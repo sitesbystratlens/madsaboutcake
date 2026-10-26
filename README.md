@@ -48,3 +48,14 @@ The gallery is managed from `cakes.json`, with editable cake titles, styles, ord
 
 ## Official Mads About Cake brand image
 The site header on all pages displays the studio's supplied original circular arch-and-cupcake logo, cropped only to reduce empty margins and optimised as `assets/mads-logo.webp`. The small browser-tab favicon `favicon.png` uses the cupcake motif cropped from the *same supplied artwork*, with no redrawing or generated replacement. All pages declare the PNG icon explicitly. Refresh browser cache after deployment if the old default icon persists. The asset source is supplied by the site owner/intermediary; confirm use permission before public launch.
+
+## Content workbook → website publishing
+Use `Mads_About_Cake_Content_Workbook_v2.xlsx` as the owner-maintained source. Only the `Portfolio` tab is wired to the gallery pipeline at this stage; Workshops, Flavours, FAQs and Site Settings remain schema-ready for later.
+
+1. Replace the example portfolio rows with owner-approved content and their individual public Instagram post or Reel URLs. The gallery recognises Cake, Cupcakes and Other Treats as products; occasions and style tags are separate.
+2. Import the workbook into Google Sheets. Publish the Portfolio sheet as CSV and set GitHub repository variable `MADS_PORTFOLIO_CSV_URL` to its `https://docs.google.com/spreadsheets/d/.../gviz/tq?tqx=out%3Acsv&sheet=Portfolio` URL. Public sheet CSV can expose hidden rows and internal notes: remove confidential information.
+3. Run GitHub Actions → Sync approved cake portfolio (manual), leaving `publish_approved` unchecked to validate without affecting the website.
+4. When the owner has approved the content, set `approval_status=Approved` and `show_on_website=Yes`, confirm high-quality real image URLs, and run with `publish_approved` checked. The action converts the records, caches Instagram covers, and verifies every cover before committing.
+5. If Instagram does not expose a retrievable cover, the workflow fails without publishing partial updates. Supply an owner-approved image asset instead. The website remains a concept until explicitly published.
+
+Fields for multiple photos, image overrides, Workshops, FAQs, Flavours and Site Settings are present in the spreadsheet but not yet fully synchronised/rendered. No scheduled sync runs; the enquiry form remains a demo.

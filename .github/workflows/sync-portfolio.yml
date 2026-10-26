@@ -1,0 +1,50 @@
+name: Sync approved cake portfolio (manual)
+on:
+  workflow_dispatch:
+    inputs:
+      publish_approved:
+        description: "Publish owner-approved designs? Unchecked validates only"
+        type: boolean
+        default: false
+        required: true
+permissions:
+  contents: write
+concurrency:
+  group: mads-portfolio-sync
+  cancel-in-progress: false
+jobs:
+  sync:
+    runs-on: ubuntu-latest
+    timeout-minutes: 10
+    env:
+      MADS_PORTFOLIO_CSV_URL: ${{ vars.MADS_PORTFOLIO_CSV_URL }}
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: "22"
+      - name: Test both importers
+        run: |
+          node scripts/sync-portfolio.mjs --test
+          node scripts/refresh-cake-covers.mjs --test
+      - name: Validate sheet only
+        if: ${{ !inputs.publish_approved }}
+        run: node scripts/sync-portfolio.mjs --validate
+      - name: Build approved snapshot
+        if: ${{ inputs.publish_approved }}
+        run: node scripts/sync-portfolio.mjs --publish
+      - name: Cache Instagram image covers
+        if: ${{ inputs.publish_approved }}
+        run: node scripts/refresh-cake-covers.mjs
+      - name: Verify all approved images exist
+        if: ${{ inputs.publish_approved }}
+        run: node scripts/check-gallery-assets.mjs
+      - name: Commit approved content only after successful checks
+        if: ${{ inputs.publish_approved }}
+        run: |
+          git add -A -- cakes.json assets/
+          if git diff --cached --quiet; then exit 0; fi
+          git config user.name "github-actions[bot]"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          git commit -m "Publish approved Mads About Cake creations"
+          git push origin HEAD:main
