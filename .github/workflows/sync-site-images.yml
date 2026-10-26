@@ -1,0 +1,42 @@
+name: Sync approved website images (manual)
+on:
+  workflow_dispatch:
+    inputs:
+      publish_approved:
+        description: "Publish approved website images? Unchecked validates only"
+        type: boolean
+        default: false
+        required: true
+permissions:
+  contents: write
+concurrency:
+  group: mads-image-sync
+  cancel-in-progress: false
+jobs:
+  sync:
+    runs-on: ubuntu-latest
+    timeout-minutes: 12
+    env:
+      MADS_SITE_IMAGES_CSV_URL: ${{ vars.MADS_SITE_IMAGES_CSV_URL }}
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: "22"
+      - name: Self-test importer
+        run: node scripts/sync-site-images.mjs --test
+      - name: Validate sheet
+        if: ${{ !inputs.publish_approved }}
+        run: node scripts/sync-site-images.mjs --validate
+      - name: Cache and publish approved images
+        if: ${{ inputs.publish_approved }}
+        run: node scripts/sync-site-images.mjs --publish
+      - name: Commit website image snapshot
+        if: ${{ inputs.publish_approved }}
+        run: |
+          git add -A -- site-images.json assets/
+          if git diff --cached --quiet; then exit 0; fi
+          git config user.name "github-actions[bot]"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          git commit -m "Sync owner-approved website images"
+          git push origin HEAD:main
