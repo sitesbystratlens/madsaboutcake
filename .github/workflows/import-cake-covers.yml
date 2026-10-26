@@ -27,7 +27,7 @@ jobs:
       - name: Commit cached images and updated metadata
         shell: bash
         run: |
-          git add -- cakes.json assets/cake-covers/
+          git add -A -- cakes.json assets/
           if git diff --cached --quiet; then
             echo "No images or metadata changed"
             exit 0
