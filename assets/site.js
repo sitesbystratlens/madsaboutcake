@@ -96,6 +96,46 @@ function initGallery(records,concept){
  if(style)style.addEventListener('change',update);
  update();
 }
+
+/* Approved website image slots are distinct from portfolio products. Each slot can
+   reference an already-published cake or an independently cached website image. */
+const WEBSITE_SLOTS=new Set([
+ 'home_hero_main','home_hero_accent','home_category_cakes','home_category_cupcakes',
+ 'home_category_other','home_workshop_feature','home_about_feature','cakes_bottom_feature',
+ 'about_main','about_detail_one','about_detail_two','workshop_main','workshop_secondary'
+]);
+const siteImagePath=s=>typeof s==='string'&&/^assets\/(?:site-images|cake-covers)\/[\w-]+\.(?:png|jpe?g|webp|avif)$/.test(s);
+async function applyWebsiteImages(records){
+ try{
+  const r=await fetch('/site-images.json',{cache:'no-cache'});
+  if(!r.ok)throw Error('No website image snapshot');
+  const snapshot=await r.json();
+  if(!Array.isArray(snapshot.images)||snapshot.images.length>40)throw Error('Invalid website image snapshot');
+  const demo=snapshot.meta?.mode==='concept-preview';
+  const byId=new Map(records.map(c=>[c.id,c]));
+  const unique=new Set();
+  for(const item of snapshot.images){
+   if(!item||!WEBSITE_SLOTS.has(item.slotId)||unique.has(item.slotId))continue;
+   unique.add(item.slotId);
+   if(!(demo?item.demoVisible!==false:item.approvalStatus==='Approved'&&item.showOnWebsite==='Yes'))continue;
+   const source=byId.get(item.sourceItemId);
+   const selected=siteImagePath(item.imagePath)?'/'+item.imagePath:source?.image;
+   if(!selected)continue;
+   const target=document.querySelector('[data-image-slot="'+item.slotId+'"]');
+   if(!target)continue;
+   const focal=['center','top','bottom','left','right'].includes(item.focalPosition)?item.focalPosition:'center';
+   const alt=typeof item.altText==='string'&&item.altText.trim()?item.altText.slice(0,200):source?.alt;
+   if(target.tagName==='IMG'){target.src=selected;target.style.objectPosition=focal;if(alt)target.alt=demo?'Concept preview: '+alt:alt;}
+   else{
+    const variable=target.dataset.cakeVariable||'--hero-image';
+    target.style.setProperty(variable,'url("'+selected+'")');
+    target.style.backgroundPosition=focal;
+    if(alt)target.setAttribute('aria-label',alt);
+   }
+  }
+ }catch(e){console.warn('Site image selections not applied:',e.message);}
+}
+
 async function initPortfolio(){
  let records=fallback.map(normalise),concept=true;
  try{
@@ -114,6 +154,7 @@ async function initPortfolio(){
   const img=card.querySelector('img[data-product-image]');
   if(sample&&img){img.src=sample.image;img.alt=(concept?'Concept example: ':'')+sample.alt;}
  });
+ await applyWebsiteImages(records);
  const occasionNav=document.querySelector('[data-home-occasions]');
  if(occasionNav)occasionNav.querySelectorAll('a').forEach(link=>{const o=new URL(link.href).searchParams.get('occasion');link.hidden=!records.some(c=>matchesOccasion(c,o));});
  initGallery(records,concept);

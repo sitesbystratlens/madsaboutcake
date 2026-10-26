@@ -59,3 +59,6 @@ Use `Mads_About_Cake_Content_Workbook_v2.xlsx` as the owner-maintained source. O
 5. If Instagram does not expose a retrievable cover, the workflow fails without publishing partial updates. Supply an owner-approved image asset instead. The website remains a concept until explicitly published.
 
 Fields for multiple photos, image overrides, Workshops, FAQs, Flavours and Site Settings are present in the spreadsheet but not yet fully synchronised/rendered. No scheduled sync runs; the enquiry form remains a demo.
+
+## Owner-controlled website hero and category imagery
+The `Website Images` worksheet uses stable `slot_id` values from `site-images.json`. Each slot selects a `portfolio_item_id` (preferred), or a separately cached local image from the corresponding Instagram post / approved override. The site attaches `data-image-slot` to the home hero photos, Cakes/Cupcakes tiles, studio and Decorate & Sip panels. The browser displays cached local assets; it does not request Instagram. `site-images.json` remains concept-only until the separate approved website-images workflow is configured and run. Do not paste an expiring Instagram CDN image URL directly into the site HTML.
