@@ -45,3 +45,6 @@ The gallery is managed from `cakes.json`, with editable cake titles, styles, ord
 **Provisional mock assumptions:** Vintage / floral / statement / celebration cake collections; bespoke quote-based cake ordering; date/serving/design enquiry; private-group Decorate & Sip enquiries. Prices, sizes, flavours, inclusions, delivery, venue, deposits and lead times are **not verified** and should not be represented as established policies. The enquiry remains a client-side demo until the owner approves a real destination.
 
 **Deployment:** A static Cloudflare Worker configuration (`wrangler.jsonc`) is included, but deploying requires appropriate Cloudflare account configuration; adding the config alone does not publish the site.
+
+## Official Mads About Cake brand image
+The site header on all pages displays the studio's supplied original circular arch-and-cupcake logo, cropped only to reduce empty margins and optimised as `assets/mads-logo.webp`. The small browser-tab favicon `favicon.png` uses the cupcake motif cropped from the *same supplied artwork*, with no redrawing or generated replacement. All pages declare the PNG icon explicitly. Refresh browser cache after deployment if the old default icon persists. The asset source is supplied by the site owner/intermediary; confirm use permission before public launch.
