@@ -5,7 +5,7 @@
 const CONFIG = {
   instagram: 'https://ig.me/m/madsaboutcake',
   instagramProfile: 'https://www.instagram.com/madsaboutcake/',
-  formEndpoint: '', // Optional Formspree-compatible endpoint: https://formspree.io/f/...
+  // Preview mode: form details remain in the browser and are never submitted.
 };
 const pexels = (id, width=960) => 'https://images.pexels.com/photos/'+id+'/pexels-photo-'+id+'.jpeg?auto=compress&cs=tinysrgb&w='+width;
 const GALLERY = [
@@ -49,50 +49,43 @@ function initGallery(){
 function initEnquiry(){
  const form=document.getElementById('enquiry-form');if(!form)return;
  const params=new URLSearchParams(window.location.search);
- const mode=params.get('type')==='workshop'?'workshop':'cake';
- const modeInput=form.querySelector('input[name="enquiryType"][value="'+mode+'"]');
+ const selected=params.get('type')==='workshop'?'workshop':'cake';
+ const modeInput=form.querySelector('input[name="enquiryType"][value="'+selected+'"]');
  if(modeInput)modeInput.checked=true;
- const style=params.get('style'); if(style&&form.elements.styleReference)form.elements.styleReference.value=style.slice(0,160);
+ const style=params.get('style');
+ if(style&&form.elements.styleReference)form.elements.styleReference.value=style.slice(0,160);
  const dateField=form.elements.eventDate;
  if(dateField){const date=new Date();const local=new Date(date.getTime()-date.getTimezoneOffset()*60000).toISOString().split('T')[0];dateField.min=local;}
  const message=document.getElementById('form-status'),backup=document.querySelector('.copy-backup');
  function updateMode(){
   const type=form.querySelector('input[name="enquiryType"]:checked')?.value||'cake';
   form.querySelectorAll('[data-mode]').forEach(el=>{el.hidden=el.dataset.mode!==type;el.querySelectorAll('input,select,textarea').forEach(input=>{input.disabled=el.hidden;});});
-  const btn=form.querySelector('[type="submit"]');if(btn)btn.textContent=CONFIG.formEndpoint?'Send enquiry →':'Prepare Instagram enquiry →';
-  message.hidden=true; if(backup)backup.classList.remove('is-visible');
+  const btn=form.querySelector('[type="submit"]');if(btn)btn.textContent='Preview my enquiry →';
+  if(message)message.hidden=true;
+  if(backup)backup.classList.remove('is-visible');
  }
  form.querySelectorAll('input[name="enquiryType"]').forEach(r=>r.addEventListener('change',updateMode));
  updateMode();
- form.addEventListener('submit',async e=>{
-  e.preventDefault();message.hidden=false;message.textContent='';
+ form.addEventListener('submit',e=>{
+  e.preventDefault();
   if(!form.reportValidity())return;
   const data=Object.fromEntries(new FormData(form).entries());
-  data.subject=data.enquiryType==='workshop'?'Decorate & Sip enquiry':'Custom cake enquiry';
-  data.source='Mads About Cake concept website';
-  const submit=form.querySelector('[type="submit"]');
-  if(CONFIG.formEndpoint){
-   submit.disabled=true;submit.textContent='Sending…';
-   try{
-    const response=await fetch(CONFIG.formEndpoint,{method:'POST',headers:{'Content-Type':'application/json','Accept':'application/json'},body:JSON.stringify(data)});
-    if(!response.ok)throw new Error('Submission failed');
-    form.reset();updateMode();message.hidden=false;message.textContent='Thank you — your enquiry has been sent. We will be in touch after reviewing your request.';
-   }catch(err){message.hidden=false;message.textContent='Your enquiry could not be sent. Please reach out via Instagram instead: @madsaboutcake.';}
-   finally{submit.disabled=false;submit.textContent='Send enquiry →';}
-   return;
-  }
-  const content=Object.entries(data).filter(([key])=>!['source','consent'].includes(key)).map(([key,value])=>key.replace(/([A-Z])/g,' $1').replace(/^./,m=>m.toUpperCase())+': '+value).join('\n');
-  const text='Hi Mads! I would love to enquire.\n\n'+content+'\n\nThank you!';
+  const labels={enquiryType:'Enquiry type',name:'Name',email:'Email',eventDate:'Event date',occasion:'Occasion',servings:'Servings',budget:'Indicative budget',styleReference:'Cake style',referenceLink:'Reference image',groupSize:'Group size',preferredVenue:'Venue or suburb',details:'Details'};
+  const content=Object.entries(data)
+   .filter(([key,value])=>key in labels&&String(value).trim())
+   .map(([key,value])=>labels[key]+': '+String(value))
+   .join('\n');
   const preview=document.getElementById('prepared-enquiry');
-  if(preview)preview.value=text;
+  if(preview)preview.value=(data.enquiryType==='workshop'?'Decorate & Sip':'Custom cake')+' — preview enquiry\n\n'+content;
   if(backup)backup.classList.add('is-visible');
-  if(navigator.clipboard&&window.isSecureContext){
-   try{await navigator.clipboard.writeText(text);message.textContent='Enquiry copied. Tap “Open Instagram DMs”, paste your message and press send to complete the enquiry.';}
-   catch(err){message.textContent='Your message is ready below. Copy it, then open Instagram DMs and press send.';}
-  }else{message.textContent='Your message is ready below. Copy it, then open Instagram DMs and press send.';}
+  if(message){message.hidden=false;message.textContent='Preview generated successfully. This is a demo: nothing has been sent, saved or shared. You can optionally copy the details to send via Instagram.';}
   if(backup)backup.scrollIntoView({behavior:'smooth',block:'nearest'});
  });
  const copy=document.getElementById('copy-enquiry');
- if(copy)copy.addEventListener('click',async()=>{const field=document.getElementById('prepared-enquiry');if(!field)return;field.select();try{await navigator.clipboard.writeText(field.value);copy.textContent='Copied ✓';}catch(err){document.execCommand('copy');copy.textContent='Selected — copy text';}});
+ if(copy)copy.addEventListener('click',async()=>{
+  const field=document.getElementById('prepared-enquiry');if(!field)return;
+  try{if(!navigator.clipboard||!window.isSecureContext)throw new Error('Clipboard unavailable');await navigator.clipboard.writeText(field.value);copy.textContent='Copied ✓';}
+  catch(err){field.focus();field.select();copy.textContent='Select all and copy';}
+ });
 }
 document.addEventListener('DOMContentLoaded',()=>{initNavigation();initGallery();initEnquiry();});
