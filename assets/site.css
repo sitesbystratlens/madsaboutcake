@@ -21,3 +21,13 @@
 @media(prefers-reduced-motion:reduce){html{scroll-behavior:auto}*,*:before,*:after{transition:none!important;animation:none!important}}
 
 @media(max-width:360px){.brand-logo{width:48px;height:48px}.brand{gap:6px;font-size:16px}.nav-shell{gap:12px}}
+
+/* 2026-10 brand-alignment pass: consistent raspberry typography with original logo. */
+.brand{font-family:var(--sans);font-weight:800;letter-spacing:-.035em;color:var(--red);font-size:clamp(18px,1.8vw,24px);gap:11px}
+.brand-wordmark,.brand-dot{color:var(--red)}
+.brand-logo{width:60px;height:60px}
+.nav-list a{color:var(--red)}
+.nav-list a.nav-cta{background:var(--red);border:1px solid var(--red);color:#fff}
+.nav-list a.nav-cta:hover{background:var(--ink);border-color:var(--ink)}
+@media(max-width:760px){.brand{font-size:clamp(16px,4.2vw,22px)}.brand-logo{width:52px;height:52px}}
+@media(max-width:360px){.brand{font-size:15px}.brand-logo{width:43px;height:43px}}
