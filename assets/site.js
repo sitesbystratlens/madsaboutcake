@@ -31,21 +31,56 @@ function enquiryUrl(style=''){return '/enquire/?type=cake'+(style?'&style='+enco
 function galleryCard(c){
  return '<article class="gallery-card" data-category="'+escapeHtml(c.style)+'"><a class="gallery-photo" href="'+enquiryUrl(c.title)+'" aria-label="Enquire about a cake inspired by '+escapeHtml(c.title)+'"><img loading="lazy" decoding="async" src="'+escapeHtml(c.image)+'" alt="'+escapeHtml(c.alt)+'"></a><div class="gallery-info"><div><small>'+escapeHtml(c.category)+'</small><h3>'+escapeHtml(c.title)+'</h3></div><a href="'+enquiryUrl(c.title)+'">Enquire ↗</a></div></article>';
 }
-function initGallery(){
+function initGallery(records=GALLERY){
  const root=document.querySelector('[data-gallery]');if(!root)return;
- const count=root.dataset.count?Number(root.dataset.count):GALLERY.length;
- root.innerHTML=GALLERY.slice(0,count).map(galleryCard).join('');
+ const count=root.dataset.count?Number(root.dataset.count):records.length;
+ root.innerHTML=records.slice(0,count).map(galleryCard).join('');
  const filters=document.querySelectorAll('[data-filter]');
  const preferred=(new URLSearchParams(window.location.search).get('style')||'').toLowerCase();
  filters.forEach(b=>b.addEventListener('click',()=>{
   const filter=b.dataset.filter;
   filters.forEach(x=>x.setAttribute('aria-pressed',String(x===b)));
   root.querySelectorAll('.gallery-card').forEach(card=>{card.hidden=filter!=='all'&&card.dataset.category!==filter;});
-  const live=document.getElementById('gallery-count');if(live)live.textContent=(filter==='all'?GALLERY.slice(0,count).length:GALLERY.slice(0,count).filter(x=>x.style===filter).length)+' designs shown';
+  const live=document.getElementById('gallery-count');if(live)live.textContent=(filter==='all'?records.slice(0,count).length:records.slice(0,count).filter(x=>x.style===filter).length)+' designs shown';
  }));
  const matching=[...filters].find(b=>b.dataset.filter===preferred);
  if(matching)matching.click();
 }
+
+/* One source of truth: cakes.json. Instagram covers are cached in local assets by
+   the manual owner-run refresh workflow. Browser visitors NEVER request Instagram. */
+function isSafeCover(path){return /^assets\/cake-covers\/[A-Za-z0-9_-]+\.(?:jpe?g|png|webp|avif)$/.test(String(path||''));}
+function portfolioImage(c){return isSafeCover(c.coverImage)?'/'+c.coverImage:c.previewImage;}
+async function initPortfolio(){
+ let records=GALLERY;
+ try{
+  const res=await fetch('/cakes.json',{cache:'no-cache'});
+  if(!res.ok)throw new Error('Snapshot unavailable');
+  const json=await res.json();
+  if(!Array.isArray(json.cakes)||json.cakes.length>80||!json.cakes.length)throw new Error('Invalid snapshot');
+  const valid=json.cakes.filter(c=>c&&typeof c.id==='string'&&/^[a-z0-9-]+$/.test(c.id)&&typeof c.title==='string'&&['vintage','floral','celebration','statement'].includes(c.style));
+  if(valid.length){
+   records=valid.sort((a,b)=>(Number(a.priority)||999)-(Number(b.priority)||999)).map(c=>({
+    ...c,image:portfolioImage(c),category:c.category||'Custom cakes',
+    alt:isSafeCover(c.coverImage)?c.alt:'Concept example: '+c.alt
+   }));
+  }
+ }catch(e){console.warn('Using embedded gallery preview:',e.message);}
+ const byId=new Map(records.map(c=>[c.id,c]));
+ document.querySelectorAll('img[data-cake-image]').forEach(img=>{
+  const c=byId.get(img.dataset.cakeImage);
+  if(c?.image){img.src=c.image;img.alt=c.alt;}
+ });
+ document.querySelectorAll('[data-cake-bg]').forEach(el=>{
+  const c=byId.get(el.dataset.cakeBg);
+  if(c?.image&&/^https:\/\//.test(c.image)||c?.image?.startsWith('/assets/cake-covers/')){
+   const property=el.dataset.cakeVariable||'--hero-image';
+   el.style.setProperty(property,'url("'+c.image.replace(/["'\\]/g,'')+'")');
+  }
+ });
+ initGallery(records);
+}
+
 function initEnquiry(){
  const form=document.getElementById('enquiry-form');if(!form)return;
  const params=new URLSearchParams(window.location.search);
@@ -88,4 +123,4 @@ function initEnquiry(){
   catch(err){field.focus();field.select();copy.textContent='Select all and copy';}
  });
 }
-document.addEventListener('DOMContentLoaded',()=>{initNavigation();initGallery();initEnquiry();});
+document.addEventListener('DOMContentLoaded',()=>{initNavigation();initPortfolio();initEnquiry();});

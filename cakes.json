@@ -1,0 +1,108 @@
+{
+  "meta": {
+    "version": 1,
+    "mode": "concept-preview",
+    "notice": "Titles, tags and pricing are illustrative until confirmed by the studio. Preview images are third-party examples, not Mads About Cake cakes."
+  },
+  "cakes": [
+    {
+      "id": "rose-piping",
+      "title": "Rose piping",
+      "category": "Vintage",
+      "style": "vintage",
+      "alt": "Sample pink and white cake with detailed buttercream piping",
+      "priority": 1,
+      "instagramUrl": "",
+      "coverImage": "",
+      "previewImage": "https://images.pexels.com/photos/29192489/pexels-photo-29192489.jpeg?auto=compress&cs=tinysrgb&w=960"
+    },
+    {
+      "id": "ribbon-romance",
+      "title": "Ribbon romance",
+      "category": "Florals",
+      "style": "floral",
+      "alt": "Sample floral cake with pink ribbons",
+      "priority": 2,
+      "instagramUrl": "",
+      "coverImage": "",
+      "previewImage": "https://images.pexels.com/photos/33100289/pexels-photo-33100289.jpeg?auto=compress&cs=tinysrgb&w=960"
+    },
+    {
+      "id": "pink-occasion",
+      "title": "Pink occasion",
+      "category": "Celebrations",
+      "style": "celebration",
+      "alt": "Sample elegant pink floral birthday cake",
+      "priority": 3,
+      "instagramUrl": "",
+      "coverImage": "",
+      "previewImage": "https://images.pexels.com/photos/18140854/pexels-photo-18140854.jpeg?auto=compress&cs=tinysrgb&w=960"
+    },
+    {
+      "id": "chapter-cake",
+      "title": "Chapter cake",
+      "category": "Statement",
+      "style": "statement",
+      "alt": "Sample pink birthday cake with a chapter message",
+      "priority": 4,
+      "instagramUrl": "",
+      "coverImage": "",
+      "previewImage": "https://images.pexels.com/photos/23358438/pexels-photo-23358438.jpeg?auto=compress&cs=tinysrgb&w=960"
+    },
+    {
+      "id": "soft-florals",
+      "title": "Soft florals",
+      "category": "Florals",
+      "style": "floral",
+      "alt": "Sample pink and gold floral celebration cake",
+      "priority": 5,
+      "instagramUrl": "",
+      "coverImage": "",
+      "previewImage": "https://images.pexels.com/photos/33932383/pexels-photo-33932383.jpeg?auto=compress&cs=tinysrgb&w=960"
+    },
+    {
+      "id": "party-pink",
+      "title": "Party in pink",
+      "category": "Celebrations",
+      "style": "celebration",
+      "alt": "Sample bright pink birthday cake with flower decoration",
+      "priority": 6,
+      "instagramUrl": "",
+      "coverImage": "",
+      "previewImage": "https://images.pexels.com/photos/18210554/pexels-photo-18210554.jpeg?auto=compress&cs=tinysrgb&w=960"
+    },
+    {
+      "id": "pink-on-pink",
+      "title": "Pink on pink",
+      "category": "Statement",
+      "style": "statement",
+      "alt": "Sample pink cake with playful decorations",
+      "priority": 7,
+      "instagramUrl": "",
+      "coverImage": "",
+      "previewImage": "https://images.pexels.com/photos/7180252/pexels-photo-7180252.jpeg?auto=compress&cs=tinysrgb&w=960"
+    },
+    {
+      "id": "sprinkle-moment",
+      "title": "Sprinkle moment",
+      "category": "Vintage",
+      "style": "vintage",
+      "alt": "Sample birthday cake with pink frosting and decorations",
+      "priority": 8,
+      "instagramUrl": "",
+      "coverImage": "",
+      "previewImage": "https://images.pexels.com/photos/9405268/pexels-photo-9405268.jpeg?auto=compress&cs=tinysrgb&w=960"
+    },
+    {
+      "id": "bow-detail",
+      "title": "All tied up",
+      "category": "Statement",
+      "style": "statement",
+      "alt": "Sample contemporary cake with floral decoration and ribbon",
+      "priority": 9,
+      "instagramUrl": "",
+      "coverImage": "",
+      "previewImage": "https://images.pexels.com/photos/33100289/pexels-photo-33100289.jpeg?auto=compress&cs=tinysrgb&w=960"
+    }
+  ]
+}

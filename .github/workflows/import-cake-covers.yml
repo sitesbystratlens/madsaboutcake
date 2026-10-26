@@ -1,0 +1,38 @@
+name: Import cake covers (manual)
+on:
+  workflow_dispatch:
+
+permissions:
+  contents: write
+
+concurrency:
+  group: mads-about-cake-cover-import
+  cancel-in-progress: false
+
+jobs:
+  import:
+    runs-on: ubuntu-latest
+    timeout-minutes: 10
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          persist-credentials: true
+      - uses: actions/setup-node@v4
+        with:
+          node-version: '22'
+      - name: Self-test cover importer
+        run: node scripts/refresh-cake-covers.mjs --test
+      - name: Import public covers from approved post URLs
+        run: node scripts/refresh-cake-covers.mjs
+      - name: Commit cached images and updated metadata
+        shell: bash
+        run: |
+          git add -- cakes.json assets/cake-covers/
+          if git diff --cached --quiet; then
+            echo "No images or metadata changed"
+            exit 0
+          fi
+          git config user.name "github-actions[bot]"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          git commit -m "Cache approved Instagram cake covers"
+          git push origin HEAD:main
