@@ -36,12 +36,15 @@ function initGallery(){
  const count=root.dataset.count?Number(root.dataset.count):GALLERY.length;
  root.innerHTML=GALLERY.slice(0,count).map(galleryCard).join('');
  const filters=document.querySelectorAll('[data-filter]');
+ const preferred=(new URLSearchParams(window.location.search).get('style')||'').toLowerCase();
  filters.forEach(b=>b.addEventListener('click',()=>{
   const filter=b.dataset.filter;
   filters.forEach(x=>x.setAttribute('aria-pressed',String(x===b)));
   root.querySelectorAll('.gallery-card').forEach(card=>{card.hidden=filter!=='all'&&card.dataset.category!==filter;});
   const live=document.getElementById('gallery-count');if(live)live.textContent=(filter==='all'?GALLERY.slice(0,count).length:GALLERY.slice(0,count).filter(x=>x.style===filter).length)+' designs shown';
  }));
+ const matching=[...filters].find(b=>b.dataset.filter===preferred);
+ if(matching)matching.click();
 }
 function initEnquiry(){
  const form=document.getElementById('enquiry-form');if(!form)return;
