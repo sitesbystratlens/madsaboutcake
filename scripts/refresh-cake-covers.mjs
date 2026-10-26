@@ -90,7 +90,8 @@ async function importCovers(){
  }
  if(ok)fs.writeFileSync(FILE,JSON.stringify(data,null,2)+'\n');
  console.log(JSON.stringify({newCovers:ok,failed,skipped}));
- if(failed)process.exitCode=1;
+ // Publish any successful imports while reporting partial misses.
+ if(failed&&!ok)process.exitCode=1;
 }
 function tests(){
  assert.equal(validPost('https://www.instagram.com/p/ABCxyz90_/')?.shortcode,'ABCxyz90_');
