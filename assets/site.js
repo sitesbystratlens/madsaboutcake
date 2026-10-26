@@ -8,77 +8,123 @@ const CONFIG = {
   // Preview mode: form details remain in the browser and are never submitted.
 };
 const pexels = (id, width=960) => 'https://images.pexels.com/photos/'+id+'/pexels-photo-'+id+'.jpeg?auto=compress&cs=tinysrgb&w='+width;
-const GALLERY = [
-  {id:'rose-piping',title:'Rose piping',category:'Vintage',style:'vintage',image:pexels(29192489),alt:'Sample pink and white cake with detailed buttercream piping'},
-  {id:'ribbon-romance',title:'Ribbon romance',category:'Florals',style:'floral',image:pexels(33100289),alt:'Sample floral cake with pink ribbons'},
-  {id:'pink-occasion',title:'Pink occasion',category:'Celebrations',style:'celebration',image:pexels(18140854),alt:'Sample elegant pink floral birthday cake'},
-  {id:'chapter-cake',title:'Chapter cake',category:'Statement',style:'statement',image:pexels(23358438),alt:'Sample pink birthday cake with a chapter message'},
-  {id:'soft-florals',title:'Soft florals',category:'Florals',style:'floral',image:pexels(33932383),alt:'Sample pink and gold floral celebration cake'},
-  {id:'party-pink',title:'Party in pink',category:'Celebrations',style:'celebration',image:pexels(18210554),alt:'Sample bright pink birthday cake with flower decoration'},
-  {id:'pink-on-pink',title:'Pink on pink',category:'Statement',style:'statement',image:pexels(7180252),alt:'Sample pink cake with playful decorations'},
-  {id:'sprinkle-moment',title:'Sprinkle moment',category:'Vintage',style:'vintage',image:pexels(9405268),alt:'Sample birthday cake with pink frosting and decorations'},
-  {id:'bow-detail',title:'All tied up',category:'Statement',style:'statement',image:pexels(33100289),alt:'Sample contemporary cake with floral decoration and ribbon'},
+
+const PRODUCT_TYPES=['Cake','Cupcakes','Other Treats'];
+const OCCASIONS=['Birthdays','Weddings & Engagements','Baby Showers & Gender Reveals','Anniversaries','Religious & Cultural','Graduations','Corporate & Events','Other Celebrations'];
+const fallback=[
+ {id:'rose-piping',title:'Rose piping',productType:'Cake',primaryOccasion:'Birthdays',styleTags:['Vintage piping'],alt:'Concept cake',previewImage:pexels(29192489)},
+ {id:'cupcake-florals',title:'Floral cupcakes',productType:'Cupcakes',primaryOccasion:'Birthdays',styleTags:['Floral'],alt:'Concept cupcakes',previewImage:pexels(1055272)}
 ];
-const escapeHtml = s=>String(s??'').replace(/[&<>"']/g, c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));
+const esc=s=>String(s==null?'':s).replace(/[&<>"']/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));
+const safeCover=s=>typeof s==='string'&&/^assets\/cake-covers\/[\w-]+\.(?:jpe?g|png|webp|avif)$/.test(s);
+const safePreview=s=>typeof s==='string'&&/^https:\/\/images\.pexels\.com\/photos\/\d+\/pexels-photo-\d+\.jpeg(?:\?.*)?$/.test(s)?s:'';
+const imageOf=c=>safeCover(c.coverImage)?'/'+c.coverImage:(safePreview(c.previewImage)||pexels(29192489));
+const slug=s=>String(s).toLowerCase().replace(/\s+/g,'-');
+const matchesOccasion=(c,o)=>c.primaryOccasion===o||c.otherOccasions.includes(o);
+function normalise(c){
+ if(!c||typeof c.id!=='string'||!/^[a-z0-9-]+$/.test(c.id)||typeof c.title!=='string'||!PRODUCT_TYPES.includes(c.productType))return null;
+ return {...c,title:c.title.slice(0,140),image:imageOf(c),alt:typeof c.alt==='string'?c.alt.slice(0,180):'Cake',
+  primaryOccasion:OCCASIONS.includes(c.primaryOccasion)?c.primaryOccasion:'Other Celebrations',
+  otherOccasions:Array.isArray(c.otherOccasions)?c.otherOccasions.filter(o=>OCCASIONS.includes(o)):[],
+  styleTags:Array.isArray(c.styleTags)?c.styleTags.filter(t=>typeof t==='string'&&t.length<80):[]};
+}
+function enquiryUrl(c){
+ const q=new URLSearchParams({type:'cake',product:c.productType,design:c.id,designTitle:c.title,occasion:c.primaryOccasion});
+ if(typeof c.instagramUrl==='string'&&/^https:\/\/www\.instagram\.com\/(p|reel|tv)\/[\w-]+\/?$/.test(c.instagramUrl))q.set('reference',c.instagramUrl);
+ return '/enquire/?'+q.toString();
+}
+function cardHtml(c){
+ return '<article class="gallery-card" data-id="'+esc(c.id)+'"><a class="gallery-photo" href="/cakes/?design='+encodeURIComponent(c.id)+'"><img loading="lazy" decoding="async" src="'+esc(c.image)+'" alt="'+esc(c.alt)+'"></a><div class="gallery-info"><div><small>'+esc(c.productType+' · '+c.primaryOccasion)+'</small><h3>'+esc(c.title)+'</h3></div><a href="/cakes/?design='+encodeURIComponent(c.id)+'">View design ↗</a></div></article>';
+}
+function showDesign(c,concept){
+ const root=document.getElementById('design-detail'),browse=document.getElementById('browse-gallery'),hero=document.getElementById('gallery-hero');
+ if(!root||!browse)return false;
+ if(hero)hero.hidden=true; browse.hidden=true;root.hidden=false;
+ const draft=concept||c.approvalStatus!=='Approved'||c.showOnWebsite!=='Yes';
+ const meta=[['Product',c.productType],['Occasion',c.primaryOccasion],['Style',c.styleTags.join(', ')||'Custom']];
+ if(c.shapeFormat)meta.push(['Format',c.shapeFormat]);
+ if(!draft&&Number(c.servingsMin)>0)meta.push(['Serves from',c.servingsMin]);
+ if(!draft&&Number(c.priceFrom)>0)meta.push(['Price from','A$'+Number(c.priceFrom).toLocaleString('en-AU')]);
+ root.innerHTML='<div><a class="detail-back" href="/cakes/">← Back to all creations</a><img class="design-detail-image" src="'+esc(c.image)+'" alt="'+esc(c.alt)+'"></div>'+
+ '<div class="design-detail-copy"><span class="eyebrow">'+esc(c.productType)+'</span><h1>'+esc(c.title)+'</h1>'+
+ '<p class="lede">'+esc(c.shortDescription||'Explore the design and share what you would like to personalise.')+'</p>'+
+ '<dl class="design-meta">'+meta.map(x=>'<dt>'+esc(x[0])+'</dt><dd>'+esc(x[1])+'</dd>').join('')+'</dl>'+
+ '<p>Inspired by this design? Tell us your date, colour preferences, flavours and any changes you have in mind.</p>'+
+ '<a class="btn" href="'+esc(enquiryUrl(c))+'">Enquire about this design →</a>'+
+ '<p class="detail-hint">'+(draft?'Illustrative preview only. Studio pricing and availability are unconfirmed.':'Availability and final details are confirmed on enquiry.')+'</p></div>';
+ return true;
+}
+function initGallery(records,concept){
+ const root=document.querySelector('[data-gallery]');if(!root)return;
+ const params=new URLSearchParams(location.search),id=params.get('design');
+ if(id){const c=records.find(x=>x.id===id);if(c&&showDesign(c,concept))return;}
+ root.innerHTML=records.map(cardHtml).join('');
+ const buttons=[...document.querySelectorAll('[data-product]')];
+ const occasion=document.getElementById('occasion-filter'),style=document.getElementById('style-filter');
+ let product=['cake','cupcakes','other-treats'].includes(params.get('product'))?params.get('product'):'all';
+ const used=new Set(records.map(c=>slug(c.productType)));
+ const otherButton=buttons.find(b=>b.dataset.product==='other-treats');if(otherButton)otherButton.hidden=!used.has('other-treats');
+ if(occasion){
+  for(const o of OCCASIONS.filter(o=>records.some(c=>matchesOccasion(c,o)))){let opt=document.createElement('option');opt.value=o;opt.textContent=o;occasion.appendChild(opt);}
+  if([...occasion.options].some(o=>o.value===params.get('occasion')))occasion.value=params.get('occasion');
+ }
+ if(style){
+  const values=[...new Set(records.flatMap(c=>c.styleTags))].sort();
+  for(const s of values){let opt=document.createElement('option');opt.value=s;opt.textContent=s;style.appendChild(opt);}
+  if(values.includes(params.get('style')))style.value=params.get('style');
+ }
+ function update(){
+  let count=0;
+  for(const card of root.querySelectorAll('.gallery-card')){
+   const c=records.find(x=>x.id===card.dataset.id);
+   const visible=!!c&&(product==='all'||slug(c.productType)===product)&&
+     (!occasion||occasion.value==='all'||matchesOccasion(c,occasion.value))&&
+     (!style||style.value==='all'||c.styleTags.includes(style.value));
+   card.hidden=!visible;if(visible)count++;
+  }
+  buttons.forEach(b=>b.setAttribute('aria-pressed',String(b.dataset.product===product)));
+  const counter=document.getElementById('gallery-count');if(counter)counter.textContent=count+' '+(count===1?'design':'designs')+' shown';
+  const empty=document.getElementById('gallery-empty');if(empty)empty.hidden=count>0;
+  const q=new URLSearchParams();
+  if(product!=='all')q.set('product',product);
+  if(occasion&&occasion.value!=='all')q.set('occasion',occasion.value);
+  if(style&&style.value!=='all')q.set('style',style.value);
+  history.replaceState(null,'','/cakes/'+(q.toString()?'?'+q.toString():''));
+ }
+ for(const b of buttons)b.addEventListener('click',()=>{product=b.dataset.product;update()});
+ if(occasion)occasion.addEventListener('change',update);
+ if(style)style.addEventListener('change',update);
+ update();
+}
+async function initPortfolio(){
+ let records=fallback.map(normalise),concept=true;
+ try{
+  const r=await fetch('/cakes.json',{cache:'no-cache'});if(!r.ok)throw Error('No snapshot');
+  const json=await r.json();if(!Array.isArray(json.cakes)||json.cakes.length>250)throw Error('Invalid snapshot');
+  concept=json.meta?.mode==='concept-preview';
+  records=json.cakes.filter(c=>concept?c.demoVisible!==false:(c.approvalStatus==='Approved'&&c.showOnWebsite==='Yes'))
+   .map(normalise).filter(Boolean).sort((a,b)=>(Number(a.priority)||999)-(Number(b.priority)||999));
+ }catch(e){console.warn('Fallback gallery:',e.message);}
+ const map=new Map(records.map(c=>[c.id,c]));
+ document.querySelectorAll('img[data-cake-image]').forEach(img=>{const c=map.get(img.dataset.cakeImage);if(c){img.src=c.image;img.alt=(concept?'Concept example: ':'')+c.alt;}});
+ document.querySelectorAll('[data-cake-bg]').forEach(el=>{const c=map.get(el.dataset.cakeBg);if(c)el.style.setProperty(el.dataset.cakeVariable||'--hero-image','url("'+c.image+'")');});
+ document.querySelectorAll('[data-product-card]').forEach(card=>{
+  const sample=records.find(c=>c.productType===card.dataset.productCard);
+  card.hidden=!sample;
+  const img=card.querySelector('img[data-product-image]');
+  if(sample&&img){img.src=sample.image;img.alt=(concept?'Concept example: ':'')+sample.alt;}
+ });
+ const occasionNav=document.querySelector('[data-home-occasions]');
+ if(occasionNav)occasionNav.querySelectorAll('a').forEach(link=>{const o=new URL(link.href).searchParams.get('occasion');link.hidden=!records.some(c=>matchesOccasion(c,o));});
+ initGallery(records,concept);
+}
+
 function initNavigation(){
  const toggle=document.querySelector('.nav-toggle'), nav=document.querySelector('.nav-list');
  if(!toggle||!nav)return;
  toggle.addEventListener('click',()=>{const open=nav.classList.toggle('is-open');toggle.setAttribute('aria-expanded',String(open));toggle.textContent=open?'Close ✕':'Menu ☰';});
  document.addEventListener('keydown',e=>{if(e.key==='Escape'){nav.classList.remove('is-open');toggle.setAttribute('aria-expanded','false');toggle.textContent='Menu ☰';}});
  nav.querySelectorAll('a').forEach(a=>a.addEventListener('click',()=>{nav.classList.remove('is-open');toggle.setAttribute('aria-expanded','false');toggle.textContent='Menu ☰';}));
-}
-function enquiryUrl(style=''){return '/enquire/?type=cake'+(style?'&style='+encodeURIComponent(style):'');}
-function galleryCard(c){
- return '<article class="gallery-card" data-category="'+escapeHtml(c.style)+'"><a class="gallery-photo" href="'+enquiryUrl(c.title)+'" aria-label="Enquire about a cake inspired by '+escapeHtml(c.title)+'"><img loading="lazy" decoding="async" src="'+escapeHtml(c.image)+'" alt="'+escapeHtml(c.alt)+'"></a><div class="gallery-info"><div><small>'+escapeHtml(c.category)+'</small><h3>'+escapeHtml(c.title)+'</h3></div><a href="'+enquiryUrl(c.title)+'">Enquire ↗</a></div></article>';
-}
-function initGallery(records=GALLERY){
- const root=document.querySelector('[data-gallery]');if(!root)return;
- const count=root.dataset.count?Number(root.dataset.count):records.length;
- root.innerHTML=records.slice(0,count).map(galleryCard).join('');
- const filters=document.querySelectorAll('[data-filter]');
- const preferred=(new URLSearchParams(window.location.search).get('style')||'').toLowerCase();
- filters.forEach(b=>b.addEventListener('click',()=>{
-  const filter=b.dataset.filter;
-  filters.forEach(x=>x.setAttribute('aria-pressed',String(x===b)));
-  root.querySelectorAll('.gallery-card').forEach(card=>{card.hidden=filter!=='all'&&card.dataset.category!==filter;});
-  const live=document.getElementById('gallery-count');if(live)live.textContent=(filter==='all'?records.slice(0,count).length:records.slice(0,count).filter(x=>x.style===filter).length)+' designs shown';
- }));
- const matching=[...filters].find(b=>b.dataset.filter===preferred);
- if(matching)matching.click();
-}
-
-/* One source of truth: cakes.json. Instagram covers are cached in local assets by
-   the manual owner-run refresh workflow. Browser visitors NEVER request Instagram. */
-function isSafeCover(path){return /^assets\/cake-covers\/[A-Za-z0-9_-]+\.(?:jpe?g|png|webp|avif)$/.test(String(path||''));}
-function portfolioImage(c){return isSafeCover(c.coverImage)?'/'+c.coverImage:c.previewImage;}
-async function initPortfolio(){
- let records=GALLERY;
- try{
-  const res=await fetch('/cakes.json',{cache:'no-cache'});
-  if(!res.ok)throw new Error('Snapshot unavailable');
-  const json=await res.json();
-  if(!Array.isArray(json.cakes)||json.cakes.length>80||!json.cakes.length)throw new Error('Invalid snapshot');
-  const valid=json.cakes.filter(c=>c&&typeof c.id==='string'&&/^[a-z0-9-]+$/.test(c.id)&&typeof c.title==='string'&&['vintage','floral','celebration','statement'].includes(c.style));
-  if(valid.length){
-   records=valid.sort((a,b)=>(Number(a.priority)||999)-(Number(b.priority)||999)).map(c=>({
-    ...c,image:portfolioImage(c),category:c.category||'Custom cakes',
-    alt:isSafeCover(c.coverImage)?c.alt:'Concept example: '+c.alt
-   }));
-  }
- }catch(e){console.warn('Using embedded gallery preview:',e.message);}
- const byId=new Map(records.map(c=>[c.id,c]));
- document.querySelectorAll('img[data-cake-image]').forEach(img=>{
-  const c=byId.get(img.dataset.cakeImage);
-  if(c?.image){img.src=c.image;img.alt=c.alt;}
- });
- document.querySelectorAll('[data-cake-bg]').forEach(el=>{
-  const c=byId.get(el.dataset.cakeBg);
-  if(c?.image&&/^https:\/\//.test(c.image)||c?.image?.startsWith('/assets/cake-covers/')){
-   const property=el.dataset.cakeVariable||'--hero-image';
-   el.style.setProperty(property,'url("'+c.image.replace(/["'\\]/g,'')+'")');
-  }
- });
- initGallery(records);
 }
 
 function initEnquiry(){
@@ -87,6 +133,14 @@ function initEnquiry(){
  const selected=params.get('type')==='workshop'?'workshop':'cake';
  const modeInput=form.querySelector('input[name="enquiryType"][value="'+selected+'"]');
  if(modeInput)modeInput.checked=true;
+ const designTitle=params.get('designTitle')||params.get('style')||'';
+ if(form.elements.selectedDesign&&designTitle)form.elements.selectedDesign.value=designTitle.slice(0,160);
+ const productType=params.get('product');
+ if(form.elements.productType&&['Cake','Cupcakes','Other Treats'].includes(productType))form.elements.productType.value=productType;
+ const occasion=params.get('occasion');
+ if(form.elements.occasion&&occasion&&[...form.elements.occasion.options].some(o=>o.value===occasion))form.elements.occasion.value=occasion;
+ const reference=params.get('reference');
+ if(reference&&form.elements.referenceLink&&/^https:\/\/www\.instagram\.com\/(p|reel|tv)\//.test(reference))form.elements.referenceLink.value=reference.slice(0,1500);
  const style=params.get('style');
  if(style&&form.elements.styleReference)form.elements.styleReference.value=style.slice(0,160);
  const dateField=form.elements.eventDate;
@@ -105,7 +159,7 @@ function initEnquiry(){
   e.preventDefault();
   if(!form.reportValidity())return;
   const data=Object.fromEntries(new FormData(form).entries());
-  const labels={enquiryType:'Enquiry type',name:'Name',email:'Email',eventDate:'Event date',occasion:'Occasion',servings:'Servings',budget:'Indicative budget',styleReference:'Cake style',referenceLink:'Reference image',groupSize:'Group size',preferredVenue:'Venue or suburb',details:'Details'};
+  const labels={productType:'Product type',selectedDesign:'Selected design',flavourPreference:'Flavour preference',cakeMessage:'Cake message',colours:'Colours/theme',dietaryNotes:'Dietary considerations',enquiryType:'Enquiry type',name:'Name',email:'Email',eventDate:'Event date',occasion:'Occasion',servings:'Servings',budget:'Indicative budget',styleReference:'Cake style',referenceLink:'Reference image',groupSize:'Group size',preferredVenue:'Venue or suburb',details:'Details'};
   const content=Object.entries(data)
    .filter(([key,value])=>key in labels&&String(value).trim())
    .map(([key,value])=>labels[key]+': '+String(value))
@@ -123,4 +177,5 @@ function initEnquiry(){
   catch(err){field.focus();field.select();copy.textContent='Select all and copy';}
  });
 }
+
 document.addEventListener('DOMContentLoaded',()=>{initNavigation();initPortfolio();initEnquiry();});
