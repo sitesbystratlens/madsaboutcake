@@ -61,3 +61,16 @@
 .detail-back{display:inline-block;margin-bottom:25px;color:var(--red);font-weight:700;font-size:13px}
 .detail-hint{font-size:12px;color:var(--muted);margin-top:18px}
 @media(max-width:760px){.design-detail{grid-template-columns:1fr;padding-block:35px 65px}.design-detail-image{max-height:620px}}
+
+/* Footer alignment refinement: centred columns, no duplicate contact/location. */
+@media(min-width:761px){
+ .footer-grid{align-items:center}
+ .footer-intro{align-self:center}
+ .footer-links{align-self:center;min-height:178px}
+}
+.footer-intro>p:not(.footer-kicker){margin-bottom:0}
+.footer-grid .footer-links h3{margin-top:0}
+@media(max-width:760px){
+ .footer-grid{align-items:start}
+ .footer-links{min-height:0}
+}
