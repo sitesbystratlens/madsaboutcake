@@ -153,11 +153,13 @@ body{background:var(--v3-cream)}
 
 
 /* V3.2 – refined visual system, compact notice and genuine form showcase. */
-.announcement[data-studio-announcement]{border-top:2px solid var(--v3-rose);background:var(--v3-peach);color:var(--v3-ink);display:flex;flex-wrap:wrap;justify-content:center;align-items:center;column-gap:17px;row-gap:3px;min-height:34px;padding:7px 16px;font-size:11px}
+
+.announcement[data-studio-announcement]{
+ background:var(--v3-peach);color:var(--v3-ink);border-top:2px solid var(--v3-rose);border-bottom:1px solid #ecc5c9;
+ display:flex;align-items:center;justify-content:center;text-align:center;padding:9px 16px;
+ min-height:36px;font:600 12px/1.4 var(--sans);letter-spacing:.005em
+}
 .announcement[data-studio-announcement][hidden]{display:none!important}
-.announcement__demo{color:var(--v3-berry);font:800 9px/1.5 var(--sans);letter-spacing:.12em}
-.announcement[data-studio-announcement] a{color:var(--v3-berry);font-weight:700;white-space:nowrap;text-underline-offset:3px}
-.announcement[data-studio-announcement] small{font-size:9px;color:#705868}
 .site-footer .footer-links nav a{line-height:1.55}
 .site-footer .footer-links nav a[href="/cakes/"]{white-space:nowrap}
 .site-footer .footer-intro h2 em{font-style:normal;color:var(--v3-ink)}
@@ -197,8 +199,7 @@ body{background:var(--v3-cream)}
  .mads-v3 .enquiry-aside-note{margin-top:17px}
 }
 @media(max-width:600px){
- .announcement[data-studio-announcement]{padding:7px 12px;gap:5px 11px;font-size:10px}
- .announcement[data-studio-announcement] small{width:100%;text-align:center}
+ .announcement[data-studio-announcement]{padding:9px 12px;font-size:11px}
  .mads-v3 .enquiry-field-row{grid-template-columns:1fr}
  .mads-v3 .enquiry-panel{padding:24px 18px}
  .mads-v3 .enquiry-panel__header{margin-bottom:19px}

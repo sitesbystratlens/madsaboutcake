@@ -54,7 +54,7 @@ function showDesign(c,concept){
  '<dl class="design-meta">'+meta.map(x=>'<dt>'+esc(x[0])+'</dt><dd>'+esc(x[1])+'</dd>').join('')+'</dl>'+
  '<p>Inspired by this design? Tell us your date, colour preferences, flavours and any changes you have in mind.</p>'+
  '<a class="btn" href="'+esc(enquiryUrl(c))+'">Enquire about this design →</a>'+
- '<p class="detail-hint">'+(draft?'Original studio design for concept review. Occasion, pricing and availability require owner confirmation.':'Availability and final details are confirmed on enquiry.')+'</p></div>';
+ '<p class="detail-hint">Availability, flavours and final details are confirmed on enquiry.</p></div>';
  return true;
 }
 function initGallery(records,concept){
@@ -128,7 +128,7 @@ async function applyWebsiteImages(records){
    if(!target)continue;
    const focal=['center','top','bottom','left','right'].includes(item.focalPosition)?item.focalPosition:'center';
    const alt=typeof item.altText==='string'&&item.altText.trim()?item.altText.slice(0,200):source?.alt;
-   if(target.tagName==='IMG'){target.src=selected;target.style.objectPosition=focal;if(alt)target.alt=demo?'Concept preview: '+alt:alt;}
+   if(target.tagName==='IMG'){target.src=selected;target.style.objectPosition=focal;if(alt)target.alt=alt;}
    else{
     const variable=target.dataset.cakeVariable||'--hero-image';
     target.style.setProperty(variable,'url("'+selected+'")');
@@ -156,7 +156,7 @@ async function initPortfolio(){
   const ids=new Map(records.map(c=>[c.id,c]));
   document.querySelectorAll('img[data-cake-image]').forEach(img=>{
    const c=ids.get(img.dataset.cakeImage);
-   if(c){img.src=c.image;img.alt='Concept example: '+c.alt;}
+   if(c){img.src=c.image;img.alt=c.alt;}
   });
  }
  // Homepage and category hero imagery stays site-owned, not controlled by the Sheet.
@@ -202,7 +202,7 @@ function initEnquiry(){
  function updateMode(){
   const type=form.querySelector('input[name="enquiryType"]:checked')?.value||'cake';
   form.querySelectorAll('[data-mode]').forEach(el=>{el.hidden=el.dataset.mode!==type;el.querySelectorAll('input,select,textarea').forEach(input=>{input.disabled=el.hidden;});});
-  const btn=form.querySelector('[type="submit"]');if(btn)btn.textContent='Preview my enquiry →';
+  const btn=form.querySelector('[type="submit"]');if(btn)btn.textContent='Prepare message for Instagram →';
   if(message)message.hidden=true;
   if(backup)backup.classList.remove('is-visible');
  }
@@ -218,9 +218,9 @@ function initEnquiry(){
    .map(([key,value])=>labels[key]+': '+String(value))
    .join('\n');
   const preview=document.getElementById('prepared-enquiry');
-  if(preview)preview.value=(data.enquiryType==='workshop'?'Decorate & Sip':'Custom cake')+' — preview enquiry\n\n'+content;
+  if(preview)preview.value=(data.enquiryType==='workshop'?'Decorate & Sip':'Custom cake')+' — enquiry\n\n'+content;
   if(backup)backup.classList.add('is-visible');
-  if(message){message.hidden=false;message.textContent='Preview generated successfully. This is a demo: nothing has been sent, saved or shared. You can optionally copy the details to send via Instagram.';}
+  if(message){message.hidden=false;message.textContent='Your message is ready. Copy it and send it directly to the studio through Instagram.';}
   if(backup)backup.scrollIntoView({behavior:'smooth',block:'nearest'});
  });
  const copy=document.getElementById('copy-enquiry');
@@ -255,32 +255,21 @@ document.addEventListener('error',event=>{
  }
 },true);
 
-/** Example availability notice — configured in assets/studio-notices.json.
- * Demo availability must never be treated as confirmed by the owner.
- */
+/** Studio availability banner, edited through assets/studio-notices.json. */
 async function initStudioNotice(){
  const banner=document.querySelector('[data-studio-announcement]');
  if(!banner)return;
  try{
   const response=await fetch('/assets/studio-notices.json',{cache:'no-cache'});
-  if(!response.ok)throw new Error('Notice unavailable');
+  if(!response.ok)return;
   const data=await response.json();
-  if(data.enabled!==true||typeof data.message!=='string'||!data.message.trim())return;
-  const msg=banner.querySelector('[data-notice-text]');
-  const link=banner.querySelector('[data-notice-link]');
-  const disclaimer=banner.querySelector('[data-notice-disclaimer]');
-  const marker=banner.querySelector('.announcement__demo');
-  if(msg)msg.textContent=data.message.slice(0,240);
-  if(marker)marker.textContent=data.isExample===true?'EXAMPLE NOTICE':'STUDIO NOTICE';
-  if(disclaimer)disclaimer.textContent=data.isExample===true?'Illustrative only · Availability not confirmed':'';
-  if(link&&typeof data.linkHref==='string'&&/^\/(?:#|[A-Za-z0-9/#?=&_-])*$/.test(data.linkHref)){
-    link.href=data.linkHref;
-    link.textContent=String(data.linkText||'Find out more ↗').slice(0,90);
-  }else if(link)link.hidden=true;
+  if(data.enabled===false||typeof data.message!=='string'||!data.message.trim()){banner.hidden=true;return;}
+  const message=banner.querySelector('[data-notice-text]');
+  if(message)message.textContent=data.message.slice(0,240);
   banner.hidden=false;
- }catch(error){console.warn('Optional studio notice could not be loaded');}
+ }catch(error){ /* The default text stays visible if the optional settings file cannot load. */ }
 }
-/** Demonstrates a complete homepage enquiry UX without sending, storing or sharing personal data. */
+/** Prepare a copyable customer enquiry without silently submitting anything. */
 function initHomeEnquiry(){
  const form=document.getElementById('home-enquiry-form');if(!form)return;
  const result=document.getElementById('home-enquiry-result');
@@ -295,7 +284,7 @@ function initHomeEnquiry(){
    if(!form.reportValidity()||!result||!preview)return;
    const data=new FormData(form);
    const lines=[
-     'Mads About Cake — concept enquiry',
+     'Mads About Cake — cake enquiry',
      '',
      'Name: '+String(data.get('name')||'').trim(),
      'Email: '+String(data.get('email')||'').trim(),

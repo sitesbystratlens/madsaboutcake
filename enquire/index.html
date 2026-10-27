@@ -11,19 +11,14 @@
 <link rel="preconnect" href="https://fonts.googleapis.com"><link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 
 <link rel="icon" type="image/png" sizes="32x32" href="/favicon.png?v=1">
-<link rel="stylesheet" href="/assets/site.css?v=20261028-v32">
-<link rel="stylesheet" href="/assets/home-v3.css?v=20261028-v32">
+<link rel="stylesheet" href="/assets/site.css?v=20261028-v33">
+<link rel="stylesheet" href="/assets/home-v3.css?v=20261028-v33">
 <style>[hidden]{display:none!important}</style>
 <script src="/assets/site.js" defer></script>
 </head>
 <body>
 <a class="skip-link" href="#main">Skip to main content</a>
-<div class="announcement" data-studio-announcement hidden role="note" aria-label="Example availability banner">
-  <span class="announcement__demo">EXAMPLE NOTICE</span>
-  <span data-notice-text>Not taking new orders for December 2026</span>
-  <a data-notice-link href="/#cake-enquiry">Ask about another date ↗</a>
-  <small data-notice-disclaimer>Illustrative only · Availability not confirmed</small>
-</div>
+<div class="announcement" data-studio-announcement role="note"><span data-notice-text>Not taking new orders for December 2026</span></div>
 <header class="site-header">
  <div class="nav-shell">
   <a class="brand" href="/" aria-label="Mads About Cake home"><img class="brand-logo" src="/assets/mads-logo.webp" width="70" height="70" alt="" decoding="async"><span class="brand-wordmark">mads about cake<span class="brand-dot">.</span></span></a>
@@ -37,7 +32,6 @@
  <aside class="enquiry-aside"><p class="eyebrow">Enquiries</p><h2>Let's make it <span class="serif-italic">happen.</span></h2><p class="lede">Share as much or as little inspiration as you have so far. A cake enquiry isn't a confirmed booking.</p><div style="border-top:1px solid var(--line);padding-top:24px;margin-top:28px"><p><strong>Based in</strong><br>Glen Iris, Melbourne</p><p><strong>Prefer Instagram?</strong><br><a class="text-link" href="https://ig.me/m/madsaboutcake" target="_blank" rel="noopener noreferrer">Message @madsaboutcake ↗</a></p><p class="muted-note">Collection details, lead times, workshop availability and pricing are confirmed directly with the studio.</p></div></aside>
  <div class="enquiry-card">
  <form id="enquiry-form">
-  <p class="muted-note" style="padding:13px 17px;border:1px solid var(--line);border-radius:4px;background:var(--cream)"><strong>Demo form:</strong> try the ordering experience without sending any information. Entries stay in this browser tab and are not stored or emailed.</p>
   <p class="eyebrow">What can we help with?</p>
   <div class="form-mode" role="group" aria-label="Enquiry type"><label class="mode-label"><input type="radio" name="enquiryType" value="cake" checked><span>Custom cake</span></label><label class="mode-label"><input type="radio" name="enquiryType" value="workshop"><span>Decorate &amp; Sip</span></label></div>
   <div class="field-grid"><div class="field"><label for="customer-name">Your name <span class="field-required">(required)</span></label><input id="customer-name" name="name" autocomplete="name" maxlength="120" required placeholder="First and last name"></div><div class="field"><label for="customer-email">Email address <span class="field-required">(required)</span></label><input id="customer-email" name="email" type="email" autocomplete="email" maxlength="200" required placeholder="you@example.com"></div></div>
@@ -54,11 +48,10 @@
     <div class="field-grid"><div class="field"><label for="group-size">Estimated group size <span class="field-required">(required)</span></label><input type="number" id="group-size" name="groupSize" min="1" max="1000" required placeholder="e.g. 12" disabled></div><div class="field"><label for="venue">Preferred venue or suburb</label><input id="venue" name="preferredVenue" placeholder="If you have one in mind" disabled></div></div>
   </div>
   <div class="field"><label for="notes">Tell us about your plans <span class="field-required">(required)</span></label><textarea id="notes" name="details" maxlength="4000" minlength="10" required placeholder="Colours, mood, dates, questions — tell us the good stuff."></textarea></div>
-  <label class="consent"><input type="checkbox" name="consent" value="yes" required><span>I understand this preview does not send a booking or enquiry. <span class="field-required">(required)</span></span></label>
-  <button class="btn" style="width:100%" type="submit">Preview my enquiry →</button>
+  <button class="btn" style="width:100%" type="submit">Prepare message for Instagram →</button>
   <div class="form-message" role="status" id="form-status" aria-live="polite" hidden></div>
-  <div class="copy-backup" aria-label="Prepared enquiry"><div class="field"><label for="prepared-enquiry">Your enquiry preview</label><textarea id="prepared-enquiry" readonly></textarea></div><div class="btn-row"><button class="btn btn-secondary" type="button" id="copy-enquiry">Copy preview text</button><a class="btn" href="https://ig.me/m/madsaboutcake" target="_blank" rel="noopener noreferrer">Open Instagram DMs ↗</a></div><p class="muted-note" style="margin-top:12px">Optional: copy the preview and paste it into Instagram DMs if you want to send it manually. This demo form never submits automatically.</p></div>
-  <p class="form-alt">Or go straight to <a href="https://www.instagram.com/madsaboutcake/" target="_blank" rel="noopener noreferrer">@madsaboutcake on Instagram ↗</a></p>
+  <div class="copy-backup" aria-label="Prepared enquiry"><div class="field"><label for="prepared-enquiry">Your enquiry message</label><textarea id="prepared-enquiry" readonly></textarea></div><div class="btn-row"><button class="btn btn-secondary" type="button" id="copy-enquiry">Copy message</button><a class="btn" href="https://ig.me/m/madsaboutcake" target="_blank" rel="noopener noreferrer">Open Instagram DMs ↗</a></div><p class="muted-note" style="margin-top:12px">Copy your message and send it to Mads through Instagram DMs.</p></div>
+  <p class="form-alt">Or message <a href="https://www.instagram.com/madsaboutcake/" target="_blank" rel="noopener noreferrer">@madsaboutcake on Instagram ↗</a></p>
  </form></div></div></section></main>
 <footer class="site-footer">
  <div class="container">
@@ -85,7 +78,7 @@
    </div>
   </div>
   <div class="footer-end">
-   <span>© 2026 Mads About Cake · Independent website concept</span>
+   <span>© 2026 Mads About Cake</span>
    <span><a href="https://www.stratlens.com/other/" target="_blank" rel="noopener noreferrer">Sites by Stratlens</a></span>
   </div>
  </div>
