@@ -140,3 +140,13 @@ body{background:var(--v3-cream)}
 /* Gallery preservation: show the entire cake whenever included in source frame. */
 .gallery-photo img,.design-detail-image{object-fit:contain!important;background:#f4e9e8}
 @media(max-width:760px){.site-footer .v2-footer-brand img{width:46px;height:46px}}
+
+/* Brand alignment: a deliberate pink mark on warm cream, not a pasted-on logo
+   over another heavy pastel banner. Match the original logo's bright pink. */
+.site-header{background:#fff9f6;border-bottom:2px solid #fac7db}
+.site-header .brand{color:#ce2777}
+.site-header .brand-wordmark,.site-header .brand-dot{color:#ce2777}
+.site-header .brand-logo{background:#ffd6e3;border-radius:50%;mix-blend-mode:normal;box-shadow:0 0 0 3px #ffd6e3}
+.mads-v3 .opening h1{font-family:var(--sans);font-weight:800;letter-spacing:-.083em}
+.mads-v3 .opening h1 span{font-style:normal;color:#c22676;text-decoration:underline;text-decoration-color:#f5b6d4;text-decoration-thickness:.065em;text-underline-offset:.075em}
+@media(max-width:800px){.site-header .nav-list{background:#fff9f6}}
