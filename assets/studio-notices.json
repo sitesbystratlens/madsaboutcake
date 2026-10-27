@@ -1,0 +1,9 @@
+{
+  "schemaVersion": 1,
+  "enabled": true,
+  "isExample": true,
+  "message": "Not taking new orders for December 2026",
+  "linkText": "Ask about another date ↗",
+  "linkHref": "/#cake-enquiry",
+  "note": "Illustrative only · Availability not confirmed"
+}

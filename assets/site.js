@@ -254,5 +254,71 @@ document.addEventListener('error',event=>{
   img.src=fallback;
  }
 },true);
-document.addEventListener('DOMContentLoaded',()=>{initNavigation();initCuratedImageSwaps();initPortfolio();initEnquiry();});
+
+/** Example availability notice — configured in assets/studio-notices.json.
+ * Demo availability must never be treated as confirmed by the owner.
+ */
+async function initStudioNotice(){
+ const banner=document.querySelector('[data-studio-announcement]');
+ if(!banner)return;
+ try{
+  const response=await fetch('/assets/studio-notices.json',{cache:'no-cache'});
+  if(!response.ok)throw new Error('Notice unavailable');
+  const data=await response.json();
+  if(data.enabled!==true||typeof data.message!=='string'||!data.message.trim())return;
+  const msg=banner.querySelector('[data-notice-text]');
+  const link=banner.querySelector('[data-notice-link]');
+  const disclaimer=banner.querySelector('[data-notice-disclaimer]');
+  const marker=banner.querySelector('.announcement__demo');
+  if(msg)msg.textContent=data.message.slice(0,240);
+  if(marker)marker.textContent=data.isExample===true?'EXAMPLE NOTICE':'STUDIO NOTICE';
+  if(disclaimer)disclaimer.textContent=data.isExample===true?'Illustrative only · Availability not confirmed':'';
+  if(link&&typeof data.linkHref==='string'&&/^\/(?:#|[A-Za-z0-9/#?=&_-])*$/.test(data.linkHref)){
+    link.href=data.linkHref;
+    link.textContent=String(data.linkText||'Find out more ↗').slice(0,90);
+  }else if(link)link.hidden=true;
+  banner.hidden=false;
+ }catch(error){console.warn('Optional studio notice could not be loaded');}
+}
+/** Demonstrates a complete homepage enquiry UX without sending, storing or sharing personal data. */
+function initHomeEnquiry(){
+ const form=document.getElementById('home-enquiry-form');if(!form)return;
+ const result=document.getElementById('home-enquiry-result');
+ const preview=document.getElementById('home-enquiry-preview');
+ const copy=document.getElementById('home-enquiry-copy');
+ const date=form.elements.eventDate;
+ if(date){
+   const now=new Date();date.min=new Date(now.getTime()-now.getTimezoneOffset()*60000).toISOString().slice(0,10);
+ }
+ form.addEventListener('submit',event=>{
+   event.preventDefault();
+   if(!form.reportValidity()||!result||!preview)return;
+   const data=new FormData(form);
+   const lines=[
+     'Mads About Cake — concept enquiry',
+     '',
+     'Name: '+String(data.get('name')||'').trim(),
+     'Email: '+String(data.get('email')||'').trim(),
+     'Product: '+String(data.get('productType')||'').trim(),
+     'Date: '+String(data.get('eventDate')||'').trim(),
+     'Details: '+String(data.get('details')||'').trim()
+   ];
+   preview.value=lines.join('\n');
+   result.hidden=false;
+   if(copy)copy.textContent='Copy message';
+   result.scrollIntoView({behavior:'smooth',block:'nearest'});
+ });
+ if(copy)copy.addEventListener('click',async()=>{
+   if(!preview||!preview.value)return;
+   try{
+     if(!navigator.clipboard||!window.isSecureContext)throw new Error('No clipboard permission');
+     await navigator.clipboard.writeText(preview.value);
+     copy.textContent='Copied ✓';
+   }catch(error){
+     preview.focus();preview.select();copy.textContent='Select and copy';
+   }
+ });
+}
+
+document.addEventListener('DOMContentLoaded',()=>{initNavigation();initCuratedImageSwaps();initPortfolio();initEnquiry();initStudioNotice();initHomeEnquiry();});
 
