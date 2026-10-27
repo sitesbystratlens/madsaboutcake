@@ -1,3 +1,11 @@
+# Mads About Cake — independent concept pitch (October 2026)
+
+**Status:** This is an unsolicited website concept prepared before the designer has engaged the owner. The 33 shortlisted images were taken from a publicly accessible Instagram media archive collected by the designer, not supplied directly by the owner. They have been curated and compressed for a private, non-indexed demonstration. There is **no requirement to obtain studio originals before showing a concept**. Before turning this into a public commercial website, obtain the owner's permission to use imagery and confirm categories, copy, pricing, services, and claims; higher-resolution originals can be requested then as an optional quality upgrade. The enquiry form is a non-sending demo.
+
+**Photo deployment:** An existing 7.5 MB file named `mads-original-photos.zip` (legacy filename) contains the 33 selected downloaded Instagram WebP files. Upload that single ZIP unchanged to the GitHub `imports/` directory. The `install-original-photos.yml` workflow installs them to `assets/creations/`. The filename is historical and does *not* mean the studio supplied original camera files. Until the upload completes the site shows temporary stock fallbacks. Keep the concept noindexed and clearly marked.
+
+---
+
 # Mads About Cake — website concept
 
 A bespoke, mobile-first boutique cake studio website built for Mads About Cake in Glen Iris, Melbourne.

@@ -245,7 +245,7 @@ function initEnquiry(){
 }
 
 
-/** Swap in the owner's WebP photographs only when actually uploaded to the site.
+/** Swap in WebP photographs curated from the public Instagram media archive when uploaded to the site.
  * Fallback stock images remain visible until that one-time GitHub asset upload.
  */
 function initCuratedImageSwaps(){

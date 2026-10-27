@@ -1,6 +1,6 @@
-# One-time original cake photo upload
+# One-time curated Instagram photo upload
 
-The site and 33 curated gallery records are already configured to use the original photos. Only the binary files need uploading.
+This is an **independent, non-indexed concept preview made before engaging the studio owner**. The ZIP already contains 33 optimised WebP photos curated from the public Instagram media archive collected for the pitch. These are not owner-supplied camera originals, and no further owner-supplied source files are required to render the concept. Confirm permission for reuse and obtain originals only if the owner agrees to a public launch. Only the existing ZIP needs uploading.
 
 1. Download **mads-original-photos.zip** from the ChatGPT conversation. **Do not extract it.**
 2. In this GitHub folder (`imports/`), click **Add file → Upload files**.
