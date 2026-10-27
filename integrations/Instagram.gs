@@ -1,122 +1,176 @@
 /**
- * Mads About Cake | Compact 3-tab Sheets integration.
- * Same Apify actor and mapping as Mammabao. Only Portfolio, Instagram and Website.
- * Imported A:J; suggestions K:N; owner review O:T; timestamp X1.
- * Nothing publishes automatically; no owner Instagram credentials required.
+ * Mads About Cake · Apify Instagram Post Scraper → existing "IG Extract" Google Sheet tab
+ * No automatic publication. Writes IG Extract and Config!B2 only.
+ *
+ * 1. Paste into Extensions → Apps Script of the Mads About Cake workbook and save.
+ * 2. Store APIFY_API_TOKEN privately under Project Settings → Script properties.
+ * Instagram-only module: exports refreshMadsInstagram() and data helpers.
+ * Does not create the Sheets menu or write Socials Dash.
+ * Spreadsheet tab setup + formatting are automatic; manual extraction only.
+ *
+ * Provides a compact 9-column link-picking list; imports are invoked on demand.
+ * The first setup/refresh safely migrates the previous 11-column IG Extract layout.
+ * Leaves the old test tab untouched; users may delete it manually once satisfied.
  */
-const MADS_IG={username:'madsaboutcake',actor:'apify~instagram-post-scraper',postsPerRun:30,timezone:'Australia/Melbourne'};
-const MADS_HEADERS=[
- 'shortcode','instagram_url','media_type','posted_at','caption','cover_url','carousel_urls','likes','views','hashtags',
- 'suggested_product','suggested_occasion','suggested_style_tags','suggested_title',
- 'owner_product_type','owner_occasion','owner_style_tags','owner_title','decision','notes'
+const MADS_IG = Object.freeze({
+    tabName: 'IG Extract',
+  username: 'madsaboutcake',
+  actor: 'apify~instagram-post-scraper',
+  postsPerRun: 30,         // Latest 30 per manual import; existing older posts are retained.
+  maxSavedRows: 650,
+  timezone: 'Australia/Melbourne'
+});
+
+// A–I only. This is a discovery/link-copying workspace, not an approvals tracker.
+const MADS_IG_HEADERS = [
+  'posted_at', 'post_type', 'post_url', 'caption', 'cover_image_url',
+  'mentions_tags', 'paid_partnership', 'likes', 'views'
 ];
-const MADS_PRODUCTS=['Cake','Cupcakes','Other Treats'];
-const MADS_OCCASIONS=['Birthdays','Weddings & Engagements','Baby Showers & Gender Reveals','Anniversaries','Religious & Cultural','Graduations','Corporate & Events','Other Celebrations'];
-function onOpen(){
- SpreadsheetApp.getUi().createMenu('Mads Content')
- .addItem('Set up (free)','setupMadsInstagram')
- .addItem('Refresh IG data (Apify)','refreshMadsInstagram')
- .addSeparator().addItem('Add selected posts to Portfolio','addMadsPostsToPortfolio')
- .addToUi();
-}
-function _madsSheet_(setup){
- const ss=SpreadsheetApp.getActiveSpreadsheet();
- let sh=ss.getSheetByName('Instagram');
- if(!sh&&setup)sh=ss.insertSheet('Instagram');
- if(!sh)throw Error('Instagram tab not found. Import the 3-tab workbook.');
- if(sh.getMaxColumns()<24)sh.insertColumnsAfter(sh.getMaxColumns(),24-sh.getMaxColumns());
- const head=sh.getRange(1,1,1,20).getValues()[0].map(x=>String(x).trim());
- if(head.every(x=>!x)){
-  if(!setup)throw Error('Run Set up (free) first.');
-  sh.getRange(1,1,1,20).setValues([MADS_HEADERS]);
-  sh.setFrozenRows(1);sh.setFrozenColumns(2);
- }else if(head.some((x,i)=>x!==MADS_HEADERS[i])){
-  throw Error('Instagram tab uses old headings. Use the simplified 3-tab workbook without overwriting any existing data.');
- }
- const stampLabel=String(sh.getRange('W1').getValue()||'');
- if(stampLabel&&stampLabel!=='Last successful IG refresh')throw Error('Instagram W1 already contains other data.');
- if(setup&&!stampLabel){
-  sh.getRange('W1').setValue('Last successful IG refresh');
-  if(!sh.getRange('X1').getValue())sh.getRange('X1').setValue('Not yet run');
- }
- return sh;
-}
-function setupMadsInstagram(){
- const ss=SpreadsheetApp.getActiveSpreadsheet();
- if(!ss.getSheetByName('Portfolio')||!ss.getSheetByName('Website'))throw Error('The Portfolio and Website tabs must exist.');
- _madsSheet_(true);
- return 'Instagram ready. No new tabs or paid calls.';
-}
-function _madsSuggestions_(caption,id){
- const s=String(caption||'').toLowerCase(),styles=[];
- const product=/\bcupcakes?\b/.test(s)?'Cupcakes':/\bcakes?\b|\blambeth\b|\bbuttercream\b/.test(s)?'Cake':'';
- let occasion='';
- if(/wedding|engagement|bridal/.test(s))occasion='Weddings & Engagements';
- else if(/baby shower|gender reveal/.test(s))occasion='Baby Showers & Gender Reveals';
- else if(/birthday|bday/.test(s))occasion='Birthdays';
- else if(/anniversary/.test(s))occasion='Anniversaries';
- else if(/baptis|christen|communion|eid|diwali/.test(s))occasion='Religious & Cultural';
- else if(/graduat/.test(s))occasion='Graduations';
- else if(/corporate|office event/.test(s))occasion='Corporate & Events';
- if(/vintage|piping|piped|lambeth|ruffle/.test(s))styles.push('Vintage piping');
- if(/floral|flower|bloom/.test(s))styles.push('Floral');
- if(/bow|ribbon/.test(s))styles.push('Bows & ribbons');
- const first=String(caption||'').split(/\r?\n/)[0].replace(/#[\w]+/g,'').trim();
- return [product,occasion,styles.join('; '),first.length>3&&first.length<81?first:'Instagram design '+id].map(_madsSafeCell_);
-}
-function _madsRecord_(item){
- if(!item||item.ownerUsername&&String(item.ownerUsername).toLowerCase()!==MADS_IG.username)return null;
- const r=_madsNormalizePosts_([item])[0];
- if(!r)return null;
- const id=_madsShortCodeFromUrl_(r[2]);if(!id)return null;
- const images=[item.displayUrl,...(Array.isArray(item.images)?item.images:[]),...(Array.isArray(item.childPosts)?item.childPosts.map(c=>c&&c.displayUrl):[])];
- const urls=[...new Set(images.filter(x=>typeof x==='string'&&/^https:\/\//.test(x)))].slice(0,15);
- const tags=[...new Set([...String(item.caption||'').matchAll(/#([\w]+)/g)].map(x=>x[1]))];
- return {id,raw:[id,r[2],r[1],r[0],r[3],r[4],_madsSafeCell_(urls.join('; ')),r[7],r[8],_madsSafeCell_(tags.join('; '))],
-  suggested:_madsSuggestions_(item.caption,id)};
-}
-function refreshMadsInstagram(){
- const token=PropertiesService.getScriptProperties().getProperty('APIFY_API_TOKEN');
- if(!token||token.trim().length<12)throw Error('Set APIFY_API_TOKEN in Apps Script Script properties.');
- const lock=LockService.getScriptLock();
- if(!lock.tryLock(2000))throw Error('Another refresh is running.');
- try{
-  const sh=_madsSheet_(false);
-  if(sh.getRange('W1').getValue()!=='Last successful IG refresh')throw Error('Run free setup first.');
-  const input={username:[MADS_IG.username],resultsLimit:MADS_IG.postsPerRun,dataDetailLevel:'detailedData',skipPinnedPosts:true};
-  const response=UrlFetchApp.fetch('https://api.apify.com/v2/acts/'+MADS_IG.actor+'/run-sync-get-dataset-items?format=json',{
-   method:'post',contentType:'application/json',headers:{Authorization:'Bearer '+token.trim(),Accept:'application/json'},
-   payload:JSON.stringify(input),muteHttpExceptions:true
-  });
-  if(![200,201].includes(response.getResponseCode()))throw Error('Apify HTTP '+response.getResponseCode()+'; existing data preserved.');
-  let items;
-  try{items=JSON.parse(response.getContentText())}catch{throw Error('Invalid Apify JSON; existing data preserved.')}
-  if(!Array.isArray(items)||!items.length)throw Error('Apify returned no posts; existing data preserved.');
-  const unique=new Map();
-  items.forEach(x=>{const r=_madsRecord_(x);if(r&&!unique.has(r.id))unique.set(r.id,r)});
-  if(!unique.size)throw Error('No valid Mads posts; existing data preserved.');
-  const count=Math.max(0,sh.getLastRow()-1),existing=new Map();
-  if(count)sh.getRange(2,1,count,1).getValues().forEach((v,i)=>{if(v[0]&&!existing.has(String(v[0])))existing.set(String(v[0]),i+2)});
-  const add=[],update=[];
-  unique.forEach(r=>{
-   if(existing.has(r.id))update.push({row:existing.get(r.id),values:r.raw});
-   else add.push(r.raw.concat(r.suggested,['','','','','Review','']));
-  });
-  if(count+add.length>500)throw Error('Instagram exceeds 500 rows. Archive old posts first.');
-  update.forEach(r=>sh.getRange(r.row,1,1,10).setValues([r.values]));
-  if(add.length){
-   const start=sh.getLastRow()+1;
-   if(sh.getMaxRows()<start+add.length-1)sh.insertRowsAfter(sh.getMaxRows(),start+add.length-1-sh.getMaxRows());
-   sh.getRange(start,1,add.length,20).setValues(add);
+// Recognise the previous layout exactly before deleting any columns.
+const MADS_IG_OLD_HEADERS = MADS_IG_HEADERS.concat(['review_status', 'notes']);
+
+function setupMadsInstagram() {
+  const ss = SpreadsheetApp.getActiveSpreadsheet();
+  let sheet = ss.getSheetByName(MADS_IG.tabName);
+  if (!sheet) throw new Error('IG Extract is missing. Import the four-tab workbook; no new tabs were made.');
+  const size = MADS_IG_HEADERS.length;
+  if (sheet.getMaxColumns() < size)
+    sheet.insertColumnsAfter(sheet.getMaxColumns(), size - sheet.getMaxColumns());
+
+  if (sheet.getLastRow()) {
+    const existing = sheet.getRange(1, 1, 1, size).getValues()[0].map(v => String(v).trim());
+    const isCurrent = existing.every((header, i) => header === MADS_IG_HEADERS[i]);
+    if (!isCurrent) {
+      throw new Error('IG Extract headings are unrecognised. Nothing was changed: check the first 9 columns.');
+    }
+    // Migrate only when J/K contain the EXACT legacy columns. Never guess.
+    const oldHeadings = sheet.getMaxColumns() >= MADS_IG_OLD_HEADERS.length
+      ? sheet.getRange(1, 1, 1, MADS_IG_OLD_HEADERS.length).getValues()[0].map(v => String(v).trim())
+      : [];
+    const isOld = oldHeadings.length === MADS_IG_OLD_HEADERS.length &&
+      oldHeadings.every((h, i) => h === MADS_IG_OLD_HEADERS[i]);
+    if (isOld) {
+      if (sheet.getLastColumn() > MADS_IG_OLD_HEADERS.length)
+        throw new Error('IG Extract contains additional data after column K. No migration performed.');
+      const filter = sheet.getFilter();
+      if (filter) filter.remove(); // Remove the 11-column filter before deleting J:K.
+      sheet.deleteColumns(10, 2); // Remove legacy Review Status and Notes, not post data.
+      console.log('IG Extract migrated safely from 11 to 9 columns.');
+    } else if (sheet.getLastColumn() > size) {
+      throw new Error('Unexpected data after column I: IG Extract was not changed.');
+    }
+  } else {
+    sheet.getRange(1, 1, 1, size).setValues([MADS_IG_HEADERS]);
   }
-  SpreadsheetApp.flush();
-  sh.getRange('X1').setNumberFormat('@');
-  sh.getRange('X1').setValue(Utilities.formatDate(new Date(),MADS_IG.timezone,'dd/MM/yyyy HH:mm'));
-  SpreadsheetApp.flush();
-  return {newPosts:add.length,updatedPosts:update.length};
- }finally{lock.releaseLock()}
+
+  sheet.getRange(1, 1, 1, size)
+    .setBackground('#e7eee6').setFontColor('#243b30').setFontWeight('bold');
+  sheet.setFrozenRows(1);
+  const widths = [130, 90, 270, 430, 310, 270, 125, 75, 75];
+  widths.forEach((w, i) => sheet.setColumnWidth(i + 1, w));
+  if (!sheet.getFilter())
+    sheet.getRange(1, 1, sheet.getMaxRows(), size).createFilter();
+  formatMadsIGExtract();
+  return 'IG Extract is ready (9 columns). Recipes, collaborations and the website are unchanged.';
 }
-/* Proven Mammabao extraction normalizers retained unchanged. */
+
+/** Apply a concise, readable layout to existing data WITHOUT starting a billable Apify run. */
+function formatMadsIGExtract() {
+  const sheet = SpreadsheetApp.getActiveSpreadsheet()
+    .getSheetByName(MADS_IG.tabName);
+  if (!sheet) throw new Error('IG Extract does not exist yet. Run setupMadsInstagram first.');
+  const width = MADS_IG_HEADERS.length;
+  const current = sheet.getRange(1, 1, 1, width).getValues()[0].map(String);
+  if (current.some((header, i) => header.trim() !== MADS_IG_HEADERS[i]))
+    throw new Error('Unexpected IG Extract column layout. No formatting changes made.');
+  sheet.setFrozenRows(1);
+  sheet.setFrozenColumns(2);
+  sheet.getRange(1, 4).setNote('Full caption is retained in the cell. The grid intentionally shows a clipped preview; select the cell to read the full caption in the formula bar.');
+  sheet.getRange(1, 5).setNote('Instagram-hosted media URLs may expire. Use verified, cached website images for publishing.');
+  sheet.getRange(1, 7).setNote('A missing platform label does not confirm whether a post was sponsored. Review separately.');
+  const count = Math.max(0, sheet.getLastRow() - 1);
+  if (count) {
+    const data = sheet.getRange(2, 1, count, width);
+    // Keep captions in the underlying cell while showing only a compact preview.
+    data.setWrapStrategy(SpreadsheetApp.WrapStrategy.CLIP);
+    data.setVerticalAlignment('middle');
+    // setRowHeights() permits auto-expansion for multiline captions.
+    // The Forced variant guarantees compact heights even after fresh data is written.
+    sheet.setRowHeightsForced(2, count, 64);
+  }
+  return 'Formatted ' + count + ' IG Extract rows. No Apify call or content changes.';
+}
+
+
+/** Resolve a pre-existing, single-cell Config named range before any paid API call.
+ * The name must be created in Google Sheets; extraction must not silently skip status reporting.
+ */
+function _madsIGRefreshCell_() {
+  const ss = SpreadsheetApp.getActiveSpreadsheet();
+  const config = ss.getSheetByName('Config');
+  if (!config || String(config.getRange('A2').getValue()).trim() !== 'Last successful IG refresh')
+    throw new Error('Config!A2 must say Last successful IG refresh before paid import.');
+  const cell = config.getRange('B2');
+  if (!cell || cell.getNumRows() !== 1 || cell.getNumColumns() !== 1)
+    throw new Error('Config!B2 is not a valid single-cell refresh timestamp.');
+  return cell;
+}
+
+function refreshMadsInstagram() {
+  const token = PropertiesService.getScriptProperties().getProperty('APIFY_API_TOKEN');
+  if (!token || token.trim().length < 12)
+    throw new Error('Add the secret APIFY_API_TOKEN in Apps Script > Project Settings > Script properties.');
+
+  const lock = LockService.getScriptLock();
+  if (!lock.tryLock(2000)) throw new Error('Another Instagram import is currently running.');
+  try {
+    // Validate the required named range before making a potentially paid Apify request.
+    const lastRefreshCell = _madsIGRefreshCell_();
+    _madsRequireFourTabs_();
+    // The Actor selected and tested in Apify Console is Instagram POST Scraper.
+    const input = {
+      username: [MADS_IG.username],
+      resultsLimit: MADS_IG.postsPerRun,
+      dataDetailLevel: 'detailedData',
+      skipPinnedPosts: true
+    };
+    const response = UrlFetchApp.fetch(
+      'https://api.apify.com/v2/acts/' + MADS_IG.actor +
+      '/run-sync-get-dataset-items?format=json',
+      {
+        method: 'post',
+        contentType: 'application/json',
+        headers: {Authorization: 'Bearer ' + token.trim(), Accept: 'application/json'},
+        payload: JSON.stringify(input),
+        muteHttpExceptions: true,
+        followRedirects: true
+      }
+    );
+    if (response.getResponseCode() !== 200 && response.getResponseCode() !== 201) {
+      throw new Error('Apify returned HTTP ' + response.getResponseCode() +
+        '. Check your Apify Console Actor runs and account credits. Sheet contents were preserved.');
+    }
+    let items;
+    try { items = JSON.parse(response.getContentText()); }
+    catch (err) { throw new Error('Apify output was not valid JSON. Existing sheet content was preserved.'); }
+    if (!Array.isArray(items) || !items.length)
+      throw new Error('Apify returned no posts. Existing sheet content was preserved.');
+
+    const stats = _madsSaveItems_(items);
+    // Only record success after the API result was validated and the extract was written/formatted.
+    // Text is explicitly formatted in Melbourne local time, regardless of spreadsheet timezone.
+    const completedAt = new Date();
+    lastRefreshCell.setNumberFormat('@');
+    lastRefreshCell.setValue(Utilities.formatDate(completedAt, MADS_IG.timezone, 'dd/MM/yyyy HH:mm'));
+    SpreadsheetApp.flush();
+    PropertiesService.getScriptProperties().setProperty('MADS_IG_LAST_REFRESH', completedAt.toISOString());
+    console.log('IG Extract refreshed: ' + stats.postsFromApify + ' current posts; ' + stats.totalPosts + ' total unique posts.');
+    return stats;
+  } finally {
+    lock.releaseLock();
+  }
+}
+
 function _madsNormalizePosts_(items) {
   const records = [], seen = new Set();
   items.forEach(item => {
@@ -202,49 +256,172 @@ function _madsSafeCell_(value) {
   return /^[\s]*[=+\-@]/.test(s) ? "'" + s : s;
 }
 
-
-function addMadsPostsToPortfolio(){
- const ss=SpreadsheetApp.getActiveSpreadsheet(),ig=_madsSheet_(false),p=ss.getSheetByName('Portfolio');
- if(!p)throw Error('Portfolio missing.');
- const width=p.getLastColumn(),head=p.getRange(1,1,1,width).getValues()[0].map(String);
- for(const k of ['item_id','title','product_type','primary_occasion','instagram_url','approval_status','show_on_website'])
-   if(!head.includes(k))throw Error('Portfolio missing '+k);
- const count=Math.max(0,p.getLastRow()-1),idCol=head.indexOf('item_id')+1;
- const existing=new Set(count?p.getRange(2,idCol,count,1).getValues().flat().map(String):[]);
- const n=Math.max(0,ig.getLastRow()-1);if(!n)return 'No Instagram posts yet.';
- const rows=ig.getRange(2,1,n,20).getValues(),out=[],chosen=[],problems=[];
- const set=(x,k,v)=>{const i=head.indexOf(k);if(i>=0)x[i]=v};
- rows.forEach((r,i)=>{
-  if(r[18]!=='Add to Portfolio')return;
-  const shortcode=String(r[0]||'');
-  if(!/^[A-Za-z0-9_-]{5,80}$/.test(shortcode)){problems.push('row '+(i+2)+' shortcode');return}
-  const id='ig-'+[...shortcode].map(c=>c.charCodeAt(0).toString(16).padStart(2,'0')).join('');
-  if(existing.has(id)){chosen.push(i+2);return}
-  const product=String(r[14]||r[10]||''),occasion=String(r[15]||r[11]||''),title=String(r[17]||r[13]||'').slice(0,140);
-  if(!MADS_PRODUCTS.includes(product)||!MADS_OCCASIONS.includes(occasion)||title.length<3){
-   problems.push('row '+(i+2)+' needs product, occasion and title');return;
-  }
-  const record=Array(width).fill('');
-  set(record,'item_id',id);set(record,'title',title);set(record,'product_type',product);
-  set(record,'primary_occasion',occasion);set(record,'style_tags',String(r[16]||r[12]||''));
-  set(record,'instagram_url',String(r[1]||''));set(record,'alt_text','Mads About Cake design — '+title);
-  set(record,'featured_home','No');set(record,'show_on_website','No');set(record,'approval_status','Draft');
-  set(record,'published_date',String(r[3]||''));set(record,'internal_notes','From Instagram. Confirm details before publishing.');
-  out.push(record);chosen.push(i+2);existing.add(id);
- });
- if(out.length){
-  const start=p.getLastRow()+1;
-  if(p.getMaxRows()<start+out.length-1)p.insertRowsAfter(p.getMaxRows(),start+out.length-1-p.getMaxRows());
-  p.getRange(start,1,out.length,width).setValues(out);SpreadsheetApp.flush();
- }
- chosen.forEach(i=>ig.getRange(i,19).setValue('Added to Portfolio'));
- return out.length+' drafts added; website unchanged.'+(problems.length?' Check '+problems.join(', '):'');
+/** Free offline test: no Apify calls, no Sheet writes. */
+function testMadsInstagramMapping() {
+  const items = [
+    {shortCode:'DepxZd7yOJo',url:'https://www.instagram.com/p/DepxZd7yOJo/',
+     type:'Video',productType:'clips',ownerUsername:'madsaboutcake',
+     timestamp:'2026-10-18 22:43:52 UTC',caption:'Dumplings with @gagasforguthealth',
+     displayUrl:'https://example.com/dumplings.jpg',likesCount:25,videoPlayCount:665},
+    {shortCode:'De5TEHqEhhH',type:'Sidecar',productType:'carousel_container',
+     ownerUsername:'madsaboutcake',timestamp:'2026-10-24T23:19:49Z',
+     caption:'=2+2',displayUrl:'Proxied content',
+     images:['https://example.com/carousel.webp']},
+    {shortCode:'EXTRA123',ownerUsername:'other-user'}
+  ];
+  const rows = _madsNormalizePosts_(items);
+  if (rows.length !== 2 || rows.some(r => r.length !== 9) ||
+      rows[0][1] !== 'Reel' || rows[0][0] !== '2026-10-18' ||
+      rows[0][5] !== "'@gagasforguthealth" || rows[0][8] !== 665 ||
+      rows[1][1] !== 'Carousel' || rows[1][4] !== 'https://example.com/carousel.webp' ||
+      rows[1][3] !== "'=2+2")
+    throw new Error('IG Extract compact mapping test failed');
+  return 'PASS: 9 columns, Reel/Carousel, dates, mentions, media fallback, metric and caption safety.';
 }
-function testMadsInstagramMapping(){
- const item={ownerUsername:'madsaboutcake',shortCode:'AbC123456',type:'Image',timestamp:'2026-10-26T00:00:00Z',
-  caption:'Birthday cupcakes with bows #cake',displayUrl:'https://example.com/photo.jpg',likesCount:12};
- const rec=_madsRecord_(item);
- if(!rec||rec.raw.length!==10||rec.suggested.length!==4||rec.suggested[0]!=='Cupcakes'||rec.suggested[1]!=='Birthdays')
-   throw Error('Instagram mapping test failed');
- return 'PASS: Mads source and category mapping';
+
+/** Single write/merge implementation for normal and historical extractions. */
+function _madsSaveItems_(items) {
+  const incoming = _madsNormalizePosts_(items);
+  if (!incoming.length) throw new Error('No valid @madsaboutcake posts returned. Sheet content preserved.');
+
+  // Do not create or change the sheet until the API response is validated.
+  setupMadsInstagram();
+  const sheet = SpreadsheetApp.getActiveSpreadsheet()
+    .getSheetByName(MADS_IG.tabName);
+  const width = MADS_IG_HEADERS.length;
+  const originalCount = Math.max(0, sheet.getLastRow() - 1);
+  const existing = originalCount ? sheet.getRange(2, 1, originalCount, width).getValues() : [];
+  const previous = new Map();
+  existing.forEach(row => {
+    const key = _madsShortCodeFromUrl_(row[2]);
+    if (key && !previous.has(key)) previous.set(key, row);
+  });
+  const data = new Map();
+  incoming.forEach(row => {
+    const key = _madsShortCodeFromUrl_(row[2]);
+    if (!key || data.has(key)) return;
+    data.set(key, row);
+  });
+  previous.forEach((row, key) => { if (!data.has(key)) data.set(key, row); });
+  const rows = Array.from(data.values())
+    .sort((a, b) => String(b[0]).localeCompare(String(a[0])) || String(a[2]).localeCompare(String(b[2])))
+    .slice(0, MADS_IG.maxSavedRows);
+  if (!rows.length) throw new Error('No valid records to write. Sheet preserved.');
+  if (sheet.getMaxRows() < rows.length + 1)
+    sheet.insertRowsAfter(sheet.getMaxRows(), rows.length + 1 - sheet.getMaxRows());
+
+  sheet.getRange(2, 1, rows.length, width).setValues(rows);
+  if (originalCount > rows.length)
+    sheet.getRange(rows.length + 2, 1, originalCount - rows.length, width).clearContent();
+  sheet.getRange(2, 1, rows.length, 1).setNumberFormat('@');
+  sheet.getRange(2, 1, rows.length, 3).setNumberFormat('@');
+  // Apply formatting after all write operations have actually reached Sheets.
+  SpreadsheetApp.flush();
+  formatMadsIGExtract();
+  SpreadsheetApp.flush();
+  return {postsFromApify:incoming.length,totalPosts:rows.length,tab:MADS_IG.tabName};
+}
+
+/* Four-tab-only Google Sheets editor — matched to Mammabao's compact model. */
+const MADS_COLUMNS=['item_id','title','instagram_url','product_type','occasion','style_tags',
+ 'show_on_website','featured','priority','short_description','other_occasions','alt_text','notes'];
+function _madsRequireFourTabs_(){
+ const ss=SpreadsheetApp.getActiveSpreadsheet();
+ ['Read Me','Config','Creation Visibility','IG Extract'].forEach(name=>{
+  if(!ss.getSheetByName(name))throw new Error('Missing '+name+'. Use the four-tab workbook.');
+ });
+ const cv=ss.getSheetByName('Creation Visibility');
+ const actual=cv.getRange(1,1,1,MADS_COLUMNS.length).getValues()[0].map(String);
+ if(actual.some((v,i)=>v!==MADS_COLUMNS[i]))throw new Error('Creation Visibility headers do not match the four-tab workbook.');
+ return ss;
+}
+function _madsDropdown_(sheet,targetRange,optionRange){
+ const rule=SpreadsheetApp.newDataValidation().requireValueInRange(optionRange,true)
+  .setAllowInvalid(false).build();
+ sheet.getRange(targetRange).setDataValidation(rule);
+}
+function setupMadsFourTabWorkbook(){
+ const ss=_madsRequireFourTabs_();
+ setupMadsInstagram();
+ const cv=ss.getSheetByName('Creation Visibility'),co=ss.getSheetByName('Config');
+ _madsDropdown_(cv,'D2:D500',co.getRange('D2:D50'));
+ _madsDropdown_(cv,'E2:E500',co.getRange('E2:E50'));
+ _madsDropdown_(cv,'G2:G500',co.getRange('G2:G50'));
+ _madsDropdown_(cv,'H2:H500',co.getRange('H2:H50'));
+ if(String(co.getRange('A2').getValue()).trim()!=='Last successful IG refresh')
+  throw new Error('Config!A2 label changed; update it before running.');
+ return 'Four tabs validated and Creation Visibility dropdowns refreshed; no Apify charge.';
+}
+function onOpen(){
+ SpreadsheetApp.getUi().createMenu('Mads About Cake')
+  .addItem('Refresh latest 30 IG posts','refreshMadsInstagram')
+  .addSeparator()
+  .addItem('Start full history import (once)','startMadsHistoryImport')
+  .addItem('Collect finished history import','collectMadsHistoryImport')
+  .addSeparator()
+  .addItem('Set up dropdowns (free)','setupMadsFourTabWorkbook')
+  .addToUi();
+}
+function _madsToken_(){
+ const token=PropertiesService.getScriptProperties().getProperty('APIFY_API_TOKEN');
+ if(!token||token.trim().length<12)throw new Error('Set APIFY_API_TOKEN under Apps Script Project Settings.');
+ return token.trim();
+}
+function _madsGetJson_(url,opts){
+ const res=UrlFetchApp.fetch(url,Object.assign({muteHttpExceptions:true,
+  headers:{Authorization:'Bearer '+_madsToken_(),Accept:'application/json'}},opts||{}));
+ if(res.getResponseCode()<200||res.getResponseCode()>=300)
+  throw new Error('Apify HTTP '+res.getResponseCode()+'; inspect Apify Console for details.');
+ try{return JSON.parse(res.getContentText());}
+ catch{throw new Error('Apify returned non-JSON data.');}
+}
+/** Starts asynchronous ONE-TIME full history. Initial actor start can incur fees.
+ * Separate collect action avoids Apps Script synchronous timeouts.
+ */
+function startMadsHistoryImport(){
+ const ss=_madsRequireFourTabs_(),config=ss.getSheetByName('Config');
+ _madsIGRefreshCell_();
+ const previous=String(config.getRange('B4').getValue()||'').trim();
+ const status=String(config.getRange('B3').getValue()||'');
+ if(previous&&status!=='Failed')throw new Error('A history run is already recorded. Collect it before starting another billable run.');
+ const payload=JSON.stringify({username:[MADS_IG.username],resultsLimit:500,
+  dataDetailLevel:'detailedData',skipPinnedPosts:false});
+ const result=_madsGetJson_('https://api.apify.com/v2/acts/'+MADS_IG.actor+'/runs',
+  {method:'post',contentType:'application/json',payload});
+ const run=result.data||result;
+ if(!/^[A-Za-z0-9]+$/.test(String(run.id||'')))throw new Error('Actor did not return a valid run ID; check Apify Console before retrying.');
+ config.getRange('B4').setNumberFormat('@');
+ config.getRange('B4').setValue(run.id);
+ config.getRange('B3').setValue('Running — collect after Apify finishes');
+ return 'Started one full-history Actor run. No posts were imported yet. Run ID: '+run.id;
+}
+function collectMadsHistoryImport(){
+ const ss=_madsRequireFourTabs_(),config=ss.getSheetByName('Config');
+ const runId=String(config.getRange('B4').getValue()||'').trim();
+ if(!/^[A-Za-z0-9]+$/.test(runId))throw new Error('No valid history run ID at Config!B4.');
+ const response=_madsGetJson_('https://api.apify.com/v2/actor-runs/'+runId);
+ const run=response.data||response;
+ if(run.status==='RUNNING'||run.status==='READY')return 'History import is still running in Apify. Try collecting after it finishes.';
+ if(run.status!=='SUCCEEDED')throw new Error('Actor status is '+run.status+'. Existing IG Extract preserved.');
+ const dataset=String(run.defaultDatasetId||'');
+ if(!/^[A-Za-z0-9]+$/.test(dataset))throw new Error('No dataset found on completed Actor.');
+ const items=[];
+ for(let offset=0;offset<600;offset+=100){
+  const part=_madsGetJson_('https://api.apify.com/v2/datasets/'+dataset+
+   '/items?format=json&clean=true&limit=100&offset='+offset);
+  if(!Array.isArray(part))throw new Error('Unexpected dataset page. IG Extract was not changed.');
+  items.push(...part);
+  if(part.length<100)break;
+ }
+ if(!items.length)throw new Error('Completed history run yielded no posts. IG Extract preserved.');
+ // Validate all item data before writing. Older posts are retained by the merge logic.
+ const valid=_madsNormalizePosts_(items);
+ if(!valid.length)throw new Error('No valid @madsaboutcake posts in historical dataset.');
+ const stats=_madsSaveItems_(items);
+ SpreadsheetApp.flush();
+ const timestamp=Utilities.formatDate(new Date(),MADS_IG.timezone,'dd/MM/yyyy HH:mm');
+ const refresh=_madsIGRefreshCell_();refresh.setNumberFormat('@');refresh.setValue(timestamp);
+ config.getRange('B3').setValue('Collected '+stats.postsFromApify+' posts');
+ SpreadsheetApp.flush();
+ return 'History imported: '+stats.postsFromApify+' records retrieved; '+stats.totalPosts+' unique saved in IG Extract.';
 }
