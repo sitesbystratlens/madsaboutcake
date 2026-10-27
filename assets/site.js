@@ -16,7 +16,7 @@ const fallback=[
  {id:'cupcake-florals',title:'Floral cupcakes',productType:'Cupcakes',primaryOccasion:'Birthdays',styleTags:['Floral'],alt:'Concept cupcakes',previewImage:pexels(1055272)}
 ];
 const esc=s=>String(s==null?'':s).replace(/[&<>"']/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));
-const safeCover=s=>typeof s==='string'&&/^assets\/cake-covers\/[\w-]+\.(?:jpe?g|png|webp|avif)$/.test(s);
+const safeCover=s=>typeof s==='string'&&/^assets\/(?:cake-covers|creations)\/[\w-]+\.(?:jpe?g|png|webp|avif)$/.test(s);
 const safePreview=s=>typeof s==='string'&&/^https:\/\/images\.pexels\.com\/photos\/\d+\/pexels-photo-\d+\.jpeg(?:\?.*)?$/.test(s)?s:'';
 const imageOf=c=>safeCover(c.coverImage)?'/'+c.coverImage:(safePreview(c.previewImage)||pexels(29192489));
 const slug=s=>String(s).toLowerCase().replace(/\s+/g,'-');
@@ -24,34 +24,37 @@ const matchesOccasion=(c,o)=>c.primaryOccasion===o||c.otherOccasions.includes(o)
 function normalise(c){
  if(!c||typeof c.id!=='string'||!/^[a-z0-9-]+$/.test(c.id)||typeof c.title!=='string'||!PRODUCT_TYPES.includes(c.productType))return null;
  return {...c,title:c.title.slice(0,140),image:imageOf(c),alt:typeof c.alt==='string'?c.alt.slice(0,180):'Cake',
-  primaryOccasion:OCCASIONS.includes(c.primaryOccasion)?c.primaryOccasion:'Other Celebrations',
+  primaryOccasion:OCCASIONS.includes(c.primaryOccasion)?c.primaryOccasion:'',
   otherOccasions:Array.isArray(c.otherOccasions)?c.otherOccasions.filter(o=>OCCASIONS.includes(o)):[],
   styleTags:Array.isArray(c.styleTags)?c.styleTags.filter(t=>typeof t==='string'&&t.length<80):[]};
 }
 function enquiryUrl(c){
- const q=new URLSearchParams({type:'cake',product:c.productType,design:c.id,designTitle:c.title,occasion:c.primaryOccasion});
+ const q=new URLSearchParams({type:'cake',product:c.productType,design:c.id,designTitle:c.title});
+ if(c.primaryOccasion)q.set('occasion',c.primaryOccasion);
  if(typeof c.instagramUrl==='string'&&/^https:\/\/www\.instagram\.com\/(p|reel|tv)\/[\w-]+\/?$/.test(c.instagramUrl))q.set('reference',c.instagramUrl);
  return '/enquire/?'+q.toString();
 }
 function cardHtml(c){
- return '<article class="gallery-card" data-id="'+esc(c.id)+'"><a class="gallery-photo" href="/cakes/?design='+encodeURIComponent(c.id)+'"><img loading="lazy" decoding="async" src="'+esc(c.image)+'" alt="'+esc(c.alt)+'"></a><div class="gallery-info"><div><small>'+esc(c.productType+' · '+c.primaryOccasion)+'</small><h3>'+esc(c.title)+'</h3></div><a href="/cakes/?design='+encodeURIComponent(c.id)+'">View design ↗</a></div></article>';
+ return '<article class="gallery-card" data-id="'+esc(c.id)+'"><a class="gallery-photo" href="/cakes/?design='+encodeURIComponent(c.id)+'"><img loading="lazy" decoding="async" src="'+esc(c.image)+'" data-fallback-src="'+esc(safePreview(c.previewImage)||pexels(c.productType==='Cupcakes'?1055272:29192489))+'" alt="'+esc(c.alt)+'"></a><div class="gallery-info"><div><small>'+esc(c.productType+(c.primaryOccasion?' · '+c.primaryOccasion:''))+'</small><h3>'+esc(c.title)+'</h3></div><a href="/cakes/?design='+encodeURIComponent(c.id)+'">View design ↗</a></div></article>';
 }
 function showDesign(c,concept){
  const root=document.getElementById('design-detail'),browse=document.getElementById('browse-gallery'),hero=document.getElementById('gallery-hero');
  if(!root||!browse)return false;
  if(hero)hero.hidden=true; browse.hidden=true;root.hidden=false;
  const draft=concept||c.approvalStatus!=='Approved'||c.showOnWebsite!=='Yes';
- const meta=[['Product',c.productType],['Occasion',c.primaryOccasion],['Style',c.styleTags.join(', ')||'Custom']];
+ const meta=[['Product',c.productType]];
+ if(c.primaryOccasion)meta.push(['Occasion',c.primaryOccasion]);
+ meta.push(['Style',c.styleTags.join(', ')||'Custom']);
  if(c.shapeFormat)meta.push(['Format',c.shapeFormat]);
  if(!draft&&Number(c.servingsMin)>0)meta.push(['Serves from',c.servingsMin]);
  if(!draft&&Number(c.priceFrom)>0)meta.push(['Price from','A$'+Number(c.priceFrom).toLocaleString('en-AU')]);
- root.innerHTML='<div><a class="detail-back" href="/cakes/">← Back to all creations</a><img class="design-detail-image" src="'+esc(c.image)+'" alt="'+esc(c.alt)+'"></div>'+
+ root.innerHTML='<div><a class="detail-back" href="/cakes/">← Back to all creations</a><img class="design-detail-image" src="'+esc(c.image)+'" data-fallback-src="'+esc(safePreview(c.previewImage)||pexels(29192489))+'" alt="'+esc(c.alt)+'"></div>'+
  '<div class="design-detail-copy"><span class="eyebrow">'+esc(c.productType)+'</span><h1>'+esc(c.title)+'</h1>'+
  '<p class="lede">'+esc(c.shortDescription||'Explore the design and share what you would like to personalise.')+'</p>'+
  '<dl class="design-meta">'+meta.map(x=>'<dt>'+esc(x[0])+'</dt><dd>'+esc(x[1])+'</dd>').join('')+'</dl>'+
  '<p>Inspired by this design? Tell us your date, colour preferences, flavours and any changes you have in mind.</p>'+
  '<a class="btn" href="'+esc(enquiryUrl(c))+'">Enquire about this design →</a>'+
- '<p class="detail-hint">'+(draft?'Illustrative preview only. Studio pricing and availability are unconfirmed.':'Availability and final details are confirmed on enquiry.')+'</p></div>';
+ '<p class="detail-hint">'+(draft?'Original studio design for concept review. Occasion, pricing and availability require owner confirmation.':'Availability and final details are confirmed on enquiry.')+'</p></div>';
  return true;
 }
 function initGallery(records,concept){
@@ -241,4 +244,28 @@ function initEnquiry(){
  });
 }
 
-document.addEventListener('DOMContentLoaded',()=>{initNavigation();initPortfolio();initEnquiry();});
+
+/** Swap in the owner's WebP photographs only when actually uploaded to the site.
+ * Fallback stock images remain visible until that one-time GitHub asset upload.
+ */
+function initCuratedImageSwaps(){
+ document.querySelectorAll('img[data-curated-src]').forEach(img=>{
+  const local=img.dataset.curatedSrc;
+  if(!/^\/assets\/creations\/[\w-]+\.webp$/.test(local))return;
+  const probe=new Image();
+  probe.decoding='async';
+  probe.onload=()=>{img.src=local;};
+  probe.src=local;
+ });
+}
+document.addEventListener('error',event=>{
+ const img=event.target;
+ if(!(img instanceof HTMLImageElement))return;
+ const fallback=img.getAttribute('data-fallback-src');
+ if(fallback&&safePreview(fallback)&&img.src!==fallback){
+  img.removeAttribute('data-fallback-src');
+  img.src=fallback;
+ }
+},true);
+document.addEventListener('DOMContentLoaded',()=>{initNavigation();initCuratedImageSwaps();initPortfolio();initEnquiry();});
+

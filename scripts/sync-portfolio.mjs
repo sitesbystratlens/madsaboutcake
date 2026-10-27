@@ -25,7 +25,7 @@ function convert(csv,prior){
   used.add(id);const priorItem=previous.get(id);
   items.push({id,title:get('title'),productType,primaryOccasion,otherOccasions:tags(get('other_occasions')).filter(x=>occasions.includes(x)),
    styleTags:tags(get('style_tags')),shapeFormat:'',shortDescription:get('short_description'),alt:get('alt_text')||get('title'),instagramUrl:url,
-   coverImage:priorItem?.instagramUrl===url?priorItem.coverImage||'':'',previewImage:'',
+   coverImage:priorItem&&/^assets\/creations\/[\w-]+\.webp$/.test(priorItem.coverImage||'')&&fs.existsSync(priorItem.coverImage)?priorItem.coverImage:(priorItem?.instagramUrl===url?priorItem.coverImage||'':''),previewImage:'',
    priority:natural(get('priority'))??999,featuredHome:yes(get('featured')),homepageOrder:natural(get('priority'))??999,showOnWebsite:'Yes',approvalStatus:'Approved',demoVisible:false,
    priceFrom:number(get('price_from_aud')),servingsMin:number(get('servings_min')),servingsMax:number(get('servings_max')),
    leadTimeDays:natural(get('lead_time_days')),designCustomisable:yes('Yes'),
