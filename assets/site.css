@@ -1,6 +1,6 @@
 
 @import url('https://fonts.googleapis.com/css2?family=DM+Sans:wght@400;500;600;700&family=Fraunces:opsz,wght,SOFT,WONK@9..144,500,30,1;9..144,600,30,1;9..144,700,30,1&display=swap');
-:root{--cream:#fff9f7;--paper:#fffdfb;--blush:#fedcde;--petal:#ffeaf1;--rose:#f25c9e;--red:#b82c71;--ink:#553047;--muted:#705262;--line:#edc6d2;--serif:'Fraunces',Georgia,serif;--sans:'DM Sans',Arial,sans-serif;--shadow:0 14px 50px rgba(83,48,71,.10)}
+:root{--cream:#fff9f7;--paper:#fffdfb;--blush:#fedcde;--petal:#ffeaf1;--rose:#f15ea0;--red:#b82c71;--ink:#553047;--muted:#705262;--line:#edc6d2;--serif:'Fraunces',Georgia,serif;--sans:'DM Sans',Arial,sans-serif;--shadow:0 14px 50px rgba(83,48,71,.10)}
 *{box-sizing:border-box}html{scroll-behavior:smooth}body{margin:0;background:var(--cream);color:var(--ink);font-family:var(--sans);-webkit-font-smoothing:antialiased;overflow-x:hidden}img{max-width:100%;display:block}button,input,textarea,select{font:inherit}button{cursor:pointer}a{color:inherit}a:focus-visible,button:focus-visible,input:focus-visible,select:focus-visible,textarea:focus-visible,summary:focus-visible{outline:3px solid var(--red);outline-offset:3px}::selection{background:#eed0d8;color:var(--ink)}
 .skip-link{position:absolute;top:-100px;left:20px;background:var(--ink);color:#fff;padding:12px 18px;z-index:1000}.skip-link:focus{top:12px}
 .announcement{background:var(--petal);color:var(--ink);padding:8px 16px;text-align:center;font-size:11px;line-height:1.5;letter-spacing:.025em;border-bottom:1px solid var(--line)}.announcement strong{font-weight:700;color:var(--red)}
@@ -63,7 +63,7 @@
 }
 
 /* Studio brand palette — sampled from the supplied original cupcake logo.
-   Logo: pink #F25C9E, base #FEDCDE. Small type and white-on-pink
+   Logo: pink #f15ea0, base #FEDCDE. Small type and white-on-pink
    controls use the darker accessible companion #B82C71. */
 .announcement{border-top:3px solid var(--rose)}
 .home-hero{border-top:3px solid var(--rose)}
