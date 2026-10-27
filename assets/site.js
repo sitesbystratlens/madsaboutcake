@@ -35,7 +35,7 @@ function enquiryUrl(c){
  return '/enquire/?'+q.toString();
 }
 function cardHtml(c){
- return '<article class="gallery-card" data-id="'+esc(c.id)+'"><a class="gallery-photo" href="/cakes/?design='+encodeURIComponent(c.id)+'"><img loading="lazy" decoding="async" src="'+esc(c.image)+'" data-fallback-src="'+esc(safePreview(c.previewImage)||pexels(c.productType==='Cupcakes'?1055272:29192489))+'" alt="'+esc(c.alt)+'"></a><div class="gallery-info"><div><small>'+esc(c.productType+(c.primaryOccasion?' · '+c.primaryOccasion:''))+'</small><h3>'+esc(c.title)+'</h3></div><a href="/cakes/?design='+encodeURIComponent(c.id)+'">View design ↗</a></div></article>';
+ return '<article class="gallery-card" data-id="'+esc(c.id)+'">'+(c.featuredHome===true?'<span class="gallery-card__feature">Featured</span>':'')+'<a class="gallery-photo" href="/cakes/?design='+encodeURIComponent(c.id)+'"><img loading="lazy" decoding="async" src="'+esc(c.image)+'" data-fallback-src="'+esc(safePreview(c.previewImage)||pexels(c.productType==='Cupcakes'?1055272:29192489))+'" alt="'+esc(c.alt)+'"></a><div class="gallery-info"><div><small>'+esc(c.productType+(c.primaryOccasion?' · '+c.primaryOccasion:''))+'</small><h3>'+esc(c.title)+'</h3></div><a href="/cakes/?design='+encodeURIComponent(c.id)+'">View design ↗</a></div></article>';
 }
 function showDesign(c,concept){
  const root=document.getElementById('design-detail'),browse=document.getElementById('browse-gallery'),hero=document.getElementById('gallery-hero');

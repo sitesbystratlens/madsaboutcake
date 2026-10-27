@@ -27,6 +27,7 @@ function convert(csv,prior){
    styleTags:tags(get('style_tags')),shapeFormat:'',shortDescription:get('short_description'),alt:get('alt_text')||get('title'),instagramUrl:url,
    coverImage:priorItem&&/^assets\/creations\/[\w-]+\.webp$/.test(priorItem.coverImage||'')&&fs.existsSync(priorItem.coverImage)?priorItem.coverImage:(priorItem?.instagramUrl===url?priorItem.coverImage||'':''),previewImage:'',
    priority:natural(get('priority'))??999,featuredHome:yes(get('featured')),homepageOrder:natural(get('priority'))??999,showOnWebsite:'Yes',approvalStatus:'Approved',demoVisible:false,
+   displayBadge:['Popular','Best seller','New'].includes(get('badge_label'))&&yes(get('badge_confirmed'))?get('badge_label'):'',badgeApproved:yes(get('badge_confirmed')),
    priceFrom:number(get('price_from_aud')),servingsMin:number(get('servings_min')),servingsMax:number(get('servings_max')),
    leadTimeDays:natural(get('lead_time_days')),designCustomisable:yes('Yes'),
    availableFlavourIds:tags(get('available_flavour_ids')),personalisationOptions:tags(get('personalisation_options')),
