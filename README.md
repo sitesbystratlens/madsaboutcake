@@ -1,5 +1,15 @@
 # Mads About Cake — independent concept pitch (October 2026)
 
+
+### V3.2 owner-concept polish (28 October 2026)
+
+- Exact logo colours: pink `#F25C9E`, backdrop `#FEDCDE`; deeper berry is used sparingly for legible calls to action.
+- Header: Creations · Deco & Sip · Let's talk cake. About is intentionally in the footer.
+- Footer: **Custom creations** and a text-only Instagram link; no icon strip.
+- Homepage's final section contains a genuine browser-only **enquiry preparation demo**. Form submissions are not sent to any server and no data is saved; a visitor can copy an enquiry draft and use the real Instagram DM link. This must not be described as a working studio booking integration.
+- `assets/studio-notices.json` controls the thin studio-announcement banner. `enabled: false` removes it, while `message`, `linkText` and `linkHref` provide editable content. The included December 2026 unavailability is an **explicitly illustrative example, not confirmed studio availability**. Leave `isExample: true` and the visible disclaimer until the owner authorises actual notices.
+- V3.2's source marker is `v3-2-polish-enquiry-notice-20261028`. Confirm Cloudflare serves that before treating the changes as deployed.
+
 ## V2 implementation (27 October 2026)
 
 The **V2 concept homepage is implemented in `index.html` + `assets/home-v2.css`**, with a cache-busted stylesheet link and visible `V2 preview` announcement. Six distinct acts replace the old five-photo mosaic / repeated card bands. Ten non-repeating, locally stored Instagram photos are assigned per the V2 spec; the hero is the Pink Ribbon Vintage Cake. The original cupcake logo is used in the peach header and each site's footer. The real Decorate & Sip session is linked on Instagram rather than shown using an unrelated cupcake photograph.

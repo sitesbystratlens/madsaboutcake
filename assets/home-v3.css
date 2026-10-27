@@ -175,9 +175,9 @@ body{background:var(--v3-cream)}
 .mads-v3 .enquiry-panel__header span{font:800 9px/1.2 var(--sans);color:var(--v3-berry);letter-spacing:.12em}
 .mads-v3 #home-enquiry-form{display:grid;gap:20px}
 .mads-v3 .enquiry-field-row{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:17px}
-.mads-v3 #home-enquiry-form label{display:grid;gap:9px;color:var(--v3-ink);font:700 12px/1.35 var(--sans);min-width:0}
+.mads-v3 #home-enquiry-form label{display:block;color:var(--v3-ink);font:700 12px/1.35 var(--sans);min-width:0}
 .mads-v3 #home-enquiry-form label>span{color:var(--v3-berry);display:inline}
-.mads-v3 #home-enquiry-form input,.mads-v3 #home-enquiry-form select,.mads-v3 #home-enquiry-form textarea{width:100%;min-width:0;min-height:47px;border:1px solid #dec5cc;border-radius:1px;background:#fffdfb;color:var(--v3-ink);font:500 14px/1.4 var(--sans);padding:11px 12px;outline-offset:2px;resize:vertical}
+.mads-v3 #home-enquiry-form input,.mads-v3 #home-enquiry-form select,.mads-v3 #home-enquiry-form textarea{width:100%;min-width:0;min-height:47px;border:1px solid #dec5cc;border-radius:1px;background:#fffdfb;color:var(--v3-ink);font:500 14px/1.4 var(--sans);padding:11px 12px;outline-offset:2px;resize:vertical;margin-top:9px}
 .mads-v3 #home-enquiry-form textarea{min-height:106px}
 .mads-v3 #home-enquiry-form input:focus,.mads-v3 #home-enquiry-form select:focus,.mads-v3 #home-enquiry-form textarea:focus{border-color:var(--v3-berry);outline:2px solid #eecbd8}
 .mads-v3 #home-enquiry-form input::placeholder,.mads-v3 #home-enquiry-form textarea::placeholder{color:#937c85}
