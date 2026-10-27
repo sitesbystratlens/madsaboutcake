@@ -71,3 +71,10 @@ The working Apps Script source is [integrations/Instagram.gs](integrations/Insta
 
 ## Current content control: four-tab Mammabao-parity workbook (27 October 2026)
 The only active owner-facing tabs are **Read Me**, **Config**, **Creation Visibility**, and **IG Extract**. The latest installer and operations guide is [docs/mads-four-tab-workflow.md](docs/mads-four-tab-workflow.md). The old eight/three-tab Portfolio, Instagram Intake, Website Images, and Config-less instructions are superseded. Only Creation Visibility feeds website publishing through `MADS_CREATIONS_CSV_URL`; Config drives reusable category dropdowns but is not itself published. Hero and category photos are one-off website assets, not spreadsheet-synced. The IG importer uses the same Apify actor as Mammabao, with a one-time asynchronous full history run followed by on-demand latest-30 refreshes.
+
+
+## Curated original-photo design (27 October 2026)
+The homepage is now image-first: main Garden Bloom photo, supplementary Pink Ribbon design, followed by five featured creations and Cakes/Cupcakes navigation. The `cakes.json` concept snapshot lists 33 distinct posts from the supplied Instagram photo archive; missing or unverified occasions remain blank rather than being invented. All entries are marked Draft/No and only visible in the noindex concept preview.
+
+### One-time binary asset upload
+Extract `Mads_About_Cake_Website_Asset_Upload.zip`, then use GitHub Add file > Upload files in `assets/creations/` to upload the 33 `.webp` images without renaming. This repository commit contains layout and image-path mappings, but the binary image files are a separate required upload. While they are absent, images display stock-photo fallbacks rather than broken boxes. This is a one-off site design task; it is not another Google Sheets tab. The owner still manages approved portfolio visibility, featured selection and priority using the four-tab Sheet.
