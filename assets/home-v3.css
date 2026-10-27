@@ -4,10 +4,10 @@
 :root{--v3-cream:#fffbf8;--v3-peach:#fedcde;--v3-petal:#fff1f2;--v3-berry:#f15ea0;--v3-ink:#553047;--v3-rose:#f15ea0;--v3-muted:#795d6c}
 body{background:var(--v3-cream)}
 .site-header{background:var(--v3-peach);border-color:var(--v3-rose)}
-.site-header .nav-shell{min-height:75px;max-width:1440px}
+.site-header .nav-shell{min-height:112px;max-width:1440px;justify-content:center;align-items:center;padding:8px 4%}
 .site-header .brand{font-family:var(--sans);font-size:clamp(18px,1.75vw,24px);font-weight:800;letter-spacing:-.055em;color:var(--v3-berry);gap:10px}
 .site-header .brand-wordmark,.site-header .brand-dot{color:var(--v3-berry)}
-.site-header .brand-logo{width:57px;height:57px;background:var(--v3-peach);object-fit:cover;mix-blend-mode:multiply}
+.site-header .brand-logo{width:94px;height:94px;background:transparent;object-fit:contain;mix-blend-mode:normal}
 .site-header .nav-list a{font-size:13px;color:var(--v3-ink)}
 .site-header .nav-list a.nav-cta{color:#fff;background:var(--v3-berry);border-color:var(--v3-berry);border-radius:2px}
 .site-header .nav-list a.nav-cta:hover{background:var(--v3-ink);color:#fff}
@@ -87,9 +87,9 @@ body{background:var(--v3-cream)}
 .mads-v3 .last p{color:var(--v3-muted);font-size:15px}
 .mads-v3 img{max-width:100%}
 @media(max-width:800px){
- .site-header .nav-shell{min-height:65px}
+ .site-header .nav-shell{min-height:88px;padding:6px 4%}
  .site-header .brand{font-size:clamp(17px,4.3vw,21px)}
- .site-header .brand-logo{width:49px;height:49px}
+ .site-header .brand-logo{width:76px;height:76px}
  .site-header .nav-list{background:var(--v3-peach)}
  .site-header .nav-toggle{color:var(--v3-berry);border-color:#e2a3b9}
  .mads-v3 .opening{padding:29px 17px 34px}
@@ -130,7 +130,7 @@ body{background:var(--v3-cream)}
 }
 @media(max-width:390px){
  .site-header .brand{font-size:17px}
- .site-header .brand-logo{width:44px;height:44px}
+ .site-header .brand-logo{width:68px;height:68px}
  .mads-v3 .opening h1{font-size:49px}
  .mads-v3 .look,.mads-v3 .look-center,.mads-v3 .look-left,.mads-v3 .look-right{flex-basis:83vw}
  .mads-v3 .occ b{font-size:14px}
@@ -146,7 +146,7 @@ body{background:var(--v3-cream)}
 .site-header{background:var(--v3-peach);border-bottom:2px solid var(--v3-rose)}
 .site-header .brand{color:var(--v3-berry)}
 .site-header .brand-wordmark,.site-header .brand-dot{color:var(--v3-berry)}
-.site-header .brand-logo{background:var(--v3-peach);border-radius:50%;mix-blend-mode:normal;box-shadow:none}
+.site-header .brand-logo{background:transparent;border-radius:50%;mix-blend-mode:normal;box-shadow:none}
 .mads-v3 .opening h1{font-family:var(--sans);font-weight:800;letter-spacing:-.06em}
 .mads-v3 .opening h1{color:var(--v3-ink);font-weight:700;letter-spacing:-.06em;font-size:clamp(50px,6.2vw,90px)}
 @media(max-width:800px){.site-header .nav-list{background:var(--v3-peach)}}
@@ -154,10 +154,14 @@ body{background:var(--v3-cream)}
 
 /* V3.2 – refined visual system, compact notice and genuine form showcase. */
 
+/* A quiet preview label, separate from the genuine order-availability message. */
+.concept-ribbon{display:flex;justify-content:center;align-items:center;gap:7px;min-height:23px;
+ padding:4px 12px;background:#fffaf8;border-bottom:1px solid #eadbdc;
+ color:var(--v3-muted);font:700 10px/1.3 var(--sans);letter-spacing:.06em;text-transform:uppercase}
 .announcement[data-studio-announcement]{
- background:var(--v3-rose);color:#fff;border-top:0;border-bottom:1px solid var(--v3-rose);
- display:flex;align-items:center;justify-content:center;text-align:center;padding:9px 16px;
- min-height:36px;font:700 19px/1.35 var(--sans);letter-spacing:.002em
+ background:var(--v3-rose);color:#fff;border:0;border-bottom:1px solid #de4387;
+ display:flex;align-items:center;justify-content:center;text-align:center;
+ padding:5px 12px;min-height:29px;font:600 12px/1.4 var(--sans);letter-spacing:.01em
 }
 .announcement[data-studio-announcement][hidden]{display:none!important}
 .site-footer .footer-links nav a{line-height:1.55}
@@ -199,7 +203,8 @@ body{background:var(--v3-cream)}
  .mads-v3 .enquiry-aside-note{margin-top:17px}
 }
 @media(max-width:600px){
- .announcement[data-studio-announcement]{padding:10px 12px;font-size:19px}
+ .announcement[data-studio-announcement]{padding:6px 12px;min-height:28px;font-size:11px}
+ .concept-ribbon{min-height:22px;font-size:9px;padding:3px 9px}
  .mads-v3 .enquiry-field-row{grid-template-columns:1fr}
  .mads-v3 .enquiry-panel{padding:24px 18px}
  .mads-v3 .enquiry-panel__header{margin-bottom:19px}

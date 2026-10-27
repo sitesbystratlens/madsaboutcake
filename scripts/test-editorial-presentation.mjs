@@ -10,9 +10,9 @@ const script=read('assets/site.js');
 const portfolio=JSON.parse(read('cakes.json')).cakes;
 const main=html.split('<main id="main"')[1]?.split('</main>')[0];
 assert(main,'No V3 homepage content');
-assert(html.includes('v3-5-logo-pink-white-20261028'),'Homepage V3.2 version marker missing');
+assert(html.includes('v3-6-centered-logo-subtle-notice-20261028'),'Homepage V3.2 version marker missing');
 assert(html.includes('noindex,nofollow'),'Owner concept must remain noindexed');
-assert(html.includes('/assets/home-v3.css?v=20261028-v35'),'V3.2 CSS missing or stale');
+assert(html.includes('/assets/home-v3.css?v=20261028-v36'),'V3.2 CSS missing or stale');
 assert(main.includes('class="cake-showcase"'),'Full-cake lookbook missing');
 assert(!/class="(?:v2-hero|editorial-hero|studio-hero)"/.test(main),'Generic split hero still present');
 assert(main.includes('id="occasions"'),'Broken occasions header link');
@@ -39,10 +39,11 @@ assert(css.includes('--v3-peach:#fedcde'),'Exact logo backdrop colour missing');
 assert(css.includes('--v3-rose:#f15ea0'),'Exact logo pink missing');
 assert(css.includes('--v3-berry:#f15ea0'),'Brand accents must match the logo pink');
 assert(css.includes('--v3-peach:#fedcde'),'Logo backdrop must stay exact');
-assert(css.includes('.site-header .nav-list a.nav-cta{color:#fff'),'Header CTA needs white text');
+assert(css.includes('.site-header .nav-shell{min-height:112px;max-width:1440px;justify-content:center'),'Centred logo layout missing');
 assert(css.includes('.mads-v3 .enquiry-copy{background:var(--v3-berry);border:0;padding:12px 16px;color:#fff'),'Enquiry copy button needs white text');
 assert(!/#f25c9e|#a92361/i.test(css),'Retired pink palette remains in V3 styles');
 assert(/announcement\[data-studio-announcement\]\s*\{[\s\S]*?background:var\(--v3-rose\);color:#fff/.test(css),'Order-closure banner must use logo pink and legible text');
+assert(css.includes('min-height:29px;font:600 12px/1.4 var(--sans)'),'Order notice should be subtle, not oversized');
 assert(!html.includes('SWIPE FOR MORE'),'Old swipe prompt visible on desktop');
 assert(main.includes('id="home-enquiry-form"')&&main.includes('id="cake-enquiry"'),'Homepage enquiry experience missing');
 assert(main.includes('Prepare my message ↗')&&main.includes('send to Mads on Instagram'),'Copy-to-Instagram form must be explicit');
@@ -58,10 +59,12 @@ assert.equal((css.match(/\{/g)||[]).length,(css.match(/\}/g)||[]).length,'V3 CSS
 assert.equal((base.match(/\{/g)||[]).length,(base.match(/\}/g)||[]).length,'Base CSS unbalanced');
 for(const name of ['index.html','about/index.html','cakes/index.html','decorate-and-sip/index.html','enquire/index.html','404.html']){
  const page=read(name);
- assert(page.includes('home-v3.css?v=20261028-v35'),'V3.2 theme absent or stale on '+name);
- const header=page.match(/<nav class="nav-list"[\s\S]*?<\/nav>/)?.[0]||'';
- assert(header.includes('>Creations</a>')&&header.includes('>Deco &amp; Sip</a>')&&header.includes('>Let’s talk cake</a>'),'Incorrect navigation: '+name);
- assert(!header.includes('>About</a>')&&!header.includes('>Occasions</a>'),'Cluttered header: '+name);
+ assert(page.includes('home-v3.css?v=20261028-v36'),'V3.2 theme absent or stale on '+name);
+ const header=page.match(/<header class="site-header">[\s\S]*?<\/header>/)?.[0]||'';
+ assert(header.includes('class="brand brand--centered"'),'Header logo is not centred: '+name);
+ assert(header.includes('alt="Mads About Cake"'),'Header logo needs accessible name: '+name);
+ assert(!header.includes('nav-list')&&!header.includes('nav-toggle')&&!header.includes('brand-wordmark'),'Header still has redundant navigation: '+name);
+ assert(page.includes('class="concept-ribbon"'),'Design concept strip missing: '+name);
  assert(page.includes('href="/about/"'),'About missing from footer: '+name);
  assert.equal((page.match(/class="footer-instagram"/g)||[]).length,0,'Unwanted Instagram icon: '+name);
  assert(page.includes('>Instagram ↗</a>'),'Instagram text link missing: '+name);
@@ -72,4 +75,4 @@ for(const name of ['index.html','about/index.html','cakes/index.html','decorate-
 }
 for(const record of portfolio)assert(fs.existsSync(record.coverImage),'Missing creation: '+record.id);
 assert(script.includes('data-home-occasions'),'Occasion filtering not supported');
-console.log('V3.5 PASS: exact logo pink #F15EA0, white text on pink actions, prominent December banner, original imagery.');
+console.log('V3.6 PASS: centered logo-only header, minimal concept label, subtle December notice, ten distinct original photos and footer navigation.');
