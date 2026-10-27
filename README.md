@@ -1,8 +1,14 @@
 # Mads About Cake — independent concept pitch (October 2026)
 
+## V2 implementation (27 October 2026)
+
+The **V2 concept homepage is implemented in `index.html` + `assets/home-v2.css`**, with a cache-busted stylesheet link and visible `V2 preview` announcement. Six distinct acts replace the old five-photo mosaic / repeated card bands. Ten non-repeating, locally stored Instagram photos are assigned per the V2 spec; the hero is the Pink Ribbon Vintage Cake. The original cupcake logo is used in the peach header and each site's footer. The real Decorate & Sip session is linked on Instagram rather than shown using an unrelated cupcake photograph.
+
+This repository's latest commit **is not itself proof of Cloudflare deployment**. After deploying, confirm the page includes `<meta name="mads-layout-version" content="v2-cake-studio-20261027">` and displays the Pink Ribbon hero. Do not show the owner until a real 390px and 1440px visual review passes. The GitHub workflow `check-editorial-presentation.yml` tests static imagery and section structure, not screenshots. There is no GitHub-hosted Wrangler deployment workflow; the Cloudflare publishing connection needs to be confirmed independently.
+
 **Status:** This is an unsolicited website concept prepared before the designer has engaged the owner. The 33 shortlisted images were taken from a publicly accessible Instagram media archive collected by the designer, not supplied directly by the owner. They have been curated and compressed for a private, non-indexed demonstration. There is **no requirement to obtain studio originals before showing a concept**. Before turning this into a public commercial website, obtain the owner's permission to use imagery and confirm categories, copy, pricing, services, and claims; higher-resolution originals can be requested then as an optional quality upgrade. The enquiry form is a non-sending demo.
 
-**Photo deployment:** An existing 7.5 MB file named `mads-original-photos.zip` (legacy filename) contains the 33 selected downloaded Instagram WebP files. Upload that single ZIP unchanged to the GitHub `imports/` directory. The `install-original-photos.yml` workflow installs them to `assets/creations/`. The filename is historical and does *not* mean the studio supplied original camera files. Until the upload completes the site shows temporary stock fallbacks. Keep the concept noindexed and clearly marked.
+**Photo deployment:** All 33 curated Instagram photographs have been installed as local files under `assets/creations/` since 27 October 2026. The earlier ZIP upload process is complete and does not need to be repeated. The independent concept remains noindexed and subject to the owner's approval before commercial use.
 
 ---
 
@@ -18,7 +24,7 @@ A bespoke, mobile-first boutique cake studio website built for Mads About Cake i
 - Enquire: cake / workshop enquiry form
 
 ## Preview status (IMPORTANT)
-This is a **concept preview, not an approved production launch**. Photography currently uses *third-party Pexels sample photos* solely to demonstrate layout and must be replaced with **Mads About Cake's own high-resolution photos** before launch. Copy, offerings, lead times, pickup/delivery arrangements, flavours, pricing and FAQs require the owner's review. No customer testimonials or unverified claims have been invented.
+This is a **concept preview, not an approved production launch**. Homepage and curated gallery now use *33 locally stored Instagram-media photographs* selected for this independent concept. Obtain the owner's commercial-use consent and ask about higher-resolution originals only when proceeding to a public launch. Some legacy sample references remain in fallback metadata and should not be mistaken for owner-approved photos. Copy, offerings, lead times, pickup/delivery arrangements, flavours, pricing and FAQs require the owner's review. No customer testimonials or unverified claims have been invented.
 
 The website is intentionally marked noindex until approved.
 
