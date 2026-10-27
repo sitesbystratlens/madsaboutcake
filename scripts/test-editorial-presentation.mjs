@@ -10,9 +10,9 @@ const script=read('assets/site.js');
 const portfolio=JSON.parse(read('cakes.json')).cakes;
 const main=html.split('<main id="main"')[1]?.split('</main>')[0];
 assert(main,'No V3 homepage content');
-assert(html.includes('v3-7-editorial-refinement-20261028'),'Homepage V3.2 version marker missing');
+assert(html.includes('v3-8-category-enquiries-20261028'),'Homepage V3.2 version marker missing');
 assert(html.includes('noindex,nofollow'),'Owner concept must remain noindexed');
-assert(html.includes('/assets/home-v3.css?v=20261028-v37'),'V3.2 CSS missing or stale');
+assert(html.includes('/assets/home-v3.css?v=20261028-v38'),'V3.2 CSS missing or stale');
 assert(main.includes('class="cake-showcase"'),'Full-cake lookbook missing');
 assert(!/class="(?:v2-hero|editorial-hero|studio-hero)"/.test(main),'Generic split hero still present');
 assert(main.includes('id="occasions"'),'Broken occasions header link');
@@ -52,7 +52,12 @@ assert(/announcement\[data-studio-announcement\]\s*\{[\s\S]*?background:var\(--v
 assert(css.includes('min-height:29px;font:600 12px/1.4 var(--sans)'),'Order notice should be subtle, not oversized');
 assert(!html.includes('SWIPE FOR MORE'),'Old swipe prompt visible on desktop');
 assert(main.includes('id="home-enquiry-form"')&&main.includes('id="cake-enquiry"'),'Homepage enquiry experience missing');
-assert(main.includes('Prepare my message ↗')&&main.includes('send to Mads on Instagram'),'Copy-to-Instagram form must be explicit');
+assert(main.includes('Send enquiry ↗')&&main.includes('data-studio-enquiry-form'),'Category enquiry form missing');
+assert(!main.includes('Prepare my message')&&!main.includes('Copy message'),'Copy-message workflow still in homepage');
+for(const category of ['creations','workshop','other']) assert(main.includes('value="'+category+'"'),'Missing enquiry category '+category);
+assert(read('enquire/index.html').includes('data-studio-enquiry-form'),'Dedicated enquiry form not unified');
+assert(script.includes('initStudioEnquiryForms()'),'Formspree-ready submission handler not wired');
+assert.equal(JSON.parse(read('assets/enquiry-settings.json')).formspreeEndpoint,'','Formspree must remain unconfigured until owner approval');
 assert(!main.includes("<h1>Life's sweeter <span>"),'Old dual-colour hero treatment returned');
 const notice=JSON.parse(read('assets/studio-notices.json'));
 assert.equal(notice.enabled,true,'Order availability banner should be enabled');
@@ -65,7 +70,7 @@ assert.equal((css.match(/\{/g)||[]).length,(css.match(/\}/g)||[]).length,'V3 CSS
 assert.equal((base.match(/\{/g)||[]).length,(base.match(/\}/g)||[]).length,'Base CSS unbalanced');
 for(const name of ['index.html','about/index.html','cakes/index.html','decorate-and-sip/index.html','enquire/index.html','404.html']){
  const page=read(name);
- assert(page.includes('home-v3.css?v=20261028-v37'),'V3.2 theme absent or stale on '+name);
+ assert(page.includes('home-v3.css?v=20261028-v38'),'V3.2 theme absent or stale on '+name);
  const header=page.match(/<header class="site-header">[\s\S]*?<\/header>/)?.[0]||'';
  assert(header.includes('class="brand brand--centered"'),'Header logo is not centred: '+name);
  assert(header.includes('alt="Mads About Cake"'),'Header logo needs accessible name: '+name);
@@ -81,4 +86,4 @@ for(const name of ['index.html','about/index.html','cakes/index.html','decorate-
 }
 for(const record of portfolio)assert(fs.existsSync(record.coverImage),'Missing creation: '+record.id);
 assert(script.includes('data-home-occasions'),'Occasion filtering not supported');
-console.log('V3.7 PASS: centred logo, no divider, warm art-directed sections, distinct photos, strong product discovery and enquiry paths.');
+console.log('V3.8 PASS: original imagery, unified custom creations / Decorate & Sip / other enquiry forms, no copy-to-Instagram workflow.');

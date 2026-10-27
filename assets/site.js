@@ -180,58 +180,6 @@ function initNavigation(){
  nav.querySelectorAll('a').forEach(a=>a.addEventListener('click',()=>{nav.classList.remove('is-open');toggle.setAttribute('aria-expanded','false');toggle.textContent='Menu ☰';}));
 }
 
-function initEnquiry(){
- const form=document.getElementById('enquiry-form');if(!form)return;
- const params=new URLSearchParams(window.location.search);
- const selected=params.get('type')==='workshop'?'workshop':'cake';
- const modeInput=form.querySelector('input[name="enquiryType"][value="'+selected+'"]');
- if(modeInput)modeInput.checked=true;
- const designTitle=params.get('designTitle')||params.get('style')||'';
- if(form.elements.selectedDesign&&designTitle)form.elements.selectedDesign.value=designTitle.slice(0,160);
- const productType=params.get('product');
- if(form.elements.productType&&['Cake','Cupcakes','Other Treats'].includes(productType))form.elements.productType.value=productType;
- const occasion=params.get('occasion');
- if(form.elements.occasion&&occasion&&[...form.elements.occasion.options].some(o=>o.value===occasion))form.elements.occasion.value=occasion;
- const reference=params.get('reference');
- if(reference&&form.elements.referenceLink&&/^https:\/\/www\.instagram\.com\/(p|reel|tv)\//.test(reference))form.elements.referenceLink.value=reference.slice(0,1500);
- const style=params.get('style');
- if(style&&form.elements.styleReference)form.elements.styleReference.value=style.slice(0,160);
- const dateField=form.elements.eventDate;
- if(dateField){const date=new Date();const local=new Date(date.getTime()-date.getTimezoneOffset()*60000).toISOString().split('T')[0];dateField.min=local;}
- const message=document.getElementById('form-status'),backup=document.querySelector('.copy-backup');
- function updateMode(){
-  const type=form.querySelector('input[name="enquiryType"]:checked')?.value||'cake';
-  form.querySelectorAll('[data-mode]').forEach(el=>{el.hidden=el.dataset.mode!==type;el.querySelectorAll('input,select,textarea').forEach(input=>{input.disabled=el.hidden;});});
-  const btn=form.querySelector('[type="submit"]');if(btn)btn.textContent='Prepare message for Instagram →';
-  if(message)message.hidden=true;
-  if(backup)backup.classList.remove('is-visible');
- }
- form.querySelectorAll('input[name="enquiryType"]').forEach(r=>r.addEventListener('change',updateMode));
- updateMode();
- form.addEventListener('submit',e=>{
-  e.preventDefault();
-  if(!form.reportValidity())return;
-  const data=Object.fromEntries(new FormData(form).entries());
-  const labels={productType:'Product type',selectedDesign:'Selected design',flavourPreference:'Flavour preference',cakeMessage:'Cake message',colours:'Colours/theme',dietaryNotes:'Dietary considerations',enquiryType:'Enquiry type',name:'Name',email:'Email',eventDate:'Event date',occasion:'Occasion',servings:'Servings',budget:'Indicative budget',styleReference:'Cake style',referenceLink:'Reference image',groupSize:'Group size',preferredVenue:'Venue or suburb',details:'Details'};
-  const content=Object.entries(data)
-   .filter(([key,value])=>key in labels&&String(value).trim())
-   .map(([key,value])=>labels[key]+': '+String(value))
-   .join('\n');
-  const preview=document.getElementById('prepared-enquiry');
-  if(preview)preview.value=(data.enquiryType==='workshop'?'Decorate & Sip':'Custom cake')+' — enquiry\n\n'+content;
-  if(backup)backup.classList.add('is-visible');
-  if(message){message.hidden=false;message.textContent='Your message is ready. Copy it and send it directly to the studio through Instagram.';}
-  if(backup)backup.scrollIntoView({behavior:'smooth',block:'nearest'});
- });
- const copy=document.getElementById('copy-enquiry');
- if(copy)copy.addEventListener('click',async()=>{
-  const field=document.getElementById('prepared-enquiry');if(!field)return;
-  try{if(!navigator.clipboard||!window.isSecureContext)throw new Error('Clipboard unavailable');await navigator.clipboard.writeText(field.value);copy.textContent='Copied ✓';}
-  catch(err){field.focus();field.select();copy.textContent='Select all and copy';}
- });
-}
-
-
 /** Swap in WebP photographs curated from the public Instagram media archive when uploaded to the site.
  * Fallback stock images remain visible until that one-time GitHub asset upload.
  */
@@ -269,45 +217,69 @@ async function initStudioNotice(){
   banner.hidden=false;
  }catch(error){ /* The default text stays visible if the optional settings file cannot load. */ }
 }
-/** Prepare a copyable customer enquiry without silently submitting anything. */
-function initHomeEnquiry(){
- const form=document.getElementById('home-enquiry-form');if(!form)return;
- const result=document.getElementById('home-enquiry-result');
- const preview=document.getElementById('home-enquiry-preview');
- const copy=document.getElementById('home-enquiry-copy');
- const date=form.elements.eventDate;
- if(date){
-   const now=new Date();date.min=new Date(now.getTime()-now.getTimezoneOffset()*60000).toISOString().slice(0,10);
- }
- form.addEventListener('submit',event=>{
+/** Formspree-ready enquiries: never claim delivery without a successful POST. */
+async function getStudioFormEndpoint(){
+ try{
+ const res=await fetch('/assets/enquiry-settings.json',{cache:'no-cache'});
+ if(!res.ok)return '';
+ const config=await res.json();
+ const endpoint=String(config.formspreeEndpoint||'').trim();
+ return /^https:\/\/formspree\.io\/f\/[a-zA-Z0-9]+$/.test(endpoint)?endpoint:'';
+ }catch(err){return '';}
+}
+function initStudioEnquiryForms(){
+ const forms=document.querySelectorAll('[data-studio-enquiry-form]');
+ if(!forms.length)return;
+ const endpoint=getStudioFormEndpoint();
+ forms.forEach(form=>{
+  const status=form.querySelector('[data-studio-enquiry-status]');
+  const submit=form.querySelector('button[type="submit"]');
+  const params=new URLSearchParams(location.search);
+  const radio=form.querySelector('input[name="category"][value="'+(params.get('type')==='workshop'?'workshop':'creations')+'"]');
+  if(radio)radio.checked=true;
+  if(form.elements.creationType&&['Cake','Cupcakes'].includes(params.get('product')))form.elements.creationType.value=params.get('product');
+  if(form.elements.selectedDesign)form.elements.selectedDesign.value=(params.get('designTitle')||params.get('style')||'').slice(0,160);
+  const ref=params.get('reference')||'';
+  if(form.elements.referenceLink&&/^https:\/\/www\.instagram\.com\/(?:p|reel|tv)\//.test(ref))form.elements.referenceLink.value=ref.slice(0,500);
+  if(form.elements.sourcePage)form.elements.sourcePage.value=location.pathname;
+  const date=form.elements.eventDate;
+  if(date){const now=new Date();date.min=new Date(now.getTime()-now.getTimezoneOffset()*60000).toISOString().slice(0,10);}
+  function updateCategory(){
+   const chosen=form.querySelector('input[name="category"]:checked')?.value||'creations';
+   form.querySelectorAll('[data-studio-category]').forEach(group=>{
+    const on=group.dataset.studioCategory===chosen;
+    group.hidden=!on;group.querySelectorAll('input,select,textarea').forEach(field=>field.disabled=!on);
+   });
+   if(status){status.hidden=true;status.replaceChildren();}
+  }
+  form.querySelectorAll('input[name="category"]').forEach(radio=>radio.addEventListener('change',updateCategory));
+  updateCategory();
+  form.addEventListener('submit',async event=>{
    event.preventDefault();
-   if(!form.reportValidity()||!result||!preview)return;
-   const data=new FormData(form);
-   const lines=[
-     'Mads About Cake — cake enquiry',
-     '',
-     'Name: '+String(data.get('name')||'').trim(),
-     'Email: '+String(data.get('email')||'').trim(),
-     'Product: '+String(data.get('productType')||'').trim(),
-     'Date: '+String(data.get('eventDate')||'').trim(),
-     'Details: '+String(data.get('details')||'').trim()
-   ];
-   preview.value=lines.join('\n');
-   result.hidden=false;
-   if(copy)copy.textContent='Copy message';
-   result.scrollIntoView({behavior:'smooth',block:'nearest'});
- });
- if(copy)copy.addEventListener('click',async()=>{
-   if(!preview||!preview.value)return;
-   try{
-     if(!navigator.clipboard||!window.isSecureContext)throw new Error('No clipboard permission');
-     await navigator.clipboard.writeText(preview.value);
-     copy.textContent='Copied ✓';
-   }catch(error){
-     preview.focus();preview.select();copy.textContent='Select and copy';
+   if(!form.reportValidity()||!status||!submit)return;
+   if(form.elements._gotcha?.value)return;
+   status.hidden=false;status.replaceChildren();
+   const url=await endpoint;
+   if(!url){
+    status.append(document.createTextNode('Online enquiries are not available here yet. Please '));
+    const link=document.createElement('a');
+    link.href='https://ig.me/m/madsaboutcake';link.target='_blank';link.rel='noopener noreferrer';link.textContent='contact Mads on Instagram';
+    status.append(link,document.createTextNode(' instead.'));
+    return;
    }
+   submit.disabled=true;submit.textContent='Sending…';
+   try{
+    const payload=new FormData(form);
+    payload.set('_subject','Mads About Cake — '+String(payload.get('category')||'general')+' enquiry');
+    const response=await fetch(url,{method:'POST',body:payload,headers:{Accept:'application/json'}});
+    if(!response.ok)throw new Error('Not delivered');
+    form.reset();updateCategory();status.hidden=false;
+    status.textContent="Thank you. Your enquiry has been sent.";
+   }catch(error){
+    status.textContent="Your enquiry couldn't be sent. Please try again or contact Mads on Instagram.";
+   }finally{submit.disabled=false;submit.textContent='Send enquiry ↗';}
+  });
  });
 }
-
-document.addEventListener('DOMContentLoaded',()=>{initNavigation();initCuratedImageSwaps();initPortfolio();initEnquiry();initStudioNotice();initHomeEnquiry();});
+document.addEventListener('DOMContentLoaded',()=>{initNavigation();initCuratedImageSwaps();initPortfolio();initStudioNotice();initStudioEnquiryForms();});
 

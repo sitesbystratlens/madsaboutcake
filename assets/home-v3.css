@@ -235,3 +235,35 @@ body{background:var(--v3-cream)}
  .mads-v3 .occasion .section-head h2{font-size:clamp(35px,8vw,45px)}
  .mads-v3 .sip h2{font-family:var(--serif);font-size:clamp(48px,10vw,65px);letter-spacing:-.04em}
 }
+
+/* V3.8 category-first enquiry: one consistent pattern on both pages. */
+.studio-service-choice{border:0;margin:0;padding:0;min-width:0}
+.studio-service-choice legend{width:100%;display:block;font:700 12px/1.4 var(--sans);color:var(--v3-ink);margin-bottom:12px}
+.studio-service-choice legend span,.studio-enquiry-field label>span{color:var(--v3-rose)}
+.studio-service-options{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:8px}
+.studio-service-options label{min-width:0;cursor:pointer;display:block;position:relative}
+.studio-service-options input{position:absolute;opacity:0;width:1px;height:1px}
+.studio-service-options label>span{display:flex;align-items:center;justify-content:center;text-align:center;min-height:53px;padding:9px 6px;border:1px solid #d9bdc6;background:#fffdfb;color:var(--v3-ink);font:700 12px/1.3 var(--sans)}
+.studio-service-options input:checked+span{background:#ffe9f0;border-color:var(--v3-rose);box-shadow:inset 0 0 0 1px var(--v3-rose)}
+.studio-service-options input:focus-visible+span{outline:2px solid var(--v3-ink);outline-offset:2px}
+.studio-service-options label:hover>span{border-color:var(--v3-rose)}
+.mads-v3 .studio-enquiry-form{display:grid;gap:20px}
+.mads-v3 .studio-enquiry-field{min-width:0}
+.mads-v3 .studio-enquiry-field[hidden]{display:none!important}
+.mads-v3 .studio-enquiry-field label{display:block;font:700 12px/1.35 var(--sans);color:var(--v3-ink)}
+.mads-v3 .studio-enquiry-field label small{font-size:11px;color:var(--v3-muted);font-weight:500}
+.mads-v3 .studio-enquiry-field input,.mads-v3 .studio-enquiry-field select,.mads-v3 .studio-enquiry-field textarea{display:block;width:100%;min-width:0;max-width:100%;min-height:46px;margin-top:8px;border:1px solid #d8c2c7;background:#fffdfb;border-radius:1px;color:var(--v3-ink);font:500 14px/1.45 var(--sans);padding:11px 13px}
+.mads-v3 .studio-enquiry-field textarea{min-height:112px;resize:vertical}
+.mads-v3 .studio-enquiry-field input:focus,.mads-v3 .studio-enquiry-field select:focus,.mads-v3 .studio-enquiry-field textarea:focus{outline:2px solid #ffb9d2;outline-offset:1px}
+.mads-v3 .enquiry-panel__header{margin-bottom:25px}
+.mads-v3 .enquiry-panel{position:relative}
+.mads-v3 .studio-enquiry-status{font:500 13px/1.6 var(--sans);padding:12px 14px;border-left:3px solid var(--v3-rose);background:#fff5f4;color:var(--v3-ink)}
+.mads-v3 .studio-enquiry-status[hidden]{display:none!important}
+.mads-v3 .studio-enquiry-status a{color:var(--v3-ink);font-weight:800;text-decoration:underline}
+.mads-v3 .studio-honeypot{position:absolute;width:1px;height:1px;overflow:hidden;clip-path:inset(50%);white-space:nowrap}
+.mads-v3 .studio-enquiry-form button:disabled{opacity:.6;cursor:wait}
+.mads-v3 .studio-enquire-heading{background:#fff1ee;padding:53px 0 39px}
+.mads-v3 .studio-enquire-heading h1{font:600 clamp(40px,4.7vw,70px)/1.1 var(--serif);letter-spacing:-.04em;margin:12px 0}
+.mads-v3 .studio-enquire-heading p:not(.eyebrow){max-width:520px;color:var(--v3-muted)}
+.mads-v3 .studio-enquire-section{padding-top:65px}
+@media(max-width:600px){.studio-service-options{gap:6px}.studio-service-options label>span{font-size:11px;min-height:54px;padding:8px 4px}.mads-v3 .studio-enquiry-form{gap:16px}.mads-v3 .studio-enquire-heading{padding:38px 0 28px}}

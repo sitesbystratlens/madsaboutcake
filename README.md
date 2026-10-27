@@ -102,3 +102,7 @@ The homepage is now image-first: main Garden Bloom photo, supplementary Pink Rib
 
 ### One-time binary asset upload
 Extract `Mads_About_Cake_Website_Asset_Upload.zip`, then use GitHub Add file > Upload files in `assets/creations/` to upload the 33 `.webp` images without renaming. This repository commit contains layout and image-path mappings, but the binary image files are a separate required upload. While they are absent, images display stock-photo fallbacks rather than broken boxes. This is a one-off site design task; it is not another Google Sheets tab. The owner still manages approved portfolio visibility, featured selection and priority using the four-tab Sheet.
+
+## Enquiry form configuration (V3.8)
+
+The homepage and `/enquire/` now share a single three-category enquiry form: Custom creations (Cake or Cupcakes), Decorate & Sip (optional group size), Other (general, corporate/events, partnership, or something else). Forms use `assets/enquiry-settings.json` as their sole delivery configuration. `formspreeEndpoint` is intentionally blank until the studio approves an address: without it, the form does **not** send personal details and explains that Instagram is the available contact option. Once the studio has created a Formspree form, add its exact `https://formspree.io/f/<id>` URL to `formspreeEndpoint` to enable real submissions. Do not describe the form as live until a successful end-to-end delivery test.
