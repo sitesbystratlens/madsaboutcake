@@ -25,7 +25,7 @@ for(const photo of photos){
  assert.equal(buf.toString('ascii',0,4),'RIFF','Not RIFF: '+relative);
  assert.equal(buf.toString('ascii',8,12),'WEBP','Not WebP: '+relative);
 }
-assert.equal([...main.matchAll(/class="editorial-tile(?: editorial-tile-lead)?"/g)].length,5,'Featured mosaic requires 5 curated creations');
+assert.equal([...main.matchAll(/class="editorial-tile(?:\s|\")/g)].length,5,'Featured mosaic requires 5 curated creations');
 assert(main.includes('product=cake')&&main.includes('product=cupcakes'),'Missing product collections');
 for(const occasion of ['Birthdays','Weddings%20%26%20Engagements','Baby%20Showers%20%26%20Gender%20Reveals','Anniversaries']){
  assert(main.includes('occasion='+occasion),'Missing occasion '+occasion);
