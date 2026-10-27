@@ -1,0 +1,25 @@
+name: Verify Mads concept imagery
+on:
+  push:
+    branches: [main]
+    paths:
+      - 'index.html'
+      - 'assets/site.css'
+      - 'assets/creations/**'
+      - 'cakes.json'
+      - 'scripts/test-editorial-presentation.mjs'
+      - '.github/workflows/check-editorial-presentation.yml'
+  workflow_dispatch:
+permissions:
+  contents: read
+jobs:
+  verify:
+    runs-on: ubuntu-latest
+    timeout-minutes: 5
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: '22'
+      - name: Check selected original photography and navigation
+        run: node scripts/test-editorial-presentation.mjs
