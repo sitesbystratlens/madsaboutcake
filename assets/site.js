@@ -139,27 +139,49 @@ async function applyWebsiteImages(records){
 async function initPortfolio(){
  let records=fallback.map(normalise),concept=true;
  try{
-  const r=await fetch('/cakes.json',{cache:'no-cache'});if(!r.ok)throw Error('No snapshot');
-  const json=await r.json();if(!Array.isArray(json.cakes)||json.cakes.length>250)throw Error('Invalid snapshot');
-  concept=json.meta?.mode==='concept-preview';
-  records=json.cakes.filter(c=>concept?c.demoVisible!==false:(c.approvalStatus==='Approved'&&c.showOnWebsite==='Yes'))
-   .map(normalise).filter(Boolean).sort((a,b)=>(Number(a.priority)||999)-(Number(b.priority)||999));
- }catch(e){console.warn('Fallback gallery:',e.message);}
- const map=new Map(records.map(c=>[c.id,c]));
- document.querySelectorAll('img[data-cake-image]').forEach(img=>{const c=map.get(img.dataset.cakeImage);if(c){img.src=c.image;img.alt=(concept?'Concept example: ':'')+c.alt;}});
- document.querySelectorAll('[data-cake-bg]').forEach(el=>{const c=map.get(el.dataset.cakeBg);if(c)el.style.setProperty(el.dataset.cakeVariable||'--hero-image','url("'+c.image+'")');});
+  const response=await fetch('/cakes.json',{cache:'no-cache'});
+  if(!response.ok)throw Error('Catalogue unavailable');
+  const data=await response.json();
+  if(!Array.isArray(data.cakes)||data.cakes.length>650)throw Error('Invalid catalogue');
+  concept=data.meta?.mode==='concept-preview';
+  records=data.cakes.filter(c=>concept?c.demoVisible!==false:
+     (c.approvalStatus==='Approved'&&c.showOnWebsite==='Yes'))
+    .map(normalise).filter(Boolean)
+    .sort((a,b)=>(Number(a.priority)||999)-(Number(b.priority)||999));
+ }catch(e){console.warn('Using fallback gallery:',e.message)}
+ if(concept){
+  const ids=new Map(records.map(c=>[c.id,c]));
+  document.querySelectorAll('img[data-cake-image]').forEach(img=>{
+   const c=ids.get(img.dataset.cakeImage);
+   if(c){img.src=c.image;img.alt='Concept example: '+c.alt;}
+  });
+ }
+ // Homepage and category hero imagery stays site-owned, not controlled by the Sheet.
  document.querySelectorAll('[data-product-card]').forEach(card=>{
-  const sample=records.find(c=>c.productType===card.dataset.productCard);
-  card.hidden=!sample;
-  const img=card.querySelector('img[data-product-image]');
-  if(sample&&img){img.src=sample.image;img.alt=(concept?'Concept example: ':'')+sample.alt;}
+  card.hidden=!records.some(c=>c.productType===card.dataset.productCard);
  });
- await applyWebsiteImages(records);
  const occasionNav=document.querySelector('[data-home-occasions]');
- if(occasionNav)occasionNav.querySelectorAll('a').forEach(link=>{const o=new URL(link.href).searchParams.get('occasion');link.hidden=!records.some(c=>matchesOccasion(c,o));});
+ if(occasionNav)occasionNav.querySelectorAll('a').forEach(a=>{
+  const occasion=new URL(a.href).searchParams.get('occasion');
+  a.hidden=!records.some(c=>matchesOccasion(c,occasion));
+ });
+ if(!concept){
+  const grid=document.querySelector('.featured-grid');
+  if(grid){
+   const chosen=records.filter(c=>c.featuredHome===true)
+    .sort((a,b)=>(Number(a.homepageOrder)||999)-(Number(b.homepageOrder)||999))
+    .slice(0,5);
+   grid.innerHTML=chosen.map(c=>{
+     const link='/cakes/?design='+encodeURIComponent(c.id);
+     return '<a class="cake-tile" href="'+link+'"><img src="'+esc(c.image)+
+       '" alt="'+esc(c.alt)+'" loading="lazy" decoding="async">'+
+       '<span class="image-caption">'+esc(c.title)+' ↗</span></a>';
+   }).join('');
+   const section=grid.closest('section');if(section)section.hidden=chosen.length===0;
+  }
+ }
  initGallery(records,concept);
 }
-
 function initNavigation(){
  const toggle=document.querySelector('.nav-toggle'), nav=document.querySelector('.nav-list');
  if(!toggle||!nav)return;
