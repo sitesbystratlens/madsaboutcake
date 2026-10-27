@@ -1,0 +1,18 @@
+# Only deploy visitor-facing static website content.
+# Wrangler is configured with assets.directory='./'; exclude internal sources.
+.git/
+**/.git/
+.github/
+docs/
+integrations/
+scripts/
+imports/
+node_modules/
+.wrangler/
+*.zip
+*.md
+wrangler.jsonc
+package.json
+package-lock.json
+pnpm-lock.yaml
+yarn.lock
