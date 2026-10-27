@@ -10,9 +10,9 @@ const script=read('assets/site.js');
 const portfolio=JSON.parse(read('cakes.json')).cakes;
 const main=html.split('<main id="main"')[1]?.split('</main>')[0];
 assert(main,'No V3 homepage content');
-assert(html.includes('v3-6-centered-logo-subtle-notice-20261028'),'Homepage V3.2 version marker missing');
+assert(html.includes('v3-7-editorial-refinement-20261028'),'Homepage V3.2 version marker missing');
 assert(html.includes('noindex,nofollow'),'Owner concept must remain noindexed');
-assert(html.includes('/assets/home-v3.css?v=20261028-v36'),'V3.2 CSS missing or stale');
+assert(html.includes('/assets/home-v3.css?v=20261028-v37'),'V3.2 CSS missing or stale');
 assert(main.includes('class="cake-showcase"'),'Full-cake lookbook missing');
 assert(!/class="(?:v2-hero|editorial-hero|studio-hero)"/.test(main),'Generic split hero still present');
 assert(main.includes('id="occasions"'),'Broken occasions header link');
@@ -40,6 +40,12 @@ assert(css.includes('--v3-rose:#f15ea0'),'Exact logo pink missing');
 assert(css.includes('--v3-berry:#f15ea0'),'Brand accents must match the logo pink');
 assert(css.includes('--v3-peach:#fedcde'),'Logo backdrop must stay exact');
 assert(css.includes('.site-header .nav-shell{min-height:112px;max-width:1440px;justify-content:center'),'Centred logo layout missing');
+assert(css.includes('.site-header{background:var(--v3-peach);border:0;box-shadow:none}'),'Heavy pink header divider remains');
+assert(css.includes('.mads-v3 .opening{position:relative;background:#fff1ee'),'Warm studio opening missing');
+assert(css.includes('.mads-v3 .occasion{padding:78px 0 87px;background:#f3eae5}'),'Neutral occasion browsing surface missing');
+assert(css.includes('.mads-v3 .sip{background:#533047;color:#fff8f4'),'Editorial contrast section missing');
+assert(html.includes('CUSTOM CAKES &amp; CUPCAKES · MELBOURNE'),'Product positioning not immediately clear');
+
 assert(css.includes('.mads-v3 .enquiry-copy{background:var(--v3-berry);border:0;padding:12px 16px;color:#fff'),'Enquiry copy button needs white text');
 assert(!/#f25c9e|#a92361/i.test(css),'Retired pink palette remains in V3 styles');
 assert(/announcement\[data-studio-announcement\]\s*\{[\s\S]*?background:var\(--v3-rose\);color:#fff/.test(css),'Order-closure banner must use logo pink and legible text');
@@ -59,7 +65,7 @@ assert.equal((css.match(/\{/g)||[]).length,(css.match(/\}/g)||[]).length,'V3 CSS
 assert.equal((base.match(/\{/g)||[]).length,(base.match(/\}/g)||[]).length,'Base CSS unbalanced');
 for(const name of ['index.html','about/index.html','cakes/index.html','decorate-and-sip/index.html','enquire/index.html','404.html']){
  const page=read(name);
- assert(page.includes('home-v3.css?v=20261028-v36'),'V3.2 theme absent or stale on '+name);
+ assert(page.includes('home-v3.css?v=20261028-v37'),'V3.2 theme absent or stale on '+name);
  const header=page.match(/<header class="site-header">[\s\S]*?<\/header>/)?.[0]||'';
  assert(header.includes('class="brand brand--centered"'),'Header logo is not centred: '+name);
  assert(header.includes('alt="Mads About Cake"'),'Header logo needs accessible name: '+name);
@@ -75,4 +81,4 @@ for(const name of ['index.html','about/index.html','cakes/index.html','decorate-
 }
 for(const record of portfolio)assert(fs.existsSync(record.coverImage),'Missing creation: '+record.id);
 assert(script.includes('data-home-occasions'),'Occasion filtering not supported');
-console.log('V3.6 PASS: centered logo-only header, minimal concept label, subtle December notice, ten distinct original photos and footer navigation.');
+console.log('V3.7 PASS: centred logo, no divider, warm art-directed sections, distinct photos, strong product discovery and enquiry paths.');
