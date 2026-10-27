@@ -12,8 +12,8 @@ const pexels = (id, width=960) => 'https://images.pexels.com/photos/'+id+'/pexel
 const PRODUCT_TYPES=['Cake','Cupcakes','Other Treats'];
 const OCCASIONS=['Birthdays','Weddings & Engagements','Baby Showers & Gender Reveals','Anniversaries','Religious & Cultural','Graduations','Corporate & Events','Other Celebrations'];
 const fallback=[
- {id:'rose-piping',title:'Rose piping',productType:'Cake',primaryOccasion:'Birthdays',styleTags:['Vintage piping'],alt:'Concept cake',previewImage:pexels(29192489)},
- {id:'cupcake-florals',title:'Floral cupcakes',productType:'Cupcakes',primaryOccasion:'Birthdays',styleTags:['Floral'],alt:'Concept cupcakes',previewImage:pexels(1055272)}
+ {id:'rose-piping',title:'Rose piping',productType:'Cake',primaryOccasion:'Birthdays',styleTags:['Vintage piping'],alt:'Rose-piped cake',previewImage:pexels(29192489)},
+ {id:'cupcake-florals',title:'Floral cupcakes',productType:'Cupcakes',primaryOccasion:'Birthdays',styleTags:['Floral'],alt:'Floral cupcakes',previewImage:pexels(1055272)}
 ];
 const esc=s=>String(s==null?'':s).replace(/[&<>"']/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));
 const safeCover=s=>typeof s==='string'&&/^assets\/(?:cake-covers|creations)\/[\w-]+\.(?:jpe?g|png|webp|avif)$/.test(s);
