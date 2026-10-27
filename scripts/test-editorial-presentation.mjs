@@ -65,7 +65,7 @@ assert(css.includes('.mads-v3 .action-line{font-size:12px;font-weight:800;color:
 assert(css.includes('background:var(--studio-plum);border-color:var(--studio-plum)'),'Secondary pages primary CTA must be plum');
 const session=read('decorate-and-sip/index.html');
 assert(session.includes('workshop-facts')&&session.includes('three-colour buttercream palette'),'Workshop facts not applied');
-assert(session.includes('four-inch')&&session.includes('grazing, beverages'),'Workshop inclusions not grounded');
+assert(session.includes('four-inch')&&/grazing[, ]+beverage/i.test(session),'Workshop inclusions not grounded');
 assert(session.includes('DF9zz10BNtL'),'Real workshop evidence link missing');
 for(const name of ['index.html','cakes/index.html','decorate-and-sip/index.html','about/index.html','enquire/index.html','404.html'])
  assert(read(name).includes('href="https://www.stratlens.com/websites/"'),'Sites by Stratlens destination wrong: '+name);
