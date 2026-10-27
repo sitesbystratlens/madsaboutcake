@@ -60,7 +60,7 @@ function extFor(type,b){
  if(type.includes('image/avif')&&b.toString('ascii',4,12).includes('ftypavif'))return 'avif';
  return '';
 }
-const localCover=s=>/^assets\/cake-covers\/[a-zA-Z0-9_-]+\.(?:jpg|jpeg|webp|png|avif)$/.test(String(s||''));
+const localCover=s=>/^assets\/(?:cake-covers|creations)\/[a-zA-Z0-9_-]+\.(?:jpg|jpeg|webp|png|avif)$/.test(String(s||''));
 async function importCovers(){
  if(!fs.existsSync(FILE))throw Error('Missing '+FILE);
  const data=JSON.parse(fs.readFileSync(FILE,'utf8'));
@@ -103,6 +103,7 @@ function tests(){
  assert.equal(getMeta('<meta property="og:image" content="https://scontent.cdninstagram.com/a.jpg?a=1&amp;b=2">','og:image'),'https://scontent.cdninstagram.com/a.jpg?a=1&b=2');
  assert.equal(extFor('image/jpeg',Buffer.from([255,216,255,0])),'jpg');
  assert.equal(localCover('assets/cake-covers/ABC123-xyz.jpg'),true);
+ assert.equal(localCover('assets/creations/01_garden-bloom-statement-cake_DKLsLPThQcx.webp'),true);
  console.log('Instagram cover importer self-tests passed.');
 }
 if(process.argv.includes('--test'))tests();
