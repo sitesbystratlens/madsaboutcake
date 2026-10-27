@@ -5,7 +5,7 @@ on:
     paths:
       - 'index.html'
       - 'assets/site.css'
-      - 'assets/home-v2.css'
+      - 'assets/home-v3.css'
       - 'about/index.html'
       - 'cakes/index.html'
       - 'decorate-and-sip/index.html'

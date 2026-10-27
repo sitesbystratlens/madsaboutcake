@@ -2,56 +2,46 @@
 import fs from 'node:fs';
 import assert from 'node:assert/strict';
 
-const read=p=>fs.readFileSync(p,'utf8');
+const read=(p)=>fs.readFileSync(p,'utf8');
 const html=read('index.html');
-const css=read('assets/home-v2.css');
-const baseCSS=read('assets/site.css');
-const catalogue=JSON.parse(read('cakes.json')).cakes;
+const css=read('assets/home-v3.css');
+const base=read('assets/site.css');
+const script=read('assets/site.js');
+const portfolio=JSON.parse(read('cakes.json')).cakes;
 const main=html.split('<main id="main"')[1]?.split('</main>')[0];
-assert(main,'V2 homepage missing');
-assert(html.includes('mads-layout-version" content="v2-cake-studio-20261027"'),'Missing V2 version marker');
-assert(html.includes('name="robots" content="noindex,nofollow"'),'Concept must remain noindexed');
-assert(html.includes('home-v2.css?v=20261027-v2'),'Missing cache-busted V2 stylesheet');
-assert(html.includes('href="/#occasions"'),'Missing occasion navigation');
-assert(!main.includes('images.pexels.com'),'Stock photography on homepage');
-assert(!main.includes('data-curated-src='),'Delayed JavaScript photo swapping is prohibited');
-const photos=[...main.matchAll(/<img\b[^>]*\bsrc="(\/assets\/creations\/[^"]+\.webp)"/g)].map(m=>m[1]);
-assert.equal(photos.length,10,'V2 must use precisely 10 purpose-selected photographs');
-assert.equal(new Set(photos).size,10,'Homepage duplicated a cake photo');
-const expected=[
-'DIh_oHjBhxN','DLwgsy0BGLv','C8JF0_IyYGt',
-'DPLsqIzkpHn','DJjIJNxB1ap','DQ0WjCPEgqr','DINfRR_BzYm',
-'DKLsLPThQcx','DL49HXIhTeY','DJQ5RLthPKp'
-];
-const codes=new Set(catalogue.filter(c=>photos.includes('/'+c.coverImage)).map(c=>c.sourceShortcode));
-assert.deepEqual([...codes].sort(),[...expected].sort(),'Wrong image assignment for V2');
-for(const photo of photos){
- const path=photo.slice(1);
- assert(fs.existsSync(path),'Missing photo '+path);
- const buf=fs.readFileSync(path);
- assert(buf.length>4000,'Empty photo '+path);
- assert.equal(buf.toString('ascii',0,4),'RIFF','Invalid WebP '+path);
- assert.equal(buf.toString('ascii',8,12),'WEBP','Invalid WebP '+path);
+assert(main,'No V3 homepage content');
+assert(html.includes('v3-lookbook-20261028'),'Homepage is not V3');
+assert(html.includes('noindex,nofollow'),'Owner concept must remain noindexed');
+assert(html.includes('/assets/home-v3.css?v=20261028-v3'),'V3 CSS missing or stale');
+assert(main.includes('class="cake-showcase"'),'Full-cake lookbook missing');
+assert(!/class="(?:v2-hero|editorial-hero|studio-hero)"/.test(main),'Generic split hero still present');
+assert(main.includes('id="occasions"'),'Broken occasions header link');
+assert(main.includes('data-home-occasions'),'Occasion menu unbound');
+assert(!main.includes('images.pexels.com'),'Stock photo found');
+assert(!main.includes('data-curated-src='),'Unexpected delayed photo replacement');
+const images=[...main.matchAll(/<img\b[^>]*src="(\/assets\/creations\/[^"]+\.webp)"/g)].map(m=>m[1]);
+assert.equal(images.length,10,'V3 requires ten selected photographs');
+assert.equal(new Set(images).size,10,'Duplicate homepage photograph');
+const chosen=['DauWQoCkuB1','DKLsLPThQcx','DNKl7y9BcgU','DPaoBCZkl_W','DJjIJNxB1ap','DQ0WjCPEgqr','DINfRR_BzYm','DEtTLWXBBce','C8JF0_IyYGt','DWv0b5kkrWE'];
+const byPath=new Map(portfolio.map(c=>['/'+c.coverImage,c]));
+assert.deepEqual(images.map(x=>byPath.get(x)?.sourceShortcode).sort(),chosen.sort(),'Image selection drifted');
+for(const p of images){
+ const f=p.slice(1);
+ assert(fs.existsSync(f),'Missing cake photograph: '+p);
+ const buffer=fs.readFileSync(f);
+ assert.equal(buffer.toString('ascii',0,4),'RIFF','Invalid WebP header: '+p);
+ assert.equal(buffer.toString('ascii',8,12),'WEBP','Invalid WebP media: '+p);
 }
-assert.equal((main.match(/<section\b/g)||[]).length,6,'V2 must use six editorial acts');
-assert(main.includes('id="occasions"'),'Missing occasion anchor');
-assert(main.includes('/cakes/?product=cake')&&main.includes('/cakes/?product=cupcakes'),'Missing product entries');
-for(const filter of ['Birthdays','Weddings%20%26%20Engagements','Baby%20Showers%20%26%20Gender%20Reveals','Anniversaries']){
- assert(main.includes('occasion='+filter),'Missing occasion: '+filter);
+assert.equal((main.match(/<section\b/g)||[]).length,5,'V3 must have five intentional sections');
+assert(main.includes('https://www.instagram.com/p/DF9zz10BNtL/'),'Real Decorate & Sip session link missing');
+assert(css.includes('object-fit:contain'),'Missing full-cake image-fit rule');
+assert(css.includes('--v3-peach:#ffdddc'),'Logo-derived peach is missing');
+assert(css.includes('@media(max-width:800px)'),'Mobile presentation missing');
+assert.equal((css.match(/\{/g)||[]).length,(css.match(/\}/g)||[]).length,'V3 CSS unbalanced');
+assert.equal((base.match(/\{/g)||[]).length,(base.match(/\}/g)||[]).length,'Base CSS unbalanced');
+for(const name of ['index.html','about/index.html','cakes/index.html','decorate-and-sip/index.html','enquire/index.html','404.html']){
+ assert(read(name).includes('home-v3.css'),'V3 theme absent on '+name);
 }
-for(const m of main.matchAll(/\/cakes\/\?design=([^"]+)/g))
- assert(catalogue.some(c=>c.id===decodeURIComponent(m[1])),'Broken design detail: '+m[1]);
-assert(main.includes('https://www.instagram.com/p/DF9zz10BNtL/'),'Missing genuine session evidence');
-assert(!main.includes('gallery-card__feature'),'No unverified popularity badges');
-assert(css.includes('--m2-peach:#ffdddc')&&css.includes('.brand-logo'),'Logo branding lost');
-for(const style of [css,baseCSS])assert.equal((style.match(/\{/g)||[]).length,(style.match(/\}/g)||[]).length,'Unbalanced stylesheet');
-for(const p of ['index.html','cakes/index.html','about/index.html','decorate-and-sip/index.html','enquire/index.html','404.html']){
- const page=read(p);
- assert(page.includes('home-v2.css'),'Missing shared brand CSS: '+p);
- assert(page.includes('v2-footer-brand'),'Footer missing branded lockup: '+p);
- assert(page.includes('href="/#occasions"'),'Missing occasion nav: '+p);
-}
-for(const creation of catalogue){
- assert(fs.existsSync(creation.coverImage),'Gallery photo missing: '+creation.coverImage);
-}
-console.log('V2 PASS — 6 acts, 10 unique authentic photographs, 33 gallery assets, filters, noindex and sitewide logo.');
+for(const record of portfolio)assert(fs.existsSync(record.coverImage),'Missing creation: '+record.id);
+assert(script.includes('data-home-occasions'),'Occasion filtering not supported');
+console.log('V3 PASS: lookbook, ten distinct actual cake images, whole-cake fit, five sections, live category targets, sitewide branding.');

@@ -137,3 +137,6 @@ body{background:var(--v3-cream)}
  .mads-v3 .sip h2{font-size:60px}
 }
 @media(prefers-reduced-motion:reduce){.mads-v3 *{scroll-behavior:auto!important;transition:none!important}}
+/* Gallery preservation: show the entire cake whenever included in source frame. */
+.gallery-photo img,.design-detail-image{object-fit:contain!important;background:#f4e9e8}
+@media(max-width:760px){.site-footer .v2-footer-brand img{width:46px;height:46px}}
