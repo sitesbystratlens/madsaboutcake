@@ -1,0 +1,37 @@
+name: Install Mads original photography
+on:
+  push:
+    branches: [main]
+    paths:
+      - 'imports/mads-original-photos.zip'
+  workflow_dispatch:
+permissions:
+  contents: write
+concurrency:
+  group: mads-original-photo-upload
+  cancel-in-progress: false
+jobs:
+  install:
+    runs-on: ubuntu-latest
+    timeout-minutes: 10
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.12'
+      - name: Verify and install 33 original studio photographs
+        run: python scripts/install-original-photos.py
+      - name: Commit extracted WebP files and remove the upload ZIP
+        run: |
+          git add -A -- assets/creations/ imports/
+          if git diff --cached --quiet; then
+            echo 'No file changes to commit'
+            exit 0
+          fi
+          git config user.name 'github-actions[bot]'
+          git config user.email '41898282+github-actions[bot]@users.noreply.github.com'
+          git commit -m 'Install original Mads About Cake photographs'
+          git pull --rebase origin main
+          git push origin HEAD:main
