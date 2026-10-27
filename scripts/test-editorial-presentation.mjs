@@ -10,9 +10,9 @@ const script=read('assets/site.js');
 const portfolio=JSON.parse(read('cakes.json')).cakes;
 const main=html.split('<main id="main"')[1]?.split('</main>')[0];
 assert(main,'No V3 homepage content');
-assert(html.includes('v3-lookbook-20261028'),'Homepage is not V3');
+assert(html.includes('v3-1-logo-spacing-nav-20261028'),'Homepage V3.1 version marker missing');
 assert(html.includes('noindex,nofollow'),'Owner concept must remain noindexed');
-assert(html.includes('/assets/home-v3.css?v=20261028-v3'),'V3 CSS missing or stale');
+assert(html.includes('/assets/home-v3.css?v=20261028-v31'),'V3.1 CSS missing or stale');
 assert(main.includes('class="cake-showcase"'),'Full-cake lookbook missing');
 assert(!/class="(?:v2-hero|editorial-hero|studio-hero)"/.test(main),'Generic split hero still present');
 assert(main.includes('id="occasions"'),'Broken occasions header link');
@@ -35,13 +35,21 @@ for(const p of images){
 assert.equal((main.match(/<section\b/g)||[]).length,5,'V3 must have five intentional sections');
 assert(main.includes('https://www.instagram.com/p/DF9zz10BNtL/'),'Real Decorate & Sip session link missing');
 assert(css.includes('object-fit:contain'),'Missing full-cake image-fit rule');
-assert(css.includes('--v3-peach:#ffdddc'),'Logo-derived peach is missing');
+assert(css.includes('--v3-peach:#fedcde'),'Exact logo backdrop colour missing');
+assert(css.includes('--v3-rose:#f25c9e'),'Exact logo pink missing');
+assert(!html.includes('SWIPE FOR MORE'),'Old swipe prompt visible on desktop');
 assert(css.includes('@media(max-width:800px)'),'Mobile presentation missing');
 assert.equal((css.match(/\{/g)||[]).length,(css.match(/\}/g)||[]).length,'V3 CSS unbalanced');
 assert.equal((base.match(/\{/g)||[]).length,(base.match(/\}/g)||[]).length,'Base CSS unbalanced');
 for(const name of ['index.html','about/index.html','cakes/index.html','decorate-and-sip/index.html','enquire/index.html','404.html']){
- assert(read(name).includes('home-v3.css'),'V3 theme absent on '+name);
+ const page=read(name);
+ assert(page.includes('home-v3.css?v=20261028-v31'),'V3.1 theme absent or stale on '+name);
+ const header=page.match(/<nav class="nav-list"[\s\S]*?<\/nav>/)?.[0]||'';
+ assert(header.includes('>Creations</a>')&&header.includes('>Deco &amp; Sip</a>')&&header.includes('>Let’s talk cake</a>'),'Incorrect navigation: '+name);
+ assert(!header.includes('>About</a>')&&!header.includes('>Occasions</a>'),'Cluttered header: '+name);
+ assert(page.includes('href="/about/"'),'About missing from footer: '+name);
+ assert.equal((page.match(/class="footer-instagram"/g)||[]).length,1,'Instagram icon missing/duplicated: '+name);
 }
 for(const record of portfolio)assert(fs.existsSync(record.coverImage),'Missing creation: '+record.id);
 assert(script.includes('data-home-occasions'),'Occasion filtering not supported');
-console.log('V3 PASS: lookbook, ten distinct actual cake images, whole-cake fit, five sections, live category targets, sitewide branding.');
+console.log('V3.1 PASS: lookbook, 10 original photos, exact logo palette, five sections, compact nav, Instagram and no desktop swipe prompt.');
