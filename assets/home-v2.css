@@ -67,10 +67,10 @@ body{background:var(--m2-cream)}
 .v2-occasions{background:#fff4f2}
 .v2-occasion-layout{display:grid;grid-template-columns:1.15fr .85fr .85fr;grid-template-rows:repeat(2,220px);gap:17px}
 .v2-occasion{display:flex;min-width:0;min-height:0;flex-direction:column;color:var(--m2-plum);background:#fffdfa}
-.v2-occasion--birthday{grid-row:span 2}
-.v2-occasion--wedding{grid-row:span 2}
+.v2-occasion--birthday{grid-column:1;grid-row:span 2}
+.v2-occasion--wedding{grid-column:2;grid-row:1}
 .v2-occasion--baby{grid-column:3;grid-row:1}
-.v2-occasion--anniversary{grid-column:3;grid-row:2}
+.v2-occasion--anniversary{grid-column:2/4;grid-row:2}
 .v2-occasion__image{display:block;min-height:0;flex:1;overflow:hidden}
 .v2-occasion__image img{transition:transform .35s;object-position:center 35%}
 .v2-occasion:hover img{transform:scale(1.025)}

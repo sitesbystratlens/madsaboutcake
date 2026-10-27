@@ -39,7 +39,7 @@ assert(main.includes('/cakes/?product=cake')&&main.includes('/cakes/?product=cup
 for(const filter of ['Birthdays','Weddings%20%26%20Engagements','Baby%20Showers%20%26%20Gender%20Reveals','Anniversaries']){
  assert(main.includes('occasion='+filter),'Missing occasion: '+filter);
 }
-for(const m of main.matchAll(/\/cakes\/\\?design=([^"]+)/g))
+for(const m of main.matchAll(/\/cakes\/\?design=([^"]+)/g))
  assert(catalogue.some(c=>c.id===decodeURIComponent(m[1])),'Broken design detail: '+m[1]);
 assert(main.includes('https://www.instagram.com/p/DF9zz10BNtL/'),'Missing genuine session evidence');
 assert(!main.includes('gallery-card__feature'),'No unverified popularity badges');
