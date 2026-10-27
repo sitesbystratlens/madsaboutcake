@@ -169,23 +169,6 @@ async function initPortfolio(){
   a.hidden=!records.some(c=>matchesOccasion(c,occasion));
  });
 
- if(!concept){
-  const grid=document.querySelector('.editorial-mosaic');
-  if(grid){
-   const featured=records.filter(c=>c.featuredHome===true)
-     .sort((a,b)=>(Number(a.homepageOrder)||999)-(Number(b.homepageOrder)||999))
-     .slice(0,5);
-   grid.innerHTML=featured.map((c,i)=>{
-    const link='/cakes/?design='+encodeURIComponent(c.id);
-    const cat=(c.productType==='Cupcakes'?'Cupcakes':c.styleTags[0]||'Featured').toUpperCase();
-    return '<a class="editorial-tile'+(i===0?' editorial-tile-lead':'')+'" href="'+link+'">'+
-      '<img src="'+esc(c.image)+'" alt="'+esc(c.alt)+'" loading="lazy" decoding="async">'+
-      '<span><span><small>'+esc(cat)+'</small><strong>'+esc(c.title)+'</strong></span>'+
-      '<span aria-hidden="true">↗</span></span></a>';
-   }).join('');
-   const section=grid.closest('section');if(section)section.hidden=featured.length===0;
-  }
- }
 
  initGallery(records,concept);
 }
