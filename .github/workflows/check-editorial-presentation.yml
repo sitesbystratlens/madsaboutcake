@@ -5,6 +5,11 @@ on:
     paths:
       - 'index.html'
       - 'assets/site.css'
+      - 'assets/home-v2.css'
+      - 'about/index.html'
+      - 'cakes/index.html'
+      - 'decorate-and-sip/index.html'
+      - 'enquire/index.html'
       - 'assets/creations/**'
       - 'cakes.json'
       - 'scripts/test-editorial-presentation.mjs'

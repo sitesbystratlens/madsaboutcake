@@ -173,3 +173,13 @@ body{background:var(--m2-cream)}
  .v2-detail-card__text strong{font-size:14px}
 }
 @media(prefers-reduced-motion:reduce){.mads-v2 *, .mads-v2 *:before,.mads-v2 *:after{transition:none!important;animation:none!important}}
+
+/* Same identity on the rest of the site, and original logo in every footer. */
+.v2-footer-brand{display:flex;align-items:center;gap:11px;width:fit-content;text-decoration:none;margin:0 0 18px;color:var(--m2-berry)}
+.v2-footer-brand img{width:53px;height:53px;object-fit:cover;border-radius:50%;background:var(--m2-peach);mix-blend-mode:multiply}
+.v2-footer-brand span{font:800 23px/1 var(--sans);letter-spacing:-.05em;color:var(--m2-berry)}
+.site-footer .footer-grid{align-items:start}
+.site-footer .footer-intro h2{margin-bottom:13px}
+.site-footer{border-top:1px solid #e5c7cd}
+.v2-finish h2{font-family:var(--sans);font-weight:700;letter-spacing:-.05em}
+@media(max-width:760px){.v2-footer-brand img{width:47px;height:47px}.v2-footer-brand span{font-size:21px}}
