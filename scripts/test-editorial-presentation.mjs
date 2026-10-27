@@ -12,7 +12,7 @@ const main=html.split('<main id="main"')[1]?.split('</main>')[0];
 assert(main,'No V3 homepage content');
 assert(html.includes('v3-10-plum-actions-studio-experience-20261028'),'Homepage V3.9 version marker missing');
 assert(html.includes('noindex,nofollow'),'Owner concept must remain noindexed');
-assert(html.includes('/assets/home-v3.css?v=20261028-v40'),'V3.9 CSS missing or stale');
+assert(html.includes('/assets/home-v3.css?v=20261028-v41'),'V3.11 CSS missing or stale');
 assert(main.includes('class="cake-showcase"'),'Full-cake lookbook missing');
 assert(!/class="(?:v2-hero|editorial-hero|studio-hero)"/.test(main),'Generic split hero still present');
 assert(main.includes('id="occasions"'),'Broken occasions header link');
@@ -48,7 +48,7 @@ assert(html.includes('CUSTOM CAKES &amp; CUPCAKES · MELBOURNE'),'Product positi
 
 assert(css.includes('background:#553047;color:#fff'),'Enquiry send button needs the plum palette');
 assert(!/#f25c9e|#a92361/i.test(css),'Retired pink palette remains in V3 styles');
-assert(/announcement\[data-studio-announcement\]\s*\{[\s\S]*?background:var\(--v3-rose\);color:#fff/.test(css),'Order-closure banner must use logo pink and legible text');
+assert(/announcement\[data-studio-announcement\]\s*\{[\s\S]*?background:var\(--v3-ink\);color:#fff/.test(css),'Order-closure banner must use plum and legible white text');
 assert(css.includes('min-height:29px;font:600 12px/1.4 var(--sans)'),'Order notice should be subtle, not oversized');
 assert(!html.includes('SWIPE FOR MORE'),'Old swipe prompt visible on desktop');
 assert(main.includes('id="cake-enquiry"')&&main.includes('data-studio-enquiry-form'),'Homepage enquiry experience missing');
@@ -59,6 +59,11 @@ for(const topic of ['cake','cupcakes','workshop-booking','workshop-question','ge
 assert(!main.includes('studio-service-options')&&!main.includes('studio-service-choice'),'Old category step remains');
 assert(css.includes('.studio-enquiry-form .enquiry-submit .action-solid{')&&css.includes('background:#553047;color:#fff'),'Plum send button missing');
 assert(!main.includes('Pretty little details.')&&main.includes('A closer look.'),'Marketing-template heading still present');
+assert(main.includes('<h2 id="home-enquiry-title">Got an idea?</h2>'),'Homepage enquiry intro duplicates the form heading');
+assert(main.includes('<strong>Let’s hear it.</strong>'),'Homepage form heading does not reflect the conversational copy');
+assert(read('enquire/index.html').includes('<strong>Let’s hear it.</strong>'),'Dedicated enquiry form uses inconsistent heading');
+assert(css.includes('object-fit:contain;background:transparent;mix-blend-mode:normal;filter:none'),'Footer logo must match the normal header image rendering');
+assert(!css.includes('mix-blend-mode:multiply'),'Multiply blend mode still darkens logo');
 assert(main.includes('Say it with cake.')&&main.includes('Daisy cake for a little daisy.'),'Caption-led wording missing');
 assert(css.includes('.mads-v3 .action-solid{display:inline-flex;align-items:center;gap:9px;justify-content:center;background:var(--v3-ink);color:#fff'),'Homepage primary CTA must be plum');
 assert(css.includes('.mads-v3 .action-line{font-size:12px;font-weight:800;color:var(--v3-ink)'),'Homepage secondary CTA must be plum');
@@ -93,7 +98,7 @@ assert.equal((css.match(/\{/g)||[]).length,(css.match(/\}/g)||[]).length,'V3 CSS
 assert.equal((base.match(/\{/g)||[]).length,(base.match(/\}/g)||[]).length,'Base CSS unbalanced');
 for(const name of ['index.html','about/index.html','cakes/index.html','decorate-and-sip/index.html','enquire/index.html','404.html']){
  const page=read(name);
- assert(page.includes('home-v3.css?v=20261028-v40'),'V3.9 theme absent or stale on '+name);
+ assert(page.includes('home-v3.css?v=20261028-v41'),'V3.11 theme absent or stale on '+name);
  const header=page.match(/<header class="site-header">[\s\S]*?<\/header>/)?.[0]||'';
  assert(header.includes('class="brand brand--centered"'),'Header logo is not centred: '+name);
  assert(header.includes('alt="Mads About Cake"'),'Header logo needs accessible name: '+name);
@@ -109,4 +114,4 @@ for(const name of ['index.html','about/index.html','cakes/index.html','decorate-
 }
 for(const record of portfolio)assert(fs.existsSync(record.coverImage),'Missing creation: '+record.id);
 assert(script.includes('data-home-occasions'),'Occasion filtering not supported');
-console.log('V3.10 PASS: all purple conversion CTAs, caption-backed session inclusions, consistent palette and valid Stratlens footer link.');
+console.log('V3.11 PASS: consistent logo rendering, conversational enquiry headings, plum availability banner, and page styling.');
