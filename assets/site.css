@@ -130,3 +130,10 @@
  .studio-featured .featured-grid>a:first-child img{aspect-ratio:1.38}
  .studio-featured .image-caption{font-size:10px}
 }
+
+/* Gallery starts with the creations and filter controls, without an oversized banner. */
+#browse-gallery{padding-top:clamp(37px,5vw,70px)}
+#browse-gallery .section-intro{margin-bottom:30px}
+#browse-gallery .section-intro h2{font-size:clamp(43px,5vw,74px)}
+#browse-gallery .gallery-grid{margin-top:24px}
+@media(max-width:760px){#browse-gallery{padding-top:39px}#browse-gallery .section-intro{margin-bottom:23px}}
