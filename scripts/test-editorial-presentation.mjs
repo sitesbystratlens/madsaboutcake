@@ -10,9 +10,9 @@ const script=read('assets/site.js');
 const portfolio=JSON.parse(read('cakes.json')).cakes;
 const main=html.split('<main id="main"')[1]?.split('</main>')[0];
 assert(main,'No V3 homepage content');
-assert(html.includes('v3-9-caption-led-copy-enquiries-20261028'),'Homepage V3.9 version marker missing');
+assert(html.includes('v3-10-plum-actions-studio-experience-20261028'),'Homepage V3.9 version marker missing');
 assert(html.includes('noindex,nofollow'),'Owner concept must remain noindexed');
-assert(html.includes('/assets/home-v3.css?v=20261028-v39'),'V3.9 CSS missing or stale');
+assert(html.includes('/assets/home-v3.css?v=20261028-v40'),'V3.9 CSS missing or stale');
 assert(main.includes('class="cake-showcase"'),'Full-cake lookbook missing');
 assert(!/class="(?:v2-hero|editorial-hero|studio-hero)"/.test(main),'Generic split hero still present');
 assert(main.includes('id="occasions"'),'Broken occasions header link');
@@ -60,6 +60,15 @@ assert(!main.includes('studio-service-options')&&!main.includes('studio-service-
 assert(css.includes('.studio-enquiry-form .enquiry-submit .action-solid{')&&css.includes('background:#553047;color:#fff'),'Plum send button missing');
 assert(!main.includes('Pretty little details.')&&main.includes('A closer look.'),'Marketing-template heading still present');
 assert(main.includes('Say it with cake.')&&main.includes('Daisy cake for a little daisy.'),'Caption-led wording missing');
+assert(css.includes('.mads-v3 .action-solid{display:inline-flex;align-items:center;gap:9px;justify-content:center;background:var(--v3-ink);color:#fff'),'Homepage primary CTA must be plum');
+assert(css.includes('.mads-v3 .action-line{font-size:12px;font-weight:800;color:var(--v3-ink)'),'Homepage secondary CTA must be plum');
+assert(css.includes('background:var(--studio-plum);border-color:var(--studio-plum)'),'Secondary pages primary CTA must be plum');
+const session=read('decorate-and-sip/index.html');
+assert(session.includes('workshop-facts')&&session.includes('three-colour buttercream palette'),'Workshop facts not applied');
+assert(session.includes('four-inch')&&session.includes('grazing, beverages'),'Workshop inclusions not grounded');
+assert(session.includes('DF9zz10BNtL'),'Real workshop evidence link missing');
+for(const name of ['index.html','cakes/index.html','decorate-and-sip/index.html','about/index.html','enquire/index.html','404.html'])
+ assert(read(name).includes('href="https://www.stratlens.com/websites/"'),'Sites by Stratlens destination wrong: '+name);
 for(const p of ['index.html','enquire/index.html']){
  const page=read(p);
  assert.equal((page.match(/data-studio-enquiry-form/g)||[]).length,1,'Exactly one form needed: '+p);
@@ -84,7 +93,7 @@ assert.equal((css.match(/\{/g)||[]).length,(css.match(/\}/g)||[]).length,'V3 CSS
 assert.equal((base.match(/\{/g)||[]).length,(base.match(/\}/g)||[]).length,'Base CSS unbalanced');
 for(const name of ['index.html','about/index.html','cakes/index.html','decorate-and-sip/index.html','enquire/index.html','404.html']){
  const page=read(name);
- assert(page.includes('home-v3.css?v=20261028-v39'),'V3.9 theme absent or stale on '+name);
+ assert(page.includes('home-v3.css?v=20261028-v40'),'V3.9 theme absent or stale on '+name);
  const header=page.match(/<header class="site-header">[\s\S]*?<\/header>/)?.[0]||'';
  assert(header.includes('class="brand brand--centered"'),'Header logo is not centred: '+name);
  assert(header.includes('alt="Mads About Cake"'),'Header logo needs accessible name: '+name);
@@ -100,4 +109,4 @@ for(const name of ['index.html','about/index.html','cakes/index.html','decorate-
 }
 for(const record of portfolio)assert(fs.existsSync(record.coverImage),'Missing creation: '+record.id);
 assert(script.includes('data-home-occasions'),'Occasion filtering not supported');
-console.log('V3.9 PASS: grouped enquiry subjects, owner-caption-inspired copy, plum send button, ten original images.');
+console.log('V3.10 PASS: all purple conversion CTAs, caption-backed session inclusions, consistent palette and valid Stratlens footer link.');
