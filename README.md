@@ -106,3 +106,9 @@ Extract `Mads_About_Cake_Website_Asset_Upload.zip`, then use GitHub Add file > U
 ## Enquiry form configuration (V3.8)
 
 The homepage and `/enquire/` now share a single three-category enquiry form: Custom creations (Cake or Cupcakes), Decorate & Sip (optional group size), Other (general, corporate/events, partnership, or something else). Forms use `assets/enquiry-settings.json` as their sole delivery configuration. `formspreeEndpoint` is intentionally blank until the studio approves an address: without it, the form does **not** send personal details and explains that Instagram is the available contact option. Once the studio has created a Formspree form, add its exact `https://formspree.io/f/<id>` URL to `formspreeEndpoint` to enable real submissions. Do not describe the form as live until a successful end-to-end delivery test.
+
+## Caption-led copy and grouped contact form (V3.9)
+
+The homepage and `/enquire/` now use **one** enquiry subject select, grouped under Custom creations (Custom cake, Cupcakes), Decorate & Sip (Group booking, Session question) and Other (General, Corporate/events, Partnership, Something else), rather than category cards followed by a secondary select. A plum `#553047` Send enquiry button improves hierarchy and distinguishes the functional action from bright-pink branding.
+
+Copy was checked against the 27 October 2026 Apify archive of 233 @madsaboutcake posts. The owner regularly uses playful, direct language such as 'Slam dunk, but make it cake', 'Daisy cake for a little daisy', 'Garden party ready' and practical descriptions of buttercream, floral decorations, flavours and Decorate & Sip inclusions. Web copy draws on this tone but is not presented as direct quotations unless actually quoted. Never infer popularity, prices or inclusions the owner has not confirmed. 

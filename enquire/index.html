@@ -11,10 +11,10 @@
 <link rel="preconnect" href="https://fonts.googleapis.com"><link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 
 <link rel="icon" type="image/png" sizes="32x32" href="/favicon.png?v=1">
-<link rel="stylesheet" href="/assets/site.css?v=20261028-v38">
-<link rel="stylesheet" href="/assets/home-v3.css?v=20261028-v38">
+<link rel="stylesheet" href="/assets/site.css?v=20261028-v39">
+<link rel="stylesheet" href="/assets/home-v3.css?v=20261028-v39">
 <style>[hidden]{display:none!important}</style>
-<script src="/assets/site.js?v=20261028-v38" defer></script>
+<script src="/assets/site.js?v=20261028-v39" defer></script>
 </head>
 <body>
 <a class="skip-link" href="#main">Skip to main content</a>
@@ -26,30 +26,41 @@
  </div>
 </header>
 <main id="main" class="mads-v3 studio-enquire-page">
-<section class="studio-enquire-heading"><div class="bound"><p class="eyebrow">GET IN TOUCH</p><h1>We'd love to hear from you.</h1><p>Custom creations, Decorate &amp; Sip and everything in between.</p></div></section>
+<section class="studio-enquire-heading"><div class="bound"><p class="eyebrow">GET IN TOUCH</p><h1>Got something in mind?</h1><p>Custom creations, Decorate &amp; Sip and everything in between.</p></div></section>
 <section class="last studio-enquire-section"><div class="bound enquiry-layout">
-<div class="enquiry-intro"><p class="eyebrow">LET'S TALK</p><h2>What have you got in mind?</h2><p>You don't need every detail figured out. Tell us what you're planning and we can go from there.</p><p class="enquiry-aside-note">Prefer Instagram? <a href="https://ig.me/m/madsaboutcake" target="_blank" rel="noopener noreferrer">Message @madsaboutcake ↗</a></p></div>
-<div class="enquiry-panel"><div class="enquiry-panel__header"><strong>Make an enquiry</strong></div><form class="studio-enquiry-form" data-studio-enquiry-form>
-<fieldset class="studio-service-choice">
-<legend>How can we help? <span aria-hidden="true">*</span></legend>
-<div class="studio-service-options">
-<label><input type="radio" name="category" value="creations" checked><span>Custom creations</span></label>
-<label><input type="radio" name="category" value="workshop"><span>Decorate &amp; Sip</span></label>
-<label><input type="radio" name="category" value="other"><span>Other</span></label>
-</div></fieldset>
-<div class="studio-enquiry-field" data-studio-category="creations"><label for="studio-creation-type">What would you like? <span aria-hidden="true">*</span></label><select id="studio-creation-type" name="creationType" required><option value="">Choose one</option><option value="Cake">Cake</option><option value="Cupcakes">Cupcakes</option></select></div>
-<div class="studio-enquiry-field" data-studio-category="workshop" hidden><label for="studio-group-size">Approximate group size <small>(optional)</small></label><input id="studio-group-size" name="groupSize" type="number" min="1" max="1000" placeholder="e.g. 12" disabled></div>
-<div class="studio-enquiry-field" data-studio-category="other" hidden><label for="studio-other-topic">What's it about? <span aria-hidden="true">*</span></label><select id="studio-other-topic" name="otherTopic" required disabled><option value="">Choose one</option><option>General question</option><option>Corporate or event enquiry</option><option>Partnership or collaboration</option><option>Something else</option></select></div>
-<div class="enquiry-field-row">
-<div class="studio-enquiry-field"><label for="studio-name">Your name <span aria-hidden="true">*</span></label><input id="studio-name" name="name" maxlength="120" autocomplete="name" placeholder="Your name" required></div>
-<div class="studio-enquiry-field"><label for="studio-email">Email address <span aria-hidden="true">*</span></label><input id="studio-email" name="email" type="email" maxlength="200" autocomplete="email" placeholder="you@example.com" required></div>
-</div>
-<div class="studio-enquiry-field"><label for="studio-date">Date, if you have one <small>(optional)</small></label><input id="studio-date" name="eventDate" type="date"></div>
-<div class="studio-enquiry-field"><label for="studio-message">Tell us a little more <span aria-hidden="true">*</span></label><textarea id="studio-message" name="message" maxlength="4000" minlength="10" rows="4" required placeholder="Occasion, colours, plans or any questions you have…"></textarea></div>
-<input type="hidden" name="selectedDesign" value=""><input type="hidden" name="referenceLink" value=""><input type="hidden" name="sourcePage" value="">
-<div class="studio-honeypot" aria-hidden="true"><label>Leave this field blank<input type="text" name="_gotcha" tabindex="-1" autocomplete="off"></label></div>
-<div class="enquiry-submit"><button class="action-solid" type="submit">Send enquiry ↗</button></div>
-<div class="studio-enquiry-status" data-studio-enquiry-status role="status" aria-live="polite" hidden></div>
+<div class="enquiry-intro"><p class="eyebrow">LET'S TALK</p><h2>What have you got in mind?</h2><p>Tell us about the cake, your group or whatever you'd like to ask.</p><p class="enquiry-aside-note">Prefer Instagram? <a href="https://ig.me/m/madsaboutcake" target="_blank" rel="noopener noreferrer">Message @madsaboutcake ↗</a></p></div>
+<div class="enquiry-panel"><div class="enquiry-panel__header"><strong>Get in touch</strong></div><form class="studio-enquiry-form" data-studio-enquiry-form>
+ <div class="studio-enquiry-field studio-topic">
+  <label for="studio-topic">What's your enquiry about? <span aria-hidden="true">*</span></label>
+  <select id="studio-topic" name="enquiryTopic" required>
+   <option value="">Choose an option</option>
+   <optgroup label="Custom creations">
+    <option value="cake" data-group="creations">Custom cake</option>
+    <option value="cupcakes" data-group="creations">Cupcakes</option>
+   </optgroup>
+   <optgroup label="Decorate &amp; Sip">
+    <option value="workshop-booking" data-group="workshop">Group booking</option>
+    <option value="workshop-question" data-group="workshop">Question about a session</option>
+   </optgroup>
+   <optgroup label="Other">
+    <option value="general" data-group="other">General question</option>
+    <option value="corporate-event" data-group="other">Corporate or event enquiry</option>
+    <option value="partnership" data-group="other">Partnership or collaboration</option>
+    <option value="something-else" data-group="other">Something else</option>
+   </optgroup>
+  </select>
+ </div>
+ <div class="enquiry-field-row">
+  <div class="studio-enquiry-field"><label for="studio-name">Your name <span aria-hidden="true">*</span></label><input id="studio-name" name="name" maxlength="120" autocomplete="name" placeholder="Your name" required></div>
+  <div class="studio-enquiry-field"><label for="studio-email">Email address <span aria-hidden="true">*</span></label><input id="studio-email" name="email" type="email" maxlength="200" autocomplete="email" placeholder="you@example.com" required></div>
+ </div>
+ <div class="studio-enquiry-field"><label for="studio-date">Date, if you have one <small>(optional)</small></label><input id="studio-date" name="eventDate" type="date"></div>
+ <div class="studio-enquiry-field"><label for="studio-message">Tell us a little more <span aria-hidden="true">*</span></label><textarea id="studio-message" name="message" maxlength="4000" minlength="10" rows="4" required placeholder="Tell us the occasion, your ideas or any questions…"></textarea></div>
+ <input type="hidden" name="category" value="">
+ <input type="hidden" name="selectedDesign" value=""><input type="hidden" name="referenceLink" value=""><input type="hidden" name="sourcePage" value="">
+ <div class="studio-honeypot" aria-hidden="true"><label>Leave this field blank<input type="text" name="_gotcha" tabindex="-1" autocomplete="off"></label></div>
+ <div class="enquiry-submit"><button class="action-solid" type="submit">Send enquiry ↗</button></div>
+ <div class="studio-enquiry-status" data-studio-enquiry-status role="status" aria-live="polite" hidden></div>
 </form></div>
 </div></section></main>
 <footer class="site-footer">

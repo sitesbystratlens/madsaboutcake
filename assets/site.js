@@ -234,30 +234,30 @@ function initStudioEnquiryForms(){
  forms.forEach(form=>{
   const status=form.querySelector('[data-studio-enquiry-status]');
   const submit=form.querySelector('button[type="submit"]');
+  const topic=form.elements.enquiryTopic;
   const params=new URLSearchParams(location.search);
-  const radio=form.querySelector('input[name="category"][value="'+(params.get('type')==='workshop'?'workshop':'creations')+'"]');
-  if(radio)radio.checked=true;
-  if(form.elements.creationType&&['Cake','Cupcakes'].includes(params.get('product')))form.elements.creationType.value=params.get('product');
+  const desiredProduct=params.get('product');
+  if(params.get('type')==='workshop')topic.value='workshop-booking';
+  else if(params.get('type')==='other')topic.value='general';
+  else if(desiredProduct==='Cupcakes')topic.value='cupcakes';
+  else if(desiredProduct==='Cake'||params.get('type')==='cake')topic.value='cake';
   if(form.elements.selectedDesign)form.elements.selectedDesign.value=(params.get('designTitle')||params.get('style')||'').slice(0,160);
   const ref=params.get('reference')||'';
   if(form.elements.referenceLink&&/^https:\/\/www\.instagram\.com\/(?:p|reel|tv)\//.test(ref))form.elements.referenceLink.value=ref.slice(0,500);
   if(form.elements.sourcePage)form.elements.sourcePage.value=location.pathname;
   const date=form.elements.eventDate;
   if(date){const now=new Date();date.min=new Date(now.getTime()-now.getTimezoneOffset()*60000).toISOString().slice(0,10);}
-  function updateCategory(){
-   const chosen=form.querySelector('input[name="category"]:checked')?.value||'creations';
-   form.querySelectorAll('[data-studio-category]').forEach(group=>{
-    const on=group.dataset.studioCategory===chosen;
-    group.hidden=!on;group.querySelectorAll('input,select,textarea').forEach(field=>field.disabled=!on);
-   });
+  function updateTopic(){
+   const opt=topic.selectedOptions[0];
+   if(form.elements.category)form.elements.category.value=opt?.dataset.group||'';
    if(status){status.hidden=true;status.replaceChildren();}
   }
-  form.querySelectorAll('input[name="category"]').forEach(radio=>radio.addEventListener('change',updateCategory));
-  updateCategory();
+  topic.addEventListener('change',updateTopic);updateTopic();
   form.addEventListener('submit',async event=>{
    event.preventDefault();
    if(!form.reportValidity()||!status||!submit)return;
    if(form.elements._gotcha?.value)return;
+   updateTopic();
    status.hidden=false;status.replaceChildren();
    const url=await endpoint;
    if(!url){
@@ -270,10 +270,10 @@ function initStudioEnquiryForms(){
    submit.disabled=true;submit.textContent='Sending…';
    try{
     const payload=new FormData(form);
-    payload.set('_subject','Mads About Cake — '+String(payload.get('category')||'general')+' enquiry');
+    payload.set('_subject','Mads About Cake — '+String(payload.get('enquiryTopic')||'general')+' enquiry');
     const response=await fetch(url,{method:'POST',body:payload,headers:{Accept:'application/json'}});
     if(!response.ok)throw new Error('Not delivered');
-    form.reset();updateCategory();status.hidden=false;
+    form.reset();updateTopic();status.hidden=false;
     status.textContent="Thank you. Your enquiry has been sent.";
    }catch(error){
     status.textContent="Your enquiry couldn't be sent. Please try again or contact Mads on Instagram.";
