@@ -21,7 +21,13 @@ for(const [slug,url] of pages){
   page.on('pageerror',error=>exceptions.push(error.message));
   await page.goto(base+url,{waitUntil:'domcontentloaded',timeout:20000});
   await page.locator('body').waitFor();
-  await page.waitForTimeout(700);
+  // Force below-the-fold native lazy images to load before counting failures and capturing a full-page screenshot.
+  await page.evaluate(async()=>{
+   const images=[...document.images];
+   for(const img of images)if(img.loading==='lazy')img.loading='eager';
+   await Promise.all(images.map(img=>img.decode().catch(()=>null)));
+  });
+  await page.waitForTimeout(150);
   const info=await page.evaluate(()=>{
    const visible=e=>{const s=getComputedStyle(e);return s.display!=='none'&&s.visibility!=='hidden'&&!e.hidden;};
    const imgs=[...document.images];
@@ -32,14 +38,15 @@ for(const [slug,url] of pages){
     documentWidth:doc.scrollWidth,
     viewportWidth:innerWidth,
     imageCount:imgs.length,
-    brokenImages:imgs.filter(x=>visible(x)&&!x.complete||visible(x)&&x.naturalWidth===0).map(x=>x.getAttribute('src')),
+    brokenImages:imgs.filter(x=>visible(x)&&x.complete&&x.naturalWidth===0).map(x=>x.getAttribute('src')),
     visibleNavigation:nav.map(a=>a.textContent.trim()),
     mainHeading:document.querySelector('main h1')?.textContent.trim()||'',
     cssFont:getComputedStyle(document.querySelector('main h1')||document.body).fontFamily,
     fontLoaded:document.fonts.check('600 40px Fraunces'),
     bannerVisible:[...document.querySelectorAll('[data-studio-announcement]')].some(visible),
     galleryCards:[...document.querySelectorAll('[data-gallery] .gallery-card')].filter(visible).length,
-    formCount:document.querySelectorAll('[data-studio-enquiry-form]').length
+    formCount:document.querySelectorAll('[data-studio-enquiry-form]').length,
+    overflowElements:[...document.querySelectorAll('body *')].filter(el=>{const rect=el.getBoundingClientRect();return rect.width>0&&rect.right>innerWidth+4&&getComputedStyle(el).position!=='fixed';}).slice(0,10).map(el=>({tag:el.tagName,cls:String(el.className).slice(0,90),right:Math.round(el.getBoundingClientRect().right)}))
    };
    return facts;
   });
