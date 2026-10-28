@@ -364,3 +364,12 @@ body{background:var(--v3-cream)}
 .gallery-info .gallery-card-actions{display:flex;flex-direction:row;flex-wrap:wrap;align-items:flex-start;gap:7px 14px;width:100%;min-width:0}
 .gallery-info .gallery-card-actions a{white-space:normal;line-height:1.45}
 @media(max-width:800px){.gallery-info .gallery-card-actions{flex-direction:column;gap:8px}}
+
+/* V3.15: engagement-led homepage. Show each selected cake in full. */
+.mads-v3 .look-left .look-img{height:clamp(275px,31vw,395px);aspect-ratio:auto}
+.mads-v3 .look-left .look-img img,
+.mads-v3 .look-center .look-img img,
+.mads-v3 .look-right .look-img img{object-fit:contain;object-position:center;background:transparent}
+.mads-v3 .occ-bday .occ-img img,.mads-v3 .occ-wedding .occ-img img,
+.mads-v3 .occ-baby .occ-img img,.mads-v3 .occ-love .occ-img img{object-fit:contain;object-position:center}
+@media(max-width:800px){.mads-v3 .look-left .look-img{height:clamp(310px,91vw,440px)}}
