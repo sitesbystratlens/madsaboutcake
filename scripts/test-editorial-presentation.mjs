@@ -4,14 +4,20 @@ const read=p=>fs.readFileSync(p,'utf8');
 const site=read('assets/site.js'),css=read('assets/home-v3.css'),base=read('assets/site.css');
 const data=JSON.parse(read('cakes.json')),notice=JSON.parse(read('assets/studio-notices.json'));
 const pages=['index.html','cakes/index.html','decorate-and-sip/index.html','about/index.html','enquire/index.html','404.html'];
-assert.equal(data.cakes.length,33);
+assert(data.cakes.length>=33);
+const featured=data.cakes.filter(c=>c.featured25===true);
+assert.equal(featured.length,25,'25 featured Instagram posts expected');
+assert.equal(new Set(featured.map(c=>c.sourceShortcode)).size,25,'One selection per source post');
+for(const category of ['Birthdays','Weddings & engagements','Baby celebrations','Love & anniversaries','Other/unspecified'])assert.equal(featured.filter(c=>c.featureCategory===category).length,5,'Unbalanced selected category '+category);
+assert(featured.every(c=>c.coverImage.startsWith('assets/featured-25/')),'Curated photos must be local hosted original derivatives');
 assert.equal(new Set(data.cakes.map(c=>c.sourceShortcode)).size,33);
 assert.equal(data.meta.mode,'concept-preview');
 assert(data.cakes.every(c=>c.showOnWebsite==='No'),'Owner photos should remain unapproved');
-assert(data.cakes.some(c=>c.sourceShortcode==='DQ0WjCPEgqr'&&c.demoVisible===false),'Character-themed image not hidden');
+assert(featured.some(c=>c.sourceShortcode==='DQ0WjCPEgqr'&&c.demoVisible===true&&c.ownerReviewRequired===true&&c.licensedCharacterReview===true),'User-selected character cake missing owner/IP review flag');
 assert(data.cakes.every(c=>!(/independent website concept/i.test(c.shortDescription+' '+c.alt))),'Internal catalogue text');
 for(const code of ['DNKl7y9BcgU','DPLhTN5kgDE']){const c=data.cakes.find(x=>x.sourceShortcode===code);assert(c&&!/(first|ninth)[- ]birthday/i.test(c.alt),'Unsupported age in alt text '+code);}
 assert(site.includes("PUBLIC_OCCASIONS=['Birthdays','Weddings & engagements','Baby celebrations','Love & anniversaries']"));
+assert(site.includes('const listed=records.filter(c=>c.featured25===true)'),'Gallery shows non-featured legacy records');
 assert(site.includes('loadDesignFromQuery(form,params)'),'Design reference lookup absent');
 assert(site.includes('data.show!==true')&&notice.show===false&&notice.message==='','Unapproved closure banner');
 assert(site.includes('melbourneToday>expires'),'Notice expiry missing');
@@ -37,6 +43,8 @@ const home=read('index.html'),gallery=read('cakes/index.html'),workshop=read('de
 assert(home.includes('Say it with cake.')&&home.includes('Got something'),'Homepage structure changed');
 assert(home.includes('Got an idea?')&&home.includes('Let’s hear it.'),'Owner-preferred headings changed');
 assert(home.includes('DIiAw_lBkM1')&&workshop.includes('DIiAw_lBkM1'),'Workshop proof reel absent');
+assert(data.cakes.some(c=>c.id==='ig-4449685f6f486a4268784e'&&c.demoVisible===true),'Homepage hero deep link broken');
+assert(data.cakes.some(c=>c.id==='ig-444b4c734c505468516378'&&c.demoVisible===true),'Homepage centre hero deep link broken');
 assert(!home.includes('DQ0WjCPEgqr'),'Character photo on homepage');
 assert(!home.includes('DauWQoCkuB1'),'Explicit novelty cake must not appear in homepage hero');
 assert(home.includes('02_pink-ribbon-vintage-cake_DIh_oHjBhxN.webp'),'Brand-appropriate hero photo missing');
@@ -64,4 +72,4 @@ for(const p of ['index.html','enquire/index.html']){
  assert(html.includes('name="designId"')&&html.includes('studio-message-help'),'Design fields absent');
 }
 for(const c of data.cakes)assert(fs.existsSync(c.coverImage),'Missing photo '+c.coverImage);
-console.log('FINAL RED-TEAM PASS: content, navigation, enquiry, launch gating and photo integrity');
+console.log('FINAL RED-TEAM PASS: balanced 25 from 25 posts, original local images, preserved homepage links, launch safeguards');

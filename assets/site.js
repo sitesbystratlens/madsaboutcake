@@ -12,7 +12,7 @@ const PRODUCT_TYPES=['Cake','Cupcakes','Other Treats'];
 const PUBLIC_OCCASIONS=['Birthdays','Weddings & engagements','Baby celebrations','Love & anniversaries'];
 const OCCASIONS=[...PUBLIC_OCCASIONS,'Religious & Cultural','Graduations','Corporate & Events','Other Celebrations'];
 const esc=s=>String(s==null?'':s).replace(/[&<>"']/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));
-const safeCover=s=>typeof s==='string'&&/^assets\/(?:cake-covers|creations)\/[\w-]+\.(?:jpe?g|png|webp|avif)$/.test(s);
+const safeCover=s=>typeof s==='string'&&/^assets\/(?:cake-covers|creations|featured-25)\/[\w-]+\.(?:jpe?g|png|webp|avif)$/.test(s);
 const imageOf=c=>safeCover(c.coverImage)?'/'+c.coverImage:'/assets/mads-logo.webp';
 const slug=s=>String(s).toLowerCase().replace(/\s+/g,'-');
 const matchesOccasion=(c,o)=>c.primaryOccasion===o||c.otherOccasions.includes(o);
@@ -55,13 +55,14 @@ function initGallery(records,concept){
  const root=document.querySelector('[data-gallery]');if(!root)return;
  const params=new URLSearchParams(location.search),id=params.get('design');
  if(id){const c=records.find(x=>x.id===id);if(c&&showDesign(c,concept))return;}
- root.innerHTML=records.map(cardHtml).join('');
+ const listed=records.filter(c=>c.featured25===true);
+ root.innerHTML=listed.map(cardHtml).join('');
  const buttons=[...document.querySelectorAll('[data-product]')],occasion=document.getElementById('occasion-filter');
  let product=['cake','cupcakes','other-treats'].includes(params.get('product'))?params.get('product'):'all';
- const used=new Set(records.map(c=>slug(c.productType))),otherButton=buttons.find(b=>b.dataset.product==='other-treats');
+ const used=new Set(listed.map(c=>slug(c.productType))),otherButton=buttons.find(b=>b.dataset.product==='other-treats');
  if(otherButton)otherButton.hidden=!used.has('other-treats');
  if(occasion){
-  for(const o of PUBLIC_OCCASIONS.filter(o=>records.some(c=>matchesOccasion(c,o)))){
+  for(const o of PUBLIC_OCCASIONS.filter(o=>listed.some(c=>matchesOccasion(c,o)))){
    const opt=document.createElement('option');opt.value=o;opt.textContent=o;occasion.appendChild(opt);
   }
   if([...occasion.options].some(o=>o.value===params.get('occasion')))occasion.value=params.get('occasion');
@@ -69,7 +70,7 @@ function initGallery(records,concept){
  function update(){
   let count=0;
   for(const card of root.querySelectorAll('.gallery-card')){
-   const c=records.find(x=>x.id===card.dataset.id);
+   const c=listed.find(x=>x.id===card.dataset.id);
    const visible=!!c&&(product==='all'||slug(c.productType)===product)&&(!occasion||occasion.value==='all'||matchesOccasion(c,occasion.value));
    card.hidden=!visible;if(visible)count++;
   }
