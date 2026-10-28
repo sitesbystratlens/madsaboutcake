@@ -116,3 +116,28 @@
  #browse-gallery .gallery-compact__head h1{font-size:38px}
  #browse-gallery .filter-btn{padding:9px 7px;font-size:11px}
 }
+
+/* Decorate & Sip: authentic session photos, one watch link and simple booking path. */
+.workshop-hero{min-height:540px}
+.workshop-hero .workshop-hero__copy{padding-top:clamp(50px,6vw,82px);padding-bottom:clamp(44px,5vw,70px)}
+.workshop-hero .workshop-hero__copy h1{margin-bottom:22px}
+.workshop-hero .workshop-hero__copy .lede{max-width:490px}
+.workshop-hero .workshop-hero__note{margin-top:22px;font-size:12px;line-height:1.55;max-width:425px}
+.workshop-hero__media{position:relative;display:block;min-height:540px;overflow:hidden;background:#ece5e0;color:#fff;text-decoration:none}
+.workshop-hero__media img{width:100%;height:100%;min-height:540px;display:block;object-fit:cover;object-position:center 40%;background:#eee5e3}
+.workshop-hero__overlay{position:absolute;inset:auto 0 0;padding:75px clamp(24px,4vw,60px) 30px;background:linear-gradient(transparent,rgba(40,24,32,.79));display:flex;flex-direction:column;gap:10px}
+.workshop-hero__overlay small{font:800 11px/1.4 var(--sans);letter-spacing:.16em;color:#fff}
+.workshop-hero__overlay strong{font:600 clamp(20px,2.1vw,29px)/1.2 var(--serif);color:#fff}
+.workshop-hero__media:hover img{filter:brightness(.96)}
+.workshop-cupcake-photo{position:relative;display:block;height:clamp(325px,38vw,480px);overflow:hidden;background:#eee1dd;color:#fff}
+.workshop-cupcake-photo img{width:100%;height:100%;object-fit:cover;object-position:center 34%;display:block}
+.workshop-cupcake-photo>span{position:absolute;left:0;right:0;bottom:0;padding:48px 28px 20px;background:linear-gradient(transparent,rgba(40,24,32,.75));color:#fff;font:600 25px/1.25 var(--serif)}
+.workshop-hero__media:focus-visible,.workshop-cupcake-photo:focus-visible{outline:3px solid #553047;outline-offset:3px}
+@media(max-width:760px){
+ .workshop-hero{min-height:0}
+ .workshop-hero .workshop-hero__copy{padding-top:46px;padding-bottom:35px}
+ .workshop-hero__media,.workshop-hero__media img{min-height:350px;height:clamp(350px,108vw,500px)}
+ .workshop-hero__overlay{padding:65px 24px 20px}
+ .workshop-cupcake-photo{height:clamp(330px,94vw,470px)}
+ .workshop-cupcake-photo>span{font-size:23px}
+}
