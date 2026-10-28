@@ -28,7 +28,7 @@ assert(site.includes('data.show!==true')&&notice.show===false&&notice.message===
 assert(site.includes('melbourneToday>expires'),'Notice expiry missing');
 assert(JSON.parse(read('assets/enquiry-settings.json')).formspreeEndpoint==='','Unapproved contact destination');
 assert(site.includes('if(!response.ok)throw'),'Form success not checked');
-assert(site.includes("enquiries aren't connected yet"),'Preview disclosure absent');
+assert(site.includes("the contact form isn't connected yet"),'Preview disclosure absent');
 assert(!site.includes('images.pexels.com'),'Stock-photo fallback');
 assert(css.includes('mix-blend-mode:normal;filter:none'),'Logo blending not corrected');
 assert(css.includes('background:var(--v3-ink);color:#fff'),'Banner should be plum');
@@ -53,7 +53,7 @@ for(const p of pages){
  assert(!html.includes('made for meaningful moments'),'Generic footer '+p);
 }
 const home=read('index.html'),gallery=read('cakes/index.html'),workshop=read('decorate-and-sip/index.html'),enquire=read('enquire/index.html');
-assert(home.includes('Say it with cake.')&&home.includes('Got something'),'Homepage structure changed');
+assert(home.includes('Say it with cake.')&&home.includes('What are we<br><i>celebrating?</i>'),'Homepage headings changed');
 assert(!home.includes('CUSTOM CAKES &amp; CUPCAKES · MELBOURNE'),'Homepage repeated the navigation category in an eyebrow');
 const opening=home.match(/<section class="opening">([\s\S]*?)<div class="cake-showcase">/)?.[1]||'';
 assert((opening.match(/class="action-solid"/g)||[]).length===1,'Hero should have one primary action');
@@ -61,7 +61,17 @@ assert(!opening.includes('class="action-line"')&&!opening.includes('>Enquire ↗
 assert(home.includes('href="/#cake-enquiry"')===false,'Legacy same-page Enquire hero link remains');
 
 assert(home.includes('Got an idea?')&&home.includes('Let’s hear it.'),'Owner-preferred headings changed');
-assert(home.includes('DIiAw_lBkM1'),'Homepage session reel link missing');
+for(const p of ['index.html','enquire/index.html']){
+ const formPage=read(p);
+ assert(formPage.includes('What can we help with?'),'Contact form still uses formal enquiry wording: '+p);
+ assert(formPage.includes('Send message ↗'),'Contact form CTA not updated: '+p);
+ assert(!formPage.includes('Send enquiry ↗')&&!formPage.includes("What's your enquiry about?"),'Old formal contact labels remain: '+p);
+}
+assert(site.includes("submit.textContent='Send message ↗'"),'Contact submit button reset text stale');
+assert(!home.includes('BIRTHDAYS, BIG DAYS & MORE'),'Redundant occasion eyebrow remains');
+assert(!workshop.includes('FROM A REAL SESSION')&&!workshop.includes('HENS PARTIES · BIRTHDAYS · GROUP SESSIONS'),'Redundant session labels remain');
+
+assert(home.includes('DIiAw_lBkM1')&&home.includes('See a session clip ↗'),'Homepage short session clip link missing');
 assert(workshop.includes('DSR06gjEgJK-hens-setup.webp')&&workshop.includes('DHDXe4EB9Le-cupcake-edition.webp'),'Original session photographs missing');
 assert(workshop.includes('href="https://www.instagram.com/p/DSR06gjEgJK/"'),'Main session photo not linked to its original post');
 assert((workshop.match(/See a session clip/g)||[]).length===1,'One accurate session-video CTA expected');
@@ -126,7 +136,7 @@ const detailMarkup=site.slice(site.indexOf('function showDesign(c,concept){'),si
 assert(detailMarkup.includes('design-instagram-link')&&detailMarkup.includes('originalPost')&&detailMarkup.includes('noopener noreferrer'),'Original Instagram link missing from design drill through');
 assert(detailMarkup.includes('Ask about this design →'),'Enquiry must stay inside the detail page');
 assert(base.includes('.gallery-photo__arrow')&&base.includes('.design-instagram-link'),'Gallery link styling missing');
-assert(pages.every(p=>read(p).includes('site.css?v=20261028-v47')&&read(p).includes('site.js?v=20261028-v47')),'Shared asset cache revision missing');
+assert(pages.every(p=>read(p).includes('site.css?v=20261028-v47')&&read(p).includes('site.js?v=20261028-v48')),'Shared asset cache revision missing');
 const faqMarkup=workshop.match(/<div class="faq-list">([\s\S]*?)<\/div>/)?.[1]||'';
 assert.equal((faqMarkup.match(/<details>/g)||[]).length,4,'Four clear workshop FAQs expected');
 assert(!/\bMads\b/.test(faqMarkup),'FAQs should speak as We rather than Mads');
