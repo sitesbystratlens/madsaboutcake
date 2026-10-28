@@ -1,5 +1,6 @@
 {
-  "schemaVersion": 1,
-  "enabled": true,
-  "message": "Not taking new orders for December 2026"
+  "schemaVersion": 2,
+  "show": false,
+  "expires": "2026-12-31",
+  "message": ""
 }
