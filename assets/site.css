@@ -148,3 +148,18 @@
 .workshop-guest-comment blockquote{font:500 clamp(20px,2.2vw,27px)/1.28 var(--serif);color:#553047;margin:9px 0 0;max-width:680px}
 .workshop-guest-comment>a{flex:0 0 auto;font:700 12px/1.5 var(--sans);text-decoration:underline;text-underline-offset:4px;color:#553047}
 @media(max-width:760px){.workshop-guest-comment{display:block;padding-top:20px}.workshop-guest-comment>a{display:inline-block;margin-top:15px}}
+
+/* Editorial gallery: image and title open the design; Instagram link lives on the detail image. */
+.gallery-card .gallery-photo{position:relative;display:block;overflow:hidden;isolation:isolate}
+.gallery-photo__arrow{position:absolute;right:12px;bottom:12px;display:flex;width:37px;height:37px;align-items:center;justify-content:center;border-radius:50%;background:#fff;color:#553047;font:500 21px/1 var(--sans);box-shadow:0 2px 12px rgba(55,27,44,.14);pointer-events:none;transition:transform .2s}
+.gallery-card .gallery-photo:hover .gallery-photo__arrow,.gallery-card .gallery-photo:focus-visible .gallery-photo__arrow{transform:translate(2px,-2px)}
+.gallery-card .gallery-title-link{color:#553047;text-decoration:none;font:inherit;white-space:normal;line-height:inherit}
+.gallery-card .gallery-title-link:hover,.gallery-card .gallery-title-link:focus-visible{text-decoration:underline;text-underline-offset:4px}
+.gallery-card .gallery-info{padding-top:12px}
+.gallery-card .gallery-info h3{margin:4px 0 0}
+.design-detail-media{position:relative;min-width:0}
+.design-detail-media .design-detail-image{display:block}
+.design-instagram-link{position:absolute;right:15px;bottom:15px;display:flex;align-items:center;justify-content:center;width:46px;height:46px;border:1px solid rgba(85,48,71,.12);border-radius:50%;background:#fff;color:#553047;box-shadow:0 3px 15px rgba(55,27,44,.14);transition:transform .2s,background .2s}
+.design-instagram-link:hover{background:#ffedf2;transform:translateY(-2px)}
+.design-instagram-link:focus-visible{outline:3px solid #553047;outline-offset:3px}
+@media(max-width:760px){.gallery-photo__arrow{right:9px;bottom:9px;width:33px;height:33px;font-size:19px}.design-instagram-link{right:12px;bottom:12px;width:43px;height:43px}}
