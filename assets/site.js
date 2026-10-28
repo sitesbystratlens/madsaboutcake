@@ -55,7 +55,7 @@ function initGallery(records,concept){
  const root=document.querySelector('[data-gallery]');if(!root)return;
  const params=new URLSearchParams(location.search),id=params.get('design');
  if(id){const c=records.find(x=>x.id===id);if(c&&showDesign(c,concept))return;}
- const listed=records.filter(c=>c.featured25===true);
+ const listed=concept?records.filter(c=>c.featured25===true):records;
  root.innerHTML=listed.map(cardHtml).join('');
  const buttons=[...document.querySelectorAll('[data-product]')],occasion=document.getElementById('occasion-filter');
  let product=['cake','cupcakes','other-treats'].includes(params.get('product'))?params.get('product'):'all';
