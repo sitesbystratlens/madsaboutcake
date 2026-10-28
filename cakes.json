@@ -720,7 +720,7 @@
     },
     {
       "id": "ig-44617557516f436b754231",
-      "title": "Pink and green vintage heart",
+      "title": "Pink and green floral piping cake",
       "productType": "Cake",
       "primaryOccasion": "",
       "otherOccasions": [],
@@ -729,8 +729,8 @@
         "Floral"
       ],
       "shapeFormat": "Heart",
-      "shortDescription": "Heart-shaped cake with vintage piping in pink and green.",
-      "alt": "Pink and green vintage heart",
+      "shortDescription": "Round pink-and-green cake with piped flowers and decorative buttercream details.",
+      "alt": "Round cake with pink and green buttercream piping and pink flowers",
       "priority": 220,
       "featuredHome": false,
       "homepageOrder": null,
@@ -739,7 +739,7 @@
       "previewImage": "https://images.pexels.com/photos/29192489/pexels-photo-29192489.jpeg?auto=compress&cs=tinysrgb&w=960",
       "approvalStatus": "Draft",
       "showOnWebsite": "No",
-      "demoVisible": true,
+      "demoVisible": false,
       "sourceShortcode": "DauWQoCkuB1",
       "sourcePhotoRank": 22,
       "ownerReviewRequired": true,

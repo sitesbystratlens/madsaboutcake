@@ -38,6 +38,10 @@ assert(home.includes('Say it with cake.')&&home.includes('Got something'),'Homep
 assert(home.includes('Got an idea?')&&home.includes('Let’s hear it.'),'Owner-preferred headings changed');
 assert(home.includes('DIiAw_lBkM1')&&workshop.includes('DIiAw_lBkM1'),'Workshop proof reel absent');
 assert(!home.includes('DQ0WjCPEgqr'),'Character photo on homepage');
+assert(!home.includes('DauWQoCkuB1'),'Explicit novelty cake must not appear in homepage hero');
+assert(home.includes('02_pink-ribbon-vintage-cake_DIh_oHjBhxN.webp'),'Brand-appropriate hero photo missing');
+assert(home.includes('Vintage piping & pink ribbons.'),'Hero photo description not updated');
+assert(data.cakes.find(c=>c.sourceShortcode==='DauWQoCkuB1')?.demoVisible===false,'Explicit novelty cake remains visible in preview gallery');
 assert(!workshop.includes('DRjMFHikhm-')&&!workshop.includes('DauWQoCkuB1'),'Unrelated product photos on workshop page');
 assert(!gallery.includes('id="style-filter"'),'Style filter still public');
 assert(gallery.includes('<h1>Find a cake'),'Gallery H1 absent');
