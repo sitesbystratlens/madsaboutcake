@@ -72,7 +72,7 @@ assert(home.includes('v3-16-full-view-caption-led-homepage-20261028'),'Current h
 assert(!home.includes('DGM5hj1hcJf-M258.webp'),'Zoomed-in Valentine crop still on landing page');
 assert(home.includes('DGM5hj1hcJf-M259.webp'),'Full view Valentine photograph missing on homepage');
 assert(home.includes('Valentine’s minis with strawberries.')&&home.includes('Garden party ready.')&&home.includes('Hand-cut wafer paper.'),'Homepage cake microcopy must summarise real post captions');
-assert(home.includes('Matched to the birthday dress'),'Birthday occasion copy must be grounded in owner's words');
+assert(home.includes('Matched to the birthday dress'),"Birthday occasion copy must be grounded in the owner's words");
 
 assert(!home.includes('DauWQoCkuB1'),'Explicit cake must not return to homepage');
 assert(css.includes('.mads-v3 .look-left .look-img img,')&&css.includes('object-fit:contain;object-position:center;background:transparent'),'Hero image framing must be full-cake / no zoom');
