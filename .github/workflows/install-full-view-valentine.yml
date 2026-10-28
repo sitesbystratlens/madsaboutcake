@@ -1,0 +1,43 @@
+name: Install full-view original Valentine cake photo
+on:
+  push:
+    branches: [main]
+    paths: [.github/workflows/install-full-view-valentine.yml]
+  workflow_dispatch:
+permissions:
+  contents: write
+jobs:
+  full-view:
+    runs-on: ubuntu-latest
+    timeout-minutes: 8
+    steps:
+      - uses: actions/checkout@v4
+      - name: Install image conversion dependency
+        run: python -m pip install Pillow
+      - name: Fetch original third carousel frame and optimise
+        shell: bash
+        env:
+          PHOTO_URL: 'https://instagram.fmil1-1.fna.fbcdn.net/v/t51.75761-15/480060649_17883258336230103_1083973328442895839_n.jpg?stp=dst-jpg_e35_tt6&_nc_cat=100&_nc_map=urlgen_bucketless&ig_cache_key=MzU3MDQ4MTU5MDM2OTA1OTM2NQ%3D%3D.3-ccb7-5&ccb=7-5&_nc_sid=58cdad&efg=eyJ2ZW5jb2RlX3RhZyI6IkNBUk9VU0VMX0lURU0ueHBpZHMuMTQ0MC5zZHIucmVndWxhcl9waG90by5DMyJ9&_nc_ohc=0O4VixepinkQ7kNvwHxPM5v&_nc_oc=AdoxuVi4WHC3FcIfS3Ooam2myg5YwSptQV6w6NDNYOIwI08ul3dFuNe2hsRCMiGfwJY&_nc_ad=z-m&_nc_cid=1093&_nc_zt=23&_nc_ht=instagram.fmil1-1.fna&_nc_gid=iYDHBrleDxMCMGrfckpcJw&_nc_ss=7a20f&oh=00_AQNIMW-2qDe2BqaWVozS0nnq8lo9XXPMlrwnfbV0jjvDBg&oe=6AE6347F'
+        run: |
+          python - <<'PY'
+          import os, io, urllib.request
+          from PIL import Image
+          url=os.environ['PHOTO_URL']
+          req=urllib.request.Request(url,headers={'User-Agent':'Mozilla/5.0 (X11; Linux x86_64) AppleWebKit/537.36 Chrome/120 Safari/537.36','Referer':'https://www.instagram.com/'})
+          with urllib.request.urlopen(req,timeout=25) as response:
+              raw=response.read()
+          image=Image.open(io.BytesIO(raw)).convert('RGB')
+          assert image.width>=900 and image.height>=1000,(image.size,len(raw))
+          image.thumbnail((1440,1800),Image.Resampling.LANCZOS)
+          out='assets/featured-25/DGM5hj1hcJf-M259.webp'
+          image.save(out,'WEBP',quality=82,method=6)
+          print('Installed full-cake view',out,image.size,os.path.getsize(out))
+          PY
+      - name: Commit complete cake photograph
+        run: |
+          git add assets/featured-25/DGM5hj1hcJf-M259.webp
+          git config user.name 'github-actions[bot]'
+          git config user.email '41898282+github-actions[bot]@users.noreply.github.com'
+          git commit -m 'Install full-view Valentine cake from original Instagram carousel'
+          git pull --rebase origin main
+          git push origin HEAD:main
