@@ -10,7 +10,7 @@ assert.equal(featured.length,25,'25 featured Instagram posts expected');
 assert.equal(new Set(featured.map(c=>c.sourceShortcode)).size,25,'One selection per source post');
 for(const category of ['Birthdays','Weddings & engagements','Baby celebrations','Love & anniversaries','Other/unspecified'])assert.equal(featured.filter(c=>c.featureCategory===category).length,5,'Unbalanced selected category '+category);
 assert(featured.every(c=>c.coverImage.startsWith('assets/featured-25/')),'Curated photos must be local hosted original derivatives');
-assert.equal(new Set(data.cakes.map(c=>c.sourceShortcode)).size,33);
+assert.equal(new Set(data.cakes.map(c=>c.sourceShortcode)).size,data.cakes.length,'Duplicate post in combined gallery and legacy catalogue');
 assert.equal(data.meta.mode,'concept-preview');
 assert(data.cakes.every(c=>c.showOnWebsite==='No'),'Owner photos should remain unapproved');
 assert(featured.some(c=>c.sourceShortcode==='DQ0WjCPEgqr'&&c.demoVisible===true&&c.ownerReviewRequired===true&&c.licensedCharacterReview===true),'User-selected character cake missing owner/IP review flag');
