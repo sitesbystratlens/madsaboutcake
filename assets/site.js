@@ -29,7 +29,10 @@ function enquiryUrl(c){
 }
 function cardHtml(c){
  const credit=c.photoCredit?'<p class="gallery-credit">'+esc(c.photoCredit)+'</p>':'';
- return '<article class="gallery-card" data-id="'+esc(c.id)+'"><a class="gallery-photo" href="/cakes/?design='+encodeURIComponent(c.id)+'"><img loading="lazy" decoding="async" src="'+esc(c.image)+'" alt="'+esc(c.alt)+'"></a><div class="gallery-info"><div><small>'+esc(c.productType+(c.primaryOccasion?' · '+c.primaryOccasion:''))+'</small><h3>'+esc(c.title)+'</h3>'+credit+'</div><div class="gallery-card-actions"><a href="/cakes/?design='+encodeURIComponent(c.id)+'">View design ↗</a><a href="'+esc(enquiryUrl(c))+'">Ask about this design →</a></div></div></article>';
+ const url='/cakes/?design='+encodeURIComponent(c.id);
+ return '<article class="gallery-card" data-id="'+esc(c.id)+'">'+
+ '<a class="gallery-photo" href="'+url+'" aria-label="View '+esc(c.title)+' design"><img loading="lazy" decoding="async" src="'+esc(c.image)+'" alt="'+esc(c.alt)+'"><span class="gallery-photo__arrow" aria-hidden="true">↗</span></a>'+
+ '<div class="gallery-info"><div><small>'+esc(c.productType+(c.primaryOccasion?' · '+c.primaryOccasion:''))+'</small><h3><a class="gallery-title-link" href="'+url+'">'+esc(c.title)+'</a></h3>'+credit+'</div></div></article>';
 }
 function showDesign(c,concept){
  const root=document.getElementById('design-detail'),browse=document.getElementById('browse-gallery'),hero=document.getElementById('gallery-hero');
@@ -41,7 +44,11 @@ function showDesign(c,concept){
  if(c.shapeFormat)meta.push(['Format',c.shapeFormat]);
  if(!draft&&Number(c.servingsMin)>0)meta.push(['Serves from',c.servingsMin]);
  if(!draft&&Number(c.priceFrom)>0)meta.push(['Price from','A$'+Number(c.priceFrom).toLocaleString('en-AU')]);
- root.innerHTML='<div><a class="detail-back" href="/cakes/">← Back to all creations</a><img class="design-detail-image" src="'+esc(c.image)+'" alt="'+esc(c.alt)+'"></div>'+
+ const originalPost=typeof c.instagramUrl==='string'&&/^https:\/\/www\.instagram\.com\/(?:p|reel)\/[\w-]+\/?$/.test(c.instagramUrl)?c.instagramUrl:'';
+ const instagramLink=originalPost?
+  '<a class="design-instagram-link" href="'+esc(originalPost)+'" target="_blank" rel="noopener noreferrer" aria-label="View original '+esc(c.title)+' post on Instagram (opens in new tab)" title="View original post on Instagram">'+
+  '<svg xmlns="http://www.w3.org/2000/svg" width="21" height="21" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><rect x="2" y="2" width="20" height="20" rx="5"></rect><circle cx="12" cy="12" r="4"></circle><circle cx="18" cy="6" r="1" fill="currentColor" stroke="none"></circle></svg></a>':'';
+ root.innerHTML='<div><a class="detail-back" href="/cakes/">← Back to all creations</a><div class="design-detail-media"><img class="design-detail-image" src="'+esc(c.image)+'" alt="'+esc(c.alt)+'">'+instagramLink+'</div></div>'+
  '<div class="design-detail-copy"><span class="eyebrow">'+esc(c.productType)+'</span><h1>'+esc(c.title)+'</h1>'+
  '<p class="lede">'+esc(c.shortDescription||'See the design and share what you would like to personalise.')+'</p>'+
  '<dl class="design-meta">'+meta.map(x=>'<dt>'+esc(x[0])+'</dt><dd>'+esc(x[1])+'</dd>').join('')+'</dl>'+
