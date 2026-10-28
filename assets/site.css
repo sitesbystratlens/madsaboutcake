@@ -141,3 +141,10 @@
  .workshop-cupcake-photo{height:clamp(330px,94vw,470px)}
  .workshop-cupcake-photo>span{font-size:23px}
 }
+
+/* Genuine guest comment on a published Decorate and Sip reel. */
+.workshop-guest-comment{display:flex;justify-content:space-between;align-items:end;gap:28px;margin-top:25px;padding:23px 0 7px;border-top:1px solid #e3ccd3}
+.workshop-guest-comment .eyebrow{font-size:10px;letter-spacing:.13em}
+.workshop-guest-comment blockquote{font:500 clamp(20px,2.2vw,27px)/1.28 var(--serif);color:#553047;margin:9px 0 0;max-width:680px}
+.workshop-guest-comment>a{flex:0 0 auto;font:700 12px/1.5 var(--sans);text-decoration:underline;text-underline-offset:4px;color:#553047}
+@media(max-width:760px){.workshop-guest-comment{display:block;padding-top:20px}.workshop-guest-comment>a{display:inline-block;margin-top:15px}}
