@@ -5,7 +5,7 @@
     "source": "Public Mads Instagram posts, Apify extract 2026-10-27, downloaded original source media",
     "notice": "Independent concept preview using 33 curated original Instagram post photographs now stored under assets/creations. All 33 source post links matched to Apify export; captions informed descriptions; occasion classification is proposed and subject to owner approval.",
     "apifyDatasetDate": "2026-10-27",
-    "selection": "25 post-level engagement-informed photographs; five each across Birthdays, Weddings & engagements, Baby celebrations, Love & anniversaries, and five signature designs with no asserted occasion.",
+    "selection": "25 post-level engagement-informed photographs; five each across Birthdays, Weddings & engagements, Baby celebrations, Love & anniversaries, and five signature designs with no asserted occasion. Photo and product descriptions grounded in original post captions; Valentine hero uses the full-cake third carousel photo.",
     "imageAssetDirectory": "assets/featured-25/",
     "ownerApprovalRequired": true,
     "notForPublicLaunch": true,
@@ -33,8 +33,8 @@
       "approvalStatus": "Draft",
       "showOnWebsite": "No",
       "demoVisible": true,
-      "title": "Green ombré birthday cake",
-      "shortDescription": "Green and ivory buttercream birthday cake, colour-matched to the birthday dress.",
+      "title": "Colour-matched birthday cake",
+      "shortDescription": "Green birthday cake matched to the birthday dress, with two vanilla tiers, cream-cheese filling and vanilla buttercream.",
       "alt": "Green and ivory buttercream birthday cake, colour-matched to the birthday dress.",
       "productType": "Cake",
       "primaryOccasion": "Birthdays",
@@ -54,17 +54,19 @@
         "responseIndex": 92.2,
         "extractDate": "2026-10-27"
       },
-      "licensedCharacterReview": false
+      "licensedCharacterReview": false,
+      "captionEvidence": "Adding “colour matching the birthday cake to the birthday dress” to my resume 💚",
+      "descriptionBasis": "Summarised from owner's Instagram post description (27 October 2026 extract)"
     },
     {
       "id": "ig-444a6a494a4e7842316170",
-      "title": "Ornate wedding cake",
+      "title": "Three-tier family wedding cake",
       "productType": "Cake",
       "primaryOccasion": "Weddings & engagements",
       "otherOccasions": [],
       "styleTags": [],
       "shapeFormat": "Tiered",
-      "shortDescription": "Multi-tier wedding cake with elaborate white piping and fresh florals.",
+      "shortDescription": "A three-tier fondant wedding cake Mads made for her brother and sister-in-law, with eight-, six- and five-inch tiers.",
       "alt": "Multi-tier wedding cake with elaborate white piping and fresh florals.",
       "priority": 2,
       "featuredHome": false,
@@ -98,11 +100,13 @@
         "responseIndex": 96.6,
         "extractDate": "2026-10-27"
       },
-      "licensedCharacterReview": false
+      "licensedCharacterReview": false,
+      "captionEvidence": "The most special cake I’ve made to date 🥹",
+      "descriptionBasis": "Summarised from owner's Instagram post description (27 October 2026 extract)"
     },
     {
       "id": "ig-445130576a435045677172",
-      "title": "Honey-themed baby shower cake",
+      "title": "Two-tier baby-shower cake",
       "productType": "Cake",
       "primaryOccasion": "Baby celebrations",
       "otherOccasions": [],
@@ -110,7 +114,7 @@
         "Whimsical"
       ],
       "shapeFormat": "Tiered",
-      "shortDescription": "Two-tier baby-shower cake with vanilla buttercream, fondant details and an edible character image.",
+      "shortDescription": "Baby-shower cake with six- and four-inch vanilla tiers, white-chocolate and raspberry filling, vanilla buttercream, fondant details and an edible image.",
       "alt": "Two-tier baby-shower cake with vanilla buttercream, fondant details and an edible character image.",
       "priority": 3,
       "featuredHome": false,
@@ -144,11 +148,13 @@
         "responseIndex": 68.8,
         "extractDate": "2026-10-27"
       },
-      "licensedCharacterReview": true
+      "licensedCharacterReview": true,
+      "captionEvidence": "Baby shower ready 🍯🧸",
+      "descriptionBasis": "Summarised from owner's Instagram post description (27 October 2026 extract)"
     },
     {
       "id": "ig-4457766e344e656b76385a",
-      "title": "Just married heart cake",
+      "title": "Biscoff celebration heart cake",
       "productType": "Cake",
       "primaryOccasion": "Love & anniversaries",
       "otherOccasions": [],
@@ -156,7 +162,7 @@
         "Vintage piping"
       ],
       "shapeFormat": "Heart",
-      "shortDescription": "White heart cake with buttercream piping, made to celebrate love.",
+      "shortDescription": "Six-inch Biscoff cake with Biscoff filling and white-chocolate buttercream, made to celebrate love.",
       "alt": "White heart cake with buttercream piping, made to celebrate love.",
       "priority": 4,
       "featuredHome": false,
@@ -190,7 +196,9 @@
         "responseIndex": 83.8,
         "extractDate": "2026-10-27"
       },
-      "licensedCharacterReview": false
+      "licensedCharacterReview": false,
+      "captionEvidence": "Celebrating love 🤍",
+      "descriptionBasis": "Summarised from owner's Instagram post description (27 October 2026 extract)"
     },
     {
       "id": "ig-f25-dp-qfm2ehmp",
@@ -212,8 +220,8 @@
       "approvalStatus": "Draft",
       "showOnWebsite": "No",
       "demoVisible": true,
-      "title": "Sculpted wafer-paper cake",
-      "shortDescription": "Individually cut edible wafer-paper details arranged into a floral, sculptural cake.",
+      "title": "Wafer-paper cake",
+      "shortDescription": "Five-inch vanilla cake with cream-cheese filling, vanilla buttercream and individually cut and folded edible wafer paper.",
       "alt": "Individually cut edible wafer-paper details arranged into a floral, sculptural cake.",
       "productType": "Cake",
       "primaryOccasion": "",
@@ -233,7 +241,9 @@
         "responseIndex": 99.1,
         "extractDate": "2026-10-27"
       },
-      "licensedCharacterReview": false
+      "licensedCharacterReview": false,
+      "captionEvidence": "Wafer paper cake - a labour intensive design, but a gorgeous result ✨",
+      "descriptionBasis": "Summarised from owner's Instagram post description (27 October 2026 extract)"
     },
     {
       "id": "ig-f25-dk8nnigbflx",
@@ -255,8 +265,8 @@
       "approvalStatus": "Draft",
       "showOnWebsite": "No",
       "demoVisible": true,
-      "title": "Red bow birthday cake",
-      "shortDescription": "Two-tier vanilla birthday cake with dramatic red bows.",
+      "title": "Red-bow birthday cake",
+      "shortDescription": "Two-tier vanilla birthday cake with raspberry-coulis filling, vanilla buttercream and a large fondant bow.",
       "alt": "Two-tier vanilla birthday cake with dramatic red bows.",
       "productType": "Cake",
       "primaryOccasion": "Birthdays",
@@ -276,7 +286,9 @@
         "responseIndex": 91,
         "extractDate": "2026-10-27"
       },
-      "licensedCharacterReview": false
+      "licensedCharacterReview": false,
+      "captionEvidence": "Still not over this gorgeous set up and this gorgeous bday gal ♥️",
+      "descriptionBasis": "Summarised from owner's Instagram post description (27 October 2026 extract)"
     },
     {
       "id": "ig-f25-dyj42nmkqlu",
@@ -298,8 +310,8 @@
       "approvalStatus": "Draft",
       "showOnWebsite": "No",
       "demoVisible": true,
-      "title": "Wafer-paper wedding cake",
-      "shortDescription": "Hand-cut wafer-paper flowers and layered textures for a wedding celebration.",
+      "title": "Textured wafer-paper wedding cake",
+      "shortDescription": "Wedding cake with individually hand-cut wafer-paper textures, faux flowers and fresh figs from the bride’s backyard.",
       "alt": "Hand-cut wafer-paper flowers and layered textures for a wedding celebration.",
       "productType": "Cake",
       "primaryOccasion": "Weddings & engagements",
@@ -319,7 +331,9 @@
         "responseIndex": 94.8,
         "extractDate": "2026-10-27"
       },
-      "licensedCharacterReview": false
+      "licensedCharacterReview": false,
+      "captionEvidence": "A labour of love for a wedding",
+      "descriptionBasis": "Summarised from owner's Instagram post description (27 October 2026 extract)"
     },
     {
       "id": "ig-4451597948692d6b6e3652",
@@ -331,7 +345,7 @@
         "Floral"
       ],
       "shapeFormat": "Cupcake box",
-      "shortDescription": "Coquette-style cupcakes decorated for a gender reveal.",
+      "shortDescription": "Coquette-style cupcakes made for a gender reveal.",
       "alt": "Coquette-style cupcakes decorated for a gender reveal.",
       "priority": 8,
       "featuredHome": false,
@@ -365,7 +379,9 @@
         "responseIndex": 61,
         "extractDate": "2026-10-27"
       },
-      "licensedCharacterReview": false
+      "licensedCharacterReview": false,
+      "captionEvidence": "Cutest coquette style cupcakes for a gender reveal ✨🧁",
+      "descriptionBasis": "Summarised from owner's Instagram post description (27 October 2026 extract)"
     },
     {
       "id": "ig-f25-dgm5hj1hcjf",
@@ -387,16 +403,16 @@
       "approvalStatus": "Draft",
       "showOnWebsite": "No",
       "demoVisible": true,
-      "title": "Strawberry Valentine's mini cake",
-      "shortDescription": "A red Valentine’s mini cake with strawberries and raspberry filling.",
-      "alt": "A red Valentine’s mini cake with strawberries and raspberry filling.",
+      "title": "Valentine’s strawberry mini cake",
+      "shortDescription": "Four-inch Valentine’s vanilla mini cake with vanilla buttercream, fresh raspberry filling and strawberries.",
+      "alt": "Full view of red Valentine mini cake with strawberries, buttercream piping and small white flowers",
       "productType": "Cake",
       "primaryOccasion": "Love & anniversaries",
       "priority": 9,
-      "coverImage": "assets/featured-25/DGM5hj1hcJf-M258.webp",
+      "coverImage": "assets/featured-25/DGM5hj1hcJf-M259.webp",
       "instagramUrl": "https://www.instagram.com/p/DGM5hj1hcJf/",
       "sourceShortcode": "DGM5hj1hcJf",
-      "sourcePhotoRank": 2,
+      "sourcePhotoRank": 3,
       "featured25": true,
       "featureCategory": "Love & anniversaries",
       "featuredHome": false,
@@ -408,11 +424,13 @@
         "responseIndex": 82.8,
         "extractDate": "2026-10-27"
       },
-      "licensedCharacterReview": false
+      "licensedCharacterReview": false,
+      "captionEvidence": "Valentines minis from the weekend 🍓",
+      "descriptionBasis": "Summarised from owner's Instagram post description (27 October 2026 extract)"
     },
     {
       "id": "ig-444a5135524c7468504b70",
-      "title": "Botanical garden-party cake",
+      "title": "Garden-party buttercream cake",
       "productType": "Cake",
       "primaryOccasion": "",
       "otherOccasions": [],
@@ -420,7 +438,7 @@
         "Character / novelty"
       ],
       "shapeFormat": "Custom",
-      "shortDescription": "Green buttercream cake with flowers, mushrooms and garden-party details.",
+      "shortDescription": "Tall eight-inch vanilla garden-party cake with chocolate-ganache filling, vanilla buttercream, buttercream drawings and mushroom figurines.",
       "alt": "Green buttercream cake with flowers, mushrooms and garden-party details.",
       "priority": 10,
       "featuredHome": false,
@@ -454,11 +472,13 @@
         "responseIndex": 92.3,
         "extractDate": "2026-10-27"
       },
-      "licensedCharacterReview": false
+      "licensedCharacterReview": false,
+      "captionEvidence": "Garden party ready 🌷🦋🌸🍄",
+      "descriptionBasis": "Summarised from owner's Instagram post description (27 October 2026 extract)"
     },
     {
       "id": "ig-445030373952616b6f7241",
-      "title": "Berry basket birthday cake",
+      "title": "Fruit-basket birthday cake",
       "productType": "Cake",
       "primaryOccasion": "Birthdays",
       "otherOccasions": [],
@@ -466,7 +486,7 @@
         "Textured"
       ],
       "shapeFormat": "Custom",
-      "shortDescription": "Basket-style cake covered in berries, made for a 30th birthday and a housewarming.",
+      "shortDescription": "Fruit-basket cake for a 30th birthday and housewarming, with five-inch chocolate cake, crunchy hazelnut filling, vanilla buttercream, berries and ribbon details.",
       "alt": "Basket-style cake covered in berries, made for a 30th birthday and a housewarming.",
       "priority": 11,
       "featuredHome": false,
@@ -500,7 +520,9 @@
         "responseIndex": 78.8,
         "extractDate": "2026-10-27"
       },
-      "licensedCharacterReview": false
+      "licensedCharacterReview": false,
+      "captionEvidence": "What do you do when your friend turns 30 AND moves into a new home while you’re overseas?",
+      "descriptionBasis": "Summarised from owner's Instagram post description (27 October 2026 extract)"
     },
     {
       "id": "ig-f25-dfcd-vgbnmd",
@@ -522,8 +544,8 @@
       "approvalStatus": "Draft",
       "showOnWebsite": "No",
       "demoVisible": true,
-      "title": "Engagement celebration cake",
-      "shortDescription": "Cream-coloured engagement cake with buttercream piping and bows.",
+      "title": "Dairy-free engagement cake",
+      "shortDescription": "Seven-inch dairy-free chocolate engagement cake with chocolate-and-raspberry filling and vanilla dairy-free buttercream.",
       "alt": "Cream-coloured engagement cake with buttercream piping and bows.",
       "productType": "Cake",
       "primaryOccasion": "Weddings & engagements",
@@ -543,7 +565,9 @@
         "responseIndex": 65.5,
         "extractDate": "2026-10-27"
       },
-      "licensedCharacterReview": false
+      "licensedCharacterReview": false,
+      "captionEvidence": "Engagement party ready 💛",
+      "descriptionBasis": "Summarised from owner's Instagram post description (27 October 2026 extract)"
     },
     {
       "id": "ig-f25-di75tivbbgx",
@@ -565,8 +589,8 @@
       "approvalStatus": "Draft",
       "showOnWebsite": "No",
       "demoVisible": true,
-      "title": "White heart baby-shower cake",
-      "shortDescription": "White heart-shaped baby-shower cake with decorative buttercream piping.",
+      "title": "Baby-shower cake with pearls",
+      "shortDescription": "Eight-inch vanilla baby-shower cake with vanilla buttercream and pearls.",
       "alt": "White heart-shaped baby-shower cake with decorative buttercream piping.",
       "productType": "Cake",
       "primaryOccasion": "Baby celebrations",
@@ -586,7 +610,9 @@
         "responseIndex": 51.1,
         "extractDate": "2026-10-27"
       },
-      "licensedCharacterReview": false
+      "licensedCharacterReview": false,
+      "captionEvidence": "Ready for a baby shower 💙",
+      "descriptionBasis": "Summarised from owner's Instagram post description (27 October 2026 extract)"
     },
     {
       "id": "ig-f25-dda-t8ghtqc",
@@ -608,8 +634,8 @@
       "approvalStatus": "Draft",
       "showOnWebsite": "No",
       "demoVisible": true,
-      "title": "Heart anniversary cake",
-      "shortDescription": "White buttercream cake decorated with little red hearts and an anniversary message.",
+      "title": "Anniversary buttercream cake",
+      "shortDescription": "Six-inch vanilla anniversary cake with vanilla buttercream.",
       "alt": "White buttercream cake decorated with little red hearts and an anniversary message.",
       "productType": "Cake",
       "primaryOccasion": "Love & anniversaries",
@@ -629,7 +655,9 @@
         "responseIndex": 33.4,
         "extractDate": "2026-10-27"
       },
-      "licensedCharacterReview": false
+      "licensedCharacterReview": false,
+      "captionEvidence": "Lil anniversary cake ❤️",
+      "descriptionBasis": "Summarised from owner's Instagram post description (27 October 2026 extract)"
     },
     {
       "id": "ig-f25-dmcwjrobfjy",
@@ -651,8 +679,8 @@
       "approvalStatus": "Draft",
       "showOnWebsite": "No",
       "demoVisible": true,
-      "title": "Geometric silver two-tier cake",
-      "shortDescription": "Square two-tier cake finished in white with geometric silver details.",
+      "title": "Silver palette-knife cake",
+      "shortDescription": "Square two-tier cake finished in white with silver accents and palette-knife design.",
       "alt": "Square two-tier cake finished in white with geometric silver details.",
       "productType": "Cake",
       "primaryOccasion": "",
@@ -672,7 +700,9 @@
         "responseIndex": 81,
         "extractDate": "2026-10-27"
       },
-      "licensedCharacterReview": false
+      "licensedCharacterReview": false,
+      "captionEvidence": "The brief was a square 2 tier cake in white with pops of silver and a palette knife design.",
+      "descriptionBasis": "Summarised from owner's Instagram post description (27 October 2026 extract)"
     },
     {
       "id": "ig-f25-dcgadluhglk",
@@ -695,7 +725,7 @@
       "showOnWebsite": "No",
       "demoVisible": true,
       "title": "Purple floral 60th cake",
-      "shortDescription": "Purple florals and pearls for a 60th birthday.",
+      "shortDescription": "Six-inch butter cake with vanilla buttercream, coloured baby’s-breath flowers and pearls for a 60th birthday.",
       "alt": "Purple florals and pearls for a 60th birthday.",
       "productType": "Cake",
       "primaryOccasion": "Birthdays",
@@ -715,7 +745,9 @@
         "responseIndex": 67.9,
         "extractDate": "2026-10-27"
       },
-      "licensedCharacterReview": false
+      "licensedCharacterReview": false,
+      "captionEvidence": "Purple florals and pearls for a 60th 💜",
+      "descriptionBasis": "Summarised from owner's Instagram post description (27 October 2026 extract)"
     },
     {
       "id": "ig-4444563630522d68634641",
@@ -727,7 +759,7 @@
         "Floral"
       ],
       "shapeFormat": "Cupcake box",
-      "shortDescription": "Yellow and white buttercream cupcakes for a Mayoun celebration.",
+      "shortDescription": "Vanilla cupcakes with vanilla buttercream for a Mayoun celebration.",
       "alt": "Yellow and white buttercream cupcakes for a Mayoun celebration.",
       "priority": 17,
       "featuredHome": false,
@@ -761,7 +793,9 @@
         "responseIndex": 62.9,
         "extractDate": "2026-10-27"
       },
-      "licensedCharacterReview": false
+      "licensedCharacterReview": false,
+      "captionEvidence": "Mayoun cupcakes 💛",
+      "descriptionBasis": "Summarised from owner's Instagram post description (27 October 2026 extract)"
     },
     {
       "id": "ig-f25-djq6b-tbqyw",
@@ -784,7 +818,7 @@
       "showOnWebsite": "No",
       "demoVisible": true,
       "title": "Floral baby-shower cake",
-      "shortDescription": "Red velvet baby-shower cake with cream-coloured buttercream and red floral details.",
+      "shortDescription": "Eight-inch red-velvet baby-shower cake with cream-cheese filling, vanilla buttercream and lots of flowers.",
       "alt": "Red velvet baby-shower cake with cream-coloured buttercream and red floral details.",
       "productType": "Cake",
       "primaryOccasion": "Baby celebrations",
@@ -804,7 +838,9 @@
         "responseIndex": 47,
         "extractDate": "2026-10-27"
       },
-      "licensedCharacterReview": false
+      "licensedCharacterReview": false,
+      "captionEvidence": "Baby shower cake with lots of flowers 🌸🌷",
+      "descriptionBasis": "Summarised from owner's Instagram post description (27 October 2026 extract)"
     },
     {
       "id": "ig-f25-duef7fjejoe",
@@ -826,8 +862,8 @@
       "approvalStatus": "Draft",
       "showOnWebsite": "No",
       "demoVisible": true,
-      "title": "Valentine-palette cake collection",
-      "shortDescription": "Red and pink cakes decorated with bows and vintage piping for Valentine’s season.",
+      "title": "Valentine-palette cakes",
+      "shortDescription": "A Valentine-themed collection featuring four-, five- and eight-inch cakes.",
       "alt": "Red and pink cakes decorated with bows and vintage piping for Valentine’s season.",
       "productType": "Cake",
       "primaryOccasion": "Love & anniversaries",
@@ -847,11 +883,13 @@
         "responseIndex": 23.3,
         "extractDate": "2026-10-27"
       },
-      "licensedCharacterReview": false
+      "licensedCharacterReview": false,
+      "captionEvidence": "Starting February off with a Valentine palette 💌",
+      "descriptionBasis": "Summarised from owner's Instagram post description (27 October 2026 extract)"
     },
     {
       "id": "ig-444c343948584968546559",
-      "title": "Red bow gift cake",
+      "title": "Neon-pink red-bow cake",
       "productType": "Cake",
       "primaryOccasion": "",
       "otherOccasions": [],
@@ -859,7 +897,7 @@
         "Sculptural"
       ],
       "shapeFormat": "Custom",
-      "shortDescription": "Neon-pink cake decorated to resemble a gift with a large red bow.",
+      "shortDescription": "Tall six-inch chocolate cake with chocolate-ganache filling, vanilla buttercream, neon-pink finish and a large fondant bow.",
       "alt": "Neon-pink cake decorated to resemble a gift with a large red bow.",
       "priority": 20,
       "featuredHome": false,
@@ -893,7 +931,9 @@
         "responseIndex": 73.6,
         "extractDate": "2026-10-27"
       },
-      "licensedCharacterReview": false
+      "licensedCharacterReview": false,
+      "captionEvidence": "A moment for this neon pink and a big red bow 😍🎀",
+      "descriptionBasis": "Summarised from owner's Instagram post description (27 October 2026 extract)"
     },
     {
       "id": "ig-f25-dkj13vrhr-v",
@@ -915,8 +955,8 @@
       "approvalStatus": "Draft",
       "showOnWebsite": "No",
       "demoVisible": true,
-      "title": "Gold 80th birthday cake",
-      "shortDescription": "A cake with ornate gold piping for an 80th birthday celebration.",
+      "title": "Gold 80th-birthday cake",
+      "shortDescription": "Eight-inch vanilla birthday cake for an 80th-birthday taste test, with white-chocolate ganache, raspberry coulis, vanilla buttercream and edible gold spray.",
       "alt": "A cake with ornate gold piping for an 80th birthday celebration.",
       "productType": "Cake",
       "primaryOccasion": "Birthdays",
@@ -936,11 +976,13 @@
         "responseIndex": 63.3,
         "extractDate": "2026-10-27"
       },
-      "licensedCharacterReview": false
+      "licensedCharacterReview": false,
+      "captionEvidence": "My customer wanted to taste test a birthday cake for her dad’s 80th birthday",
+      "descriptionBasis": "Summarised from owner's Instagram post description (27 October 2026 extract)"
     },
     {
       "id": "ig-4453675f6f71706b6a794b",
-      "title": "Summer floral Nikkah cake",
+      "title": "Floral Nikkah cake",
       "productType": "Cake",
       "primaryOccasion": "Weddings & engagements",
       "otherOccasions": [],
@@ -948,7 +990,7 @@
         "Floral"
       ],
       "shapeFormat": "Tiered",
-      "shortDescription": "Two-tier Nikkah cake with fresh flowers and a vanilla buttercream finish.",
+      "shortDescription": "Nikkah cake with five- and seven-inch tiers, naked vanilla buttercream and fresh, non-edible flowers with protected stems.",
       "alt": "Two-tier Nikkah cake with fresh flowers and a vanilla buttercream finish.",
       "priority": 22,
       "featuredHome": false,
@@ -982,11 +1024,13 @@
         "responseIndex": 46.1,
         "extractDate": "2026-10-27"
       },
-      "licensedCharacterReview": false
+      "licensedCharacterReview": false,
+      "captionEvidence": "Summery florals for a Nikkah ✨",
+      "descriptionBasis": "Summarised from owner's Instagram post description (27 October 2026 extract)"
     },
     {
       "id": "ig-4337744f6d6354686b5441",
-      "title": "Floral baby-shower cupcakes",
+      "title": "Baby-shower buttercream cupcakes",
       "productType": "Cupcakes",
       "primaryOccasion": "Baby celebrations",
       "otherOccasions": [],
@@ -995,7 +1039,7 @@
         "Vintage piping"
       ],
       "shapeFormat": "Cupcake box",
-      "shortDescription": "Butter cake cupcakes topped with floral vanilla buttercream for a baby shower.",
+      "shortDescription": "Butter-cake cupcakes with vanilla buttercream for a baby shower.",
       "alt": "Butter cake cupcakes topped with floral vanilla buttercream for a baby shower.",
       "priority": 23,
       "featuredHome": false,
@@ -1029,11 +1073,13 @@
         "responseIndex": 42.2,
         "extractDate": "2026-10-27"
       },
-      "licensedCharacterReview": false
+      "licensedCharacterReview": false,
+      "captionEvidence": "Cutest set for a baby shower 🌸",
+      "descriptionBasis": "Summarised from owner's Instagram post description (27 October 2026 extract)"
     },
     {
       "id": "ig-44494e6652525f427a596d",
-      "title": "35th anniversary heart cake",
+      "title": "35th-anniversary heart cake",
       "productType": "Cake",
       "primaryOccasion": "Love & anniversaries",
       "otherOccasions": [],
@@ -1041,7 +1087,7 @@
         "Vintage piping"
       ],
       "shapeFormat": "Heart",
-      "shortDescription": "White vintage-piped heart cake for a 35th anniversary.",
+      "shortDescription": "Six-inch red-velvet cake for a 35th anniversary, with cream-cheese frosting, vanilla buttercream and hearts.",
       "alt": "White vintage-piped heart cake for a 35th anniversary.",
       "priority": 24,
       "featuredHome": false,
@@ -1075,7 +1121,9 @@
         "responseIndex": 19.4,
         "extractDate": "2026-10-27"
       },
-      "licensedCharacterReview": false
+      "licensedCharacterReview": false,
+      "captionEvidence": "Hearts all around for a 35th anniversary 💚",
+      "descriptionBasis": "Summarised from owner's Instagram post description (27 October 2026 extract)"
     },
     {
       "id": "ig-f25-dxlcjobeljq",
@@ -1097,8 +1145,8 @@
       "approvalStatus": "Draft",
       "showOnWebsite": "No",
       "demoVisible": true,
-      "title": "Berry-topped celebration cake",
-      "shortDescription": "Vanilla buttercream cake topped with fresh strawberries, blueberries and other berries.",
+      "title": "Fresh-berry vanilla cake",
+      "shortDescription": "Seven-inch vanilla cake topped with lots of fresh berries.",
       "alt": "Vanilla buttercream cake topped with fresh strawberries, blueberries and other berries.",
       "productType": "Cake",
       "primaryOccasion": "",
@@ -1118,7 +1166,9 @@
         "responseIndex": 42.7,
         "extractDate": "2026-10-27"
       },
-      "licensedCharacterReview": false
+      "licensedCharacterReview": false,
+      "captionEvidence": "“I’d like a lot of berries on the cake pls” say less 🍓🫐",
+      "descriptionBasis": "Summarised from owner's Instagram post description (27 October 2026 extract)"
     },
     {
       "id": "ig-444b4c734c505468516378",
