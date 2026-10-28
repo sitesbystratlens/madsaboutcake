@@ -41,6 +41,8 @@ assert(!home.includes('DQ0WjCPEgqr'),'Character photo on homepage');
 assert(!home.includes('DauWQoCkuB1'),'Explicit novelty cake must not appear in homepage hero');
 assert(home.includes('02_pink-ribbon-vintage-cake_DIh_oHjBhxN.webp'),'Brand-appropriate hero photo missing');
 assert(home.includes('Vintage piping & pink ribbons.'),'Hero photo description not updated');
+assert(home.includes('05_sunlit-floral-tier-cake_DSg_oqpkjyK.webp'),'Weddings tile should show actual buttercream floral tiers');
+assert(!home.includes('11_ornate-wedding-cake_DJjIJNxB1ap.webp'),'Soft cropped wedding photo still used on homepage');
 assert(data.cakes.find(c=>c.sourceShortcode==='DauWQoCkuB1')?.demoVisible===false,'Explicit novelty cake remains visible in preview gallery');
 assert(!workshop.includes('DRjMFHikhm-')&&!workshop.includes('DauWQoCkuB1'),'Unrelated product photos on workshop page');
 assert(!gallery.includes('id="style-filter"'),'Style filter still public');
