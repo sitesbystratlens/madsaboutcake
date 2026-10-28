@@ -1,0 +1,40 @@
+name: Verify deployed Mads preview
+on:
+  push:
+    branches: [main]
+    paths:
+      - index.html
+      - .github/workflows/check-live-preview.yml
+  workflow_dispatch:
+permissions:
+  contents: read
+jobs:
+  check-preview:
+    runs-on: ubuntu-latest
+    timeout-minutes: 5
+    steps:
+      - uses: actions/checkout@v4
+      - name: Confirm Cloudflare worker serves latest homepage and original photo
+        shell: bash
+        run: |
+          set -euo pipefail
+          SITE="https://madsaboutcake.sitesbystratlens.workers.dev/"
+          MARKER=$(sed -n 's/.*<meta name="mads-layout-version" content="\([^"]*\)".*/\1/p' index.html | head -1)
+          IMAGE="/assets/featured-25/DGM5hj1hcJf-M259.webp"
+          echo "Expected homepage version: $MARKER"
+          for n in 1 2 3 4 5 6; do
+            curl --silent --show-error --fail --location --max-time 20 -H 'Cache-Control: no-cache' "$SITE?check=${GITHUB_SHA}-${n}" > /tmp/live-preview.html || true
+            if grep -Fq "$MARKER" /tmp/live-preview.html && grep -Fq "$IMAGE" /tmp/live-preview.html; then
+              echo "Live Cloudflare homepage is current."
+              curl --silent --show-error --fail --location --max-time 20 -o /tmp/full-view.webp "$SITE${IMAGE}"
+              file /tmp/full-view.webp
+              echo "Live hero image downloaded successfully: $(wc -c < /tmp/full-view.webp) bytes"
+              exit 0
+            fi
+            echo "Live homepage not yet updated (attempt $n of 6)."
+            if [ "$n" -lt 6 ]; then sleep 12; fi
+          done
+          echo "ERROR: Cloudflare does not yet serve the GitHub homepage version or full-view cake photo."
+          echo "Remote version markers:"
+          grep -oE 'mads-layout-version[^>]*' /tmp/live-preview.html || true
+          exit 1
