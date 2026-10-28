@@ -7,7 +7,7 @@ const port=4173;
 const base='http://127.0.0.1:'+port;
 const widths=[1440,768,390,320];
 const pages=[
- ['home','/'],['cakes','/cakes/'],['cake-detail','/cakes/?design=ig-4449685f6f486a4268784e'],
+ ['home','/'],['cakes','/cakes/'],['cake-detail','/cakes/?design=ig-f25-dgm5hj1hcjf'],
  ['decorate-and-sip','/decorate-and-sip/'],['about','/about/'],['enquire','/enquire/']
 ];
 const out='qa-screenshots';
@@ -66,6 +66,21 @@ for(const [slug,url] of pages){
     if(visible!==5)problem.push(label+' has '+visible+' items, expected 5');
    }
    await page.locator('#occasion-filter').selectOption('all');
+  }
+  if(slug==='cakes'){
+   const counts=await page.evaluate(()=>({cardActions:document.querySelectorAll('[data-gallery] .gallery-card-actions').length,photoLinks:document.querySelectorAll('[data-gallery] .gallery-photo[href*="design="]').length,titleLinks:document.querySelectorAll('[data-gallery] .gallery-title-link[href*="design="]').length,arrows:document.querySelectorAll('[data-gallery] .gallery-photo__arrow').length}));
+   if(counts.cardActions!==0)problem.push('repeated gallery CTAs '+counts.cardActions);
+   if(counts.photoLinks!==25||counts.titleLinks!==25||counts.arrows!==25)problem.push('gallery click targets missing '+JSON.stringify(counts));
+  }
+  if(slug==='cake-detail'){
+   const post=await page.locator('#design-detail .design-instagram-link').evaluate(el=>({href:el.href,rel:el.rel,target:el.target,visible:el.getBoundingClientRect().width>0}));
+   if(post.href!=='https://www.instagram.com/p/DGM5hj1hcJf/'||post.target!=='_blank'||!post.rel.includes('noopener')||!post.visible)problem.push('original Instagram link missing or incorrect '+JSON.stringify(post));
+   if((await page.locator('#design-detail a[href*="/enquire/"]').count())!==1)problem.push('detail enquiry link missing');
+  }
+  if(slug==='decorate-and-sip'){
+   const answers=await page.locator('.faq-list').innerText();
+   if(/\\bMads\\b/.test(answers)||!answers.includes('we’ve')&&!answers.includes('We’re'))problem.push('FAQ studio voice not consistent');
+   if((await page.locator('.faq-list details').count())!==4)problem.push('FAQ count differs');
   }
   if(slug==='enquire'&&info.formCount!==1)problem.push('missing enquiry form');
   results.push({page:slug,width,screenshot,...info,problems:problem});
