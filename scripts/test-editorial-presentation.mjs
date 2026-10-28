@@ -10,6 +10,11 @@ assert.equal(featured.length,25,'25 featured Instagram posts expected');
 assert.equal(new Set(featured.map(c=>c.sourceShortcode)).size,25,'One selection per source post');
 for(const category of ['Birthdays','Weddings & engagements','Baby celebrations','Love & anniversaries','Other/unspecified'])assert.equal(featured.filter(c=>c.featureCategory===category).length,5,'Unbalanced selected category '+category);
 assert(featured.every(c=>c.coverImage.startsWith('assets/featured-25/')),'Curated photos must be local hosted original derivatives');
+assert(featured.every(c=>typeof c.captionEvidence==='string'&&c.captionEvidence.trim().length>10),'Each featured cake needs an original-caption evidence field');
+assert(featured.every(c=>typeof c.descriptionBasis==='string'&&c.descriptionBasis.includes('Instagram post description')),'Every featured summary must cite the owner caption');
+const valentine=featured.find(c=>c.sourceShortcode==='DGM5hj1hcJf');
+assert(valentine?.coverImage==='assets/featured-25/DGM5hj1hcJf-M259.webp'&&valentine.sourcePhotoRank===3,'Must use complete cake photograph from same Instagram carousel');
+
 assert.equal(new Set(data.cakes.map(c=>c.sourceShortcode)).size,data.cakes.length,'Duplicate post in combined gallery and legacy catalogue');
 assert.equal(data.meta.mode,'concept-preview');
 assert(data.cakes.every(c=>c.showOnWebsite==='No'),'Owner photos should remain unapproved');
@@ -63,7 +68,12 @@ for(const [category,code] of winners){
  assert(c?.featureCategory===category,'Wrong occasion for winner '+code);
  assert(home.includes('src="/'+c.coverImage+'"'),'Occasion image missing: '+code);
 }
-assert(home.includes('v3-15-engagement-led-homepage-20261028'),'Current homepage version marker missing');
+assert(home.includes('v3-16-full-view-caption-led-homepage-20261028'),'Current homepage version marker missing');
+assert(!home.includes('DGM5hj1hcJf-M258.webp'),'Zoomed-in Valentine crop still on landing page');
+assert(home.includes('DGM5hj1hcJf-M259.webp'),'Full view Valentine photograph missing on homepage');
+assert(home.includes('Valentine’s minis with strawberries.')&&home.includes('Garden party ready.')&&home.includes('Hand-cut wafer paper.'),'Homepage cake microcopy must summarise real post captions');
+assert(home.includes('Matched to the birthday dress'),'Birthday occasion copy must be grounded in owner's words');
+
 assert(!home.includes('DauWQoCkuB1'),'Explicit cake must not return to homepage');
 assert(css.includes('.mads-v3 .look-left .look-img img,')&&css.includes('object-fit:contain;object-position:center;background:transparent'),'Hero image framing must be full-cake / no zoom');
 assert(home.includes('edit-photo-frame--gold')&&home.includes('edit-photo-frame--butterfly')&&home.includes('edit-photo-frame--garden'),'Detail photographs must be deliberately cropped');
