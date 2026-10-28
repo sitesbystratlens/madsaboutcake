@@ -47,7 +47,13 @@ for(const p of pages){
 const home=read('index.html'),gallery=read('cakes/index.html'),workshop=read('decorate-and-sip/index.html'),enquire=read('enquire/index.html');
 assert(home.includes('Say it with cake.')&&home.includes('Got something'),'Homepage structure changed');
 assert(home.includes('Got an idea?')&&home.includes('Let’s hear it.'),'Owner-preferred headings changed');
-assert(home.includes('DIiAw_lBkM1')&&workshop.includes('DIiAw_lBkM1'),'Workshop proof reel absent');
+assert(home.includes('DIiAw_lBkM1'),'Homepage session reel link missing');
+assert(workshop.includes('DSR06gjEgJK-hens-setup.webp')&&workshop.includes('DHDXe4EB9Le-cupcake-edition.webp'),'Original session photographs missing');
+assert(workshop.includes('href="https://www.instagram.com/p/DSR06gjEgJK/"'),'Main session photo not linked to its original post');
+assert((workshop.match(/Watch a session on Instagram/g)||[]).length===1,'Duplicated watch session CTA');
+assert(!workshop.includes('studio-session-media')&&!workshop.includes('studio-group-invite'),'Text-only workshop placeholders remain');
+assert(fs.existsSync('assets/workshops/DSR06gjEgJK-hens-setup.webp')&&fs.existsSync('assets/workshops/DHDXe4EB9Le-cupcake-edition.webp'),'Workshop images not installed');
+
 
 const codes=['DGM5hj1hcJf','DJQ5RLthPKp','DP-QFm2EhMp'];
 const winners=[
@@ -89,6 +95,11 @@ assert(home.includes('DJjIJNxB1ap-M324.webp'),'Engagement-ranked wedding photo m
 assert(data.cakes.find(c=>c.sourceShortcode==='DauWQoCkuB1')?.demoVisible===false,'Explicit novelty cake remains visible in preview gallery');
 assert(!workshop.includes('DRjMFHikhm-')&&!workshop.includes('DauWQoCkuB1'),'Unrelated product photos on workshop page');
 assert(!gallery.includes('id="style-filter"'),'Style filter still public');
+assert(gallery.includes('gallery-compact__toolbar')&&gallery.includes('gallery-compact__head'),'Gallery header not consolidated');
+assert(!gallery.includes('class="feature-strip"')&&!gallery.includes('GOT A DESIGN IN MIND?'),'Redundant enquiry section still displayed on gallery/drill-through');
+assert(gallery.includes('site.css?v=20261028-v43')&&workshop.includes('site.css?v=20261028-v43'),'Refined CSS cache version stale');
+assert(base.includes('Cake gallery: compact overview')&&base.includes('Decorate & Sip: authentic session photos'),'New gallery/workshop CSS absent');
+
 assert(gallery.includes('<h1>Find a cake'),'Gallery H1 absent');
 assert(enquire.includes('<h1 id="enquiry-page-title">Got an idea?</h1>'),'Enquiry heading incorrect');
 for(const p of ['index.html','enquire/index.html']){
