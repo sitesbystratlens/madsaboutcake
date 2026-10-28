@@ -6,6 +6,8 @@ on:
       - cakes/index.html
       - decorate-and-sip/index.html
       - .github/workflows/check-live-interior-pages.yml
+      - assets/site.js
+      - assets/site.css
   workflow_dispatch:
 permissions:
   contents: read
@@ -23,7 +25,14 @@ jobs:
           for n in 1 2 3 4 5 6; do
             curl --silent --show-error --fail --location --max-time 25 -H 'Cache-Control: no-cache' "$SITE/cakes/?rev=$GITHUB_SHA-$n" > /tmp/cakes-live.html || true
             curl --silent --show-error --fail --location --max-time 25 -H 'Cache-Control: no-cache' "$SITE/decorate-and-sip/?rev=$GITHUB_SHA-$n" > /tmp/sip-live.html || true
+            curl --silent --show-error --fail --location --max-time 25 -H 'Cache-Control: no-cache' "$SITE/assets/site.js?rev=$GITHUB_SHA-$n" > /tmp/gallery-live.js || true
             if grep -Fq 'gallery-compact__toolbar' /tmp/cakes-live.html &&
+               grep -Fq 'site.js?v=20261028-v47' /tmp/cakes-live.html &&
+               grep -Fq 'site.js?v=20261028-v47' /tmp/sip-live.html &&
+               grep -Fq 'gallery-photo__arrow' /tmp/gallery-live.js &&
+               grep -Fq 'design-instagram-link' /tmp/gallery-live.js &&
+               grep -Fq 'We’re based in Glen Iris' /tmp/sip-live.html &&
+               grep -Fq 'we’ve hosted private' /tmp/sip-live.html &&
                ! grep -Fq 'class="feature-strip"' /tmp/cakes-live.html &&
                grep -Fq 'DSR06gjEgJK-hens-setup.webp' /tmp/sip-live.html &&
                grep -Fq 'DHDXe4EB9Le-cupcake-edition.webp' /tmp/sip-live.html &&
