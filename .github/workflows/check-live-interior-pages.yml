@@ -1,0 +1,43 @@
+name: Verify live Cakes and Decorate Sip pages
+on:
+  push:
+    branches: [main]
+    paths:
+      - cakes/index.html
+      - decorate-and-sip/index.html
+      - .github/workflows/check-live-interior-pages.yml
+  workflow_dispatch:
+permissions:
+  contents: read
+jobs:
+  verify-live:
+    runs-on: ubuntu-latest
+    timeout-minutes: 6
+    steps:
+      - uses: actions/checkout@v4
+      - name: Confirm the worker serves the revised page structure and session images
+        shell: bash
+        run: |
+          set -euo pipefail
+          SITE="https://madsaboutcake.sitesbystratlens.workers.dev"
+          for n in 1 2 3 4 5 6; do
+            curl --silent --show-error --fail --location --max-time 25 -H 'Cache-Control: no-cache' "$SITE/cakes/?rev=$GITHUB_SHA-$n" > /tmp/cakes-live.html || true
+            curl --silent --show-error --fail --location --max-time 25 -H 'Cache-Control: no-cache' "$SITE/decorate-and-sip/?rev=$GITHUB_SHA-$n" > /tmp/sip-live.html || true
+            if grep -Fq 'gallery-compact__toolbar' /tmp/cakes-live.html &&
+               ! grep -Fq 'class="feature-strip"' /tmp/cakes-live.html &&
+               grep -Fq 'DSR06gjEgJK-hens-setup.webp' /tmp/sip-live.html &&
+               grep -Fq 'DHDXe4EB9Le-cupcake-edition.webp' /tmp/sip-live.html &&
+               grep -Fq 'Thank you for hosting us Madara' /tmp/sip-live.html; then
+              echo "Live Cakes and Decorate Sip pages are current."
+              for img in DSR06gjEgJK-hens-setup.webp DHDXe4EB9Le-cupcake-edition.webp; do
+                curl --silent --show-error --fail --head --location --max-time 45 "$SITE/assets/workshops/$img" > /tmp/workshop-photo-headers.txt
+                grep -qi '^content-type: image/webp' /tmp/workshop-photo-headers.txt
+                echo "$img responds with image/webp"
+              done
+              exit 0
+            fi
+            echo "Deployment not yet propagated ($n / 6)."
+            if [ "$n" -lt 6 ]; then sleep 12; fi
+          done
+          echo "ERROR: One or more revised pages are not yet available on the live Worker."
+          exit 1
