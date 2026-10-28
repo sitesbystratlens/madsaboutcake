@@ -1,0 +1,53 @@
+name: Install original workshop session photo covers
+on:
+  push:
+    branches: [main]
+    paths:
+      - '.github/workflows/install-session-covers-once.yml'
+  workflow_dispatch:
+permissions:
+  contents: write
+jobs:
+  install:
+    runs-on: ubuntu-latest
+    timeout-minutes: 10
+    steps:
+      - uses: actions/checkout@v4
+        with: {persist-credentials: true}
+      - name: Prepare image optimiser
+        run: python -m pip install Pillow
+      - name: Import published Decorate and Sip session cover photographs
+        shell: bash
+        run: |
+          python - <<'PY'
+          import io,os,urllib.request,time
+          from PIL import Image
+          sources=[{"code":"DR9AAqlEovY","name":"hens-party","url":"https://instagram.fmel19-1.fna.fbcdn.net/v/t51.82787-15/591156335_17916733932230103_4636360206062666939_n.jpg?stp=dst-jpg_e15_tt6&_nc_cat=103&_nc_map=urlgen_bucketless&ig_cache_key=Mzc4MjE3OTMwNzc4MDIxMzcyMDE3OTE2NzMzOTI5MjMwMTAz.3-ccb7-5&ccb=7-5&_nc_sid=58cdad&efg=eyJ2ZW5jb2RlX3RhZyI6IkNMSVBTLnhwaWRzLjk0NC5zZHIudmlkZW9fZGVmYXVsdF9jb3Zlcl9mcmFtZS5DMyJ9&_nc_ohc=5w3C_xeNHqwQ7kNvwFvJ2Ke&_nc_oc=Adre5Tw6ECU98dQG_Rpzib1Cf2Z-hE7PTPoc1zbkh67HgfgBHdc0quoZl2QcLQM0WA0&_nc_ad=z-m&_nc_cid=0&_nc_zt=23&_nc_ht=instagram.fmel19-1.fna&_nc_gid=dBOlIU430YgNp1m3-jXqvA&_nc_ss=7a20f&oh=00_AQPjrt2rzw-Z4cTDd18kDZkK0SUCq5P8EL2quuaCDT4qw&oe=6AE65CAB"},{"code":"DT3u87PkgOG","name":"decorating-tools","url":"https://scontent-mad2-1.cdninstagram.com/v/t51.82787-15/619843662_17922110193230103_2926992789998759274_n.jpg?stp=dst-jpg_e15_tt6&_nc_cat=111&ig_cache_key=MzgxNjcyNTcwNjEzOTg5NDY2MjE3OTIyMTEwMTkwMjMwMTAz.3-ccb7-5&ccb=7-5&_nc_sid=58cdad&efg=eyJ2ZW5jb2RlX3RhZyI6IkNMSVBTLnhwaWRzLjcyMC5zZHIudmlkZW9fZGVmYXVsdF9jb3Zlcl9mcmFtZS5DMyJ9&_nc_ohc=kOnpLYucozQQ7kNvwFmpKCE&_nc_oc=AdqrL89pseKPAQDwGJgkxb3Qanu3tTb_vK5in8gFY4w6TLazaJWupoWbm6xFticKYUw&_nc_ad=z-m&_nc_zt=23&_nc_ht=scontent-mad2-1.cdninstagram.com&_nc_gid=QBnKDrk5imYGYw7oyuVx6Q&_nc_ss=7a20f&oh=00_AQPtdOyprqMYh_jcKIubHKwYjPjYwBcrqpJmcqrGJ5_-2g&oe=6AE631C8"},{"code":"DHDXe4EB9Le","name":"cupcake-edition","url":"https://scontent-gmp1-1.cdninstagram.com/v/t51.75761-15/484884070_17886492435230103_7072412679630755825_n.jpg?stp=dst-jpg_e15_tt6&_nc_cat=105&ig_cache_key=MzU4NTgxMzAwNTE2ODI2Nzk5ODE3ODg2NDkyNDMyMjMwMTAz.3-ccb7-5&ccb=7-5&_nc_sid=58cdad&efg=eyJ2ZW5jb2RlX3RhZyI6IkNMSVBTLnhwaWRzLjIxMjIuc2RyLnZpZGVvX2RlZmF1bHRfY292ZXJfZnJhbWUuQzMifQ%3D%3D&_nc_ohc=xj2FsechtLcQ7kNvwFUBg71&_nc_oc=Adon1kLMFd-cEsDLjOvHcB-SfEQuIO4G1HYNtgHIuECNBqIpnwvfxi81ZN6eOfs4-r0&_nc_ad=z-m&_nc_cid=0&_nc_zt=23&_nc_ht=scontent-gmp1-1.cdninstagram.com&_nc_gid=vat4xe4itskQnXDiVeWiUg&_nc_ss=7a20f&oh=00_AQPNBcOwEmhguDwUw8uq-IT1QGBn4DB5ylcIUy6vFiOXow&oe=6AE6465E"},{"code":"DSR06gjEgJK","name":"hens-setup","url":"https://scontent-mad2-1.cdninstagram.com/v/t51.71878-15/600906035_1748568379157790_7681391818513392030_n.jpg?stp=dst-jpg_e15_tt6&_nc_cat=111&ig_cache_key=Mzc4ODA0MTQ4MDY5MTY0NzA1MDI1ODA1MTA2OTQyNDE1NTc2.3-ccb7-5&ccb=7-5&_nc_sid=58cdad&efg=eyJ2ZW5jb2RlX3RhZyI6IkNMSVBTLnhwaWRzLjY0MC5zZHIudmlkZW9fbmZyYW1lX2NvdmVyX2ZyYW1lLkMzIn0%3D&_nc_ohc=Mi2-z1eVexwQ7kNvwGDhq19&_nc_oc=AdrxsTmc-hnIWk9Y-w1PWz0g6Q3_zJcWRl57pnazWG3wPOyf0Fj9iKNqn3JCslC-frY&_nc_ad=z-m&_nc_cid=0&_nc_zt=23&_nc_ht=scontent-mad2-1.cdninstagram.com&_nc_gid=KKLf6mCybdytV9__Iw6UOQ&_nc_ss=7a20f&oh=00_AQPevw0Zg56CgXaT-69hHuF-4dV2elel37zCM9lZVaNKhA&oe=6AE65391"}]
+          os.makedirs('assets/workshops',exist_ok=True)
+          success=[]
+          for src in sources:
+              req=urllib.request.Request(src['url'],headers={'User-Agent':'Mozilla/5.0 (X11; Linux x86_64) AppleWebKit/537.36 Chrome/124 Safari/537.36','Referer':'https://www.instagram.com/'})
+              out='assets/workshops/'+src['code']+'-'+src['name']+'.webp'
+              try:
+                  with urllib.request.urlopen(req,timeout=45) as response: raw=response.read()
+                  image=Image.open(io.BytesIO(raw)).convert('RGB')
+                  assert image.width>=450 and image.height>=500,(image.size,src['code'])
+                  image.thumbnail((1120,1440),Image.Resampling.LANCZOS)
+                  image.save(out,'WEBP',quality=80,method=6)
+                  success.append((src['code'],image.size,os.path.getsize(out)))
+              except Exception as ex:
+                  print('COULD NOT INSTALL',src['code'],repr(ex),flush=True)
+          print('IMPORTED',success,flush=True)
+          assert len(success)>=3,'At least three authentic session images required'
+          
+          PY
+      - name: Commit usable session photos to the private website preview
+        shell: bash
+        run: |
+          git add assets/workshops/
+          if git diff --cached --quiet; then echo 'No workshop images'; exit 1; fi
+          git config user.name 'github-actions[bot]'
+          git config user.email '41898282+github-actions[bot]@users.noreply.github.com'
+          git commit -m 'Install original Mads Decorate and Sip session covers'
+          git pull --rebase origin main
+          git push origin HEAD:main
