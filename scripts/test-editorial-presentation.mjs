@@ -84,7 +84,7 @@ assert(css.includes('.mads-v3 .look-center .look-img img,.mads-v3 .look-right .l
 assert(css.includes('.mads-v3 .edit-grid .edit-photo-frame{display:block;overflow:hidden'),'Detail photo crop frame missing');
 assert(css.includes('.mads-v3 .look-left .look-img{height:clamp(275px,31vw,395px);aspect-ratio:auto}'),'Full-cake left hero framing missing');
 assert(css.includes('.gallery-info .gallery-card-actions{display:flex;flex-direction:row;flex-wrap:wrap'),'Gallery tablet overflow layout not fixed');
-assert(home.includes('DGM5hj1hcJf-M258.webp')&&home.includes('loading="eager"'),'First hero source or loading attribute missing');
+assert(home.includes('DGM5hj1hcJf-M259.webp')&&home.includes('loading="eager"'),'First hero full-view source or loading attribute missing');
 assert(home.includes('DJjIJNxB1ap-M324.webp'),'Engagement-ranked wedding photo missing');
 assert(data.cakes.find(c=>c.sourceShortcode==='DauWQoCkuB1')?.demoVisible===false,'Explicit novelty cake remains visible in preview gallery');
 assert(!workshop.includes('DRjMFHikhm-')&&!workshop.includes('DauWQoCkuB1'),'Unrelated product photos on workshop page');
@@ -98,4 +98,4 @@ for(const p of ['index.html','enquire/index.html']){
  assert(html.includes('name="designId"')&&html.includes('studio-message-help'),'Design fields absent');
 }
 for(const c of data.cakes)assert(fs.existsSync(c.coverImage),'Missing photo '+c.coverImage);
-console.log('V3.15 PASS: balanced 25, top-ranked occasion imagery, engagement-led hero, consistent links, full-cake framing and launch safeguards');
+console.log('V3.16 PASS: complete hero photo, owner-caption summaries, balanced 25 gallery and safe preview');
