@@ -55,7 +55,7 @@ function showDesign(c,concept){
  (c.photoCredit?'<p class="gallery-credit">'+esc(c.photoCredit)+'</p>':'')+
  '<p>Inspired by this design? Tell us your date, colour preferences, flavours and changes you have in mind.</p>'+
  '<a class="btn" href="'+esc(enquiryUrl(c))+'">Ask about this design →</a>'+
- '<p class="detail-hint">Availability, flavours and final details are confirmed on enquiry.</p></div>';
+ '<p class="detail-hint">Availability, flavours and final details are confirmed when you contact us.</p></div>';
  return true;
 }
 function initGallery(records,concept){
@@ -269,7 +269,7 @@ function initStudioEnquiryForms(){
    if(!status||!submit)return;
    if(form.elements._gotcha?.value)return;
    const endpoint=await endpointPromise;
-   if(!endpoint){setStatus("This is a preview, so enquiries aren't connected yet. Please",true);return;}
+   if(!endpoint){setStatus("This is a preview, so the contact form isn't connected yet. Please",true);return;}
    submit.disabled=true;submit.textContent='Sending…';status.hidden=true;
    try{
     const payload=new FormData(form);
@@ -278,9 +278,9 @@ function initStudioEnquiryForms(){
     if(!response.ok)throw Error('Submission failed');
     const firstName=String(payload.get('name')||'').trim().split(/\s+/)[0];
     form.reset();updateTopic();
-    setStatus('Thanks'+(firstName?', '+firstName:'')+'. Your enquiry is in, and we’ll reply by email.');
+    setStatus('Thanks'+(firstName?', '+firstName:'')+'. Your message has been received. We’ll reply by email.');
    }catch(error){setStatus("Sorry, that didn’t send. Please try again, or",true);}
-   finally{submit.disabled=false;submit.textContent='Send enquiry ↗';}
+   finally{submit.disabled=false;submit.textContent='Send message ↗';}
   });
  });
 }
