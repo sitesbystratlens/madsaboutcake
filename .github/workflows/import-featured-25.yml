@@ -1,0 +1,32 @@
+name: Import Mads 25 selected cake photos
+on:
+  push:
+    branches: [main]
+    paths:
+      - 'scripts/featured-25-source-urls.json'
+      - 'scripts/import-featured-25.py'
+      - '.github/workflows/import-featured-25.yml'
+  workflow_dispatch:
+permissions:
+  contents: write
+jobs:
+  import-original-photographs:
+    runs-on: ubuntu-latest
+    timeout-minutes: 20
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          persist-credentials: true
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.11'
+      - name: Install image processing library
+        run: python -m pip install Pillow==11.1.0
+      - name: Import and verify all 25 original photographs
+        run: python scripts/import-featured-25.py
+      - name: Commit original photo derivatives
+        run: |
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          git config user.name "github-actions[bot]"
+          git add assets/featured-25 scripts/featured-25-import-report.json
+          git diff --cached --quiet || (git commit -m "Import 25 exact Instagram photo selections for Mads preview" && git push origin HEAD:main)
