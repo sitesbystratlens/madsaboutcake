@@ -303,3 +303,35 @@ body{background:var(--v3-cream)}
  .workshop-inclusions{grid-template-columns:1fr;gap:0}
  .workshop-detail{padding:18px 0;border-bottom:1px solid #ead7dd}
 }
+
+/* Final red-team pass: light text navigation beneath the logo. */
+.site-header .nav-shell{min-height:100px}
+.mads-main-nav{display:flex;justify-content:center;align-items:stretch;gap:clamp(12px,3vw,36px);padding:0 16px 4px;background:var(--v3-peach)}
+.mads-main-nav a{display:inline-flex;min-height:44px;align-items:center;justify-content:center;text-decoration:none;color:var(--v3-ink);font:700 13px/1.3 var(--sans);border-bottom:2px solid transparent;white-space:nowrap}
+.mads-main-nav a:hover,.mads-main-nav a[aria-current="page"]{border-bottom-color:var(--v3-ink)}
+.mads-main-nav .nav-short{display:none}
+.mads-v3 .enquiry-aside-note a{color:#a53265}
+.mads-v3 .eyebrow,.page-hero .eyebrow,.split-visual .eyebrow,.section .eyebrow{color:#7a5568}
+.mads-v3 .studio-enquiry-field input,.mads-v3 .studio-enquiry-field select,.mads-v3 .studio-enquiry-field textarea{border-color:#9b7a88}
+.mads-v3 .studio-field-hint{display:block;color:#705262;font:500 12px/1.55 var(--sans);margin-top:8px}
+:where(a,button,input,select,textarea,summary):focus-visible{outline:2px solid #553047!important;outline-offset:2px}
+.gallery-card-actions{display:flex;flex-direction:column;align-items:flex-start;gap:8px;min-width:116px}
+.gallery-card-actions a:last-child{color:#553047;text-decoration:underline;text-underline-offset:3px}
+.gallery-credit{font:500 11px/1.5 var(--sans);color:#705262;margin:6px 0 0}
+.gallery-empty a{color:#553047;text-decoration:underline;font-weight:700}
+.studio-session-media{display:flex;flex-direction:column;align-items:flex-start;justify-content:center;padding:clamp(30px,5vw,85px);background:#f3eae5;color:#553047}
+.studio-session-media p{font:600 clamp(27px,3.4vw,48px)/1.18 var(--serif);max-width:360px;margin:12px 0 26px}
+.studio-group-invite{display:flex;flex-direction:column;justify-content:center;min-height:280px;padding:35px;background:#fedcde;color:#553047}
+.studio-group-invite p{font:600 clamp(27px,3vw,42px)/1.2 var(--serif);margin:12px 0 0}
+.mads-v3.studio-enquire-page .studio-enquire-section{padding:55px 0 80px}
+.mads-v3.studio-enquire-page .enquiry-intro h1{font:600 clamp(44px,4.6vw,65px)/1.1 var(--serif);margin:16px 0 20px;letter-spacing:-.04em}
+@media(max-width:600px){
+.site-header .nav-shell{min-height:79px}
+.mads-main-nav{gap:14px;padding:0 11px}
+.mads-main-nav a{font-size:12px}
+.mads-main-nav .nav-long{display:none}
+.mads-main-nav .nav-short{display:inline}
+.gallery-card-actions{min-width:0}
+.mads-v3.studio-enquire-page .studio-enquire-section{padding:35px 0 60px}
+}
+@media(max-width:400px){.mads-main-nav .mads-nav-about{display:none}}

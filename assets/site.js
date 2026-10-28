@@ -7,18 +7,13 @@ const CONFIG = {
   instagramProfile: 'https://www.instagram.com/madsaboutcake/',
   // Preview mode: form details remain in the browser and are never submitted.
 };
-const pexels = (id, width=960) => 'https://images.pexels.com/photos/'+id+'/pexels-photo-'+id+'.jpeg?auto=compress&cs=tinysrgb&w='+width;
 
 const PRODUCT_TYPES=['Cake','Cupcakes','Other Treats'];
-const OCCASIONS=['Birthdays','Weddings & Engagements','Baby Showers & Gender Reveals','Anniversaries','Religious & Cultural','Graduations','Corporate & Events','Other Celebrations'];
-const fallback=[
- {id:'rose-piping',title:'Rose piping',productType:'Cake',primaryOccasion:'Birthdays',styleTags:['Vintage piping'],alt:'Rose-piped cake',previewImage:pexels(29192489)},
- {id:'cupcake-florals',title:'Floral cupcakes',productType:'Cupcakes',primaryOccasion:'Birthdays',styleTags:['Floral'],alt:'Floral cupcakes',previewImage:pexels(1055272)}
-];
+const PUBLIC_OCCASIONS=['Birthdays','Weddings & engagements','Baby celebrations','Love & anniversaries'];
+const OCCASIONS=[...PUBLIC_OCCASIONS,'Religious & Cultural','Graduations','Corporate & Events','Other Celebrations'];
 const esc=s=>String(s==null?'':s).replace(/[&<>"']/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));
 const safeCover=s=>typeof s==='string'&&/^assets\/(?:cake-covers|creations)\/[\w-]+\.(?:jpe?g|png|webp|avif)$/.test(s);
-const safePreview=s=>typeof s==='string'&&/^https:\/\/images\.pexels\.com\/photos\/\d+\/pexels-photo-\d+\.jpeg(?:\?.*)?$/.test(s)?s:'';
-const imageOf=c=>safeCover(c.coverImage)?'/'+c.coverImage:(safePreview(c.previewImage)||pexels(29192489));
+const imageOf=c=>safeCover(c.coverImage)?'/'+c.coverImage:'/assets/mads-logo.webp';
 const slug=s=>String(s).toLowerCase().replace(/\s+/g,'-');
 const matchesOccasion=(c,o)=>c.primaryOccasion===o||c.otherOccasions.includes(o);
 function normalise(c){
@@ -29,13 +24,12 @@ function normalise(c){
   styleTags:Array.isArray(c.styleTags)?c.styleTags.filter(t=>typeof t==='string'&&t.length<80):[]};
 }
 function enquiryUrl(c){
- const q=new URLSearchParams({type:'cake',product:c.productType,design:c.id,designTitle:c.title});
- if(c.primaryOccasion)q.set('occasion',c.primaryOccasion);
- if(typeof c.instagramUrl==='string'&&/^https:\/\/www\.instagram\.com\/(p|reel|tv)\/[\w-]+\/?$/.test(c.instagramUrl))q.set('reference',c.instagramUrl);
+ const q=new URLSearchParams({type:c.productType==='Cupcakes'?'cupcakes':'cake',design:c.id});
  return '/enquire/?'+q.toString();
 }
 function cardHtml(c){
- return '<article class="gallery-card" data-id="'+esc(c.id)+'">'+(c.badgeApproved===true&&['Popular','Best seller','New'].includes(c.displayBadge)?'<span class="gallery-card__feature">'+esc(c.displayBadge)+'</span>':c.featuredHome===true?'<span class="gallery-card__feature">Featured</span>':'')+'<a class="gallery-photo" href="/cakes/?design='+encodeURIComponent(c.id)+'"><img loading="lazy" decoding="async" src="'+esc(c.image)+'" data-fallback-src="'+esc(safePreview(c.previewImage)||pexels(c.productType==='Cupcakes'?1055272:29192489))+'" alt="'+esc(c.alt)+'"></a><div class="gallery-info"><div><small>'+esc(c.productType+(c.primaryOccasion?' · '+c.primaryOccasion:''))+'</small><h3>'+esc(c.title)+'</h3></div><a href="/cakes/?design='+encodeURIComponent(c.id)+'">View design ↗</a></div></article>';
+ const credit=c.photoCredit?'<p class="gallery-credit">'+esc(c.photoCredit)+'</p>':'';
+ return '<article class="gallery-card" data-id="'+esc(c.id)+'"><a class="gallery-photo" href="/cakes/?design='+encodeURIComponent(c.id)+'"><img loading="lazy" decoding="async" src="'+esc(c.image)+'" alt="'+esc(c.alt)+'"></a><div class="gallery-info"><div><small>'+esc(c.productType+(c.primaryOccasion?' · '+c.primaryOccasion:''))+'</small><h3>'+esc(c.title)+'</h3>'+credit+'</div><div class="gallery-card-actions"><a href="/cakes/?design='+encodeURIComponent(c.id)+'">View design ↗</a><a href="'+esc(enquiryUrl(c))+'">Ask about this design →</a></div></div></article>';
 }
 function showDesign(c,concept){
  const root=document.getElementById('design-detail'),browse=document.getElementById('browse-gallery'),hero=document.getElementById('gallery-hero');
@@ -44,16 +38,16 @@ function showDesign(c,concept){
  const draft=concept||c.approvalStatus!=='Approved'||c.showOnWebsite!=='Yes';
  const meta=[['Product',c.productType]];
  if(c.primaryOccasion)meta.push(['Occasion',c.primaryOccasion]);
- meta.push(['Style',c.styleTags.join(', ')||'Custom']);
  if(c.shapeFormat)meta.push(['Format',c.shapeFormat]);
  if(!draft&&Number(c.servingsMin)>0)meta.push(['Serves from',c.servingsMin]);
  if(!draft&&Number(c.priceFrom)>0)meta.push(['Price from','A$'+Number(c.priceFrom).toLocaleString('en-AU')]);
- root.innerHTML='<div><a class="detail-back" href="/cakes/">← Back to all creations</a><img class="design-detail-image" src="'+esc(c.image)+'" data-fallback-src="'+esc(safePreview(c.previewImage)||pexels(29192489))+'" alt="'+esc(c.alt)+'"></div>'+
+ root.innerHTML='<div><a class="detail-back" href="/cakes/">← Back to all creations</a><img class="design-detail-image" src="'+esc(c.image)+'" alt="'+esc(c.alt)+'"></div>'+
  '<div class="design-detail-copy"><span class="eyebrow">'+esc(c.productType)+'</span><h1>'+esc(c.title)+'</h1>'+
- '<p class="lede">'+esc(c.shortDescription||'Explore the design and share what you would like to personalise.')+'</p>'+
+ '<p class="lede">'+esc(c.shortDescription||'See the design and share what you would like to personalise.')+'</p>'+
  '<dl class="design-meta">'+meta.map(x=>'<dt>'+esc(x[0])+'</dt><dd>'+esc(x[1])+'</dd>').join('')+'</dl>'+
- '<p>Inspired by this design? Tell us your date, colour preferences, flavours and any changes you have in mind.</p>'+
- '<a class="btn" href="'+esc(enquiryUrl(c))+'">Enquire about this design →</a>'+
+ (c.photoCredit?'<p class="gallery-credit">'+esc(c.photoCredit)+'</p>':'')+
+ '<p>Inspired by this design? Tell us your date, colour preferences, flavours and changes you have in mind.</p>'+
+ '<a class="btn" href="'+esc(enquiryUrl(c))+'">Ask about this design →</a>'+
  '<p class="detail-hint">Availability, flavours and final details are confirmed on enquiry.</p></div>';
  return true;
 }
@@ -62,27 +56,21 @@ function initGallery(records,concept){
  const params=new URLSearchParams(location.search),id=params.get('design');
  if(id){const c=records.find(x=>x.id===id);if(c&&showDesign(c,concept))return;}
  root.innerHTML=records.map(cardHtml).join('');
- const buttons=[...document.querySelectorAll('[data-product]')];
- const occasion=document.getElementById('occasion-filter'),style=document.getElementById('style-filter');
+ const buttons=[...document.querySelectorAll('[data-product]')],occasion=document.getElementById('occasion-filter');
  let product=['cake','cupcakes','other-treats'].includes(params.get('product'))?params.get('product'):'all';
- const used=new Set(records.map(c=>slug(c.productType)));
- const otherButton=buttons.find(b=>b.dataset.product==='other-treats');if(otherButton)otherButton.hidden=!used.has('other-treats');
+ const used=new Set(records.map(c=>slug(c.productType))),otherButton=buttons.find(b=>b.dataset.product==='other-treats');
+ if(otherButton)otherButton.hidden=!used.has('other-treats');
  if(occasion){
-  for(const o of OCCASIONS.filter(o=>records.some(c=>matchesOccasion(c,o)))){let opt=document.createElement('option');opt.value=o;opt.textContent=o;occasion.appendChild(opt);}
+  for(const o of PUBLIC_OCCASIONS.filter(o=>records.some(c=>matchesOccasion(c,o)))){
+   const opt=document.createElement('option');opt.value=o;opt.textContent=o;occasion.appendChild(opt);
+  }
   if([...occasion.options].some(o=>o.value===params.get('occasion')))occasion.value=params.get('occasion');
- }
- if(style){
-  const values=[...new Set(records.flatMap(c=>c.styleTags))].sort();
-  for(const s of values){let opt=document.createElement('option');opt.value=s;opt.textContent=s;style.appendChild(opt);}
-  if(values.includes(params.get('style')))style.value=params.get('style');
  }
  function update(){
   let count=0;
   for(const card of root.querySelectorAll('.gallery-card')){
    const c=records.find(x=>x.id===card.dataset.id);
-   const visible=!!c&&(product==='all'||slug(c.productType)===product)&&
-     (!occasion||occasion.value==='all'||matchesOccasion(c,occasion.value))&&
-     (!style||style.value==='all'||c.styleTags.includes(style.value));
+   const visible=!!c&&(product==='all'||slug(c.productType)===product)&&(!occasion||occasion.value==='all'||matchesOccasion(c,occasion.value));
    card.hidden=!visible;if(visible)count++;
   }
   buttons.forEach(b=>b.setAttribute('aria-pressed',String(b.dataset.product===product)));
@@ -91,15 +79,12 @@ function initGallery(records,concept){
   const q=new URLSearchParams();
   if(product!=='all')q.set('product',product);
   if(occasion&&occasion.value!=='all')q.set('occasion',occasion.value);
-  if(style&&style.value!=='all')q.set('style',style.value);
   history.replaceState(null,'','/cakes/'+(q.toString()?'?'+q.toString():''));
  }
  for(const b of buttons)b.addEventListener('click',()=>{product=b.dataset.product;update()});
  if(occasion)occasion.addEventListener('change',update);
- if(style)style.addEventListener('change',update);
  update();
 }
-
 /* Approved website image slots are distinct from portfolio products. Each slot can
    reference an already-published cake or an independently cached website image. */
 const WEBSITE_SLOTS=new Set([
@@ -140,7 +125,7 @@ async function applyWebsiteImages(records){
 }
 
 async function initPortfolio(){
- let records=fallback.map(normalise),concept=true;
+ let records=[],concept=true;
  try{
   const response=await fetch('/cakes.json',{cache:'no-cache'});
   if(!response.ok)throw Error('Catalogue unavailable');
@@ -151,7 +136,7 @@ async function initPortfolio(){
      (c.approvalStatus==='Approved'&&c.showOnWebsite==='Yes'))
     .map(normalise).filter(Boolean)
     .sort((a,b)=>(Number(a.priority)||999)-(Number(b.priority)||999));
- }catch(e){console.warn('Using fallback gallery:',e.message)}
+ }catch(e){console.warn('Gallery unavailable:',e.message)}
  if(concept){
   const ids=new Map(records.map(c=>[c.id,c]));
   document.querySelectorAll('img[data-cake-image]').forEach(img=>{
@@ -195,89 +180,99 @@ function initCuratedImageSwaps(){
 }
 document.addEventListener('error',event=>{
  const img=event.target;
- if(!(img instanceof HTMLImageElement))return;
- const fallback=img.getAttribute('data-fallback-src');
- if(fallback&&safePreview(fallback)&&img.src!==fallback){
-  img.removeAttribute('data-fallback-src');
-  img.src=fallback;
- }
+ if(!(img instanceof HTMLImageElement)||img.dataset.fallbackApplied==='yes')return;
+ img.dataset.fallbackApplied='yes';img.src='/assets/mads-logo.webp';
 },true);
 
 /** Studio availability banner, edited through assets/studio-notices.json. */
+
 async function initStudioNotice(){
- const banner=document.querySelector('[data-studio-announcement]');
- if(!banner)return;
+ const banner=document.querySelector('[data-studio-announcement]');if(!banner)return;
+ banner.hidden=true;
  try{
   const response=await fetch('/assets/studio-notices.json',{cache:'no-cache'});
   if(!response.ok)return;
   const data=await response.json();
-  if(data.enabled===false||typeof data.message!=='string'||!data.message.trim()){banner.hidden=true;return;}
+  const parts=Object.fromEntries(new Intl.DateTimeFormat('en-GB',{timeZone:'Australia/Melbourne',year:'numeric',month:'2-digit',day:'2-digit'}).formatToParts(new Date()).filter(p=>p.type!=='literal').map(p=>[p.type,p.value]));
+  const melbourneToday=parts.year+'-'+parts.month+'-'+parts.day;
+  const expires=typeof data.expires==='string'&&/^\d{4}-\d{2}-\d{2}$/.test(data.expires)?data.expires:'';
+  if(data.show!==true||!expires||melbourneToday>expires||typeof data.message!=='string'||!data.message.trim())return;
   const message=banner.querySelector('[data-notice-text]');
   if(message)message.textContent=data.message.slice(0,240);
   banner.hidden=false;
- }catch(error){ /* The default text stays visible if the optional settings file cannot load. */ }
+ }catch(error){banner.hidden=true;}
 }
-/** Formspree-ready enquiries: never claim delivery without a successful POST. */
 async function getStudioFormEndpoint(){
  try{
- const res=await fetch('/assets/enquiry-settings.json',{cache:'no-cache'});
- if(!res.ok)return '';
- const config=await res.json();
- const endpoint=String(config.formspreeEndpoint||'').trim();
- return /^https:\/\/formspree\.io\/f\/[a-zA-Z0-9]+$/.test(endpoint)?endpoint:'';
+  const res=await fetch('/assets/enquiry-settings.json',{cache:'no-cache'});
+  if(!res.ok)return '';
+  const config=await res.json(),endpoint=String(config.formspreeEndpoint||'').trim();
+  return /^https:\/\/formspree\.io\/f\/[a-zA-Z0-9]+$/.test(endpoint)?endpoint:'';
  }catch(err){return '';}
 }
+async function loadDesignFromQuery(form,params){
+ const design=params.get('design');
+ if(!design||!/^ig-[a-z0-9-]+$/.test(design))return;
+ try{
+  const response=await fetch('/cakes.json',{cache:'no-cache'});
+  if(!response.ok)return;
+  const data=await response.json(),concept=data.meta?.mode==='concept-preview';
+  const item=(data.cakes||[]).find(c=>c.id===design&&
+    (concept?c.demoVisible!==false:c.approvalStatus==='Approved'&&c.showOnWebsite==='Yes'));
+  if(!item)return;
+  const ref=typeof item.instagramUrl==='string'&&/^https:\/\/www\.instagram\.com\/(?:p|reel)\/[\w-]+\/?$/.test(item.instagramUrl)?item.instagramUrl:'';
+  if(form.elements.designId)form.elements.designId.value=item.id;
+  if(form.elements.selectedDesign)form.elements.selectedDesign.value=item.title;
+  if(form.elements.referenceLink)form.elements.referenceLink.value=ref;
+  const message=form.elements.namedItem('message');
+  if(message&&!message.value.trim())message.value="I'm interested in a design like your "+item.title+(ref?' ('+ref+')':'')+".\n\n";
+ }catch(err){/* Invalid design leaves a blank, usable enquiry. */}
+}
 function initStudioEnquiryForms(){
- const forms=document.querySelectorAll('[data-studio-enquiry-form]');
- if(!forms.length)return;
- const endpoint=getStudioFormEndpoint();
+ const forms=document.querySelectorAll('[data-studio-enquiry-form]');if(!forms.length)return;
+ const endpointPromise=getStudioFormEndpoint();
  forms.forEach(form=>{
-  const status=form.querySelector('[data-studio-enquiry-status]');
-  const submit=form.querySelector('button[type="submit"]');
-  const topic=form.elements.enquiryTopic;
-  const params=new URLSearchParams(location.search);
-  const desiredProduct=params.get('product');
-  if(params.get('type')==='workshop')topic.value='workshop-booking';
-  else if(params.get('type')==='other')topic.value='general';
-  else if(desiredProduct==='Cupcakes')topic.value='cupcakes';
-  else if(desiredProduct==='Cake'||params.get('type')==='cake')topic.value='cake';
-  if(form.elements.selectedDesign)form.elements.selectedDesign.value=(params.get('designTitle')||params.get('style')||'').slice(0,160);
-  const ref=params.get('reference')||'';
-  if(form.elements.referenceLink&&/^https:\/\/www\.instagram\.com\/(?:p|reel|tv)\//.test(ref))form.elements.referenceLink.value=ref.slice(0,500);
+  const status=form.querySelector('[data-studio-enquiry-status]'),submit=form.querySelector('button[type="submit"]');
+  const topic=form.elements.enquiryTopic,params=new URLSearchParams(location.search);
+  const requested=params.get('type'),product=params.get('product');
+  if(requested==='workshop'||requested==='decorate-and-sip')topic.value='decorate-and-sip';
+  else if(requested==='other')topic.value='something-else';
+  else if(product==='Cupcakes'||requested==='cupcakes')topic.value='cupcakes';
+  else if(product==='Cake'||requested==='cake')topic.value='cake';
   if(form.elements.sourcePage)form.elements.sourcePage.value=location.pathname;
   const date=form.elements.eventDate;
-  if(date){const now=new Date();date.min=new Date(now.getTime()-now.getTimezoneOffset()*60000).toISOString().slice(0,10);}
-  function updateTopic(){
-   const opt=topic.selectedOptions[0];
-   if(form.elements.category)form.elements.category.value=opt?.dataset.group||'';
-   if(status){status.hidden=true;status.replaceChildren();}
+  if(date){const today=new Date();date.min=new Date(today.getTime()-today.getTimezoneOffset()*60000).toISOString().slice(0,10);}
+  void loadDesignFromQuery(form,params);
+  function setStatus(message,withInstagram=false){
+   status.hidden=false;status.replaceChildren();
+   status.append(document.createTextNode(message));
+   if(withInstagram){
+    const link=document.createElement('a');link.href='https://ig.me/m/madsaboutcake';link.target='_blank';link.rel='noopener noreferrer';
+    link.textContent='message @madsaboutcake on Instagram';status.append(document.createTextNode(' '),link,document.createTextNode('.'));
+   }
   }
-  topic.addEventListener('change',updateTopic);updateTopic();
+  function updateTopic(){
+   if(form.elements.category)form.elements.category.value=topic.selectedOptions[0]?.dataset.group||'';
+  }
+  topic.addEventListener('change',()=>{updateTopic();if(status)status.hidden=true;});updateTopic();
   form.addEventListener('submit',async event=>{
    event.preventDefault();
-   if(!form.reportValidity()||!status||!submit)return;
+   if(!form.checkValidity()){const invalid=form.querySelector(':invalid');if(invalid)invalid.focus();form.reportValidity();return;}
+   if(!status||!submit)return;
    if(form.elements._gotcha?.value)return;
-   updateTopic();
-   status.hidden=false;status.replaceChildren();
-   const url=await endpoint;
-   if(!url){
-    status.append(document.createTextNode('Online enquiries are not available here yet. Please '));
-    const link=document.createElement('a');
-    link.href='https://ig.me/m/madsaboutcake';link.target='_blank';link.rel='noopener noreferrer';link.textContent='contact Mads on Instagram';
-    status.append(link,document.createTextNode(' instead.'));
-    return;
-   }
-   submit.disabled=true;submit.textContent='Sending…';
+   const endpoint=await endpointPromise;
+   if(!endpoint){setStatus("This is a preview, so enquiries aren't connected yet. Please",true);return;}
+   submit.disabled=true;submit.textContent='Sending…';status.hidden=true;
    try{
     const payload=new FormData(form);
-    payload.set('_subject','Mads About Cake — '+String(payload.get('enquiryTopic')||'general')+' enquiry');
-    const response=await fetch(url,{method:'POST',body:payload,headers:{Accept:'application/json'}});
-    if(!response.ok)throw new Error('Not delivered');
-    form.reset();updateTopic();status.hidden=false;
-    status.textContent="Thank you. Your enquiry has been sent.";
-   }catch(error){
-    status.textContent="Your enquiry couldn't be sent. Please try again or contact Mads on Instagram.";
-   }finally{submit.disabled=false;submit.textContent='Send enquiry ↗';}
+    payload.set('_subject','Website enquiry: '+String(topic.selectedOptions[0]?.textContent||'Cake')+' from '+String(payload.get('name')||'visitor'));
+    const response=await fetch(endpoint,{method:'POST',body:payload,headers:{Accept:'application/json'}});
+    if(!response.ok)throw Error('Submission failed');
+    const firstName=String(payload.get('name')||'').trim().split(/\s+/)[0];
+    form.reset();updateTopic();
+    setStatus('Thanks'+(firstName?', '+firstName:'')+'. Your enquiry is in, and we’ll reply by email.');
+   }catch(error){setStatus("Sorry, that didn’t send. Please try again, or",true);}
+   finally{submit.disabled=false;submit.textContent='Send enquiry ↗';}
   });
  });
 }
