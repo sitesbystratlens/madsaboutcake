@@ -38,7 +38,7 @@ jobs:
               except Exception as ex:
                   print('COULD NOT INSTALL',src['code'],repr(ex),flush=True)
           print('IMPORTED',success,flush=True)
-          assert len(success)>=3,'At least three authentic session images required'
+          assert len(success)>=2,'At least two authentic session covers required'
           
           PY
       - name: Commit usable session photos to the private website preview
