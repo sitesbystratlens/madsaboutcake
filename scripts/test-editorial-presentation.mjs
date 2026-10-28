@@ -97,7 +97,10 @@ assert(!workshop.includes('DRjMFHikhm-')&&!workshop.includes('DauWQoCkuB1'),'Unr
 assert(!gallery.includes('id="style-filter"'),'Style filter still public');
 assert(gallery.includes('gallery-compact__toolbar')&&gallery.includes('gallery-compact__head'),'Gallery header not consolidated');
 assert(!gallery.includes('class="feature-strip"')&&!gallery.includes('GOT A DESIGN IN MIND?'),'Redundant enquiry section still displayed on gallery/drill-through');
-assert(gallery.includes('site.css?v=20261028-v43')&&workshop.includes('site.css?v=20261028-v43'),'Refined CSS cache version stale');
+assert(gallery.includes('site.css?v=20261028-v43')&&workshop.includes('site.css?v=20261028-v44'),'Refined CSS cache version stale');
+assert(workshop.includes('This is lovely! Thank you for hosting us Madara'),'Real guest comment absent from Decorate and Sip');
+assert(workshop.includes('https://www.instagram.com/p/DR9AAqlEovY/'),'Guest comment not attributed to original Instagram post');
+
 assert(base.includes('Cake gallery: compact overview')&&base.includes('Decorate & Sip: authentic session photos'),'New gallery/workshop CSS absent');
 
 assert(gallery.includes('<h1>Find a cake'),'Gallery H1 absent');
