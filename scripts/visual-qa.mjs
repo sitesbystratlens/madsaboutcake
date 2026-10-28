@@ -58,7 +58,15 @@ for(const [slug,url] of pages){
   if(info.visibleNavigation.length<3)problem.push('insufficient visible navigation');
   if(!info.mainHeading)problem.push('missing H1');
   if(exceptions.length)problem.push('uncaught JS '+exceptions.join('; '));
-  if(slug==='cakes'&&info.galleryCards<25)problem.push('unexpected gallery count '+info.galleryCards);
+  if(slug==='cakes'&&info.galleryCards!==25)problem.push('expected 25 featured designs, saw '+info.galleryCards);
+  if(slug==='cakes'&&(width===1440||width===390)){
+   for(const label of ['Birthdays','Weddings & engagements','Baby celebrations','Love & anniversaries']){
+    await page.locator('#occasion-filter').selectOption({label});
+    const visible=await page.locator('[data-gallery] .gallery-card:not([hidden])').count();
+    if(visible!==5)problem.push(label+' has '+visible+' items, expected 5');
+   }
+   await page.locator('#occasion-filter').selectOption('all');
+  }
   if(slug==='enquire'&&info.formCount!==1)problem.push('missing enquiry form');
   results.push({page:slug,width,screenshot,...info,problems:problem});
   if(problem.length)failures.push(slug+' '+width+': '+problem.join('; '));

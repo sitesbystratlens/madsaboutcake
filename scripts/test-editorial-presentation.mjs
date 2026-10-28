@@ -17,7 +17,7 @@ assert(featured.some(c=>c.sourceShortcode==='DQ0WjCPEgqr'&&c.demoVisible===true&
 assert(data.cakes.every(c=>!(/independent website concept/i.test(c.shortDescription+' '+c.alt))),'Internal catalogue text');
 for(const code of ['DNKl7y9BcgU','DPLhTN5kgDE']){const c=data.cakes.find(x=>x.sourceShortcode===code);assert(c&&!/(first|ninth)[- ]birthday/i.test(c.alt),'Unsupported age in alt text '+code);}
 assert(site.includes("PUBLIC_OCCASIONS=['Birthdays','Weddings & engagements','Baby celebrations','Love & anniversaries']"));
-assert(site.includes('const listed=records.filter(c=>c.featured25===true)'),'Gallery shows non-featured legacy records');
+assert(site.includes('const listed=concept?records.filter(c=>c.featured25===true):records'),'Preview list must use 25 selected posts while production supports approved records');
 assert(site.includes('loadDesignFromQuery(form,params)'),'Design reference lookup absent');
 assert(site.includes('data.show!==true')&&notice.show===false&&notice.message==='','Unapproved closure banner');
 assert(site.includes('melbourneToday>expires'),'Notice expiry missing');
