@@ -29,7 +29,7 @@ for(const p of pages){
  assert(html.includes('noindex,nofollow'),'Preview indexed: '+p);
  assert(html.includes('data-studio-announcement role="note" hidden'),'Closure exposed before JS: '+p);
  assert(html.includes('mads-main-nav'),'Nav absent '+p);
- assert(html.includes('home-v3.css?v=20261028-v42')&&html.includes('site.js?v=20261028-v42'),'Cache version stale '+p);
+ assert(html.includes('home-v3.css?v=20261028-v43')&&html.includes('site.js?v=20261028-v42'),'Cache version stale '+p);
  assert(html.includes('href="https://www.stratlens.com/websites/"'),'Footer credit link wrong '+p);
  assert(!html.includes('made for meaningful moments'),'Generic footer '+p);
 }
@@ -42,6 +42,13 @@ assert(!home.includes('DauWQoCkuB1'),'Explicit novelty cake must not appear in h
 assert(home.includes('02_pink-ribbon-vintage-cake_DIh_oHjBhxN.webp'),'Brand-appropriate hero photo missing');
 assert(home.includes('Vintage piping & pink ribbons.'),'Hero photo description not updated');
 assert(home.includes('05_sunlit-floral-tier-cake_DSg_oqpkjyK.webp'),'Weddings tile should show actual buttercream floral tiers');
+assert(home.includes('edit-photo-frame--gold')&&home.includes('edit-photo-frame--butterfly')&&home.includes('edit-photo-frame--garden'),'Detail photographs must be deliberately cropped');
+assert(!read('about/index.html').includes('<div class="about-photo"><img src="/assets/creations/02_pink-ribbon'),'About repeats homepage hero');
+assert(read('about/index.html').includes('21_red-rose-celebration-cake_DLJrSt0BmNc.webp'),'About opening must show piped buttercream roses');
+assert(css.includes('.mads-v3 .occ-love .occ-img img{object-fit:cover'),'Selective small tile crop missing');
+assert(css.includes('.mads-v3 .look-center .look-img img,.mads-v3 .look-right .look-img img{object-fit:contain}'),'Whole hero cakes should stay visible');
+assert(css.includes('.mads-v3 .edit-grid .edit-photo-frame{display:block;overflow:hidden'),'Detail photo crop frame missing');
+assert(home.includes('width="1440" height="1800" loading="eager"'),'First hero image layout dimensions missing');
 assert(!home.includes('11_ornate-wedding-cake_DJjIJNxB1ap.webp'),'Soft cropped wedding photo still used on homepage');
 assert(data.cakes.find(c=>c.sourceShortcode==='DauWQoCkuB1')?.demoVisible===false,'Explicit novelty cake remains visible in preview gallery');
 assert(!workshop.includes('DRjMFHikhm-')&&!workshop.includes('DauWQoCkuB1'),'Unrelated product photos on workshop page');
