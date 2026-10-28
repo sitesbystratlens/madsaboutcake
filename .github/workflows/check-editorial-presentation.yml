@@ -7,6 +7,7 @@ on:
       - 'assets/site.css'
       - 'assets/site.js'
       - 'assets/studio-notices.json'
+      - 'assets/enquiry-settings.json'
       - 'assets/home-v3.css'
       - 'about/index.html'
       - 'cakes/index.html'
@@ -16,6 +17,8 @@ on:
       - 'cakes.json'
       - 'scripts/test-editorial-presentation.mjs'
       - '.github/workflows/check-editorial-presentation.yml'
+  pull_request:
+    branches: [main]
   workflow_dispatch:
 permissions:
   contents: read
