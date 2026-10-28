@@ -8,6 +8,8 @@ on:
       - 'assets/home-v3.css'
       - 'index.html'
       - 'cakes/index.html'
+      - 'decorate-and-sip/index.html'
+      - 'assets/site.css'
   workflow_dispatch:
 permissions:
   contents: read
