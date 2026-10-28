@@ -337,7 +337,8 @@ body{background:var(--v3-cream)}
 @media(max-width:400px){.mads-main-nav .mads-nav-about{display:none}}
 
 /* V3.12: selective framing (protect inscriptions and full tiered cakes). */
-.mads-v3 .look-left .look-img img{object-fit:cover;object-position:50% 50%}
+.mads-v3 .look-left .look-img{aspect-ratio:4/5;height:auto}
+.mads-v3 .look-left .look-img img{object-fit:contain;object-position:50% 50%}
 .mads-v3 .look-center .look-img img,.mads-v3 .look-right .look-img img{object-fit:contain}
 .mads-v3 .occ-baby .occ-img img{object-fit:cover;object-position:50% 47%}
 .mads-v3 .occ-love .occ-img img{object-fit:cover;object-position:50% 43%}
@@ -356,3 +357,10 @@ body{background:var(--v3-cream)}
 .mads-v3 .edit-grid .edit-photo-frame img{height:auto;aspect-ratio:.83}
 .mads-v3 .edit-grid>a:nth-child(1) .edit-photo-frame img{aspect-ratio:1.2}
 }
+/* Browser QA: avoid cramped two-column card captions at 768px and narrower. */
+.gallery-info{display:flex;flex-direction:column;align-items:flex-start;justify-content:flex-start;gap:10px}
+.gallery-info>div:first-child{min-width:0;width:100%}
+.gallery-info h3{font-size:clamp(19px,2.1vw,27px);line-height:1.16;overflow-wrap:break-word}
+.gallery-info .gallery-card-actions{display:flex;flex-direction:row;flex-wrap:wrap;align-items:flex-start;gap:7px 14px;width:100%;min-width:0}
+.gallery-info .gallery-card-actions a{white-space:normal;line-height:1.45}
+@media(max-width:800px){.gallery-info .gallery-card-actions{flex-direction:column;gap:8px}}
