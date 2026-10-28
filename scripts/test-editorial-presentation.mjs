@@ -44,6 +44,8 @@ for(const p of pages){
  assert.equal((nav.match(/<a\s/g)||[]).length,3,'Primary navigation should have exactly 3 links: '+p);
  assert(!nav.includes('href="/about/"'),'About should live in the footer rather than top navigation: '+p);
  assert(nav.includes('href="/cakes/"')&&nav.includes('href="/decorate-and-sip/"')&&nav.includes('href="/enquire/"'),'Primary navigation destinations missing '+p);
+ assert(nav.includes('>Contact us</a>'),'Contact navigation label should match owner wording '+p);
+ assert(!nav.includes('>Enquire</a>'),'Formal contact label should not appear in header '+p);
  assert(html.includes('href="/about/"'),'About footer link must remain available: '+p);
 
  assert(html.includes('home-v3.css?v=20261028-v45')&&html.includes('site.js?v=20261028-v42'),'Cache version stale '+p);
@@ -117,6 +119,8 @@ assert(base.includes('Cake gallery: compact overview')&&base.includes('Decorate 
 
 assert(gallery.includes('<h1>Find a cake'),'Gallery H1 absent');
 assert(enquire.includes('<h1 id="enquiry-page-title">Got an idea?</h1>'),'Enquiry heading incorrect');
+assert(enquire.includes('<p class="eyebrow">CONTACT US</p>'),'Contact page label should be friendly');
+assert(enquire.includes('<title>Contact us | Mads About Cake, Melbourne</title>'),'Contact page title mismatch');
 for(const p of ['index.html','enquire/index.html']){
  const html=read(p);
  assert.equal((html.match(/data-studio-enquiry-form/g)||[]).length,1);
