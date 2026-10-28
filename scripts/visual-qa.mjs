@@ -78,8 +78,8 @@ for(const [slug,url] of pages){
    if((await page.locator('#design-detail a[href*="/enquire/"]').count())!==1)problem.push('detail enquiry link missing');
   }
   if(slug==='decorate-and-sip'){
-   const answers=await page.locator('.faq-list').innerText();
-   if(/\\bMads\\b/.test(answers)||!answers.includes('we’ve')&&!answers.includes('We’re'))problem.push('FAQ studio voice not consistent');
+   const answers=await page.locator('.faq-list').textContent();
+   if(/\bMads\b/.test(answers)||!answers.includes('we’ve')&&!answers.includes('We’re'))problem.push('FAQ studio voice not consistent');
    if((await page.locator('.faq-list details').count())!==4)problem.push('FAQ count differs');
   }
   if(slug==='enquire'&&info.formCount!==1)problem.push('missing enquiry form');
