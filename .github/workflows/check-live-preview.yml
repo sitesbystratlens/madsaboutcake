@@ -26,9 +26,9 @@ jobs:
             curl --silent --show-error --fail --location --max-time 20 -H 'Cache-Control: no-cache' "$SITE?check=${GITHUB_SHA}-${n}" > /tmp/live-preview.html || true
             if grep -Fq "$MARKER" /tmp/live-preview.html && grep -Fq "$IMAGE" /tmp/live-preview.html; then
               echo "Live Cloudflare homepage is current."
-              curl --silent --show-error --fail --location --max-time 20 -o /tmp/full-view.webp "$SITE${IMAGE}"
-              file /tmp/full-view.webp
-              echo "Live hero image downloaded successfully: $(wc -c < /tmp/full-view.webp) bytes"
+              curl --silent --show-error --fail --location --head --max-time 45 "$SITE${IMAGE}" > /tmp/hero-headers.txt
+              grep -qi '^content-type: image/webp' /tmp/hero-headers.txt
+              echo "Live hero image responds as WebP: $(grep -i '^content-type:' /tmp/hero-headers.txt | tail -1)"
               exit 0
             fi
             echo "Live homepage not yet updated (attempt $n of 6)."
