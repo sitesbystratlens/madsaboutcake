@@ -64,7 +64,9 @@ assert(home.includes('Got an idea?')&&home.includes('Let’s hear it.'),'Owner-p
 assert(home.includes('DIiAw_lBkM1'),'Homepage session reel link missing');
 assert(workshop.includes('DSR06gjEgJK-hens-setup.webp')&&workshop.includes('DHDXe4EB9Le-cupcake-edition.webp'),'Original session photographs missing');
 assert(workshop.includes('href="https://www.instagram.com/p/DSR06gjEgJK/"'),'Main session photo not linked to its original post');
-assert((workshop.match(/Watch a session on Instagram/g)||[]).length===1,'Duplicated watch session CTA');
+assert((workshop.match(/See a session clip/g)||[]).length===1,'One accurate session-video CTA expected');
+assert(!workshop.includes('FROM A REAL SESSION')&&!workshop.includes('HENS PARTIES · BIRTHDAYS · GROUP SESSIONS'),'Redundant workshop header labels remain');
+assert(workshop.includes('See a short clip from a Decorate &amp; Sip group session on Instagram'),'Session clip accessible description missing');
 assert(!workshop.includes('studio-session-media')&&!workshop.includes('studio-group-invite'),'Text-only workshop placeholders remain');
 assert(fs.existsSync('assets/workshops/DSR06gjEgJK-hens-setup.webp')&&fs.existsSync('assets/workshops/DHDXe4EB9Le-cupcake-edition.webp'),'Workshop images not installed');
 
@@ -110,6 +112,12 @@ assert(data.cakes.find(c=>c.sourceShortcode==='DauWQoCkuB1')?.demoVisible===fals
 assert(!workshop.includes('DRjMFHikhm-')&&!workshop.includes('DauWQoCkuB1'),'Unrelated product photos on workshop page');
 assert(!gallery.includes('id="style-filter"'),'Style filter still public');
 assert(gallery.includes('gallery-compact__toolbar')&&gallery.includes('gallery-compact__head'),'Gallery header not consolidated');
+assert(!gallery.includes('<p class="eyebrow">CAKES &amp; CUPCAKES</p>'),'Repeated gallery eyebrow still present');
+assert(gallery.includes('A little inspiration from past creations.'),'Gallery description should be concise and in the studio voice');
+assert(!gallery.includes('Mads’ past creations'),'Gallery intro still repeats Mads');
+const galleryNav=gallery.match(/<nav class="mads-main-nav"[^>]*>([\s\S]*?)<\/nav>/)?.[1]||'';
+assert(galleryNav.includes('class="nav-short">Cakes</span>')&&galleryNav.includes('class="nav-long">Cakes &amp; cupcakes</span>'),'Keep concise mobile nav that includes cupcakes on desktop');
+
 assert(data.cakes.every(c=>typeof c.instagramUrl==='string'&&/^https:\/\/www\.instagram\.com\/(?:p|reel)\/[\w-]+\/?$/.test(c.instagramUrl)),'Every catalogue design should retain its original Instagram URL');
 const cardMarkup=site.slice(site.indexOf('function cardHtml(c){'),site.indexOf('function showDesign(c,concept){'));
 assert(cardMarkup.includes('gallery-photo__arrow')&&cardMarkup.includes('gallery-title-link'),'Gallery photos and titles must link to the design');
