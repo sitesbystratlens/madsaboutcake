@@ -51,4 +51,22 @@ jobs:
             if [ "$n" -lt 6 ]; then sleep 12; fi
           done
           echo "ERROR: One or more revised pages are not yet available on the live Worker."
+          for test in \
+            "gallery-compact__toolbar:/tmp/cakes-live.html" \
+            "site.js?v=20261028-v48:/tmp/cakes-live.html" \
+            "site.js?v=20261028-v48:/tmp/sip-live.html" \
+            "gallery-photo__arrow:/tmp/gallery-live.js" \
+            "design-instagram-link:/tmp/gallery-live.js" \
+            "We’re based in Glen Iris:/tmp/sip-live.html" \
+            "we’ve hosted private:/tmp/sip-live.html" \
+            "See a session clip:/tmp/sip-live.html" \
+            "DSR06gjEgJK-hens-setup.webp:/tmp/sip-live.html" \
+            "DHDXe4EB9Le-cupcake-edition.webp:/tmp/sip-live.html" \
+            "Thank you for hosting us Madara:/tmp/sip-live.html"; do
+            expected="${test%%:*}"; file="${test#*:}"
+            if grep -Fq "$expected" "$file"; then echo "PASS $expected"; else echo "MISSING $expected from $file"; fi
+          done
+          echo "Served CSS/JS versions:"
+          grep -oE '(site\.js|site\.css)\?v=[0-9a-z-]+' /tmp/cakes-live.html | head -5 || true
+          grep -oE '(site\.js|site\.css)\?v=[0-9a-z-]+' /tmp/sip-live.html | head -5 || true
           exit 1
