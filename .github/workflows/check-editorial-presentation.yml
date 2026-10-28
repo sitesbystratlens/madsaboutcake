@@ -16,6 +16,7 @@ on:
       - 'assets/creations/**'
       - 'cakes.json'
       - 'scripts/test-editorial-presentation.mjs'
+      - 'scripts/sync-portfolio.mjs'
       - '.github/workflows/check-editorial-presentation.yml'
   pull_request:
     branches: [main]
@@ -32,4 +33,6 @@ jobs:
         with:
           node-version: '22'
       - name: Check selected original photography and navigation
-        run: node scripts/test-editorial-presentation.mjs
+        run: |
+          node scripts/test-editorial-presentation.mjs
+          node scripts/sync-portfolio.mjs --test

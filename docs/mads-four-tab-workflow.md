@@ -53,3 +53,10 @@ For ongoing updates choose **Mads About Cake → Refresh latest 30 IG posts**. I
 - Apify usage may incur fees. Set a spending cap and check Actor pricing before the 500-post historical run.
 - An Instagram extract never automatically publishes the website. Manual review and publishing are separate.
 - Google Apps Script installed in Google Sheets does not auto-update from GitHub. Copy the latest source after changes.
+
+## Featured 25 preview collection (28 October 2026)
+The independent concept currently shows **25 owner-review cake photographs** (five each for Birthdays, Weddings & engagements, Baby celebrations, Love & anniversaries, and five signature designs with no inferred occasion). They are hosted in `assets/featured-25/` with preview-only `featured25: true` flags; older records are retained for existing homepage detail links.
+
+This curated selection comes from the full 650-item media archive and caption/engagement evidence. **It is not yet represented in the original 33-record Creation Visibility sheet.** The manual publisher now checks whether the approved Sheet includes all 25 selected Instagram posts. Until the owner reconciles the Sheet, publishing is deliberately blocked, not silently substituted with the old shortlist. The explicit `MADS_ALLOW_CURATED_REPLACEMENT=1` override should only be used for a conscious, owner-approved production cutover. Dry-run validation will identify missing posts.
+
+Category labels in the publisher now support both the original Sheet terminology and the new public labels. The source photographs and all post engagement data remain subject to the studio's approval, and the Winnie-the-Pooh baby-shower record has a separate commercial-use/rights review flag. The preview remains noindexed and its enquiry endpoint unconnected.
