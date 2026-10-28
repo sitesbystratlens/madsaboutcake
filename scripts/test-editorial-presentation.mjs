@@ -40,12 +40,24 @@ for(const p of pages){
  assert(html.includes('noindex,nofollow'),'Preview indexed: '+p);
  assert(html.includes('data-studio-announcement role="note" hidden'),'Closure exposed before JS: '+p);
  assert(html.includes('mads-main-nav'),'Nav absent '+p);
+ const nav=html.match(/<nav class="mads-main-nav"[^>]*>([\s\S]*?)<\/nav>/)?.[1]||'';
+ assert.equal((nav.match(/<a\s/g)||[]).length,3,'Primary navigation should have exactly 3 links: '+p);
+ assert(!nav.includes('href="/about/"'),'About should live in the footer rather than top navigation: '+p);
+ assert(nav.includes('href="/cakes/"')&&nav.includes('href="/decorate-and-sip/"')&&nav.includes('href="/enquire/"'),'Primary navigation destinations missing '+p);
+ assert(html.includes('href="/about/"'),'About footer link must remain available: '+p);
+
  assert(html.includes('home-v3.css?v=20261028-v45')&&html.includes('site.js?v=20261028-v42'),'Cache version stale '+p);
  assert(html.includes('href="https://www.stratlens.com/websites/"'),'Footer credit link wrong '+p);
  assert(!html.includes('made for meaningful moments'),'Generic footer '+p);
 }
 const home=read('index.html'),gallery=read('cakes/index.html'),workshop=read('decorate-and-sip/index.html'),enquire=read('enquire/index.html');
 assert(home.includes('Say it with cake.')&&home.includes('Got something'),'Homepage structure changed');
+assert(!home.includes('CUSTOM CAKES &amp; CUPCAKES · MELBOURNE'),'Homepage repeated the navigation category in an eyebrow');
+const opening=home.match(/<section class="opening">([\s\S]*?)<div class="cake-showcase">/)?.[1]||'';
+assert((opening.match(/class="action-solid"/g)||[]).length===1,'Hero should have one primary action');
+assert(!opening.includes('class="action-line"')&&!opening.includes('>Enquire ↗</a>'),'Hero duplicates Enquire already in main navigation');
+assert(home.includes('href="/#cake-enquiry"')===false,'Legacy same-page Enquire hero link remains');
+
 assert(home.includes('Got an idea?')&&home.includes('Let’s hear it.'),'Owner-preferred headings changed');
 assert(home.includes('DIiAw_lBkM1'),'Homepage session reel link missing');
 assert(workshop.includes('DSR06gjEgJK-hens-setup.webp')&&workshop.includes('DHDXe4EB9Le-cupcake-edition.webp'),'Original session photographs missing');
