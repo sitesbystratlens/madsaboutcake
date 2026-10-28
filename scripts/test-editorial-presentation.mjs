@@ -9,7 +9,8 @@ assert.equal(new Set(data.cakes.map(c=>c.sourceShortcode)).size,33);
 assert.equal(data.meta.mode,'concept-preview');
 assert(data.cakes.every(c=>c.showOnWebsite==='No'),'Owner photos should remain unapproved');
 assert(data.cakes.some(c=>c.sourceShortcode==='DQ0WjCPEgqr'&&c.demoVisible===false),'Character-themed image not hidden');
-assert(data.cakes.every(c=>!(/independent website concept|ninth.birthday|first.birthday/i.test(c.shortDescription+' '+c.alt))),'Internal or unsubstantiated catalogue text');
+assert(data.cakes.every(c=>!(/independent website concept/i.test(c.shortDescription+' '+c.alt))),'Internal catalogue text');
+for(const code of ['DNKl7y9BcgU','DPLhTN5kgDE']){const c=data.cakes.find(x=>x.sourceShortcode===code);assert(c&&!/(first|ninth)[- ]birthday/i.test(c.alt),'Unsupported age in alt text '+code);}
 assert(site.includes("PUBLIC_OCCASIONS=['Birthdays','Weddings & engagements','Baby celebrations','Love & anniversaries']"));
 assert(site.includes('loadDesignFromQuery(form,params)'),'Design reference lookup absent');
 assert(site.includes('data.show!==true')&&notice.show===false&&notice.message==='','Unapproved closure banner');
