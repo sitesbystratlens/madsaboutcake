@@ -335,3 +335,24 @@ body{background:var(--v3-cream)}
 .mads-v3.studio-enquire-page .studio-enquire-section{padding:35px 0 60px}
 }
 @media(max-width:400px){.mads-main-nav .mads-nav-about{display:none}}
+
+/* V3.12: selective framing (protect inscriptions and full tiered cakes). */
+.mads-v3 .look-left .look-img img{object-fit:cover;object-position:50% 50%}
+.mads-v3 .look-center .look-img img,.mads-v3 .look-right .look-img img{object-fit:contain}
+.mads-v3 .occ-baby .occ-img img{object-fit:cover;object-position:50% 47%}
+.mads-v3 .occ-love .occ-img img{object-fit:cover;object-position:50% 43%}
+.mads-v3 .occ-bday .occ-img img,.mads-v3 .occ-wedding .occ-img img{object-fit:contain}
+.mads-v3 .edit-grid .edit-photo-frame{display:block;overflow:hidden;background:#f5edeb;padding:0;line-height:0}
+.mads-v3 .edit-grid .edit-photo-frame img{height:350px;object-fit:cover;display:block;transition:filter .3s}
+.mads-v3 .edit-grid .edit-photo-frame--gold img{object-position:50% 29%;transform:scale(1.16)}
+.mads-v3 .edit-grid .edit-photo-frame--butterfly img{object-position:47% 48%;transform:scale(1.22)}
+.mads-v3 .edit-grid .edit-photo-frame--garden img{object-position:50% 33%;transform:scale(1.17)}
+.mads-v3 .edit-grid>a:hover .edit-photo-frame img{filter:brightness(1.03)}
+.mads-v3 .opening h1{letter-spacing:-.02em}
+.mads-v3 .section-head h2,.mads-v3 .edit-heading h2,.mads-v3 .last h2{letter-spacing:-.025em}
+.mads-v3 .sip h2,.mads-v3.studio-enquire-page .enquiry-intro h1{letter-spacing:-.02em}
+.page-hero h1,.split-visual h1{letter-spacing:-.025em}
+@media(max-width:800px){
+.mads-v3 .edit-grid .edit-photo-frame img{height:auto;aspect-ratio:.83}
+.mads-v3 .edit-grid>a:nth-child(1) .edit-photo-frame img{aspect-ratio:1.2}
+}
