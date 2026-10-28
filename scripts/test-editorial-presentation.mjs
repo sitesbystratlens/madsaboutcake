@@ -110,8 +110,22 @@ assert(data.cakes.find(c=>c.sourceShortcode==='DauWQoCkuB1')?.demoVisible===fals
 assert(!workshop.includes('DRjMFHikhm-')&&!workshop.includes('DauWQoCkuB1'),'Unrelated product photos on workshop page');
 assert(!gallery.includes('id="style-filter"'),'Style filter still public');
 assert(gallery.includes('gallery-compact__toolbar')&&gallery.includes('gallery-compact__head'),'Gallery header not consolidated');
+assert(data.cakes.every(c=>typeof c.instagramUrl==='string'&&/^https:\/\/www\.instagram\.com\/(?:p|reel)\/[\w-]+\/?$/.test(c.instagramUrl)),'Every catalogue design should retain its original Instagram URL');
+const cardMarkup=site.slice(site.indexOf('function cardHtml(c){'),site.indexOf('function showDesign(c,concept){'));
+assert(cardMarkup.includes('gallery-photo__arrow')&&cardMarkup.includes('gallery-title-link'),'Gallery photos and titles must link to the design');
+assert(!cardMarkup.includes('gallery-card-actions')&&!cardMarkup.includes('Ask about this design')&&!cardMarkup.includes('View design ↗'),'Repeated gallery actions must be removed');
+const detailMarkup=site.slice(site.indexOf('function showDesign(c,concept){'),site.indexOf('function initGallery(records,concept){'));
+assert(detailMarkup.includes('design-instagram-link')&&detailMarkup.includes('originalPost')&&detailMarkup.includes('noopener noreferrer'),'Original Instagram link missing from design drill through');
+assert(detailMarkup.includes('Ask about this design →'),'Enquiry must stay inside the detail page');
+assert(base.includes('.gallery-photo__arrow')&&base.includes('.design-instagram-link'),'Gallery link styling missing');
+assert(pages.every(p=>read(p).includes('site.css?v=20261028-v47')&&read(p).includes('site.js?v=20261028-v47')),'Shared asset cache revision missing');
+const faqMarkup=workshop.match(/<div class="faq-list">([\s\S]*?)<\/div>/)?.[1]||'';
+assert.equal((faqMarkup.match(/<details>/g)||[]).length,4,'Four clear workshop FAQs expected');
+assert(!/\bMads\b/.test(faqMarkup),'FAQs should speak as We rather than Mads');
+assert(faqMarkup.includes('we’ve hosted private')&&faqMarkup.includes('We’re based in Glen Iris')&&faqMarkup.includes('We’ll confirm exactly')&&faqMarkup.includes('we’ve run a cupcake edition'),'Workshop FAQs should answer plainly in studio voice');
+
 assert(!gallery.includes('class="feature-strip"')&&!gallery.includes('GOT A DESIGN IN MIND?'),'Redundant enquiry section still displayed on gallery/drill-through');
-assert(gallery.includes('site.css?v=20261028-v43')&&workshop.includes('site.css?v=20261028-v44'),'Refined CSS cache version stale');
+assert(gallery.includes('site.css?v=20261028-v47')&&workshop.includes('site.css?v=20261028-v47'),'Refined stylesheet cache version stale');
 assert(workshop.includes('This is lovely! Thank you for hosting us Madara'),'Real guest comment absent from Decorate and Sip');
 assert(workshop.includes('https://www.instagram.com/p/DR9AAqlEovY/'),'Guest comment not attributed to original Instagram post');
 
