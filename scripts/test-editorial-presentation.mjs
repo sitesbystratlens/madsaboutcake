@@ -35,7 +35,7 @@ for(const p of pages){
  assert(html.includes('noindex,nofollow'),'Preview indexed: '+p);
  assert(html.includes('data-studio-announcement role="note" hidden'),'Closure exposed before JS: '+p);
  assert(html.includes('mads-main-nav'),'Nav absent '+p);
- assert(html.includes('home-v3.css?v=20261028-v44')&&html.includes('site.js?v=20261028-v42'),'Cache version stale '+p);
+ assert(html.includes('home-v3.css?v=20261028-v45')&&html.includes('site.js?v=20261028-v42'),'Cache version stale '+p);
  assert(html.includes('href="https://www.stratlens.com/websites/"'),'Footer credit link wrong '+p);
  assert(!html.includes('made for meaningful moments'),'Generic footer '+p);
 }
@@ -43,23 +43,39 @@ const home=read('index.html'),gallery=read('cakes/index.html'),workshop=read('de
 assert(home.includes('Say it with cake.')&&home.includes('Got something'),'Homepage structure changed');
 assert(home.includes('Got an idea?')&&home.includes('Let’s hear it.'),'Owner-preferred headings changed');
 assert(home.includes('DIiAw_lBkM1')&&workshop.includes('DIiAw_lBkM1'),'Workshop proof reel absent');
-assert(data.cakes.some(c=>c.id==='ig-4449685f6f486a4268784e'&&c.demoVisible===true),'Homepage hero deep link broken');
-assert(data.cakes.some(c=>c.id==='ig-444b4c734c505468516378'&&c.demoVisible===true),'Homepage centre hero deep link broken');
-assert(!home.includes('DQ0WjCPEgqr'),'Character photo on homepage');
-assert(!home.includes('DauWQoCkuB1'),'Explicit novelty cake must not appear in homepage hero');
-assert(home.includes('02_pink-ribbon-vintage-cake_DIh_oHjBhxN.webp'),'Brand-appropriate hero photo missing');
-assert(home.includes('Vintage piping & pink ribbons.'),'Hero photo description not updated');
-assert(home.includes('05_sunlit-floral-tier-cake_DSg_oqpkjyK.webp'),'Weddings tile should show actual buttercream floral tiers');
+
+const codes=['DGM5hj1hcJf','DJQ5RLthPKp','DP-QFm2EhMp'];
+const winners=[
+ ['Birthdays','DA-B4huhKQ4'],
+ ['Weddings & engagements','DJjIJNxB1ap'],
+ ['Baby celebrations','DQ0WjCPEgqr'],
+ ['Love & anniversaries','DWvn4Nekv8Z']
+];
+const byCode=new Map(featured.map(c=>[c.sourceShortcode,c]));
+for(const code of codes){
+ const c=byCode.get(code);
+ assert(c,'Hero source is not in the featured 25: '+code);
+ assert(home.includes('href="/cakes/?design='+c.id+'"'),'Hero has incorrect gallery detail link: '+code);
+ assert(home.includes('src="/'+c.coverImage+'"'),'Hero is not using selected photo: '+code);
+}
+for(const [category,code] of winners){
+ const c=byCode.get(code);
+ assert(c?.featureCategory===category,'Wrong occasion for winner '+code);
+ assert(home.includes('src="/'+c.coverImage+'"'),'Occasion image missing: '+code);
+}
+assert(home.includes('v3-15-engagement-led-homepage-20261028'),'Current homepage version marker missing');
+assert(!home.includes('DauWQoCkuB1'),'Explicit cake must not return to homepage');
+assert(css.includes('.mads-v3 .look-left .look-img img,')&&css.includes('object-fit:contain;object-position:center;background:transparent'),'Hero image framing must be full-cake / no zoom');
 assert(home.includes('edit-photo-frame--gold')&&home.includes('edit-photo-frame--butterfly')&&home.includes('edit-photo-frame--garden'),'Detail photographs must be deliberately cropped');
 assert(!read('about/index.html').includes('<div class="about-photo"><img src="/assets/creations/02_pink-ribbon'),'About repeats homepage hero');
 assert(read('about/index.html').includes('21_red-rose-celebration-cake_DLJrSt0BmNc.webp'),'About opening must show piped buttercream roses');
 assert(css.includes('.mads-v3 .occ-love .occ-img img{object-fit:cover'),'Selective small tile crop missing');
 assert(css.includes('.mads-v3 .look-center .look-img img,.mads-v3 .look-right .look-img img{object-fit:contain}'),'Whole hero cakes should stay visible');
 assert(css.includes('.mads-v3 .edit-grid .edit-photo-frame{display:block;overflow:hidden'),'Detail photo crop frame missing');
-assert(css.includes('.mads-v3 .look-left .look-img{aspect-ratio:4/5;height:auto}'),'Full pink-ribbon hero framing missing');
+assert(css.includes('.mads-v3 .look-left .look-img{height:clamp(275px,31vw,395px);aspect-ratio:auto}'),'Full-cake left hero framing missing');
 assert(css.includes('.gallery-info .gallery-card-actions{display:flex;flex-direction:row;flex-wrap:wrap'),'Gallery tablet overflow layout not fixed');
-assert(home.includes('width="1440" height="1800" loading="eager"'),'First hero image layout dimensions missing');
-assert(!home.includes('11_ornate-wedding-cake_DJjIJNxB1ap.webp'),'Soft cropped wedding photo still used on homepage');
+assert(home.includes('DGM5hj1hcJf-M258.webp')&&home.includes('loading="eager"'),'First hero source or loading attribute missing');
+assert(home.includes('DJjIJNxB1ap-M324.webp'),'Engagement-ranked wedding photo missing');
 assert(data.cakes.find(c=>c.sourceShortcode==='DauWQoCkuB1')?.demoVisible===false,'Explicit novelty cake remains visible in preview gallery');
 assert(!workshop.includes('DRjMFHikhm-')&&!workshop.includes('DauWQoCkuB1'),'Unrelated product photos on workshop page');
 assert(!gallery.includes('id="style-filter"'),'Style filter still public');
@@ -72,4 +88,4 @@ for(const p of ['index.html','enquire/index.html']){
  assert(html.includes('name="designId"')&&html.includes('studio-message-help'),'Design fields absent');
 }
 for(const c of data.cakes)assert(fs.existsSync(c.coverImage),'Missing photo '+c.coverImage);
-console.log('FINAL RED-TEAM PASS: balanced 25 from 25 posts, original local images, preserved homepage links, launch safeguards');
+console.log('V3.15 PASS: balanced 25, top-ranked occasion imagery, engagement-led hero, consistent links, full-cake framing and launch safeguards');
