@@ -48,7 +48,7 @@ for(const p of pages){
  assert(!nav.includes('>Enquire</a>'),'Formal contact label should not appear in header '+p);
  assert(html.includes('href="/about/"'),'About footer link must remain available: '+p);
 
- assert(html.includes('home-v3.css?v=20261028-v45')&&html.includes('site.js?v=20261028-v42'),'Cache version stale '+p);
+ assert(html.includes('home-v3.css?v=20261028-v45')&&html.includes('site.js?v=20261028-v47'),'Cache version stale '+p);
  assert(html.includes('href="https://www.stratlens.com/websites/"'),'Footer credit link wrong '+p);
  assert(!html.includes('made for meaningful moments'),'Generic footer '+p);
 }
