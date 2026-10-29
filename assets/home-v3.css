@@ -373,3 +373,13 @@ body{background:var(--v3-cream)}
 .mads-v3 .occ-bday .occ-img img,.mads-v3 .occ-wedding .occ-img img,
 .mads-v3 .occ-baby .occ-img img,.mads-v3 .occ-love .occ-img img{object-fit:contain;object-position:center}
 @media(max-width:800px){.mads-v3 .look-left .look-img{height:clamp(310px,91vw,440px)}}
+
+
+/* 2026-10-30: no hard-coded line break. One-line occasion heading when it fits,
+   natural wrapping at tablet and mobile widths. */
+@media(min-width:1200px){
+ .mads-v3 .occasion .section-head h2{font-size:clamp(49px,4.1vw,66px);white-space:nowrap}
+}
+@media(max-width:1199px){
+ .mads-v3 .occasion .section-head h2{white-space:normal}
+}
