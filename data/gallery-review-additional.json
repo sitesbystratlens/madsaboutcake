@@ -1,0 +1,604 @@
+{
+  "version": 1,
+  "source": "Public Instagram post extract 2026-10-27 (236 posts); manually reviewed for category plausibility",
+  "lastUpdated": "2026-10-30",
+  "notes": "Review only. Confirmed means source caption or existing user classification, except coconut set retained in Love by user choice. Possible means visual/theme suggestion only, not proof of occasion. Popular means 45+ archive likes OR previously featured as unclassified, excluding posts with an explicit identified occasion; likes are historical raw counts, not engagement rate.",
+  "weddingsConfirmed": [
+    "DYJ42NMkqlU",
+    "DYcB0ByEmzo",
+    "DWz1K4TErEv",
+    "DSg_oqpkjyK",
+    "DQTMOqiD53h",
+    "DTMTuSdkm4Y",
+    "DJQ50BvB5qK",
+    "DHNjWAJhbpK",
+    "DINfV1OhprN",
+    "DJjIJNxB1ap",
+    "DFCd_VGBnmD",
+    "DDV60R-hcFA"
+  ],
+  "weddingsPossible": [
+    "DR8_-HBkjFa",
+    "DQ1CEggEliL",
+    "DU40F0ikkwm",
+    "DPanB6UErVa",
+    "DBnwK_WBIeD",
+    "DEtTLWXBBce"
+  ],
+  "babyConfirmed": [
+    "DQ0WjCPEgqr",
+    "DQYyHi-kn6R",
+    "DMmuv2mBvWk",
+    "DJQ6B-tBQyw",
+    "DI75TIVBBgx",
+    "C7tOmcThkTA",
+    "DCc_OmjBsyf",
+    "DKDtfwHhPlE",
+    "C7tO9F4B8lX"
+  ],
+  "babyPossible": [
+    "DNZj3aAh2jC",
+    "DPgSOTKkgjS",
+    "DK8lOEfhYJA",
+    "C8JF0_IyYGt",
+    "DWv0b5kkrWE",
+    "C7tQnOMhkKK",
+    "DHCy_bTBLKc",
+    "DHQDoHHB26G",
+    "DQEVlRrkh42"
+  ],
+  "loveConfirmed": [
+    "DGM5hj1hcJf",
+    "DWvn4Nekv8Z",
+    "DINfRR_BzYm",
+    "DCTltZxh4Bq",
+    "Db2wuYpEoIe",
+    "DDA_T8GhtQC",
+    "DUef7FjEjoE",
+    "DGrtxe_BJDR",
+    "DHkpIm5B08V",
+    "C8_6qUPSrOq"
+  ],
+  "lovePossible": [
+    "C-hr7ntS0Ei",
+    "C9cJQsry1gY",
+    "C9ZZH4eyqcm",
+    "DLdz3jRh9NV",
+    "DLdzEx3Btmr",
+    "DIYSdKZhbxK",
+    "C88mW3FyNh8",
+    "DK8oglIBpLj",
+    "DMuhu5dhJbb",
+    "DL49HXIhTeY",
+    "DRHM4kxEqlA",
+    "DQEVlRrkh42"
+  ],
+  "popularUncategorised": [
+    "DP-QFm2EhMp",
+    "DdneHOekoku",
+    "DLdzEx3Btmr",
+    "DXlL97REp2M",
+    "Db71kAREsvz",
+    "DcqRbBLIFnH",
+    "DcX8-bKoO2D",
+    "DHfpPpfhaNb",
+    "DJQ5RLthPKp",
+    "DR8_-HBkjFa",
+    "DRHM4kxEqlA",
+    "DQEVlRrkh42",
+    "DMuhu5dhJbb",
+    "DQjHWq9krsH",
+    "DLJtVcYBsky",
+    "DG-S_-6BYNA",
+    "DauWQoCkuB1",
+    "DcX9APCvQU6",
+    "DMCwjRoBfjy",
+    "DU4wZg-kjHx",
+    "DF1l80hBrhI",
+    "DCv93Blhb1I",
+    "Dd7v3M5EhKI",
+    "DNKnQrpB4Bv",
+    "DRqUIHQkpM4",
+    "DO2QV4bkkFV",
+    "DKLsLPThQcx",
+    "DKDr6usBv-B",
+    "DeoTAxVoN5f",
+    "DL49HXIhTeY",
+    "DXlCJoBEljq",
+    "DHQDoHHB26G"
+  ],
+  "metadata": {
+    "DYJ42NMkqlU": {
+      "title": "Textured wafer-paper wedding cake",
+      "likes": 100,
+      "caption": "A labour of love for a wedding - hand cut sheets of wafer paper, individually “glued” on to create this textured effect. Finished with faux florals and fresh figs from the bride’s own backyard! \ud83e",
+      "existingFeatured": true
+    },
+    "DYcB0ByEmzo": {
+      "title": "Bridesmaid proposal mini cakes",
+      "likes": 155,
+      "caption": "In my bridal era! 🤍 And how does a cake lady propose to her bridesmaids? With mini personalised cakes of course! Beyond obsessed with how these turned out 😩",
+      "existingFeatured": false
+    },
+    "DWz1K4TErEv": {
+      "title": "Domed bridal-shower cake",
+      "likes": 49,
+      "caption": "Domed two tier for a bridal shower 🩵",
+      "existingFeatured": false
+    },
+    "DSg_oqpkjyK": {
+      "title": "Floral Nikkah cake",
+      "likes": 40,
+      "caption": "Summery florals for a Nikkah ✨",
+      "existingFeatured": true
+    },
+    "DQTMOqiD53h": {
+      "title": "Red-ribbon surprise-engagement cake",
+      "likes": 83,
+      "caption": "Ashwati & Jonathan Surprise Engagement Dinner Photography: @vanrap.weddings Venue: @thecarltonwineroom Cake: @madsaboutcake",
+      "existingFeatured": true
+    },
+    "DTMTuSdkm4Y": {
+      "title": "Cream floral engagement cake",
+      "likes": 53,
+      "caption": "First order of 2026. 💍",
+      "existingFeatured": true
+    },
+    "DJQ50BvB5qK": {
+      "title": "Citrus bridal-shower cake",
+      "likes": 38,
+      "caption": "These customer pics were too cute not to post! Citrus vibes for a bridal shower 🍊🍋",
+      "existingFeatured": false
+    },
+    "DHNjWAJhbpK": {
+      "title": "Calla-lily tiered cake",
+      "likes": 55,
+      "caption": "Bridal season with @anthicastudio 🌷 Fondant cakes are definitely not my thing, but it sure gives the perfect blank canvas for floral additions ✨",
+      "existingFeatured": false
+    },
+    "DINfV1OhprN": {
+      "title": "Floral bridal-celebration cake",
+      "likes": 41,
+      "caption": "Cake crush alert! Love seeing professional pics of our cakes out in the wild! Honored to have been a part of this lovely bride-to-be’s special day. 🌷🌹 Also a little sneak peek into something ne",
+      "existingFeatured": true
+    },
+    "DJjIJNxB1ap": {
+      "title": "Three-tier family wedding cake",
+      "likes": 84,
+      "caption": "The most special cake I’ve made to date 🥹 Last weekend I had the absolute honour of creating the wedding cake for my brother and new sister in law 🤍 A three-tier challenge, made with all the lo",
+      "existingFeatured": true
+    },
+    "DFCd_VGBnmD": {
+      "title": "Dairy-free engagement cake",
+      "likes": 42,
+      "caption": "Engagement party ready 💛",
+      "existingFeatured": false
+    },
+    "DDV60R-hcFA": {
+      "title": "Mayoun celebration cupcakes",
+      "likes": 38,
+      "caption": "Mayoun cupcakes 💛",
+      "existingFeatured": true
+    },
+    "DR8_-HBkjFa": {
+      "title": "Pressed-floral buttercream cake",
+      "likes": 61,
+      "caption": "Edible pressed florals for that something blue ✨",
+      "existingFeatured": true
+    },
+    "DQ1CEggEliL": {
+      "title": "Disco-inspired tiered cakes",
+      "likes": 39,
+      "caption": "These cakes were made to be on the dance floor 🪩💃✨🤩",
+      "existingFeatured": false
+    },
+    "DU40F0ikkwm": {
+      "title": "Pearl and baby's-breath cake",
+      "likes": 33,
+      "caption": "White pearls and baby’s breath is a match made in heaven ✨",
+      "existingFeatured": false
+    },
+    "DPanB6UErVa": {
+      "title": "White and gold tones for this dreamy cake ✨",
+      "likes": 36,
+      "caption": "White and gold tones for this dreamy cake ✨",
+      "existingFeatured": false
+    },
+    "DBnwK_WBIeD": {
+      "title": "Floral overload for one of my faves 🤩",
+      "likes": 42,
+      "caption": "Floral overload for one of my faves 🤩",
+      "existingFeatured": false
+    },
+    "DEtTLWXBBce": {
+      "title": "Gold pearl two-tier cake",
+      "likes": 33,
+      "caption": "First cake of 2025 ✨",
+      "existingFeatured": false
+    },
+    "DQ0WjCPEgqr": {
+      "title": "Winnie-the-Pooh baby-shower cake",
+      "likes": 51,
+      "caption": "Baby shower ready 🍯🧸",
+      "existingFeatured": true
+    },
+    "DQYyHi-kn6R": {
+      "title": "Coquette gender-reveal cupcakes",
+      "likes": 40,
+      "caption": "Cutest coquette style cupcakes for a gender reveal ✨🧁",
+      "existingFeatured": true
+    },
+    "DMmuv2mBvWk": {
+      "title": "Butterfly gender-reveal cake",
+      "likes": 40,
+      "caption": "Baked this cake with a secret centre and so much love for my friends and their little one on the way 🍼 The cutest mini 2 tier for a 🥹",
+      "existingFeatured": true
+    },
+    "DJQ6B-tBQyw": {
+      "title": "Floral baby-shower cake",
+      "likes": 33,
+      "caption": "Baby shower cake with lots of flowers 🌸🌷",
+      "existingFeatured": true
+    },
+    "DI75TIVBBgx": {
+      "title": "Vintage baby-shower cake",
+      "likes": 37,
+      "caption": "Ready for a baby shower 💙 My customer wanted a baby shower cake just as I was about to head overseas, but we made it work! I made it early and she refrigerated it for 3 days—yep, buttercream cak",
+      "existingFeatured": true
+    },
+    "C7tOmcThkTA": {
+      "title": "Floral baby-shower cupcakes",
+      "likes": 28,
+      "caption": "Cutest set for a baby shower 🌸",
+      "existingFeatured": true
+    },
+    "DCc_OmjBsyf": {
+      "title": "White gender-reveal cake",
+      "likes": 17,
+      "caption": "Ready for a gender reveal 🤍",
+      "existingFeatured": false
+    },
+    "DKDtfwHhPlE": {
+      "title": "Floral baptism cake",
+      "likes": 29,
+      "caption": "Baptism cake 🌸",
+      "existingFeatured": false
+    },
+    "C7tO9F4B8lX": {
+      "title": "Oh Baby cupcakes",
+      "likes": 24,
+      "caption": "Happiness is a cupcake in each hand 💓",
+      "existingFeatured": true
+    },
+    "DNZj3aAh2jC": {
+      "title": "Styled pink bow cake",
+      "likes": 34,
+      "caption": "A moment for this dreamy fairy-tale set up for a first birthday 🧚‍♀️ For all the gorgeous details that brought this day to life, check out @shinievents ✨ Event Planner/Coordinator: @shinievents ",
+      "existingFeatured": true
+    },
+    "DPgSOTKkgjS": {
+      "title": "Rodeo first birthday cake",
+      "likes": 27,
+      "caption": "Cutest rodeo themed cake for a first birthday 🤠🐮",
+      "existingFeatured": true
+    },
+    "DK8lOEfhYJA": {
+      "title": "First birthday cake and cupcakes",
+      "likes": 45,
+      "caption": "1 year around the sun ☀️",
+      "existingFeatured": true
+    },
+    "C8JF0_IyYGt": {
+      "title": "Butterfly garden cupcakes",
+      "likes": 32,
+      "caption": "Butterfly garden set 🦋🧚",
+      "existingFeatured": true
+    },
+    "DWv0b5kkrWE": {
+      "title": "Pastel garden tiered cake",
+      "likes": 36,
+      "caption": "🧚‍♀️🌸🌷✨🧚",
+      "existingFeatured": false
+    },
+    "C7tQnOMhkKK": {
+      "title": "Under-the-sea cake",
+      "likes": 22,
+      "caption": "A little under the sea moment 🐚🐳🌊",
+      "existingFeatured": false
+    },
+    "DHCy_bTBLKc": {
+      "title": "🦋🦋🦋 6 inch vanilla cake with vanilla buttercream, printed image and",
+      "likes": 39,
+      "caption": "🦋🦋🦋 6 inch vanilla cake with vanilla buttercream, printed image and edible butterflies",
+      "existingFeatured": false
+    },
+    "DHQDoHHB26G": {
+      "title": "The cutiest of all cuties 🎀",
+      "likes": 45,
+      "caption": "The cutiest of all cuties 🎀",
+      "existingFeatured": false
+    },
+    "DQEVlRrkh42": {
+      "title": "Mini fondant cakes",
+      "likes": 55,
+      "caption": "Minis so cute I just wanna squish ‘em 💗 4 inch cakes with vanilla buttercream and fondant details",
+      "existingFeatured": false
+    },
+    "DGM5hj1hcJf": {
+      "title": "Valentine’s strawberry mini cake",
+      "likes": 45,
+      "caption": "Valentines minis from the weekend 🍓",
+      "existingFeatured": true
+    },
+    "DWvn4Nekv8Z": {
+      "title": "Biscoff celebration heart cake",
+      "likes": 61,
+      "caption": "Celebrating love 🤍",
+      "existingFeatured": true
+    },
+    "DINfRR_BzYm": {
+      "title": "35th-anniversary heart cake",
+      "likes": 30,
+      "caption": "Hearts all around for a 35th anniversary 💚",
+      "existingFeatured": true
+    },
+    "DCTltZxh4Bq": {
+      "title": "Anniversary cupcake gift box",
+      "likes": 24,
+      "caption": "Happy anniversary with a box of cupcakes ❤️",
+      "existingFeatured": true
+    },
+    "Db2wuYpEoIe": {
+      "title": "Coconut cake and cupcake set",
+      "likes": 43,
+      "caption": "Fluffy coconut cake with its fluffy coconut cupcake entourage 🥥",
+      "existingFeatured": true
+    },
+    "DDA_T8GhtQC": {
+      "title": "Anniversary buttercream cake",
+      "likes": 32,
+      "caption": "Lil anniversary cake ❤️",
+      "existingFeatured": false
+    },
+    "DUef7FjEjoE": {
+      "title": "Valentine-palette cakes",
+      "likes": 33,
+      "caption": "Starting February off with a Valentine palette 💌",
+      "existingFeatured": false
+    },
+    "DGrtxe_BJDR": {
+      "title": "Galentine’s ❤️",
+      "likes": 22,
+      "caption": "Galentine’s ❤️",
+      "existingFeatured": false
+    },
+    "DHkpIm5B08V": {
+      "title": "Our favourite little 4 inch heart cakes ❤️",
+      "likes": 37,
+      "caption": "Our favourite little 4 inch heart cakes ❤️",
+      "existingFeatured": false
+    },
+    "C8_6qUPSrOq": {
+      "title": "Love-themed butterfly cupcakes",
+      "likes": 41,
+      "caption": "Showing love with a box of cupcakes, for whatever the occasion 💓",
+      "existingFeatured": false
+    },
+    "C-hr7ntS0Ei": {
+      "title": "Customer: “I like purple and gold, surprise me!” 💜",
+      "likes": 38,
+      "caption": "Customer: “I like purple and gold, surprise me!” 💜",
+      "existingFeatured": false
+    },
+    "C9cJQsry1gY": {
+      "title": "Obsessed with this shade of blue 🤩",
+      "likes": 32,
+      "caption": "Obsessed with this shade of blue 🤩",
+      "existingFeatured": false
+    },
+    "C9ZZH4eyqcm": {
+      "title": "Monochrome moments from this weekend 🎂",
+      "likes": 35,
+      "caption": "Monochrome moments from this weekend 🎂",
+      "existingFeatured": false
+    },
+    "DLdz3jRh9NV": {
+      "title": "Keeping it classic for these important milestones 🤍",
+      "likes": 29,
+      "caption": "Keeping it classic for these important milestones 🤍",
+      "existingFeatured": false
+    },
+    "DLdzEx3Btmr": {
+      "title": "Pearl-detail vintage heart cake",
+      "likes": 78,
+      "caption": "Placing each pearl individually by hand was not therapeutic as it looked on Pinterest, but we love the result 🤩 🧿",
+      "existingFeatured": true
+    },
+    "DIYSdKZhbxK": {
+      "title": "Business-anniversary minis",
+      "likes": 37,
+      "caption": "Minis from this weekend ✨ A special shoutout to @zaebeled on their one year anniversary!",
+      "existingFeatured": false
+    },
+    "C88mW3FyNh8": {
+      "title": "Work-anniversary cake",
+      "likes": 23,
+      "caption": "A very special work anniversary 🌟",
+      "existingFeatured": false
+    },
+    "DK8oglIBpLj": {
+      "title": "Mixed vintage heart and rectangular cakes",
+      "likes": 38,
+      "caption": "When the orders sync up 😌",
+      "existingFeatured": false
+    },
+    "DMuhu5dhJbb": {
+      "title": "Raspberry cake with satin bows",
+      "likes": 54,
+      "caption": "Raspberries and and satin bows 🤝🏼",
+      "existingFeatured": false
+    },
+    "DL49HXIhTeY": {
+      "title": "Neon-pink red-bow cake",
+      "likes": 46,
+      "caption": "A moment for this neon pink and a big red bow 😍🎀",
+      "existingFeatured": false
+    },
+    "DRHM4kxEqlA": {
+      "title": "Three vintage mini cakes",
+      "likes": 55,
+      "caption": "Just 3 cutie cakes sitting around looking cutie af 💕",
+      "existingFeatured": true
+    },
+    "DP-QFm2EhMp": {
+      "title": "Wafer-paper sculptural cake",
+      "likes": 85,
+      "caption": "Wafer paper cake - a labour intensive design, but a gorgeous result ✨ Edible wafer paper individually cut, folded and glued together to create this effect",
+      "existingFeatured": true
+    },
+    "DdneHOekoku": {
+      "title": "Lawyer-themed vintage cake",
+      "likes": 82,
+      "caption": "Pretty cake for a pretty LAWYER ⚖️",
+      "existingFeatured": true
+    },
+    "DXlL97REp2M": {
+      "title": "Fondant statement cake",
+      "likes": 76,
+      "caption": "Every now and then I say yes to a fondant cake… and every time I question that decision mid-way 😅 But somehow we make it work in the end ✨",
+      "existingFeatured": false
+    },
+    "Db71kAREsvz": {
+      "title": "Nostalgia-themed cake",
+      "likes": 71,
+      "caption": "This cake got me feeling so much nostalgia 😭",
+      "existingFeatured": false
+    },
+    "DcqRbBLIFnH": {
+      "title": "Tiramisu letter cake",
+      "likes": 70,
+      "caption": "Something about a tiramisu cake ☕️",
+      "existingFeatured": false
+    },
+    "DcX8-bKoO2D": {
+      "title": "Why solve your problems when you can eat them instead 🫡",
+      "likes": 64,
+      "caption": "Why solve your problems when you can eat them instead 🫡",
+      "existingFeatured": false
+    },
+    "DHfpPpfhaNb": {
+      "title": "Arcane-themed tiered cake",
+      "likes": 63,
+      "caption": "This one’s for the Arcane fans ✨",
+      "existingFeatured": false
+    },
+    "DJQ5RLthPKp": {
+      "title": "Garden-party buttercream cake",
+      "likes": 62,
+      "caption": "Garden party ready 🌷🦋🌸🍄",
+      "existingFeatured": true
+    },
+    "DQjHWq9krsH": {
+      "title": "Vintage square buttercream cake",
+      "likes": 53,
+      "caption": "It’s giving vintage ✨",
+      "existingFeatured": true
+    },
+    "DLJtVcYBsky": {
+      "title": "Gemini season cake collection",
+      "likes": 53,
+      "caption": "Gemini season has been in full swing these past few weeks, bringing in some of the most gorgeous cake orders ♊️✨",
+      "existingFeatured": false
+    },
+    "DG-S_-6BYNA": {
+      "title": "Dusty-purple floral buttercream cake",
+      "likes": 53,
+      "caption": "Had so much fun making this one 🌹🌼🌷🌸",
+      "existingFeatured": true
+    },
+    "DauWQoCkuB1": {
+      "title": "Pink and green floral piping cake",
+      "likes": 52,
+      "caption": "🧚",
+      "existingFeatured": false
+    },
+    "DcX9APCvQU6": {
+      "title": "In loveeee ❤️",
+      "likes": 51,
+      "caption": "In loveeee ❤️",
+      "existingFeatured": false
+    },
+    "DMCwjRoBfjy": {
+      "title": "Silver palette-knife cake",
+      "likes": 51,
+      "caption": "It was so much fun bringing this design to life. The brief was a square 2 tier cake in white with pops of silver and a palette knife design. Love how it came together! 🩶✨",
+      "existingFeatured": true
+    },
+    "DU4wZg-kjHx": {
+      "title": "Can you guess the occasion? 😝",
+      "likes": 50,
+      "caption": "Can you guess the occasion? 😝",
+      "existingFeatured": false
+    },
+    "DF1l80hBrhI": {
+      "title": "Cutie cake 🌹🌸🌺🌷🌼",
+      "likes": 50,
+      "caption": "Cutie cake 🌹🌸🌺🌷🌼",
+      "existingFeatured": false
+    },
+    "DCv93Blhb1I": {
+      "title": "Cherry vintage two-tier cake",
+      "likes": 50,
+      "caption": "Feelin’ cherry! 🍒",
+      "existingFeatured": true
+    },
+    "Dd7v3M5EhKI": {
+      "title": "GEM CAKE 💎✨",
+      "likes": 49,
+      "caption": "GEM CAKE 💎✨",
+      "existingFeatured": false
+    },
+    "DNKnQrpB4Bv": {
+      "title": "Serving serious red carpet energy 🎬🎞️",
+      "likes": 49,
+      "caption": "Serving serious red carpet energy 🎬🎞️",
+      "existingFeatured": false
+    },
+    "DRqUIHQkpM4": {
+      "title": "fresh florals 🤝🏼 cake",
+      "likes": 47,
+      "caption": "fresh florals 🤝🏼 cake",
+      "existingFeatured": false
+    },
+    "DO2QV4bkkFV": {
+      "title": "Almost too pretty to slice 🍰",
+      "likes": 47,
+      "caption": "Almost too pretty to slice 🍰",
+      "existingFeatured": false
+    },
+    "DKLsLPThQcx": {
+      "title": "Fondant garden bloom cake",
+      "likes": 47,
+      "caption": "This cake had me tapping into the depths of my arts and crafts skills - hand made fondant flowers, not a usual for me but love how it came out!",
+      "existingFeatured": false
+    },
+    "DKDr6usBv-B": {
+      "title": "Finally got the chance to create a cake inspired by the amazing @studi",
+      "likes": 47,
+      "caption": "Finally got the chance to create a cake inspired by the amazing @studiosweetly and I am obsessed!",
+      "existingFeatured": false
+    },
+    "DeoTAxVoN5f": {
+      "title": "This was a fun one to make 🤩",
+      "likes": 46,
+      "caption": "This was a fun one to make 🤩",
+      "existingFeatured": false
+    },
+    "DXlCJoBEljq": {
+      "title": "Fresh-berry vanilla cake",
+      "likes": 45,
+      "caption": "“I’d like a lot of berries on the cake pls” say less 🍓🫐",
+      "existingFeatured": false
+    }
+  }
+}
