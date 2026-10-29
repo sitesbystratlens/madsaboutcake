@@ -1,0 +1,54 @@
+name: Verify live owner gallery review
+on:
+  push:
+    branches: [main]
+    paths:
+      - 'review/index.html'
+      - 'assets/gallery-review.js'
+      - 'assets/gallery-review.css'
+      - 'assets/gallery-review-covers/**'
+      - 'data/gallery-review-candidates.json'
+      - '.github/workflows/check-live-gallery-review.yml'
+  workflow_dispatch:
+permissions:
+  contents: read
+jobs:
+  verify:
+    runs-on: ubuntu-latest
+    timeout-minutes: 9
+    steps:
+      - uses: actions/checkout@v4
+      - name: Validate deployed review with source-backed images
+        shell: bash
+        run: |
+          set -euo pipefail
+          SITE=https://madsaboutcake.sitesbystratlens.workers.dev
+          for n in $(seq 1 15); do
+            curl -fsSL --max-time 24 -H 'Cache-Control: no-cache' "$SITE/review/?v=$GITHUB_SHA-$n" >/tmp/review.html || true
+            curl -fsSL --max-time 24 -H 'Cache-Control: no-cache' "$SITE/assets/gallery-review.js?v=$GITHUB_SHA-$n" >/tmp/review.js || true
+            curl -fsSL --max-time 24 -H 'Cache-Control: no-cache' "$SITE/data/gallery-review-candidates.json?v=$GITHUB_SHA-$n" >/tmp/review.json || true
+            if grep -Fq 'Choose the designs' /tmp/review.html && grep -Fq 'Copy my review' /tmp/review.html &&
+               grep -Fq 'mads-owner-gallery-review-v1' /tmp/review.js &&
+               python3 - <<'PY'
+          import json
+          d=json.load(open('/tmp/review.json'))
+          assert len(d['birthdayConfirmed'])==33
+          assert len(d['birthdayThemed'])==7
+          assert len(d['cupcakes'])==34
+          assert len(set(d['birthdayConfirmed']+d['birthdayThemed']+d['cupcakes']))==70
+          print('Live review shows all 70 original post references')
+          PY
+            then
+              for img in DVFVq_Ukulg DDQR8n_BNxQ C83Ol1UyMkf DQEUavaEhle; do
+                headers=$(curl -fsSI --max-time 25 "$SITE/assets/gallery-review-covers/$img.webp")
+                echo "$headers" | grep -qi 'content-type: image/webp'
+                echo "Image live: $img"
+              done
+              echo 'Live owner review and sample original WebP images PASS.'
+              exit 0
+            fi
+            echo "Waiting for owner review deployment ($n/15)"
+            sleep 12
+          done
+          echo 'ERROR: Owner review page not deployed with expected assets'
+          exit 1
