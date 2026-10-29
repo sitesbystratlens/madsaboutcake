@@ -1,4 +1,4 @@
-name: Verify live owner-selected gallery and original photos
+name: Verify live expanded second-round owner gallery and original photos
 on:
   push:
     branches: [main]
@@ -10,6 +10,8 @@ on:
       - 'cakes/index.html'
       - 'assets/site.js'
       - 'data/gallery-owner-decisions-2026-10-30.json'
+      - 'data/gallery-owner-decisions-round2-2026-10-30.json'
+      - 'data/gallery-round2-category-moves.json'
   workflow_dispatch:
 permissions:
   contents: read
@@ -35,18 +37,18 @@ jobs:
           try:
               d=json.load(open('/tmp/live-gallery.json'))
               chosen=[c for c in d['cakes'] if c.get('featured30')]
-              assert len(chosen)==74 and d['meta']['featuredCount']==74
+              assert len(chosen)==113 and d['meta']['featuredCount']==113
               assert d['meta']['mode']=='concept-preview'
               assert all(c['showOnWebsite']=='No' and c['approvalStatus']=='Draft' for c in d['cakes'])
               assert all(c.get('ownerReviewRequired') for c in chosen)
-              assert sum(c.get('featureCategory')=='Weddings & engagements' for c in chosen)==6
-              assert sum(c.get('featureCategory')=='Baby celebrations' for c in chosen)==6
-              assert sum(c.get('featureCategory')=='Love & anniversaries' for c in chosen)==5
-              assert sum(c.get('featureCategory')=='Other/unspecified' for c in chosen)==11
-              assert sum(c['productType']=='Cupcakes' or 'Cupcakes' in c.get('otherProductTypes',[]) for c in chosen)==28
+              assert sum(c.get('featureCategory')=='Weddings & engagements' for c in chosen)==10
+              assert sum(c.get('featureCategory')=='Baby celebrations' for c in chosen)==9
+              assert sum(c.get('featureCategory')=='Love & anniversaries' for c in chosen)==6
+              assert sum(c.get('featureCategory')=='Other/unspecified' for c in chosen)==28
+              assert sum(c['productType']=='Cupcakes' or 'Cupcakes' in c.get('otherProductTypes',[]) for c in chosen)==29
               assert 'DK8nnIGBfLx' in {c['sourceShortcode'] for c in chosen}
               assert 'C8iniSsyccX' not in {c['sourceShortcode'] for c in chosen}
-              print('74 owner selections deployed with protected categories and draft safeguards.')
+              print('113 owner selections deployed with second-round categories and draft safeguards.')
           except Exception as e:
               print('Live gallery not updated:',e)
               sys.exit(1)
