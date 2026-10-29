@@ -6,6 +6,8 @@ on:
       - '.github/workflows/import-gallery-review.yml'
       - 'scripts/import-review-covers.py'
       - 'data/gallery-review-candidates.json'
+      - 'data/gallery-review-additional.json'
+      - 'data/gallery-review-photo-urls.json'
   workflow_dispatch:
 permissions:
   contents: write
@@ -15,7 +17,7 @@ concurrency:
 jobs:
   import:
     runs-on: ubuntu-latest
-    timeout-minutes: 18
+    timeout-minutes: 20
     steps:
       - uses: actions/checkout@v4
         with:
