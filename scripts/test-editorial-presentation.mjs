@@ -7,6 +7,9 @@ const pages=['index.html','cakes/index.html','decorate-and-sip/index.html','abou
 assert(data.cakes.length>=33);
 const featured=data.cakes.filter(c=>c.featured30===true);
 assert.equal(featured.length,34,'34 original Instagram designs expected');
+assert.equal(data.meta.featuredCount,34,'Published preview catalogue count must match the selected 34');
+assert(data.meta.legacyDetailRecords===data.cakes.length-34,'Legacy detail record total must remain accurate');
+
 assert.equal(new Set(featured.map(c=>c.sourceShortcode)).size,34,'One selection per source post');
 for(const [category,count] of Object.entries({'Birthdays':6,'Weddings & engagements':6,'Baby celebrations':6,'Love & anniversaries':5,'Other/unspecified':11}))assert.equal(featured.filter(c=>c.featureCategory===category).length,count,'Wrong selected category count '+category);
 assert(featured.every(c=>c.coverImage.startsWith('assets/gallery-30/')),'Curated photos must be local hosted original derivatives');
