@@ -7,8 +7,8 @@
 <title>Owner gallery review — Mads About Cake</title>
 <meta name="description" content="Private concept design review for birthday, cupcake, wedding, baby, love and uncategorised cake designs.">
 <link rel="icon" type="image/png" href="/favicon.png">
-<link rel="stylesheet" href="/assets/gallery-review.css?v=20261030-7">
-<script src="/assets/gallery-review.js?v=20261030-7" defer></script>
+<link rel="stylesheet" href="/assets/gallery-review.css?v=20261030-8">
+<script src="/assets/gallery-review.js?v=20261030-8" defer></script>
 </head>
 <body>
 <div class="preview-strip">Mads About Cake <span aria-hidden="true">·</span> Concept review only <span aria-hidden="true">·</span> Not the public gallery</div>
@@ -20,7 +20,7 @@
   <section class="intro">
     <div><p class="eyebrow">OWNER REVIEW  /  30 OCTOBER 2026</p>
       <h1>Choose the designs <em>you love.</em></h1>
-      <p>Browse the full Instagram discovery catalogue across six review sections. Mark <strong>Keep</strong> or <strong>Remove</strong>, add notes, and send us your decisions when you're ready.</p></div>
+      <p>Work through designs in each category, move anything misplaced using <strong>Move this design to</strong>, and group what's left in Other. Once assigned, designs disappear from the pending queue but remain accessible under Show all designs. Export a CSV to apply changes to the website.</p></div>
     <div class="guide"><strong>Work-in-progress review</strong><p>Your earlier selections are carried forward, and new decisions save automatically in <em>this browser</em>. They are not sent anywhere. Use Copy review or Download CSV to keep a backup before switching devices or clearing browser data.</p></div>
   </section>
   <div class="review-controls" aria-label="Review settings">
@@ -42,6 +42,7 @@
     <div class="filters">
       <label class="sr-only" for="search">Search design</label><input id="search" type="search" placeholder="Find a design…">
       <label class="sr-only" for="status">Review status</label><select id="status"><option value="all">All decisions</option><option value="undecided">Undecided</option><option value="keep">Keep</option><option value="remove">Remove</option></select>
+      <label class="sr-only" for="queue-filter">Review progress</label><select id="queue-filter"><option value="all">Show all designs</option><option value="pending">Needs a category</option><option value="handled">Already placed</option></select>
       <label class="sr-only" for="sort">Sort</label><select id="sort"><option value="existing">On site first</option><option value="name">Name A–Z</option><option value="source">Source list order</option><option value="popularity">Most likes</option></select>
     </div>
   </div>
@@ -53,7 +54,7 @@
     <label for="overall-notes">Anything else you want changed, removed or considered?</label>
     <textarea id="overall-notes" rows="3" placeholder="Add notes here — these save automatically in this browser…"></textarea>
     <div class="bottom-actions"><button type="button" class="action-primary" id="copy-bottom">Copy my review</button><button type="button" class="action-secondary" id="download-bottom">Download CSV</button><span id="feedback" aria-live="polite"></span></div>
-    <p class="footnote">This review is for visual selection and category discovery only. Previous decisions and category moves are reflected in the expanded concept gallery; any new votes here are local until you export a CSV. Other is deliberately ungrouped, not a studio-defined Signature category. Nothing you select automatically changes public publishing status. This preview is not password protected: do not share broadly.</p>
+    <p class="footnote">This review is for visual selection and category discovery only. Previous decisions and category moves are reflected in the expanded concept gallery. New Move to choices, notes, and proposed categories remain in this browser until you export a CSV; they are not applied to the website automatically. Other is deliberately ungrouped, not a studio-defined Signature category. Nothing you select automatically changes public publishing status. This preview is not password protected: do not share broadly.</p>
   </section>
 </main>
 <dialog id="photo-dialog" class="image-dialog" aria-label="Design image preview"><button type="button" class="dialog-close" id="close-dialog" aria-label="Close image">×</button><img id="dialog-image" src="/assets/mads-logo.webp" alt=""><p id="dialog-caption"></p></dialog>
