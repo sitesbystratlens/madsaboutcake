@@ -1,170 +1,223 @@
-/* Independent, owner-only gallery review. No server submissions or hidden publishing. */
+/* Owner-only visual discovery. No submissions or catalogue mutations. */
 (() => {
 'use strict';
-const el=id=>document.getElementById(id);
-const STORAGE='mads-owner-gallery-review-v1';
-const choices=['undecided','keep','remove'];
-let candidates=null,catalogue=null,records=[],currentGroup='birthdays',state={decisions:{},notes:{},overall:''};
-let storageAvailable=true;
-const postUrl=c=>'https://www.instagram.com/p/'+encodeURIComponent(c)+'/';
-const clean=s=>String(s??'').replace(/[&<>"']/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));
-const validPath=s=>typeof s==='string'&&/^assets\/(?:gallery-30(?:\/thumbs)?|featured-25|creations|cake-covers)\/[\w.-]+\.(?:webp|jpe?g|png|avif)$/.test(s);
+const $=id=>document.getElementById(id);
+const STORAGE='mads-owner-gallery-review-v1'; // MUST remain stable: previous decisions are saved here.
+const decisionsAllowed=['undecided','keep','remove'];
+const GROUPS=[
+ {id:'birthdays',name:'Birthdays',description:'33 birthday/age-confirmed and 7 visually themed possibilities. A possible theme does not establish the occasion.'},
+ {id:'cupcakes',name:'Cupcakes',description:'34 cupcake or mixed cake-and-cupcake posts, including the coconut set retained under Love & Anniversaries.'},
+ {id:'weddings',name:'Weddings & engagements',description:'12 wedding, engagement, bridal or pre-wedding posts, plus 6 style-led possibilities not confirmed as wedding orders.'},
+ {id:'baby',name:'Baby celebrations',description:'9 baby-related posts including one user-labelled cupcake set, plus 9 tentative themes and first-birthday crossover designs.'},
+ {id:'love',name:'Love & anniversaries',description:'10 love/anniversary or owner-kept examples, plus 12 possible hearts, bows, mini cakes and work/business anniversary examples. Not all are romantic.'},
+ {id:'popular',name:'Popular · uncategorised',description:'Posts with at least 45 historical Instagram likes, or already featured without an occasion, excluding confirmed occasion groups and workshop/promotional posts. Likes are a screening signal, not sales or engagement rate.'}
+];
+const GROUP_LABEL=Object.fromEntries(GROUPS.map(g=>[g.id,g.name]));
+const CATEGORY_OPTIONS=[
+ ['','Not sure yet'],['Vintage piping','Vintage piping'],['Floral / garden','Floral / garden'],['Statement / tiered','Statement / tiered'],
+ ['Novelty / characters','Novelty / characters'],['Mini cakes','Mini cakes'],['Flavours / fruit','Flavours / fruit'],
+ ['Religious / cultural','Religious / cultural'],['Graduation','Graduation'],['Seasonal','Seasonal'],
+ ['Corporate / career','Corporate / career'],['Milestone celebrations','Milestone celebrations'],['Other','Other — add note']
+];
+let base=null,additional=null,catalogue=null,history=null,records=[],currentGroup='birthdays';
+let state={decisions:{},notes:{},overall:'',groupDecisions:{},groupNotes:{},suggestedCategories:{}};
+const clean=s=>String(s??'').replace(/[&<>"']/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;','\'':'&#39;'}[c]));
+const postUrl=s=>'https://www.instagram.com/p/'+encodeURIComponent(s)+'/';
 const validCode=s=>/^[A-Za-z0-9_-]{5,32}$/.test(s);
+const validPhoto=s=>typeof s==='string'&&/^assets\/(?:gallery-30(?:\/thumbs)?|featured-25|creations|cake-covers|gallery-review-covers)\/[\w.-]+\.(?:webp|png|jpe?g|avif)$/.test(s);
+const legacyGroup=g=>g==='birthdays'||g==='cupcakes';
+const decision=(code,group)=>{
+ const val=legacyGroup(group)?state.decisions[code]:state.groupDecisions[group]?.[code];
+ return decisionsAllowed.includes(val)?val:'undecided';
+};
+const note=(code,group)=>legacyGroup(group)?(state.notes[code]||''):(state.groupNotes[group]?.[code]||'');
+const categoryChoice=code=>state.suggestedCategories[code]||'';
 function readStorage(){
- try { const raw=localStorage.getItem(STORAGE);if(raw){const saved=JSON.parse(raw);
- if(saved&&typeof saved==='object')state={decisions:saved.decisions||{},notes:saved.notes||{},overall:typeof saved.overall==='string'?saved.overall:''};}}
- catch(e){storageAvailable=false;el('feedback').textContent='Browser storage is disabled. Please download a CSV regularly.';}
+ try {
+  const s=localStorage.getItem(STORAGE);
+  if(!s)return;
+  const saved=JSON.parse(s);
+  if(saved&&typeof saved==='object'){
+   for(const k of ['decisions','notes','groupDecisions','groupNotes','suggestedCategories'])if(saved[k]&&typeof saved[k]==='object')state[k]=saved[k];
+   if(typeof saved.overall==='string')state.overall=saved.overall;
+  }
+ }catch(e){$('feedback').textContent='Browser storage is disabled. Download CSV often to preserve your decisions.';}
 }
 function save(){
- try {localStorage.setItem(STORAGE,JSON.stringify(state));}
- catch(e){storageAvailable=false;el('feedback').textContent='Your browser could not save locally. Download a CSV backup.';}
+ try{localStorage.setItem(STORAGE,JSON.stringify(state))}
+ catch(e){$('feedback').textContent='Browser could not save your review locally. Please download CSV now.';}
 }
-function findCurrent(code){
- const c=(catalogue.cakes||[]).find(x=>x.sourceShortcode===code);
- return c||null;
+function setDecision(code,group,val){
+ if(!decisionsAllowed.includes(val))return;
+ if(legacyGroup(group))state.decisions[code]=val;
+ else (state.groupDecisions[group]??={})[code]=val;
+ save();
 }
-function build(){
- const groups=[
-  ...candidates.birthdayConfirmed.map((code,i)=>({code,group:'birthdays',evidence:'Confirmed birthday / age',sequence:i})),
-  ...candidates.birthdayThemed.map((code,i)=>({code,group:'birthdays',evidence:'Themed — birthday not confirmed',sequence:i+candidates.birthdayConfirmed.length})),
-  ...candidates.cupcakes.map((code,i)=>({code,group:'cupcakes',evidence:'Cupcake / mixed order',sequence:i}))
+function setNote(code,group,val){
+ if(legacyGroup(group))state.notes[code]=val.slice(0,1500);
+ else (state.groupNotes[group]??={})[code]=val.slice(0,1500);
+ save();
+}
+function makeRecords(){
+ const combos=[
+  ...base.birthdayConfirmed.map((code,i)=>({code,group:'birthdays',evidence:'Birthday / age evidenced',sequence:i})),
+  ...base.birthdayThemed.map((code,i)=>({code,group:'birthdays',evidence:'Themed — occasion unconfirmed',sequence:base.birthdayConfirmed.length+i})),
+  ...base.cupcakes.map((code,i)=>({code,group:'cupcakes',evidence:'Cupcake / mixed order',sequence:i})),
+  ...additional.weddingsConfirmed.map((code,i)=>({code,group:'weddings',evidence:'Wedding, bridal or pre-wedding source',sequence:i})),
+  ...additional.weddingsPossible.map((code,i)=>({code,group:'weddings',evidence:'Style-led suggestion — not confirmed',sequence:i+additional.weddingsConfirmed.length})),
+  ...additional.babyConfirmed.map((code,i)=>({code,group:'baby',evidence:code==='C7tO9F4B8lX'?'Baby occasion noted by reviewer':'Baby occasion evidenced',sequence:i})),
+  ...additional.babyPossible.map((code,i)=>({code,group:'baby',evidence:'First birthday crossover / visual suggestion',sequence:i+additional.babyConfirmed.length})),
+  ...additional.loveConfirmed.map((code,i)=>({code,group:'love',evidence:code==='Db2wuYpEoIe'?'Anniversary category retained by reviewer':'Love / anniversary / mini-heart candidate',sequence:i})),
+  ...additional.lovePossible.map((code,i)=>({code,group:'love',evidence:['DIYSdKZhbxK','C88mW3FyNh8'].includes(code)?'Work / business anniversary, not romantic':'Visual style only — occasion not established',sequence:i+additional.loveConfirmed.length})),
+  ...additional.popularUncategorised.map((code,i)=>({code,group:'popular',evidence:'Uncategorised discovery candidate',sequence:i}))
  ];
- records=groups.filter(x=>validCode(x.code)).map(x=>{
-  const found=findCurrent(x.code);
-  const alreadyFeatured=!!found?.featured30;
-  const inGroup=x.group==='birthdays'
-   ?alreadyFeatured&&(found.primaryOccasion==='Birthdays'||(found.otherOccasions||[]).includes('Birthdays'))
-   :alreadyFeatured&&found.productType==='Cupcakes';
-  const status=inGroup?'Currently featured':alreadyFeatured?'On site in another filter':'Not featured';
-  const photo=validPath(found?.coverImage)?'/'+found.coverImage:'/assets/gallery-review-covers/'+x.code+'.webp';
-  return {...x,title:candidates.labels[x.code]||found?.title||x.code,photo,found,status,alreadyFeatured};
+ const existing=new Map((catalogue.cakes||[]).map(x=>[x.sourceShortcode,x]));
+ records=combos.filter(x=>validCode(x.code)).map(x=>{
+  const item=existing.get(x.code),meta=additional.metadata?.[x.code]||{},featured=!!item?.featured30;
+  const currentOccasions=[item?.primaryOccasion,...(item?.otherOccasions||[])].filter(Boolean);
+  const inGroup=featured&&(x.group==='birthdays'?currentOccasions.includes('Birthdays'):
+   x.group==='cupcakes'?item?.productType==='Cupcakes'||(item?.otherProductTypes||[]).includes('Cupcakes'):
+   x.group==='weddings'?currentOccasions.includes('Weddings & engagements')&&!item?.holdOccasionFilterUntilOwnerApproval:
+   x.group==='baby'?currentOccasions.includes('Baby celebrations')&&!item?.holdOccasionFilterUntilOwnerApproval:
+   x.group==='love'?currentOccasions.includes('Love & anniversaries'):
+   item?.featureCategory==='Other/unspecified');
+  const status=inGroup?'Featured in this group':featured?'Featured elsewhere':'Not in featured gallery';
+  const photo=validPhoto(item?.coverImage)?'/'+item.coverImage:'/assets/gallery-review-covers/'+x.code+'.webp';
+  return {...x,title:meta.title||base.labels[x.code]||item?.title||x.code,caption:meta.caption||'',likes:Number.isFinite(meta.likes)?meta.likes:null,
+   photo,status,featured,source:postUrl(x.code)};
  });
- el('overall-notes').value=state.overall||'';
- el('overall-notes').addEventListener('input',e=>{state.overall=e.target.value.slice(0,15000);save();});
- const params=new URLSearchParams(location.search);
- const tab=params.get('category');
- currentGroup=tab==='cupcakes'?'cupcakes':'birthdays';
- el('context').textContent='Select Keep or Remove for each design; your decisions apply in both lists when a post appears twice. The existing gallery is unchanged.';
- bind();
- render();
 }
-function chosen(code){return choices.includes(state.decisions[code])?state.decisions[code]:'undecided';}
-function visibleItems(){
- const term=el('search').value.trim().toLowerCase(),status=el('status').value,sort=el('sort').value;
- let list=records.filter(c=>c.group===currentGroup&&(status==='all'||chosen(c.code)===status)&&
- (!term||(c.title+' '+c.code+' '+c.evidence).toLowerCase().includes(term)));
- if(sort==='name')list.sort((a,b)=>a.title.localeCompare(b.title));
- else if(sort==='existing')list.sort((a,b)=>Number(b.alreadyFeatured)-Number(a.alreadyFeatured)||a.sequence-b.sequence);
- else list.sort((a,b)=>a.sequence-b.sequence);
- return list;
+function cardHtml(r){
+ const d=decision(r.code,r.group),n=note(r.code,r.group),chosenCategory=categoryChoice(r.code);
+ const categoryField=r.group==='popular'?'<label class="note-label" for="category-'+clean(r.code)+'">Could this belong to a new category?</label>'+
+ '<select class="category-choice" id="category-'+clean(r.code)+'">'+CATEGORY_OPTIONS.map(([v,t])=>'<option value="'+clean(v)+'"'+(chosenCategory===v?' selected':'')+'>'+clean(t)+'</option>').join('')+'</select>':'';
+ return '<article class="review-card" data-code="'+clean(r.code)+'" data-decision="'+d+'">'+
+  '<button class="review-image-button" type="button" aria-label="Enlarge '+clean(r.title)+' image">'+
+  '<img src="'+clean(r.photo)+'" alt="'+clean(r.title)+'" loading="lazy" decoding="async">'+
+  '<span class="image-fallback" hidden><strong>Photo temporarily unavailable</strong><span>Use the original Instagram post below.</span></span></button>'+
+  '<div class="card-copy"><div class="card-tags">'+clean(r.status)+' · '+clean(r.evidence)+'</div>'+
+  '<h2>'+clean(r.title)+'</h2>'+
+  (r.caption?'<p class="card-caption">'+clean(r.caption)+'</p>':'')+
+  '<div class="card-stats">'+(r.likes!==null?'Historical Instagram likes: <b>'+r.likes+'</b>':'Historical likes unavailable')+'</div>'+
+  '<a class="post-link" href="'+r.source+'" target="_blank" rel="noopener noreferrer">View original Instagram post ↗</a></div>'+
+  '<footer><div class="decision-buttons" role="group" aria-label="Choose '+clean(r.title)+'">'+
+  decisionsAllowed.map(x=>'<button type="button" data-decision="'+x+'" aria-pressed="'+(d===x)+'">'+({keep:'✓ Keep',remove:'× Remove',undecided:'? Later'}[x])+'</button>').join('')+'</div>'+
+  categoryField+
+  '<label class="note-label" for="note-'+clean(r.code)+'-'+r.group+'">Notes (optional)</label>'+
+  '<textarea class="card-note" id="note-'+clean(r.code)+'-'+r.group+'" maxlength="1500" placeholder="e.g. suitable for floral cakes, photo 2…">'+clean(n)+'</textarea></footer></article>';
 }
-function cardHtml(c){
- const decision=chosen(c.code),note=state.notes[c.code]||'',isNew=c.status==='Not featured';
- const badge=c.status==='Currently featured'?'Currently featured':c.status==='On site in another filter'?'Featured under Cakes':'Not in curated gallery';
- const decisionButtons=choices.map(choice=>'<button type="button" data-decision="'+choice+'" aria-pressed="'+String(decision===choice)+'">'+({keep:'✓ Keep',remove:'× Remove',undecided:'? Decide later'}[choice])+'</button>').join('');
- return '<article class="review-card" data-code="'+clean(c.code)+'" data-decision="'+decision+'">'+
- '<button type="button" class="review-image-button" aria-label="Enlarge photo of '+clean(c.title)+'">'+
- '<img loading="lazy" decoding="async" src="'+clean(c.photo)+'" alt="'+clean(c.title)+'" onerror="" />'+
- '<span class="image-fallback" hidden><strong>Photo not available yet</strong><span>Use the original Instagram post link below.</span></span></button>'+
- '<div class="card-copy"><div class="card-tags">'+clean(badge)+' · '+clean(c.evidence)+'</div>'+
- '<h2>'+clean(c.title)+'</h2>'+
- '<p class="card-caption">'+(isNew?'Additional Instagram candidate': 'Part of the current website selection')+'</p>'+
- '<a class="post-link" href="'+postUrl(c.code)+'" target="_blank" rel="noopener noreferrer">View original Instagram post ↗</a></div>'+
- '<footer><div class="decision-buttons" role="group" aria-label="Review '+clean(c.title)+'">'+decisionButtons+'</div>'+
- '<label class="note-label" for="note-'+clean(c.code)+'-'+c.group+'">Notes (optional)</label>'+
- '<textarea class="card-note" id="note-'+clean(c.code)+'-'+c.group+'" maxlength="1500" placeholder="e.g. keep but use photo 2…">'+clean(note)+'</textarea>'+
- '</footer></article>';
+function shown(){
+ const search=$('search').value.trim().toLowerCase(),filter=$('status').value,sort=$('sort').value;
+ const arr=records.filter(x=>x.group===currentGroup&&(filter==='all'||decision(x.code,x.group)===filter)&&
+ (!search||(x.title+' '+x.code+' '+x.caption+' '+x.evidence).toLowerCase().includes(search)));
+ if(sort==='name')arr.sort((a,b)=>a.title.localeCompare(b.title));
+ else if(sort==='popularity')arr.sort((a,b)=>(b.likes??-1)-(a.likes??-1)||a.sequence-b.sequence);
+ else if(sort==='existing')arr.sort((a,b)=>Number(b.featured)-Number(a.featured)||a.sequence-b.sequence);
+ else arr.sort((a,b)=>a.sequence-b.sequence);
+ return arr;
 }
 function render(){
- document.querySelectorAll('[data-group]').forEach(btn=>btn.setAttribute('aria-selected',String(btn.dataset.group===currentGroup)));
- const groupRecords=records.filter(c=>c.group===currentGroup);
- const counts={keep:0,remove:0,undecided:0};
- groupRecords.forEach(c=>counts[chosen(c.code)]++);
- el('total').textContent=groupRecords.length;el('kept').textContent=counts.keep;el('removed').textContent=counts.remove;el('undecided').textContent=counts.undecided;
- const shown=visibleItems();
- el('cards').innerHTML=shown.map(cardHtml).join('');
- el('empty').hidden=shown.length!==0;
- el('context').textContent=(currentGroup==='birthdays'
- ?'33 caption-confirmed birthdays plus 7 themed possibilities. Themed candidates are clearly labelled; generic hashtags alone do not confirm birthdays.'
- :'34 cupcake-related posts. Mixed cake-and-cupcake sets are included and labelled. The coconut set remains in Love & Anniversaries.')+
- ' '+shown.length+' designs shown. Selections save in this browser.';
- el('cards').querySelectorAll('.review-card').forEach(card=>{
-  const code=card.dataset.code,c=records.find(x=>x.code===code&&x.group===currentGroup);
-  const img=card.querySelector('img'),fallback=card.querySelector('.image-fallback');
-  function broken(){img.hidden=true;fallback.hidden=false;card.querySelector('.review-image-button').disabled=true;}
+ document.querySelectorAll('[data-group]').forEach(b=>b.setAttribute('aria-selected',String(b.dataset.group===currentGroup)));
+ const current=records.filter(x=>x.group===currentGroup);
+ const count=val=>current.filter(x=>decision(x.code,x.group)===val).length;
+ $('total').textContent=current.length;$('kept').textContent=count('keep');$('removed').textContent=count('remove');$('undecided').textContent=count('undecided');
+ const list=shown();$('cards').innerHTML=list.map(cardHtml).join('');$('empty').hidden=!!list.length;
+ const g=GROUPS.find(x=>x.id===currentGroup);
+ $('context').textContent=g.description+' '+list.length+' posts visible. Selections save automatically on this device.';
+ for(const card of $('cards').querySelectorAll('.review-card')){
+  const code=card.dataset.code,r=records.find(x=>x.code===code&&x.group===currentGroup);
+  const img=card.querySelector('img'),fb=card.querySelector('.image-fallback');
+  function broken(){img.hidden=true;fb.hidden=false;card.querySelector('.review-image-button').disabled=true}
   img.addEventListener('error',broken);
   if(img.complete&&img.naturalWidth===0)broken();
   card.querySelector('.review-image-button').addEventListener('click',()=>{
    if(!img.naturalWidth)return;
-   el('dialog-image').src=img.src;el('dialog-image').alt=c.title;el('dialog-caption').textContent=c.title;
-   el('photo-dialog').showModal();
+   $('dialog-image').src=img.src;$('dialog-image').alt=r.title;$('dialog-caption').textContent=r.title;
+   $('photo-dialog').showModal();
   });
   card.querySelectorAll('[data-decision]').forEach(btn=>btn.addEventListener('click',()=>{
-   state.decisions[code]=btn.dataset.decision;save();
-   const focusCode=code;render();
-   const selected=Array.from(el('cards').querySelectorAll('.review-card')).find(x=>x.dataset.code===focusCode);
-   selected?.querySelector('[data-decision="'+state.decisions[code]+'"]')?.focus({preventScroll:true});
+   setDecision(code,currentGroup,btn.dataset.decision);render();
+   const selected=Array.from($('cards').querySelectorAll('.review-card')).find(x=>x.dataset.code===code);
+   selected?.querySelector('[data-decision="'+btn.dataset.decision+'"]')?.focus({preventScroll:true});
   }));
-  card.querySelector('.card-note').addEventListener('input',e=>{state.notes[code]=e.target.value.slice(0,1500);save();});
- });
+  card.querySelector('.card-note').addEventListener('input',e=>setNote(code,currentGroup,e.target.value));
+  card.querySelector('.category-choice')?.addEventListener('change',e=>{state.suggestedCategories[code]=e.target.value;save()});
+ }
 }
-function unique(){return [...new Map(records.map(c=>[c.code,c])).values()];}
-function exportData(){
- return unique().map(c=>({code:c.code,title:c.title,birthday:records.some(x=>x.code===c.code&&x.group==='birthdays'),
- cupcake:records.some(x=>x.code===c.code&&x.group==='cupcakes'),currentGallery:c.status,
- decision:chosen(c.code),note:state.notes[c.code]||'',source:postUrl(c.code)}));
-}
+function exportRows(){return records.map(r=>({
+ group:r.group,code:r.code,title:r.title,decision:decision(r.code,r.group),
+ note:note(r.code,r.group),category: r.group==='popular'?categoryChoice(r.code):'',
+ status:r.status,instagram:r.source,likes:r.likes,sourceEvidence:r.evidence
+}));}
 function reviewText(){
- const lines=['MADS ABOUT CAKE — GALLERY REVIEW','Saved decisions (shared across Birthday and Cupcake lists)',''];
- for(const g of ['birthdays','cupcakes']){
-  const list=records.filter(x=>x.group===g);
-  lines.push(g==='birthdays'?'BIRTHDAYS':'CUPCAKES');
-  for(const c of list){
-   const d=chosen(c.code),note=state.notes[c.code]||'';
-   if(d==='undecided'&&!note)continue;
-   lines.push((d==='keep'?'KEEP':d==='remove'?'REMOVE':'UNDECIDED')+' — '+c.title+' — '+postUrl(c.code)+(note?' — Note: '+note.replace(/\s+/g,' '):''));
-  }
-  lines.push('Decided '+list.filter(c=>chosen(c.code)!=='undecided').length+' of '+list.length,'');
+ const lines=['MADS ABOUT CAKE — OWNER REVIEW','Decisions are per-category for Weddings, Baby, Love and Popular. Birthday/Cupcake decisions retain their previous shared selection.',''];
+ for(const g of GROUPS){
+  const items=exportRows().filter(x=>x.group===g.id);
+  lines.push(g.name.toUpperCase());
+  for(const r of items)if(r.decision!=='undecided'||r.note||r.category)lines.push(r.decision.toUpperCase()+' — '+r.title+' — '+r.instagram+(r.category?' — Category: '+r.category:'')+(r.note?' — Note: '+r.note.replace(/\s+/g,' '):''));
+  lines.push('Decided '+items.filter(x=>x.decision!=='undecided').length+' of '+items.length,'');
  }
  if(state.overall)lines.push('OVERALL NOTES',state.overall);
- lines.push('Note: no gallery changes are applied automatically.');
+ lines.push('No changes to the live curated gallery are made by these decisions.');
  return lines.join('\n');
 }
 async function copy(){
  const t=reviewText();
- try{await navigator.clipboard.writeText(t);el('feedback').textContent='Copied! Paste into ChatGPT when ready.';}
- catch(e){const node=document.createElement('textarea');node.value=t;document.body.appendChild(node);node.select();const worked=document.execCommand('copy');node.remove();el('feedback').textContent=worked?'Copied! Paste into ChatGPT.':'Copy unavailable. Use Download CSV instead.';}
+ try{await navigator.clipboard.writeText(t);$('feedback').textContent='Copied. Paste the review here.'}
+ catch(e){
+  const area=document.createElement('textarea');area.value=t;document.body.appendChild(area);area.select();
+  const ok=document.execCommand('copy');area.remove();$('feedback').textContent=ok?'Copied. Paste into ChatGPT.':'Copy was blocked; download CSV instead.';
+ }
 }
-function download(){
- const rows=[['Shortcode','Design','Birthday list','Cupcake list','Review','Current gallery','Notes','Instagram']];
- for(const c of exportData())rows.push([c.code,c.title,c.birthday?'Yes':'No',c.cupcake?'Yes':'No',c.decision,c.currentGallery,c.note,c.source]);
+function csvDownload(){
+ const rows=[['Section','Shortcode','Design','Decision','Notes','Suggested category','Current gallery','Instagram','Historical likes','Evidence']];
+ for(const r of exportRows())rows.push([GROUP_LABEL[r.group],r.code,r.title,r.decision,r.note,r.category,r.status,r.instagram,r.likes??'',r.sourceEvidence]);
  rows.push([],['Overall notes',state.overall]);
  const csv=rows.map(row=>row.map(v=>'"'+String(v??'').replace(/"/g,'""')+'"').join(',')).join('\r\n');
  const blob=new Blob(['\uFEFF'+csv],{type:'text/csv;charset=utf-8'}),url=URL.createObjectURL(blob),a=document.createElement('a');
- a.href=url;a.download='Mads_Gallery_Review_'+new Date().toISOString().slice(0,10)+'.csv';document.body.appendChild(a);a.click();a.remove();setTimeout(()=>URL.revokeObjectURL(url),2000);
- el('feedback').textContent='CSV downloaded. You can upload it here for the final selections.';
+ a.href=url;a.download='Mads_Full_Gallery_Review_'+new Date().toISOString().slice(0,10)+'.csv';
+ document.body.appendChild(a);a.click();a.remove();setTimeout(()=>URL.revokeObjectURL(url),2000);
+ $('feedback').textContent='Full review CSV downloaded. Upload it here when finished.';
 }
 function bind(){
- document.querySelectorAll('[data-group]').forEach(b=>b.addEventListener('click',()=>{
-  currentGroup=b.dataset.group;
-  const u=new URL(location.href);u.searchParams.set('category',currentGroup);history.replaceState(null,'',u);
-  el('search').value='';el('status').value='all';render();
+ document.querySelectorAll('[data-group]').forEach(button=>button.addEventListener('click',()=>{
+  currentGroup=button.dataset.group;const url=new URL(location.href);url.searchParams.set('category',currentGroup);history.replaceState(null,'',url);
+  $('search').value='';$('status').value='all';$('sort').value=currentGroup==='popular'?'popularity':'existing';render();
  }));
- for(const id of ['search','status','sort'])el(id).addEventListener(id==='search'?'input':'change',render);
- for(const id of ['copy','copy-bottom'])el(id).addEventListener('click',copy);
- for(const id of ['download','download-bottom'])el(id).addEventListener('click',download);
- el('close-dialog').addEventListener('click',()=>el('photo-dialog').close());
- el('photo-dialog').addEventListener('click',e=>{if(e.target===el('photo-dialog'))el('photo-dialog').close();});
+ for(const id of ['search','status','sort'])$(id).addEventListener(id==='search'?'input':'change',render);
+ for(const id of ['copy','copy-bottom'])$(id).addEventListener('click',copy);
+ for(const id of ['download','download-bottom'])$(id).addEventListener('click',csvDownload);
+ $('close-dialog').addEventListener('click',()=>$('photo-dialog').close());
+ $('photo-dialog').addEventListener('click',e=>{if(e.target===$('photo-dialog'))$('photo-dialog').close()});
+ $('overall-notes').value=state.overall||'';
+ $('overall-notes').addEventListener('input',e=>{state.overall=e.target.value.slice(0,15000);save()});
+}
+function seedHistory(){
+ const ds=history?.decisions||{};
+ for(const [code,value] of Object.entries(ds)){
+  if(!Object.hasOwn(state.decisions,code) && decisionsAllowed.includes(value.review))state.decisions[code]=value.review;
+  if(!Object.hasOwn(state.notes,code)&&value.note)state.notes[code]=value.note;
+ }
+ save();
 }
 async function init(){
  readStorage();
  try{
-  const [r1,r2]=await Promise.all([fetch('/data/gallery-review-candidates.json',{cache:'no-cache'}),fetch('/cakes.json',{cache:'no-cache'})]);
-  if(!r1.ok||!r2.ok)throw Error('Unable to load review records');
-  candidates=await r1.json();catalogue=await r2.json();
-  if(candidates.birthdayConfirmed.length!==33||candidates.birthdayThemed.length!==7||candidates.cupcakes.length!==34)throw Error('Candidate list changed unexpectedly');
-  build();
- }catch(err){el('context').textContent='The gallery could not load: '+err.message+'. Refresh the page and try again.';}
+  const paths=['/data/gallery-review-candidates.json','/data/gallery-review-additional.json','/cakes.json','/data/gallery-owner-decisions-2026-10-30.json'];
+  const rs=await Promise.all(paths.map(path=>fetch(path,{cache:'no-cache'})));
+  if(rs.some(r=>!r.ok))throw Error('Review source file unavailable');
+  [base,additional,catalogue,history]=await Promise.all(rs.map(r=>r.json()));
+  if(base.birthdayConfirmed?.length!==33||base.birthdayThemed?.length!==7||base.cupcakes?.length!==34||
+   additional.weddingsConfirmed?.length!==12||additional.weddingsPossible?.length!==6||
+   additional.babyConfirmed?.length!==9||additional.babyPossible?.length!==9||
+   additional.loveConfirmed?.length!==10||additional.lovePossible?.length!==12||
+   additional.popularUncategorised?.length<20)throw Error('Unexpected review candidate counts');
+  seedHistory();makeRecords();
+  for(const g of GROUPS){const b=document.querySelector('[data-group="'+g.id+'"]');if(b)b.querySelector('span').textContent=records.filter(x=>x.group===g.id).length;}
+  const tab=new URLSearchParams(location.search).get('category');
+  currentGroup=GROUPS.some(g=>g.id===tab)?tab:'birthdays';
+  $('sort').value=currentGroup==='popular'?'popularity':'existing';bind();render();
+ }catch(e){$('context').textContent='Could not load review: '+e.message+'. Refresh after deployment.';}
 }
 document.addEventListener('DOMContentLoaded',init);
 })();
