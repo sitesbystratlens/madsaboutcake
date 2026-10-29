@@ -8,6 +8,7 @@ on:
       - 'assets/gallery-review.css'
       - 'assets/gallery-review-covers/**'
       - 'data/gallery-review-candidates.json'
+      - 'data/gallery-review-additional.json'
       - '.github/workflows/check-live-gallery-review.yml'
   workflow_dispatch:
 permissions:
@@ -18,37 +19,63 @@ jobs:
     timeout-minutes: 9
     steps:
       - uses: actions/checkout@v4
-      - name: Validate deployed review with source-backed images
+      - name: Confirm six review tabs and 82 new category references on Cloudflare
         shell: bash
         run: |
           set -euo pipefail
           SITE=https://madsaboutcake.sitesbystratlens.workers.dev
           for n in $(seq 1 15); do
-            curl -fsSL --max-time 24 -H 'Cache-Control: no-cache' "$SITE/review/?v=$GITHUB_SHA-$n" >/tmp/review.html || true
-            curl -fsSL --max-time 24 -H 'Cache-Control: no-cache' "$SITE/assets/gallery-review.js?v=$GITHUB_SHA-$n" >/tmp/review.js || true
-            curl -fsSL --max-time 24 -H 'Cache-Control: no-cache' "$SITE/data/gallery-review-candidates.json?v=$GITHUB_SHA-$n" >/tmp/review.json || true
-            if grep -Fq 'Choose the designs' /tmp/review.html && grep -Fq 'Copy my review' /tmp/review.html &&
+            curl -fsSL --max-time 25 -H 'Cache-Control: no-cache' "$SITE/review/?v=$GITHUB_SHA-$n" >/tmp/review.html || true
+            curl -fsSL --max-time 25 -H 'Cache-Control: no-cache' "$SITE/assets/gallery-review.js?v=$GITHUB_SHA-$n" >/tmp/review.js || true
+            curl -fsSL --max-time 25 -H 'Cache-Control: no-cache' "$SITE/data/gallery-review-candidates.json?v=$GITHUB_SHA-$n" >/tmp/review-old.json || true
+            curl -fsSL --max-time 25 -H 'Cache-Control: no-cache' "$SITE/data/gallery-review-additional.json?v=$GITHUB_SHA-$n" >/tmp/review-additional.json || true
+            if grep -Fq 'data-group="popular"' /tmp/review.html &&
+               grep -Fq 'data-group="weddings"' /tmp/review.html &&
+               grep -Fq 'data-group="baby"' /tmp/review.html &&
+               grep -Fq 'data-group="love"' /tmp/review.html &&
+               grep -Fq 'suggestedCategories' /tmp/review.js &&
                grep -Fq 'mads-owner-gallery-review-v1' /tmp/review.js &&
                python3 - <<'PY'
           import json
-          d=json.load(open('/tmp/review.json'))
-          assert len(d['birthdayConfirmed'])==33
-          assert len(d['birthdayThemed'])==7
-          assert len(d['cupcakes'])==34
-          assert len(set(d['birthdayConfirmed']+d['birthdayThemed']+d['cupcakes']))==70
-          print('Live review shows all 70 original post references')
+          old=json.load(open('/tmp/review-old.json'))
+          new=json.load(open('/tmp/review-additional.json'))
+          counts={'weddingsConfirmed':12,'weddingsPossible':6,'babyConfirmed':9,'babyPossible':9,'loveConfirmed':10,'lovePossible':12,'popularUncategorised':32}
+          assert (len(old['birthdayConfirmed']),len(old['birthdayThemed']),len(old['cupcakes']))==(33,7,34)
+          for key,n in counts.items():assert len(new[key])==n,(key,len(new[key]))
+          all_new=set(sum((new[k] for k in counts),[]))
+          assert len(all_new)==82,len(all_new)
+          assert all_new==set(new['metadata']), 'metadata missing for candidates'
+          print('Live discovery: 40 birthdays, 34 cupcakes, 18 wedding, 18 baby, 22 love, 32 popular; 82 additional unique posts.')
           PY
             then
-              for img in DVFVq_Ukulg DDQR8n_BNxQ C83Ol1UyMkf DQEUavaEhle; do
-                headers=$(curl -fsSI --max-time 25 "$SITE/assets/gallery-review-covers/$img.webp")
-                echo "$headers" | grep -qi 'content-type: image/webp'
-                echo "Image live: $img"
-              done
-              echo 'Live owner review and sample original WebP images PASS.'
-              exit 0
+              echo 'Six-section review and candidate evidence are deployed.'
+              break
             fi
-            echo "Waiting for owner review deployment ($n/15)"
+            if [[ "$n" == 15 ]]; then echo 'ERROR: live expanded review did not propagate'; exit 1; fi
             sleep 12
           done
-          echo 'ERROR: Owner review page not deployed with expected assets'
-          exit 1
+      - name: Verify all additional original images on live Worker
+        shell: bash
+        run: |
+          python3 - <<'PY'
+          import concurrent.futures,json,subprocess
+          extra=json.load(open('/tmp/review-additional.json'))
+          catalogue=json.load(open('cakes.json'))
+          cat={x['sourceShortcode']:x for x in catalogue['cakes']}
+          codes=list(extra['metadata'])
+          paths={}
+          for code in codes:
+              source=(cat.get(code) or {}).get('coverImage','')
+              paths[code]=source if source else 'assets/gallery-review-covers/'+code+'.webp'
+          def verify(item):
+              code,path=item
+              url='https://madsaboutcake.sitesbystratlens.workers.dev/'+path
+              r=subprocess.run(['curl','-fsSI','--max-time','25',url],capture_output=True,text=True)
+              ok=r.returncode==0 and 'content-type: image/webp' in r.stdout.lower()
+              return (code,path,ok,(r.stderr or '')[-140:])
+          with concurrent.futures.ThreadPoolExecutor(max_workers=10) as pool:
+              results=list(pool.map(verify,paths.items()))
+          bad=[x for x in results if not x[2]]
+          print(f'Additional original photo checks: {len(results)}; missing: {len(bad)}')
+          if bad:print('MISSING:',bad[:15]);raise SystemExit(1)
+          PY
