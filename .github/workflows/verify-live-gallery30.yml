@@ -1,4 +1,4 @@
-name: Verify live gallery 34 and original images
+name: Verify live owner-selected gallery and original photos
 on:
   push:
     branches: [main]
@@ -6,63 +6,79 @@ on:
       - '.github/workflows/verify-live-gallery30.yml'
       - 'cakes.json'
       - 'assets/gallery-30/**'
+      - 'assets/gallery-review-covers/**'
       - 'cakes/index.html'
+      - 'assets/site.js'
+      - 'data/gallery-owner-decisions-2026-10-30.json'
   workflow_dispatch:
 permissions:
   contents: read
 jobs:
   verify:
     runs-on: ubuntu-latest
-    timeout-minutes: 8
+    timeout-minutes: 10
     steps:
       - uses: actions/checkout@v4
-      - name: Confirm published Cloudflare gallery and original photo URLs
+      - name: Check Cloudflare preview gallery version and selection integrity
         shell: bash
         run: |
           set -euo pipefail
           SITE="https://madsaboutcake.sitesbystratlens.workers.dev"
           for n in $(seq 1 15); do
-            curl -fsSL --max-time 22 -H 'Cache-Control: no-cache' "$SITE/cakes.json?rev=$GITHUB_SHA-$n" > /tmp/live-gallery.json || true
-            curl -fsSL --max-time 22 -H 'Cache-Control: no-cache' "$SITE/cakes/?rev=$GITHUB_SHA-$n" > /tmp/live-cakes.html || true
-            curl -fsSL --max-time 22 -H 'Cache-Control: no-cache' "$SITE/?rev=$GITHUB_SHA-$n" > /tmp/live-home.html || true
-            if grep -Fq 'site.js?v=20261030-refine1' /tmp/live-cakes.html && 
-               ! grep -Fq 'DQ0WjCPEgqr' /tmp/live-home.html && 
+            curl -fsSL --max-time 25 -H 'Cache-Control: no-cache' "$SITE/cakes.json?rev=$GITHUB_SHA-$n" > /tmp/live-gallery.json || true
+            curl -fsSL --max-time 25 -H 'Cache-Control: no-cache' "$SITE/cakes/?rev=$GITHUB_SHA-$n" > /tmp/live-cakes.html || true
+            curl -fsSL --max-time 25 -H 'Cache-Control: no-cache' "$SITE/assets/site.js?rev=$GITHUB_SHA-$n" > /tmp/live-gallery.js || true
+            if grep -Fq 'site.js?v=20261030-refine1' /tmp/live-cakes.html &&
+               grep -Fq 'gallery-review-covers' /tmp/live-gallery.js &&
                python3 - <<'PY'
-          import json,sys
+          import json, sys
           try:
-              data=json.load(open('/tmp/live-gallery.json'))
-              selected=[c for c in data['cakes'] if c.get('featured30')]
-              assert len(selected)==34
-              assert data['meta']['mode']=='concept-preview'
-              assert data['meta']['featuredCount']==34
-              assert all(c['showOnWebsite']=='No' for c in data['cakes'])
-              assert all(c.get('thumbnailImage','').startswith('assets/gallery-30/thumbs/') for c in selected)
-              assert sum(c.get('featureCategory')=='Baby celebrations' for c in selected)==6
-              assert sum(c.get('featureCategory')=='Weddings & engagements' for c in selected)==6
-              assert all(c.get('ownerReviewRequired') for c in selected)
-              assert 'DQ0WjCPEgqr' in {c['sourceShortcode'] for c in selected}
-              print('Cloudflare serves 34 source-backed designs with preview safeguards')
+              d=json.load(open('/tmp/live-gallery.json'))
+              chosen=[c for c in d['cakes'] if c.get('featured30')]
+              assert len(chosen)==74 and d['meta']['featuredCount']==74
+              assert d['meta']['mode']=='concept-preview'
+              assert all(c['showOnWebsite']=='No' and c['approvalStatus']=='Draft' for c in d['cakes'])
+              assert all(c.get('ownerReviewRequired') for c in chosen)
+              assert sum(c.get('featureCategory')=='Weddings & engagements' for c in chosen)==6
+              assert sum(c.get('featureCategory')=='Baby celebrations' for c in chosen)==6
+              assert sum(c.get('featureCategory')=='Love & anniversaries' for c in chosen)==5
+              assert sum(c.get('featureCategory')=='Other/unspecified' for c in chosen)==11
+              assert sum(c['productType']=='Cupcakes' or 'Cupcakes' in c.get('otherProductTypes',[]) for c in chosen)==28
+              assert 'DK8nnIGBfLx' in {c['sourceShortcode'] for c in chosen}
+              assert 'C8iniSsyccX' not in {c['sourceShortcode'] for c in chosen}
+              print('74 owner selections deployed with protected categories and draft safeguards.')
           except Exception as e:
-              print('Preview not yet current:',e)
+              print('Live gallery not updated:',e)
               sys.exit(1)
           PY
             then
-              echo "Cloudflare gallery 34 version is current."
-              python3 - <<'PY'
-          import json, subprocess
-          data=json.load(open('/tmp/live-gallery.json'))
-          covers=[c for c in data['cakes'] if c.get('featured30')]
-          all_images=[image for c in covers for image in (c['coverImage'],c['thumbnailImage'])]
-          for img in all_images:
-              p=subprocess.run(['curl','-fsSI','--max-time','25','https://madsaboutcake.sitesbystratlens.workers.dev/'+img],capture_output=True,text=True)
-              assert p.returncode==0, 'Image not live: '+img
-              assert 'content-type: image/webp' in p.stdout.lower(), 'Not served as WebP: '+img
-          print('All 68 image URLs are live and served as WebP.')
-          PY
-              exit 0
+              break
             fi
-            echo "Worker has not propagated the full 34 design gallery (attempt $n / 15)."
+            if [[ "$n" == 15 ]]; then echo "Live gallery has not propagated"; exit 1; fi
+            echo "Awaiting owner-selected gallery publication to Cloudflare ($n/15)"
             sleep 12
           done
-          echo 'ERROR: published gallery still differs from the selected 34.'
-          exit 1
+      - name: Verify every selected original photo and thumbnail responds as WebP
+        shell: bash
+        run: |
+          python3 - <<'PY'
+          import concurrent.futures, json, urllib.request
+          from urllib.error import URLError, HTTPError
+          d=json.load(open('/tmp/live-gallery.json'))
+          unique=sorted({p for c in d['cakes'] if c.get('featured30') for p in (c['coverImage'], c.get('thumbnailImage') or c['coverImage'])})
+          def check(path):
+              url='https://madsaboutcake.sitesbystratlens.workers.dev/'+path
+              request=urllib.request.Request(url,method='HEAD',headers={'Cache-Control':'no-cache'})
+              try:
+                  with urllib.request.urlopen(request,timeout=25) as response:
+                      return (path,response.status,response.headers.get('Content-Type',''))
+              except Exception as e:
+                  return (path,0,str(e))
+          with concurrent.futures.ThreadPoolExecutor(max_workers=12) as pool:
+              result=list(pool.map(check,unique))
+          bad=[x for x in result if x[1]!=200 or 'image/webp' not in x[2].lower()]
+          print('Checked',len(result),'unique selected photo/thumbnail URLs; invalid:',len(bad))
+          if bad:
+              print('Failures:',bad[:15])
+              raise SystemExit(1)
+          PY
