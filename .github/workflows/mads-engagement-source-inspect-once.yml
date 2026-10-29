@@ -1,0 +1,47 @@
+name: Inspect original surprise engagement post images (once)
+on:
+  push:
+    branches: [main]
+    paths: ['.github/workflows/mads-engagement-source-inspect-once.yml']
+  workflow_dispatch:
+permissions:
+  contents: read
+jobs:
+  inspect:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.11'
+      - run: python -m pip install Pillow
+      - name: Download original 12 photograph URLs for visual selection
+        shell: bash
+        run: |
+          python - <<'PY'
+          import json,urllib.request,time,os
+          from PIL import Image,ImageOps,ImageDraw
+          from io import BytesIO
+          urls=json.loads("[\"https://scontent-dfw6-2.cdninstagram.com/v/t51.82787-15/571413260_17997281114833937_3738035646572048834_n.jpg?stp=dst-jpg_e35_tt6&_nc_cat=110&ig_cache_key=Mzc1MjM5NjY4MDc2ODQ4Njg3NQ%3D%3D.3-ccb7-5&ccb=7-5&_nc_sid=58cdad&efg=eyJ2ZW5jb2RlX3RhZyI6IkNBUk9VU0VMX0lURU0ueHBpZHMuMTQ0MC5zZHIucmVndWxhcl9waG90by5DMyJ9&_nc_ohc=GwUv7kTvSNwQ7kNvwHmmOO6&_nc_oc=AdqY3GPwZY5FG1LWbfZU0Sogc3AEf8VNv-9GJ8as_Zw0FWhEYY5VtUUzprXN-ZYMVwI&_nc_ad=z-m&_nc_cid=0&_nc_zt=23&_nc_ht=scontent-dfw6-2.cdninstagram.com&_nc_gid=V0W-8gnNpf8kXxHqVubRHQ&_nc_ss=7a20f&oh=00_AQPcX9jgP0Bp7Zcqe6CK3KUwVzwFdso_968IRPahJOzU8A&oe=6AE64103\",\"https://scontent-dfw5-2.cdninstagram.com/v/t51.82787-15/573033234_17997281123833937_1988689594943214734_n.jpg?stp=dst-jpg_e35_tt6&_nc_cat=100&ig_cache_key=Mzc1MjM5NjY4MDU1ODgwMjkyNw%3D%3D.3-ccb7-5&ccb=7-5&_nc_sid=58cdad&efg=eyJ2ZW5jb2RlX3RhZyI6IkNBUk9VU0VMX0lURU0ueHBpZHMuMTM2NS5zZHIucmVndWxhcl9waG90by5DMyJ9&_nc_ohc=CBJQQsdjO78Q7kNvwFbHwOA&_nc_oc=AdoG2VC_M5XupywBjbGNttXyShJSC46bbbIz9MwYuLM7TPczMQBZS28vF30kUurt-k8&_nc_ad=z-m&_nc_cid=0&_nc_zt=23&_nc_ht=scontent-dfw5-2.cdninstagram.com&_nc_gid=V0W-8gnNpf8kXxHqVubRHQ&_nc_ss=7a20f&oh=00_AQMy2aE2wH2H-DOQpeyvCyuTrbR06ASaIIkApfrmCPVYXQ&oe=6AE63572\",\"https://scontent-dfw6-2.cdninstagram.com/v/t51.82787-15/571861048_17997281138833937_7220842012548024506_n.jpg?stp=dst-jpg_e35_tt6&_nc_cat=108&ig_cache_key=Mzc1MjM5NjY4MDU2NzE5MTM0OQ%3D%3D.3-ccb7-5&ccb=7-5&_nc_sid=58cdad&efg=eyJ2ZW5jb2RlX3RhZyI6IkNBUk9VU0VMX0lURU0ueHBpZHMuMTM2NS5zZHIucmVndWxhcl9waG90by5DMyJ9&_nc_ohc=IvgDJwiC2JEQ7kNvwHKkYcI&_nc_oc=AdqnuV4uA5oFvgWOzCwB9QntgMLc6FCGJb2OXxQO6W6Q-_i3bomyJ5drnPZWlp5EzNc&_nc_ad=z-m&_nc_cid=0&_nc_zt=23&_nc_ht=scontent-dfw6-2.cdninstagram.com&_nc_gid=V0W-8gnNpf8kXxHqVubRHQ&_nc_ss=7a20f&oh=00_AQNHeQwh7ElHeSdDRDFU2vJ_A08rSOmcBprZ_vh2boALlQ&oe=6AE63661\",\"https://scontent-dfw6-1.cdninstagram.com/v/t51.82787-15/570661217_17997281156833937_5975776326386139359_n.jpg?stp=dst-jpg_e35_tt6&_nc_cat=102&ig_cache_key=Mzc1MjM5NjY4MDc2MDA3Mzc0OQ%3D%3D.3-ccb7-5&ccb=7-5&_nc_sid=58cdad&efg=eyJ2ZW5jb2RlX3RhZyI6IkNBUk9VU0VMX0lURU0ueHBpZHMuMTQ0MC5zZHIucmVndWxhcl9waG90by5DMyJ9&_nc_ohc=KSGdpfp-oEkQ7kNvwGLZrep&_nc_oc=Adqw_VwxJA_1fOMLv91g9XWlfdBmWktXCGmigMHrhiDplqDvhec7BpWDYTQ1Y1PpMSo&_nc_ad=z-m&_nc_cid=0&_nc_zt=23&_nc_ht=scontent-dfw6-1.cdninstagram.com&_nc_gid=V0W-8gnNpf8kXxHqVubRHQ&_nc_ss=7a20f&oh=00_AQMwz6h9k1C1Va8VT0jCy4546W-Rlk7NWSAlN4Qky_T6nA&oe=6AE65CD8\",\"https://scontent-dfw5-1.cdninstagram.com/v/t51.82787-15/572133268_17997281159833937_7078506116281037958_n.jpg?stp=dst-jpg_e35_tt6&_nc_cat=106&ig_cache_key=Mzc1MjM5NjY4MDU2NzE4ODI0Nw%3D%3D.3-ccb7-5&ccb=7-5&_nc_sid=58cdad&efg=eyJ2ZW5jb2RlX3RhZyI6IkNBUk9VU0VMX0lURU0ueHBpZHMuMTM2NS5zZHIucmVndWxhcl9waG90by5DMyJ9&_nc_ohc=WX-kVg_VkOUQ7kNvwF9w92E&_nc_oc=AdrSQZxv5Acpxdm3CZLHw_fr8vy8vZRHJRvVypX3xgN47Ete_4hnXXy5eweBiphgvHQ&_nc_ad=z-m&_nc_cid=0&_nc_zt=23&_nc_ht=scontent-dfw5-1.cdninstagram.com&_nc_gid=V0W-8gnNpf8kXxHqVubRHQ&_nc_ss=7a20f&oh=00_AQNsTiuVMrw8_4tFLQXZjrHpC7S7oAE8bY3ssq_1BtiKkQ&oe=6AE65514\",\"https://scontent-dfw6-1.cdninstagram.com/v/t51.82787-15/571141158_17997281141833937_78464043719676751_n.jpg?stp=dst-jpg_e35_tt6&_nc_cat=102&ig_cache_key=Mzc1MjM5NjY4MDU1MDM1MjU2NQ%3D%3D.3-ccb7-5&ccb=7-5&_nc_sid=58cdad&efg=eyJ2ZW5jb2RlX3RhZyI6IkNBUk9VU0VMX0lURU0ueHBpZHMuMTIxNS5zZHIucmVndWxhcl9waG90by5DMyJ9&_nc_ohc=V0uAQp3bmWsQ7kNvwENB965&_nc_oc=AdqaPeLNGkAJ6nnQFNballOEcmuseorE6wD0lz7yxI9AUXzJRT9j9QtRcRKR2Lupl48&_nc_ad=z-m&_nc_cid=0&_nc_zt=23&_nc_ht=scontent-dfw6-1.cdninstagram.com&_nc_gid=V0W-8gnNpf8kXxHqVubRHQ&_nc_ss=7a20f&oh=00_AQOLou_FuFB6GjE2nju4PylXvWB706HFe6RPr7KFnWp1qg&oe=6AE64103\",\"https://scontent-dfw6-1.cdninstagram.com/v/t51.82787-15/570323527_17997281174833937_1609003108308334083_n.jpg?stp=dst-jpg_e35_tt6&_nc_cat=101&ig_cache_key=Mzc1MjM5NjY4MDY5Mjk3NjA0MA%3D%3D.3-ccb7-5&ccb=7-5&_nc_sid=58cdad&efg=eyJ2ZW5jb2RlX3RhZyI6IkNBUk9VU0VMX0lURU0ueHBpZHMuMTQ0MC5zZHIucmVndWxhcl9waG90by5DMyJ9&_nc_ohc=dHka6hHIH28Q7kNvwFPRkvA&_nc_oc=AdrkiONak60JTc7R7_PajU1nLgl_2dd4b5QjOyImUBTszE9Tn2llWjgu7sUWoD2ulUI&_nc_ad=z-m&_nc_cid=0&_nc_zt=23&_nc_ht=scontent-dfw6-1.cdninstagram.com&_nc_gid=V0W-8gnNpf8kXxHqVubRHQ&_nc_ss=7a20f&oh=00_AQNooyNgWd_VmD12KgUA2LsQNeGQ-3Wm0bHh84qvciXWmA&oe=6AE66363\",\"https://scontent-dfw5-1.cdninstagram.com/v/t51.82787-15/572912442_17997281177833937_8377985920105611160_n.jpg?stp=dst-jpg_e35_tt6&_nc_cat=106&ig_cache_key=Mzc1MjM5NjY4MDU3NTU2NjQ4OA%3D%3D.3-ccb7-5&ccb=7-5&_nc_sid=58cdad&efg=eyJ2ZW5jb2RlX3RhZyI6IkNBUk9VU0VMX0lURU0ueHBpZHMuMTE3NC5zZHIucmVndWxhcl9waG90by5DMyJ9&_nc_ohc=3PWG7RmFDHsQ7kNvwHVrpJD&_nc_oc=AdocX7oxlYR6ibr9kIGUS7mMVt-hyLsHo82zQ_Z-BDI2EF5J-VRE_gnEdpfE8H_JQ_U&_nc_ad=z-m&_nc_cid=0&_nc_zt=23&_nc_ht=scontent-dfw5-1.cdninstagram.com&_nc_gid=V0W-8gnNpf8kXxHqVubRHQ&_nc_ss=7a20f&oh=00_AQMp-j-883Ox836y44NUhhsaqs-yrE77rfXLH_BKqPuHjg&oe=6AE63DD1\",\"https://scontent-dfw5-2.cdninstagram.com/v/t51.82787-15/572773620_17997281189833937_4437727255581295944_n.jpg?stp=dst-jpg_e35_tt6&_nc_cat=107&ig_cache_key=Mzc1MjM5NjY4MDU1ODc2OTYzNQ%3D%3D.3-ccb7-5&ccb=7-5&_nc_sid=58cdad&efg=eyJ2ZW5jb2RlX3RhZyI6IkNBUk9VU0VMX0lURU0ueHBpZHMuMTQ0MC5zZHIucmVndWxhcl9waG90by5DMyJ9&_nc_ohc=2F_zLP1PGA4Q7kNvwEl3DpZ&_nc_oc=AdpboFoTsrLac13kC2L-Amt5qGrwL6lSWULm7JmfWNCJoXH5zOYKN0cy6U-79018GHc&_nc_ad=z-m&_nc_cid=0&_nc_zt=23&_nc_ht=scontent-dfw5-2.cdninstagram.com&_nc_gid=V0W-8gnNpf8kXxHqVubRHQ&_nc_ss=7a20f&oh=00_AQPhrSMEP67yvNwQdSM8qN88IcqN5qecna-fHihJeHMkBQ&oe=6AE64168\",\"https://scontent-dfw5-2.cdninstagram.com/v/t51.82787-15/569217903_17997281198833937_3835816714273062818_n.jpg?stp=dst-jpg_e35_tt6&_nc_cat=104&ig_cache_key=Mzc1MjM5NjY4MDc1MTcxNTE0OA%3D%3D.3-ccb7-5&ccb=7-5&_nc_sid=58cdad&efg=eyJ2ZW5jb2RlX3RhZyI6IkNBUk9VU0VMX0lURU0ueHBpZHMuMTQ0MC5zZHIucmVndWxhcl9waG90by5DMyJ9&_nc_ohc=-9eZo2OSce4Q7kNvwGQssRb&_nc_oc=AdqhrbrLtiXEiWB420YtHW0K2P69MkA14lbsvmL1QmXT5fTzXMffHJDcJxZ7w9AFFlc&_nc_ad=z-m&_nc_cid=0&_nc_zt=23&_nc_ht=scontent-dfw5-2.cdninstagram.com&_nc_gid=V0W-8gnNpf8kXxHqVubRHQ&_nc_ss=7a20f&oh=00_AQOqpymQXV5BvJgfbFHb5FT0Fkm_zhxmk0DAypLLbCVRPA&oe=6AE66054\",\"https://scontent-dfw6-2.cdninstagram.com/v/t51.82787-15/570597056_17997281231833937_5265391298272873003_n.jpg?stp=dst-jpg_e35_tt6&_nc_cat=108&ig_cache_key=Mzc1MjM5NjY4MDc0MzMyNzcyNQ%3D%3D.3-ccb7-5&ccb=7-5&_nc_sid=58cdad&efg=eyJ2ZW5jb2RlX3RhZyI6IkNBUk9VU0VMX0lURU0ueHBpZHMuMTQ0MC5zZHIucmVndWxhcl9waG90by5DMyJ9&_nc_ohc=58zzOQrHk00Q7kNvwHiDsoS&_nc_oc=AdrYMawuohUfSZS8Cey6tLCe-aXPuMRb9KqvgjpkaYhjLiJYImhfSQTmVnBex7QECdg&_nc_ad=z-m&_nc_cid=0&_nc_zt=23&_nc_ht=scontent-dfw6-2.cdninstagram.com&_nc_gid=V0W-8gnNpf8kXxHqVubRHQ&_nc_ss=7a20f&oh=00_AQN4EYI9_2FQaW0a-L6Ud32OmEvCAesrbvB5rnU4EJ-94g&oe=6AE64EB0\",\"https://scontent-dfw6-1.cdninstagram.com/v/t51.82787-15/570319078_17997281258833937_3939140639545995727_n.jpg?stp=dst-jpg_e35_tt6&_nc_cat=103&ig_cache_key=Mzc1MjM5NjY4MDY4NDU5MzcyNQ%3D%3D.3-ccb7-5&ccb=7-5&_nc_sid=58cdad&efg=eyJ2ZW5jb2RlX3RhZyI6IkNBUk9VU0VMX0lURU0ueHBpZHMuMTM2NS5zZHIucmVndWxhcl9waG90by5DMyJ9&_nc_ohc=wiK78xlRP2gQ7kNvwFYsbUJ&_nc_oc=AdoV66R1B7JEsPBPmp95KAQJnVwqZOujuEzE-FyRfS132jDMhi_iN_GORi0Wd9hgYqo&_nc_ad=z-m&_nc_cid=0&_nc_zt=23&_nc_ht=scontent-dfw6-1.cdninstagram.com&_nc_gid=V0W-8gnNpf8kXxHqVubRHQ&_nc_ss=7a20f&oh=00_AQMkA5heyGwtFdTBC_1v72r8026Q-wXQvLEAyEB6E-JKDg&oe=6AE652E9\"]")
+          os.makedirs('ribbon-source-candidates',exist_ok=True)
+          thumbs=[]
+          for i,u in enumerate(urls,1):
+           try:
+            req=urllib.request.Request(u,headers={'User-Agent':'Mozilla/5.0','Referer':'https://www.instagram.com/'})
+            data=urllib.request.urlopen(req,timeout=25).read()
+            im=Image.open(BytesIO(data)).convert('RGB')
+            im.save('ribbon-source-candidates/%02d.jpg'%i,quality=90)
+            th=ImageOps.contain(im,(220,240));thumbs.append((i,th))
+            print('OK',i,len(data),im.size,flush=True)
+           except Exception as e:print('FAILED',i,str(e)[:200],flush=True)
+          if thumbs:
+           out=Image.new('RGB',(6*235,((len(thumbs)+5)//6)*285),'white');d=ImageDraw.Draw(out)
+           for k,(i,th) in enumerate(thumbs):
+            x=(k%6)*235+5;y=(k//6)*285+22;out.paste(th,(x,y));d.text((x,y-19),'Original post image %02d'%i,fill='black')
+           out.save('ribbon-source-candidates/contact-sheet.jpg',quality=85)
+          PY
+      - uses: actions/upload-artifact@v4
+        if: always()
+        with:
+          name: mads-surprise-engagement-original-sources
+          path: ribbon-source-candidates/
