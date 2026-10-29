@@ -1,0 +1,44 @@
+{
+  "version": 1,
+  "source": "Mads_Full_Gallery_Review_2026-10-29(1).csv",
+  "status": "concept-preview-only",
+  "preserve": "First-round 51 Keep/17 Remove/2 Undecided. Review Remove only removes a post from the category in that row. Keep original photos and notes. Preserve Coco Love, red-bow Birthday and 74 design baseline unless category notes explicitly override.",
+  "birthdayMoves": [
+    "DPanB6UErVa",
+    "DBnwK_WBIeD",
+    "DHCy_bTBLKc",
+    "DHQDoHHB26G",
+    "C-hr7ntS0Ei",
+    "C9cJQsry1gY",
+    "C9ZZH4eyqcm",
+    "DcqRbBLIFnH",
+    "DG-S_-6BYNA",
+    "DcX9APCvQU6",
+    "DF1l80hBrhI",
+    "DCv93Blhb1I",
+    "DO2QV4bkkFV",
+    "DeoTAxVoN5f"
+  ],
+  "cupcakeMoves": [
+    "C7tQnOMhkKK"
+  ],
+  "otherMoves": [
+    "DU40F0ikkwm",
+    "DEtTLWXBBce",
+    "DWv0b5kkrWE",
+    "DQEVlRrkh42",
+    "DUef7FjEjoE",
+    "C88mW3FyNh8",
+    "DK8oglIBpLj",
+    "DL49HXIhTeY"
+  ],
+  "meaning": {
+    "birthdayMoves": "Moved out of wedding, baby, love or popular discovery as requested by note; retain in Birthday rather than deleting.",
+    "cupcakeMoves": "Reviewer asked to keep in cupcakes, but 27 Oct caption calls it a butter cake. Provisional conceptual Cupcake cross-filter only, request photograph confirmation prior to public launch.",
+    "otherMoves": "Remove from the inapplicable occasion while retaining attractive design in unclassified discovery for the next round.",
+    "weddings": "Use only the 10 Keep designs; DDV Mayoun remains in Cupcakes without wedding occasion.",
+    "baby": "Newborn / baby shower / gender reveal / baptism only, 9 Keep designs; first birthdays stay Birthday.",
+    "love": "6 Keep designs including coconut set and raspberry satin-bows; do not classify visually heart-shaped birthday cakes as romantic.",
+    "popular": "Keep 22 designs; route wedding-design DR8 and birthday-design DHQ to their occasions, leaving other Keep designs for categorisation next round."
+  }
+}
