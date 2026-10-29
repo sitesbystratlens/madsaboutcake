@@ -12,15 +12,16 @@ const PRODUCT_TYPES=['Cake','Cupcakes','Other Treats'];
 const PUBLIC_OCCASIONS=['Birthdays','Weddings & engagements','Baby celebrations','Love & anniversaries'];
 const OCCASIONS=[...PUBLIC_OCCASIONS,'Religious & Cultural','Graduations','Corporate & Events','Other Celebrations'];
 const esc=s=>String(s==null?'':s).replace(/[&<>"']/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));
-const safeCover=s=>typeof s==='string'&&/^assets\/(?:cake-covers|creations|featured-25|gallery-30(?:\/thumbs)?)\/[\w-]+\.(?:jpe?g|png|webp|avif)$/.test(s);
+const safeCover=s=>typeof s==='string'&&/^assets\/(?:cake-covers|creations|featured-25|gallery-30(?:\/thumbs)?|gallery-review-covers(?:\/thumbs)?)\/[\w-]+\.(?:jpe?g|png|webp|avif)$/.test(s);
 const imageOf=c=>safeCover(c.coverImage)?'/'+c.coverImage:'/assets/mads-logo.webp';
 const slug=s=>String(s).toLowerCase().replace(/\s+/g,'-');
-const matchesOccasion=(c,o)=>c.primaryOccasion===o||c.otherOccasions.includes(o);
+const matchesOccasion=(c,o)=>!c.holdOccasionFilterUntilOwnerApproval&&(c.primaryOccasion===o||c.otherOccasions.includes(o));
 function normalise(c){
  if(!c||typeof c.id!=='string'||!/^[a-z0-9-]+$/.test(c.id)||typeof c.title!=='string'||!PRODUCT_TYPES.includes(c.productType))return null;
  return {...c,title:c.title.slice(0,140),image:imageOf(c),thumbnail:safeCover(c.thumbnailImage)?'/'+c.thumbnailImage:imageOf(c),alt:typeof c.alt==='string'?c.alt.slice(0,180):'Cake',
   primaryOccasion:OCCASIONS.includes(c.primaryOccasion)?c.primaryOccasion:'',
   otherOccasions:Array.isArray(c.otherOccasions)?c.otherOccasions.filter(o=>OCCASIONS.includes(o)):[],
+  otherProductTypes:Array.isArray(c.otherProductTypes)?c.otherProductTypes.filter(t=>PRODUCT_TYPES.includes(t)):[],
   styleTags:Array.isArray(c.styleTags)?c.styleTags.filter(t=>typeof t==='string'&&t.length<80):[]};
 }
 function enquiryUrl(c){
@@ -32,7 +33,7 @@ function cardHtml(c){
  const url='/cakes/?design='+encodeURIComponent(c.id);
  return '<article class="gallery-card" data-id="'+esc(c.id)+'">'+
  '<a class="gallery-photo" href="'+url+'" aria-label="View '+esc(c.title)+' design"><img loading="lazy" decoding="async" src="'+esc(c.thumbnail)+'" alt="'+esc(c.alt)+'" width="480" height="600"><span class="gallery-photo__arrow" aria-hidden="true">↗</span></a>'+
- '<div class="gallery-info"><div><small>'+esc(c.productType+(c.primaryOccasion?' · '+c.primaryOccasion:''))+'</small><h3><a class="gallery-title-link" href="'+url+'">'+esc(c.title)+'</a></h3>'+credit+'</div></div></article>';
+ '<div class="gallery-info"><div><small>'+esc((c.otherProductTypes.includes('Cupcakes')?'Cake & cupcakes':c.productType)+(c.primaryOccasion?' · '+c.primaryOccasion:''))+'</small><h3><a class="gallery-title-link" href="'+url+'">'+esc(c.title)+'</a></h3>'+credit+'</div></div></article>';
 }
 function showDesign(c,concept){
  const root=document.getElementById('design-detail'),browse=document.getElementById('browse-gallery'),hero=document.getElementById('gallery-hero');
@@ -66,7 +67,7 @@ function initGallery(records,concept){
  root.innerHTML=listed.map(cardHtml).join('');
  const buttons=[...document.querySelectorAll('[data-product]')],occasion=document.getElementById('occasion-filter');
  let product=['cake','cupcakes','other-treats'].includes(params.get('product'))?params.get('product'):'all';
- const used=new Set(listed.map(c=>slug(c.productType))),otherButton=buttons.find(b=>b.dataset.product==='other-treats');
+ const used=new Set(listed.flatMap(c=>[c.productType,...c.otherProductTypes].map(slug))),otherButton=buttons.find(b=>b.dataset.product==='other-treats');
  if(otherButton)otherButton.hidden=!used.has('other-treats');
  if(occasion){
   for(const o of PUBLIC_OCCASIONS.filter(o=>listed.some(c=>matchesOccasion(c,o)))){
@@ -78,7 +79,7 @@ function initGallery(records,concept){
   let count=0;
   for(const card of root.querySelectorAll('.gallery-card')){
    const c=listed.find(x=>x.id===card.dataset.id);
-   const visible=!!c&&(product==='all'||slug(c.productType)===product)&&(!occasion||occasion.value==='all'||matchesOccasion(c,occasion.value));
+   const visible=!!c&&(product==='all'||slug(c.productType)===product||c.otherProductTypes.some(t=>slug(t)===product))&&(!occasion||occasion.value==='all'||matchesOccasion(c,occasion.value));
    card.hidden=!visible;if(visible)count++;
   }
   root.dataset.visibleCount=String(count);
