@@ -126,7 +126,7 @@ test=swap(test,"valentine?.coverImage==='assets/featured-25/DGM5hj1hcJf-M259.web
 test=swap(test,"assert(featured.some(c=>c.sourceShortcode==='DQ0WjCPEgqr'&&c.demoVisible===true&&c.ownerReviewRequired===true&&c.licensedCharacterReview===true),'User-selected character cake missing owner/IP review flag');",
 "assert(!featured.some(c=>c.sourceShortcode==='DQ0WjCPEgqr')&&data.cakes.find(c=>c.sourceShortcode==='DQ0WjCPEgqr')?.demoVisible===false,'Licensed character must be hidden from the preview gallery');","Exclude licensed character")
 test=swap(test,"records.filter(c=>c.featured25===true)","records.filter(c=>c.featured30===true)","Test gallery selection code")
-test=swap(test,"const winners=[\n ['Birthdays','DA-B4huhKQ4'],\n ['Weddings & engagements','DJjIJNxB1ap'],\n ['Baby celebrations','DQ0WjCPEgqr'],\n ['Love & anniversaries','DWvn4Nekv8Z']\n];",
+test=swap(test,"const winners=[\n ['Birthdays','DA-B4huhKQ4'],\n ['Weddings & engagements','DJjIJNxB1ap'],\n ['Baby celebrations','DQYyHi-kn6R'],\n ['Love & anniversaries','DWvn4Nekv8Z']\n];",
 "const winners=[\n ['Birthdays','DA-B4huhKQ4'],\n ['Weddings & engagements','DJjIJNxB1ap'],\n ['Baby celebrations','DQYyHi-kn6R'],\n ['Love & anniversaries','DWvn4Nekv8Z']\n];","Safe homepage occasion tiles")
 test=swap(test,"assert(home.includes('src=\"/'+c.coverImage+'\"'),'Hero is not using selected photo: '+code);",
 "assert(home.includes(code),'Hero must continue to reference the original selected design: '+code);","Home hero original still lives under previous folder")
