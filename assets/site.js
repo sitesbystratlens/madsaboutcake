@@ -12,13 +12,13 @@ const PRODUCT_TYPES=['Cake','Cupcakes','Other Treats'];
 const PUBLIC_OCCASIONS=['Birthdays','Weddings & engagements','Baby celebrations','Love & anniversaries'];
 const OCCASIONS=[...PUBLIC_OCCASIONS,'Religious & Cultural','Graduations','Corporate & Events','Other Celebrations'];
 const esc=s=>String(s==null?'':s).replace(/[&<>"']/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));
-const safeCover=s=>typeof s==='string'&&/^assets\/(?:cake-covers|creations|featured-25)\/[\w-]+\.(?:jpe?g|png|webp|avif)$/.test(s);
+const safeCover=s=>typeof s==='string'&&/^assets\/(?:cake-covers|creations|featured-25|gallery-30(?:/thumbs)?)\/[\w-]+\.(?:jpe?g|png|webp|avif)$/.test(s);
 const imageOf=c=>safeCover(c.coverImage)?'/'+c.coverImage:'/assets/mads-logo.webp';
 const slug=s=>String(s).toLowerCase().replace(/\s+/g,'-');
 const matchesOccasion=(c,o)=>c.primaryOccasion===o||c.otherOccasions.includes(o);
 function normalise(c){
  if(!c||typeof c.id!=='string'||!/^[a-z0-9-]+$/.test(c.id)||typeof c.title!=='string'||!PRODUCT_TYPES.includes(c.productType))return null;
- return {...c,title:c.title.slice(0,140),image:imageOf(c),alt:typeof c.alt==='string'?c.alt.slice(0,180):'Cake',
+ return {...c,title:c.title.slice(0,140),image:imageOf(c),thumbnail:safeCover(c.thumbnailImage)?'/'+c.thumbnailImage:imageOf(c),alt:typeof c.alt==='string'?c.alt.slice(0,180):'Cake',
   primaryOccasion:OCCASIONS.includes(c.primaryOccasion)?c.primaryOccasion:'',
   otherOccasions:Array.isArray(c.otherOccasions)?c.otherOccasions.filter(o=>OCCASIONS.includes(o)):[],
   styleTags:Array.isArray(c.styleTags)?c.styleTags.filter(t=>typeof t==='string'&&t.length<80):[]};
@@ -31,7 +31,7 @@ function cardHtml(c){
  const credit=c.photoCredit?'<p class="gallery-credit">'+esc(c.photoCredit)+'</p>':'';
  const url='/cakes/?design='+encodeURIComponent(c.id);
  return '<article class="gallery-card" data-id="'+esc(c.id)+'">'+
- '<a class="gallery-photo" href="'+url+'" aria-label="View '+esc(c.title)+' design"><img loading="lazy" decoding="async" src="'+esc(c.image)+'" alt="'+esc(c.alt)+'"><span class="gallery-photo__arrow" aria-hidden="true">↗</span></a>'+
+ '<a class="gallery-photo" href="'+url+'" aria-label="View '+esc(c.title)+' design"><img loading="lazy" decoding="async" src="'+esc(c.thumbnail)+'" alt="'+esc(c.alt)+'" width="480" height="600"><span class="gallery-photo__arrow" aria-hidden="true">↗</span></a>'+
  '<div class="gallery-info"><div><small>'+esc(c.productType+(c.primaryOccasion?' · '+c.primaryOccasion:''))+'</small><h3><a class="gallery-title-link" href="'+url+'">'+esc(c.title)+'</a></h3>'+credit+'</div></div></article>';
 }
 function showDesign(c,concept){
@@ -61,8 +61,8 @@ function showDesign(c,concept){
 function initGallery(records,concept){
  const root=document.querySelector('[data-gallery]');if(!root)return;
  const params=new URLSearchParams(location.search),id=params.get('design');
- if(id){const c=records.find(x=>x.id===id);if(c&&showDesign(c,concept))return;}
- const listed=concept?records.filter(c=>c.featured25===true):records;
+ if(id){const c=records.find(x=>x.id===id);if(c&&(!concept||c.demoVisible!==false)&&showDesign(c,concept))return;}
+ const listed=concept?records.filter(c=>c.featured30===true):records;
  root.innerHTML=listed.map(cardHtml).join('');
  const buttons=[...document.querySelectorAll('[data-product]')],occasion=document.getElementById('occasion-filter');
  let product=['cake','cupcakes','other-treats'].includes(params.get('product'))?params.get('product'):'all';

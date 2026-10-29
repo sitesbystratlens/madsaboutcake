@@ -163,3 +163,7 @@
 .design-instagram-link:hover{background:#ffedf2;transform:translateY(-2px)}
 .design-instagram-link:focus-visible{outline:3px solid #553047;outline-offset:3px}
 @media(max-width:760px){.gallery-photo__arrow{right:9px;bottom:9px;width:33px;height:33px;font-size:19px}.design-instagram-link{right:12px;bottom:12px;width:43px;height:43px}}
+
+/* Gallery 30: 4:5 pre-optimised originals, no flat side bars. */
+#browse-gallery .gallery-card .gallery-photo img{width:100%;height:100%;aspect-ratio:4/5;object-fit:cover;background:transparent}
+#browse-gallery .gallery-photo{aspect-ratio:4/5;overflow:hidden}

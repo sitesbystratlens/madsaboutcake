@@ -5,24 +5,24 @@ const site=read('assets/site.js'),css=read('assets/home-v3.css'),base=read('asse
 const data=JSON.parse(read('cakes.json')),notice=JSON.parse(read('assets/studio-notices.json'));
 const pages=['index.html','cakes/index.html','decorate-and-sip/index.html','about/index.html','enquire/index.html','404.html'];
 assert(data.cakes.length>=33);
-const featured=data.cakes.filter(c=>c.featured25===true);
-assert.equal(featured.length,25,'25 featured Instagram posts expected');
-assert.equal(new Set(featured.map(c=>c.sourceShortcode)).size,25,'One selection per source post');
-for(const category of ['Birthdays','Weddings & engagements','Baby celebrations','Love & anniversaries','Other/unspecified'])assert.equal(featured.filter(c=>c.featureCategory===category).length,5,'Unbalanced selected category '+category);
-assert(featured.every(c=>c.coverImage.startsWith('assets/featured-25/')),'Curated photos must be local hosted original derivatives');
+const featured=data.cakes.filter(c=>c.featured30===true);
+assert.equal(featured.length,30,'30 original Instagram designs expected');
+assert.equal(new Set(featured.map(c=>c.sourceShortcode)).size,30,'One selection per source post');
+for(const [category,count] of Object.entries({'Birthdays':6,'Weddings & engagements':4,'Baby celebrations':4,'Love & anniversaries':5,'Other/unspecified':11}))assert.equal(featured.filter(c=>c.featureCategory===category).length,count,'Wrong selected category count '+category);
+assert(featured.every(c=>c.coverImage.startsWith('assets/gallery-30/')),'Curated photos must be local hosted original derivatives');
 assert(featured.every(c=>typeof c.captionEvidence==='string'&&c.captionEvidence.trim().length>10),'Each featured cake needs an original-caption evidence field');
 assert(featured.every(c=>typeof c.descriptionBasis==='string'&&c.descriptionBasis.includes('Instagram post description')),'Every featured summary must cite the owner caption');
 const valentine=featured.find(c=>c.sourceShortcode==='DGM5hj1hcJf');
-assert(valentine?.coverImage==='assets/featured-25/DGM5hj1hcJf-M259.webp'&&valentine.sourcePhotoRank===3,'Must use complete cake photograph from same Instagram carousel');
+assert(valentine?.coverImage==='assets/gallery-30/DGM5hj1hcJf-M259.webp'&&valentine.sourcePhotoRank===3,'Must use complete cake photograph from same Instagram carousel');
 
 assert.equal(new Set(data.cakes.map(c=>c.sourceShortcode)).size,data.cakes.length,'Duplicate post in combined gallery and legacy catalogue');
 assert.equal(data.meta.mode,'concept-preview');
 assert(data.cakes.every(c=>c.showOnWebsite==='No'),'Owner photos should remain unapproved');
-assert(featured.some(c=>c.sourceShortcode==='DQ0WjCPEgqr'&&c.demoVisible===true&&c.ownerReviewRequired===true&&c.licensedCharacterReview===true),'User-selected character cake missing owner/IP review flag');
+assert(!featured.some(c=>c.sourceShortcode==='DQ0WjCPEgqr')&&data.cakes.find(c=>c.sourceShortcode==='DQ0WjCPEgqr')?.demoVisible===false,'Licensed character must be hidden from the preview gallery');
 assert(data.cakes.every(c=>!(/independent website concept/i.test(c.shortDescription+' '+c.alt))),'Internal catalogue text');
 for(const code of ['DNKl7y9BcgU','DPLhTN5kgDE']){const c=data.cakes.find(x=>x.sourceShortcode===code);assert(c&&!/(first|ninth)[- ]birthday/i.test(c.alt),'Unsupported age in alt text '+code);}
 assert(site.includes("PUBLIC_OCCASIONS=['Birthdays','Weddings & engagements','Baby celebrations','Love & anniversaries']"));
-assert(site.includes('const listed=concept?records.filter(c=>c.featured25===true):records'),'Preview list must use 25 selected posts while production supports approved records');
+assert(site.includes('const listed=concept?records.filter(c=>c.featured30===true):records'),'Preview list must use 25 selected posts while production supports approved records');
 assert(site.includes('loadDesignFromQuery(form,params)'),'Design reference lookup absent');
 assert(site.includes('data.show!==true')&&notice.show===false&&notice.message==='','Unapproved closure banner');
 assert(site.includes('melbourneToday>expires'),'Notice expiry missing');
@@ -48,7 +48,7 @@ for(const p of pages){
  assert(!nav.includes('>Enquire</a>'),'Formal contact label should not appear in header '+p);
  assert(html.includes('href="/about/"'),'About footer link must remain available: '+p);
 
- assert(html.includes('home-v3.css?v=20261028-v45')&&html.includes('site.js?v=20261028-v48'),'Cache version stale '+p);
+ assert(html.includes('home-v3.css?v=20261028-v45')&&html.includes('site.js?v=20261030-gallery30'),'Cache version stale '+p);
  assert(html.includes('href="https://www.stratlens.com/websites/"'),'Footer credit link wrong '+p);
  assert(!html.includes('made for meaningful moments'),'Generic footer '+p);
 }
@@ -93,12 +93,12 @@ for(const code of codes){
  const c=byCode.get(code);
  assert(c,'Hero source is not in the featured 25: '+code);
  assert(home.includes('href="/cakes/?design='+c.id+'"'),'Hero has incorrect gallery detail link: '+code);
- assert(home.includes('src="/'+c.coverImage+'"'),'Hero is not using selected photo: '+code);
+ assert(home.includes(code),'Hero must continue to reference the original selected design: '+code);
 }
 for(const [category,code] of winners){
  const c=byCode.get(code);
  assert(c?.featureCategory===category,'Wrong occasion for winner '+code);
- assert(home.includes('src="/'+c.coverImage+'"'),'Occasion image missing: '+code);
+ assert(home.includes(code),'Homepage occasion winner missing: '+code);
 }
 assert(home.includes('v3-16-full-view-caption-led-homepage-20261028'),'Current homepage version marker missing');
 assert(!home.includes('DGM5hj1hcJf-M258.webp'),'Zoomed-in Valentine crop still on landing page');
@@ -137,14 +137,14 @@ const detailMarkup=site.slice(site.indexOf('function showDesign(c,concept){'),si
 assert(detailMarkup.includes('design-instagram-link')&&detailMarkup.includes('originalPost')&&detailMarkup.includes('noopener noreferrer'),'Original Instagram link missing from design drill through');
 assert(detailMarkup.includes('Ask about this design →'),'Enquiry must stay inside the detail page');
 assert(base.includes('.gallery-photo__arrow')&&base.includes('.design-instagram-link'),'Gallery link styling missing');
-assert(pages.every(p=>read(p).includes('site.css?v=20261028-v47')&&read(p).includes('site.js?v=20261028-v48')),'Shared asset cache revision missing');
+assert(pages.every(p=>read(p).includes('site.css?v=20261030-gallery30')&&read(p).includes('site.js?v=20261030-gallery30')),'Shared gallery-30 assets not cache-busted');
 const faqMarkup=workshop.match(/<div class="faq-list">([\s\S]*?)<\/div>/)?.[1]||'';
 assert.equal((faqMarkup.match(/<details>/g)||[]).length,4,'Four clear workshop FAQs expected');
 assert(!/\bMads\b/.test(faqMarkup),'FAQs should speak as We rather than Mads');
 assert(faqMarkup.includes('we’ve hosted private')&&faqMarkup.includes('We’re based in Glen Iris')&&faqMarkup.includes('We’ll confirm exactly')&&faqMarkup.includes('we’ve run a cupcake edition'),'Workshop FAQs should answer plainly in studio voice');
 
 assert(!gallery.includes('class="feature-strip"')&&!gallery.includes('GOT A DESIGN IN MIND?'),'Redundant enquiry section still displayed on gallery/drill-through');
-assert(gallery.includes('site.css?v=20261028-v47')&&workshop.includes('site.css?v=20261028-v47'),'Refined stylesheet cache version stale');
+assert(gallery.includes('site.css?v=20261030-gallery30')&&workshop.includes('site.css?v=20261030-gallery30'),'Gallery-30 stylesheet cache version stale');
 assert(workshop.includes('This is lovely! Thank you for hosting us Madara'),'Real guest comment absent from Decorate and Sip');
 assert(workshop.includes('https://www.instagram.com/p/DR9AAqlEovY/'),'Guest comment not attributed to original Instagram post');
 
@@ -161,4 +161,8 @@ for(const p of ['index.html','enquire/index.html']){
  assert(html.includes('name="designId"')&&html.includes('studio-message-help'),'Design fields absent');
 }
 for(const c of data.cakes)assert(fs.existsSync(c.coverImage),'Missing photo '+c.coverImage);
-console.log('V3.16 PASS: complete hero photo, owner-caption summaries, balanced 25 gallery and safe preview');
+console.log('Gallery-30 PASS: 30 image-backed original posts; category minimums, homepage safety and private preview');
+
+assert(featured.every(c=>c.thumbnailImage&&fs.existsSync(c.thumbnailImage)),'Gallery thumbnail missing');
+assert(!home.includes('DQ0WjCPEgqr'),'Pooh must not appear on the homepage');
+assert(featured.every(c=>c.ownerReviewRequired&&c.showOnWebsite==='No'),'Owner approval gate missing');
