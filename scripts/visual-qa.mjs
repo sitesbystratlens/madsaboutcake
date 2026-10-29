@@ -8,7 +8,7 @@ const base='http://127.0.0.1:'+port;
 const widths=[1440,768,390,320];
 const pages=[
  ['home','/'],['cakes','/cakes/'],['cake-detail','/cakes/?design=ig-f25-dgm5hj1hcjf'],
- ['decorate-and-sip','/decorate-and-sip/'],['about','/about/'],['enquire','/enquire/']
+ ['decorate-and-sip','/decorate-and-sip/'],['about','/about/'],['enquire','/enquire/'],['review','/review/']
 ];
 const out='qa-screenshots';
 fs.mkdirSync(out,{recursive:true});
@@ -21,6 +21,7 @@ for(const [slug,url] of pages){
   page.on('pageerror',error=>exceptions.push(error.message));
   await page.goto(base+url,{waitUntil:'domcontentloaded',timeout:20000});
   await page.locator('body').waitFor();
+  if(slug==='review')await page.locator('.review-card').first().waitFor({timeout:15000});
   // Force below-the-fold native lazy images to load before counting failures and capturing a full-page screenshot.
   await page.evaluate(async()=>{
    const images=[...document.images];
@@ -111,6 +112,23 @@ for(const [slug,url] of pages){
    const answers=await page.locator('.faq-list').textContent();
    if(/\bMads\b/.test(answers)||!answers.includes('we’ve')&&!answers.includes('We’re'))problem.push('FAQ studio voice not consistent');
    if((await page.locator('.faq-list details').count())!==4)problem.push('FAQ count differs');
+  }
+  if(slug==='review'&&(width===1440||width===390)){
+    const birthdayCount=await page.locator('.review-card').count();
+    if(birthdayCount!==40)problem.push('Birthday owner-review list has '+birthdayCount+' posts, expected 40');
+    await page.locator('[data-group="cupcakes"]').click();
+    const cupcakeCount=await page.locator('.review-card').count();
+    if(cupcakeCount!==34)problem.push('Cupcake owner-review list has '+cupcakeCount+' posts, expected 34');
+    await page.locator('[data-group="birthdays"]').click();
+    const first=page.locator('.review-card').first();
+    const source=await first.getAttribute('data-code');
+    await first.locator('[data-decision="keep"]').click();
+    await page.reload({waitUntil:'domcontentloaded'});
+    await page.locator('.review-card').first().waitFor();
+    const retained=page.locator('.review-card[data-code="'+source+'"] [data-decision="keep"]');
+    if(await retained.getAttribute('aria-pressed')!=='true')problem.push('Owner Keep selection does not survive refresh');
+    if(!await page.locator('.review-card .post-link[href^="https://www.instagram.com/p/"]').count())problem.push('Source-post links missing');
+    if((await page.locator('body').evaluate(el=>el.scrollWidth))>width+4)problem.push('review horizontal overflow');
   }
   if(slug==='enquire'&&info.formCount!==1)problem.push('missing enquiry form');
   results.push({page:slug,width,screenshot,...info,problems:problem});
