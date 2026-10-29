@@ -6,9 +6,9 @@ const data=JSON.parse(read('cakes.json')),notice=JSON.parse(read('assets/studio-
 const pages=['index.html','cakes/index.html','decorate-and-sip/index.html','about/index.html','enquire/index.html','404.html'];
 assert(data.cakes.length>=33);
 const featured=data.cakes.filter(c=>c.featured30===true);
-assert.equal(featured.length,30,'30 original Instagram designs expected');
-assert.equal(new Set(featured.map(c=>c.sourceShortcode)).size,30,'One selection per source post');
-for(const [category,count] of Object.entries({'Birthdays':6,'Weddings & engagements':4,'Baby celebrations':4,'Love & anniversaries':5,'Other/unspecified':11}))assert.equal(featured.filter(c=>c.featureCategory===category).length,count,'Wrong selected category count '+category);
+assert.equal(featured.length,34,'34 original Instagram designs expected');
+assert.equal(new Set(featured.map(c=>c.sourceShortcode)).size,34,'One selection per source post');
+for(const [category,count] of Object.entries({'Birthdays':6,'Weddings & engagements':6,'Baby celebrations':6,'Love & anniversaries':5,'Other/unspecified':11}))assert.equal(featured.filter(c=>c.featureCategory===category).length,count,'Wrong selected category count '+category);
 assert(featured.every(c=>c.coverImage.startsWith('assets/gallery-30/')),'Curated photos must be local hosted original derivatives');
 assert(featured.every(c=>typeof c.captionEvidence==='string'&&c.captionEvidence.trim().length>10),'Each featured cake needs an original-caption evidence field');
 assert(featured.every(c=>typeof c.descriptionBasis==='string'&&c.descriptionBasis.includes('Instagram post description')),'Every featured summary must cite the owner caption');
@@ -18,11 +18,11 @@ assert(valentine?.coverImage==='assets/gallery-30/DGM5hj1hcJf-M259.webp'&&valent
 assert.equal(new Set(data.cakes.map(c=>c.sourceShortcode)).size,data.cakes.length,'Duplicate post in combined gallery and legacy catalogue');
 assert.equal(data.meta.mode,'concept-preview');
 assert(data.cakes.every(c=>c.showOnWebsite==='No'),'Owner photos should remain unapproved');
-assert(!featured.some(c=>c.sourceShortcode==='DQ0WjCPEgqr')&&data.cakes.find(c=>c.sourceShortcode==='DQ0WjCPEgqr')?.demoVisible===false,'Licensed character must be hidden from the preview gallery');
+assert(featured.some(c=>c.sourceShortcode==='DQ0WjCPEgqr'&&c.licensedCharacterReview===true&&c.ownerReviewRequired===true&&c.showOnWebsite==='No'),'Pooh design should be owner-preview only with launch approval safeguard');
 assert(data.cakes.every(c=>!(/independent website concept/i.test(c.shortDescription+' '+c.alt))),'Internal catalogue text');
 for(const code of ['DNKl7y9BcgU','DPLhTN5kgDE']){const c=data.cakes.find(x=>x.sourceShortcode===code);assert(c&&!/(first|ninth)[- ]birthday/i.test(c.alt),'Unsupported age in alt text '+code);}
 assert(site.includes("PUBLIC_OCCASIONS=['Birthdays','Weddings & engagements','Baby celebrations','Love & anniversaries']"));
-assert(site.includes('const listed=concept?records.filter(c=>c.featured30===true):records'),'Preview list must use 25 selected posts while production supports approved records');
+assert(site.includes('const listed=concept?records.filter(c=>c.featured30===true):records'),'Preview list must use the current curated selection while production supports approved records');
 assert(site.includes('loadDesignFromQuery(form,params)'),'Design reference lookup absent');
 assert(site.includes('data.show!==true')&&notice.show===false&&notice.message==='','Unapproved closure banner');
 assert(site.includes('melbourneToday>expires'),'Notice expiry missing');
@@ -55,9 +55,8 @@ for(const p of pages){
 const homeCss=read('assets/home-v3.css');
 const home=read('index.html'),gallery=read('cakes/index.html'),workshop=read('decorate-and-sip/index.html'),enquire=read('enquire/index.html');
 assert(home.includes('Say it with cake.')&&home.includes('What are we <i>celebrating?</i>'),'Homepage headings changed');
-assert(base.includes('.workshop-hero .workshop-hero__copy h1 .workshop-hero__accent'),'Workshop pink accent missing');
-assert(workshop.includes('class="workshop-hero__accent"'),'Workshop headline must have accented & Sip');
-assert(base.includes('.workshop-inclusions .workshop-detail__num'),'Workshop numbered steps not emphasised');
+assert(!workshop.includes('workshop-hero__accent')&&workshop.includes('<h1>Decorate<br>&amp; <span class="serif-italic">Sip.</span></h1>'),'Workshop title must use one ink colour');
+assert(base.includes('.workshop-inclusions .workshop-detail__num'),'Workshop numbered steps not styled');
 assert(site.includes('root.dataset.visibleCount=String(count);'),'Gallery count must drive balanced 2×2 grid');
 assert(base.includes('.gallery-grid[data-visible-count="4"]'),'Four-card filtered gallery layout missing');
 assert(homeCss.includes('.occasion .section-head h2{font-size:clamp(49px,4.1vw,66px);white-space:nowrap}'),'Desktop occasion heading should be single line');
@@ -80,13 +79,13 @@ assert(!home.includes('BIRTHDAYS, BIG DAYS & MORE'),'Redundant occasion eyebrow 
 assert(!workshop.includes('FROM A REAL SESSION')&&!workshop.includes('HENS PARTIES · BIRTHDAYS · GROUP SESSIONS'),'Redundant session labels remain');
 
 assert(home.includes('DIiAw_lBkM1')&&home.includes('See a session clip ↗'),'Homepage short session clip link missing');
-assert(workshop.includes('DSR06gjEgJK-hens-setup.webp')&&workshop.includes('DHDXe4EB9Le-cupcake-edition.webp'),'Original session photographs missing');
+assert(workshop.includes('DSR06gjEgJK-no-visible-faces.webp')&&workshop.includes('DHDXe4EB9Le-cupcake-edition.webp'),'Face-safe source session photograph or secondary cupcake photo missing');
 assert(workshop.includes('href="https://www.instagram.com/p/DSR06gjEgJK/"'),'Main session photo not linked to its original post');
 assert((workshop.match(/See a session clip/g)||[]).length===1,'One accurate session-video CTA expected');
 assert(!workshop.includes('FROM A REAL SESSION')&&!workshop.includes('HENS PARTIES · BIRTHDAYS · GROUP SESSIONS'),'Redundant workshop header labels remain');
 assert(workshop.includes('See a short clip from a Decorate &amp; Sip group session on Instagram'),'Session clip accessible description missing');
 assert(!workshop.includes('studio-session-media')&&!workshop.includes('studio-group-invite'),'Text-only workshop placeholders remain');
-assert(fs.existsSync('assets/workshops/DSR06gjEgJK-hens-setup.webp')&&fs.existsSync('assets/workshops/DHDXe4EB9Le-cupcake-edition.webp'),'Workshop images not installed');
+assert(fs.existsSync('assets/workshops/DSR06gjEgJK-no-visible-faces.webp')&&fs.existsSync('assets/workshops/DHDXe4EB9Le-cupcake-edition.webp'),'Workshop images not installed');
 
 
 const codes=['DGM5hj1hcJf','DJQ5RLthPKp','DP-QFm2EhMp'];
@@ -145,14 +144,14 @@ const detailMarkup=site.slice(site.indexOf('function showDesign(c,concept){'),si
 assert(detailMarkup.includes('design-instagram-link')&&detailMarkup.includes('originalPost')&&detailMarkup.includes('noopener noreferrer'),'Original Instagram link missing from design drill through');
 assert(detailMarkup.includes('Ask about this design →'),'Enquiry must stay inside the detail page');
 assert(base.includes('.gallery-photo__arrow')&&base.includes('.design-instagram-link'),'Gallery link styling missing');
-assert(pages.every(p=>read(p).includes('site.css?v=20261030-refine1')&&read(p).includes('site.js?v=20261030-refine1')),'Shared gallery-30 assets not cache-busted');
+assert(pages.every(p=>read(p).includes('site.css?v=20261030-occasion34')&&read(p).includes('site.js?v=20261030-refine1')),'Shared gallery-30 assets not cache-busted');
 const faqMarkup=workshop.match(/<div class="faq-list">([\s\S]*?)<\/div>/)?.[1]||'';
 assert.equal((faqMarkup.match(/<details>/g)||[]).length,4,'Four clear workshop FAQs expected');
 assert(!/\bMads\b/.test(faqMarkup),'FAQs should speak as We rather than Mads');
 assert(faqMarkup.includes('we’ve hosted private')&&faqMarkup.includes('We’re based in Glen Iris')&&faqMarkup.includes('We’ll confirm exactly')&&faqMarkup.includes('we’ve run a cupcake edition'),'Workshop FAQs should answer plainly in studio voice');
 
 assert(!gallery.includes('class="feature-strip"')&&!gallery.includes('GOT A DESIGN IN MIND?'),'Redundant enquiry section still displayed on gallery/drill-through');
-assert(gallery.includes('site.css?v=20261030-refine1')&&workshop.includes('site.css?v=20261030-refine1'),'Gallery-30 stylesheet cache version stale');
+assert(gallery.includes('site.css?v=20261030-occasion34')&&workshop.includes('site.css?v=20261030-occasion34'),'Gallery-30 stylesheet cache version stale');
 assert(workshop.includes('This is lovely! Thank you for hosting us Madara'),'Real guest comment absent from Decorate and Sip');
 assert(workshop.includes('https://www.instagram.com/p/DR9AAqlEovY/'),'Guest comment not attributed to original Instagram post');
 
@@ -174,3 +173,6 @@ console.log('Gallery-30 PASS: 30 image-backed original posts; category minimums,
 assert(featured.every(c=>c.thumbnailImage&&fs.existsSync(c.thumbnailImage)),'Gallery thumbnail missing');
 assert(!home.includes('DQ0WjCPEgqr'),'Pooh must not appear on the homepage');
 assert(featured.every(c=>c.ownerReviewRequired&&c.showOnWebsite==='No'),'Owner approval gate missing');
+for(const code of ['DQ0WjCPEgqr','DJQ6B-tBQyw','DINfV1OhprN','DQTMOqiD53h']){const c=featured.find(x=>x.sourceShortcode===code);assert(c?.thumbnailImage&&fs.existsSync(c.thumbnailImage)&&fs.existsSync(c.coverImage),'Owner-selected original photo missing '+code)}
+assert(featured.find(x=>x.sourceShortcode==='DQTMOqiD53h')?.sourcePhotoRank===10,'Surprise engagement ribbon cake must link to original post photo 10');
+assert(base.includes('border-radius:0;background:transparent')&&base.includes('.workshop-detail__num::after'),'Numbered steps should be editorial, not circular badges');
