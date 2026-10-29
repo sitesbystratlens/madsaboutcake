@@ -1,4 +1,4 @@
-name: Verify live gallery 30 and original images
+name: Verify live gallery 34 and original images
 on:
   push:
     branches: [main]
@@ -25,26 +25,29 @@ jobs:
             curl -fsSL --max-time 22 -H 'Cache-Control: no-cache' "$SITE/cakes.json?rev=$GITHUB_SHA-$n" > /tmp/live-gallery.json || true
             curl -fsSL --max-time 22 -H 'Cache-Control: no-cache' "$SITE/cakes/?rev=$GITHUB_SHA-$n" > /tmp/live-cakes.html || true
             curl -fsSL --max-time 22 -H 'Cache-Control: no-cache' "$SITE/?rev=$GITHUB_SHA-$n" > /tmp/live-home.html || true
-            if grep -Fq 'site.js?v=20261030-gallery30' /tmp/live-cakes.html && 
+            if grep -Fq 'site.js?v=20261030-refine1' /tmp/live-cakes.html && 
                ! grep -Fq 'DQ0WjCPEgqr' /tmp/live-home.html && 
                python3 - <<'PY'
           import json,sys
           try:
               data=json.load(open('/tmp/live-gallery.json'))
               selected=[c for c in data['cakes'] if c.get('featured30')]
-              assert len(selected)==30
+              assert len(selected)==34
               assert data['meta']['mode']=='concept-preview'
-              assert data['meta']['featuredCount']==30
+              assert data['meta']['featuredCount']==34
               assert all(c['showOnWebsite']=='No' for c in data['cakes'])
               assert all(c.get('thumbnailImage','').startswith('assets/gallery-30/thumbs/') for c in selected)
-              assert 'DQ0WjCPEgqr' not in {c['sourceShortcode'] for c in selected}
-              print('Cloudflare serves 30 source-backed designs with preview safeguards')
+              assert sum(c.get('featureCategory')=='Baby celebrations' for c in selected)==6
+              assert sum(c.get('featureCategory')=='Weddings & engagements' for c in selected)==6
+              assert all(c.get('ownerReviewRequired') for c in selected)
+              assert 'DQ0WjCPEgqr' in {c['sourceShortcode'] for c in selected}
+              print('Cloudflare serves 34 source-backed designs with preview safeguards')
           except Exception as e:
               print('Preview not yet current:',e)
               sys.exit(1)
           PY
             then
-              echo "Cloudflare gallery 30 version is current."
+              echo "Cloudflare gallery 34 version is current."
               python3 - <<'PY'
           import json, subprocess
           data=json.load(open('/tmp/live-gallery.json'))
@@ -54,12 +57,12 @@ jobs:
               p=subprocess.run(['curl','-fsSI','--max-time','25','https://madsaboutcake.sitesbystratlens.workers.dev/'+img],capture_output=True,text=True)
               assert p.returncode==0, 'Image not live: '+img
               assert 'content-type: image/webp' in p.stdout.lower(), 'Not served as WebP: '+img
-          print('All 60 image URLs are live and served as WebP.')
+          print('All 68 image URLs are live and served as WebP.')
           PY
               exit 0
             fi
-            echo "Worker has not propagated the full 30 design gallery (attempt $n / 15)."
+            echo "Worker has not propagated the full 34 design gallery (attempt $n / 15)."
             sleep 12
           done
-          echo 'ERROR: published gallery still differs from the selected 30.'
+          echo 'ERROR: published gallery still differs from the selected 34.'
           exit 1
