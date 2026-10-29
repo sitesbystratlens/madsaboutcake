@@ -54,13 +54,14 @@ jobs:
            ('DINfRR_BzYm','Love & anniversaries','Cake')]
           records=[]
           for k,(code,cat,product) in enumerate(rows,1):
-              path='assets/gallery-30/'+code+'-M'+str(k)+'.webp'
-              thumb='assets/gallery-30/thumbs/'+code+'-M'+str(k)+'-card.webp'
+              mid='M259' if code=='DGM5hj1hcJf' else 'M'+str(k)
+              path='assets/gallery-30/'+code+'-'+mid+'.webp'
+              thumb='assets/gallery-30/thumbs/'+code+'-'+mid+'-card.webp'
               pathlib.Path(path).parent.mkdir(parents=True,exist_ok=True)
               pathlib.Path(thumb).parent.mkdir(parents=True,exist_ok=True)
               pathlib.Path(path).write_bytes(b'x'*6500)
               pathlib.Path(thumb).write_bytes(b'x'*6500)
-              records.append(dict(displayOrder=k,sourceShortcode=code,sourceOriginalFilename=('igexport-DGM5hj1hcJf-3.jpg' if code=='DGM5hj1hcJf' else 'igexport-'+code+'.jpg'),sourceMediaId='M'+str(k),instagramUrl='https://www.instagram.com/p/'+code+'/',coverImage=path,thumbnailImage=thumb,title='Fixture '+code,shortDescription='A cake from the source caption.',alt='Cake',productType=product,primaryOccasion='' if cat=='Other/unspecified' else cat,featureCategory=cat,captionEvidence='The original owner caption describing a cake',occasionEvidence='caption',reviewHoldReasons=['Owner approval required'],postEngagement=dict(likes=30,comments=5,responseIndex=70,extractDate='2026-10-27')))
+              records.append(dict(displayOrder=k,sourceShortcode=code,sourceOriginalFilename=('igexport-DGM5hj1hcJf-3.jpg' if code=='DGM5hj1hcJf' else 'igexport-'+code+'.jpg'),sourceMediaId=mid,instagramUrl='https://www.instagram.com/p/'+code+'/',coverImage=path,thumbnailImage=thumb,title='Fixture '+code,shortDescription='A cake from the source caption.',alt='Cake',productType=product,primaryOccasion='' if cat=='Other/unspecified' else cat,featureCategory=cat,captionEvidence='The original owner caption describing a cake',occasionEvidence='caption',reviewHoldReasons=['Owner approval required'],postEngagement=dict(likes=30,comments=5,responseIndex=70,extractDate='2026-10-27')))
           pathlib.Path('gallery30-manifest.json').write_text(json.dumps(dict(records=records)))
           PY
           python3 scripts/apply-gallery-30.py
