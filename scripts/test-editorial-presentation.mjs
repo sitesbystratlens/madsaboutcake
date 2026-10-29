@@ -55,11 +55,11 @@ for(const p of pages){
 const homeCss=read('assets/home-v3.css');
 const home=read('index.html'),gallery=read('cakes/index.html'),workshop=read('decorate-and-sip/index.html'),enquire=read('enquire/index.html');
 assert(home.includes('Say it with cake.')&&home.includes('What are we <i>celebrating?</i>'),'Homepage headings changed');
-assert(css.includes('.workshop-hero .workshop-hero__copy h1 .workshop-hero__accent'),'Workshop pink accent missing');
+assert(base.includes('.workshop-hero .workshop-hero__copy h1 .workshop-hero__accent'),'Workshop pink accent missing');
 assert(workshop.includes('class="workshop-hero__accent"'),'Workshop headline must have accented & Sip');
-assert(css.includes('.workshop-inclusions .workshop-detail__num'),'Workshop numbered steps not emphasised');
+assert(base.includes('.workshop-inclusions .workshop-detail__num'),'Workshop numbered steps not emphasised');
 assert(site.includes('root.dataset.visibleCount=String(count);'),'Gallery count must drive balanced 2×2 grid');
-assert(css.includes('.gallery-grid[data-visible-count="4"]'),'Four-card filtered gallery layout missing');
+assert(base.includes('.gallery-grid[data-visible-count="4"]'),'Four-card filtered gallery layout missing');
 assert(homeCss.includes('.occasion .section-head h2{font-size:clamp(49px,4.1vw,66px);white-space:nowrap}'),'Desktop occasion heading should be single line');
 
 assert(!home.includes('CUSTOM CAKES &amp; CUPCAKES · MELBOURNE'),'Homepage repeated the navigation category in an eyebrow');
