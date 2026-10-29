@@ -56,7 +56,7 @@ for(const [slug,url] of pages){
   const problem=[];
   if(info.documentWidth>width+4)problem.push('horizontal overflow '+info.documentWidth+' > '+width);
   if(info.brokenImages.length)problem.push('broken images '+info.brokenImages.join(','));
-  if(info.visibleNavigation.length<3)problem.push('insufficient visible navigation');
+  if(slug!=='review'&&info.visibleNavigation.length<3)problem.push('insufficient visible navigation');
   if(!info.mainHeading)problem.push('missing H1');
   if(exceptions.length)problem.push('uncaught JS '+exceptions.join('; '));
   if(slug==='cakes'){
@@ -128,6 +128,7 @@ for(const [slug,url] of pages){
     const retained=page.locator('.review-card[data-code="'+source+'"] [data-decision="keep"]');
     if(await retained.getAttribute('aria-pressed')!=='true')problem.push('Owner Keep selection does not survive refresh');
     if(!await page.locator('.review-card .post-link[href^="https://www.instagram.com/p/"]').count())problem.push('Source-post links missing');
+    if((await page.locator('.review-header .brand').count())!==1||(await page.locator('.review-header .back').count())!==1)problem.push('Review navigation links missing');
     if((await page.locator('body').evaluate(el=>el.scrollWidth))>width+4)problem.push('review horizontal overflow');
   }
   if(slug==='enquire'&&info.formCount!==1)problem.push('missing enquiry form');
