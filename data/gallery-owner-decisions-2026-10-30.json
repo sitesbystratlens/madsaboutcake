@@ -1,0 +1,300 @@
+{
+  "version": 1,
+  "sourceFiles": [
+    "Mads_Gallery_Review_2026-10-29 (1).csv",
+    "Mads_Gallery_Review_2026-10-29 (2).csv"
+  ],
+  "sourceIdentical": true,
+  "sourceSha256": "1cbde85d4b3aca4300e82d0f17f57a20311767671f0ac0277d834b5c2e1e5c97",
+  "dateRecorded": "2026-10-30",
+  "notes": "Keep=selected for concept gallery; Remove=exclude from concept gallery but preserve source records and review posts; Undecided=not selected. This is not public commercial approval.",
+  "counts": {
+    "keep": 51,
+    "remove": 17,
+    "undecided": 2,
+    "birthdayKeep": 27,
+    "cupcakeKeep": 28
+  },
+  "decisions": {
+    "DA-B4huhKQ4": {
+      "review": "keep",
+      "note": ""
+    },
+    "DP079RakorA": {
+      "review": "keep",
+      "note": ""
+    },
+    "C8iniSsyccX": {
+      "review": "remove",
+      "note": ""
+    },
+    "DKDwrNzBA65": {
+      "review": "keep",
+      "note": ""
+    },
+    "DBF6bqKhZK1": {
+      "review": "keep",
+      "note": ""
+    },
+    "DK8nnIGBfLx": {
+      "review": "keep",
+      "note": ""
+    },
+    "DVnLqRxkovV": {
+      "review": "remove",
+      "note": ""
+    },
+    "DVFVq_Ukulg": {
+      "review": "remove",
+      "note": ""
+    },
+    "DWvvtLPEno2": {
+      "review": "undecided",
+      "note": ""
+    },
+    "DRY4dfnkjIF": {
+      "review": "remove",
+      "note": ""
+    },
+    "DNZj3aAh2jC": {
+      "review": "keep",
+      "note": ""
+    },
+    "DO2PQVaEmC1": {
+      "review": "remove",
+      "note": ""
+    },
+    "DLd0M9phw0R": {
+      "review": "keep",
+      "note": ""
+    },
+    "DLhgP2FhIlz": {
+      "review": "keep",
+      "note": ""
+    },
+    "DPgSOTKkgjS": {
+      "review": "keep",
+      "note": ""
+    },
+    "DFcQB6mherC": {
+      "review": "keep",
+      "note": "birthday"
+    },
+    "DKJ13vrhR-V": {
+      "review": "undecided",
+      "note": ""
+    },
+    "DGrtchwBJFb": {
+      "review": "keep",
+      "note": ""
+    },
+    "DF2H8Fbh3Nv": {
+      "review": "keep",
+      "note": ""
+    },
+    "DBzxsvthtXE": {
+      "review": "keep",
+      "note": "birthday"
+    },
+    "DIGJ6oiBq4u": {
+      "review": "remove",
+      "note": ""
+    },
+    "DCgADluhglk": {
+      "review": "keep",
+      "note": ""
+    },
+    "DBqMqdshb59": {
+      "review": "keep",
+      "note": ""
+    },
+    "DBC0_I4hblC": {
+      "review": "remove",
+      "note": ""
+    },
+    "DAnXD3CPUGY": {
+      "review": "keep",
+      "note": ""
+    },
+    "C-WMTMtTzQP": {
+      "review": "keep",
+      "note": ""
+    },
+    "DPLsqIzkpHn": {
+      "review": "keep",
+      "note": ""
+    },
+    "DLJsj8shD5d": {
+      "review": "keep",
+      "note": ""
+    },
+    "DK8lOEfhYJA": {
+      "review": "keep",
+      "note": "birthday"
+    },
+    "C-7MEXVysny": {
+      "review": "remove",
+      "note": ""
+    },
+    "C-yn5sHTOTH": {
+      "review": "keep",
+      "note": ""
+    },
+    "C83Ol1UyMkf": {
+      "review": "keep",
+      "note": ""
+    },
+    "C9ECFTcS6n8": {
+      "review": "remove",
+      "note": ""
+    },
+    "DPaoBCZkl_W": {
+      "review": "remove",
+      "note": ""
+    },
+    "DNKl7y9BcgU": {
+      "review": "keep",
+      "note": ""
+    },
+    "DPLhTN5kgDE": {
+      "review": "keep",
+      "note": ""
+    },
+    "DNfV8IhB9Q9": {
+      "review": "keep",
+      "note": ""
+    },
+    "DBAkK7DBINC": {
+      "review": "remove",
+      "note": ""
+    },
+    "DBOENm-BFoX": {
+      "review": "keep",
+      "note": ""
+    },
+    "C-hKkWSSLwl": {
+      "review": "keep",
+      "note": ""
+    },
+    "DQYyHi-kn6R": {
+      "review": "keep",
+      "note": ""
+    },
+    "DVnJAZwEs0P": {
+      "review": "keep",
+      "note": ""
+    },
+    "DCTltZxh4Bq": {
+      "review": "keep",
+      "note": "anniversary"
+    },
+    "C7tOmcThkTA": {
+      "review": "keep",
+      "note": "baby celebration"
+    },
+    "Db2wuYpEoIe": {
+      "review": "keep",
+      "note": "anniversary"
+    },
+    "DQEUavaEhle": {
+      "review": "keep",
+      "note": "birthday"
+    },
+    "DRjMFHikhm-": {
+      "review": "remove",
+      "note": ""
+    },
+    "DNKmiSahnj0": {
+      "review": "keep",
+      "note": ""
+    },
+    "DGITCLkhk24": {
+      "review": "keep",
+      "note": "birthday"
+    },
+    "DDQROTyhVCL": {
+      "review": "keep",
+      "note": ""
+    },
+    "DDQR8n_BNxQ": {
+      "review": "keep",
+      "note": ""
+    },
+    "DDV60R-hcFA": {
+      "review": "keep",
+      "note": "mayoun is a pre wedding celebration"
+    },
+    "DAOl05QuG0y": {
+      "review": "keep",
+      "note": ""
+    },
+    "DAxbgXkTqp-": {
+      "review": "remove",
+      "note": "no cupcake images"
+    },
+    "C-7L_LNy_AE": {
+      "review": "keep",
+      "note": ""
+    },
+    "C-PowScyDHY": {
+      "review": "keep",
+      "note": ""
+    },
+    "C-7NLvQS7dv": {
+      "review": "keep",
+      "note": ""
+    },
+    "C8lL68qS0n2": {
+      "review": "keep",
+      "note": ""
+    },
+    "C8q6EfiSCgn": {
+      "review": "remove",
+      "note": ""
+    },
+    "C8jafsmy2-6": {
+      "review": "remove",
+      "note": ""
+    },
+    "C8_6qUPSrOq": {
+      "review": "remove",
+      "note": ""
+    },
+    "C8Y7kujSawG": {
+      "review": "keep",
+      "note": ""
+    },
+    "C8iozsPSPB8": {
+      "review": "keep",
+      "note": ""
+    },
+    "C9WLlW8Sf1I": {
+      "review": "keep",
+      "note": ""
+    },
+    "C86wdrtynb0": {
+      "review": "keep",
+      "note": ""
+    },
+    "C7tO9F4B8lX": {
+      "review": "keep",
+      "note": "baby celebration"
+    },
+    "C7tPf3RBuZy": {
+      "review": "keep",
+      "note": ""
+    },
+    "C7tWF2Kh1l5": {
+      "review": "keep",
+      "note": ""
+    },
+    "C7tSwzahZuk": {
+      "review": "remove",
+      "note": ""
+    },
+    "C8JF0_IyYGt": {
+      "review": "keep",
+      "note": ""
+    }
+  }
+}
