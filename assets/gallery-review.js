@@ -20,7 +20,7 @@ const CATEGORY_OPTIONS=[
  ['Corporate / career','Corporate / career'],['Milestone celebrations','Milestone celebrations'],['Other','Other — add note']
 ];
 let base=null,additional=null,catalogue=null,priorReview=null,secondReview=null,categoryMoves=null,records=[],currentGroup='birthdays';
-let state={decisions:{},notes:{},overall:'',groupDecisions:{},groupNotes:{},suggestedCategories:{}};
+let state={decisions:{},notes:{},overall:'',groupDecisions:{},groupNotes:{},suggestedCategories:{},moveDestinations:{}};
 const clean=s=>String(s??'').replace(/[&<>"']/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;','\'':'&#39;'}[c]));
 const postUrl=s=>'https://www.instagram.com/p/'+encodeURIComponent(s)+'/';
 const validCode=s=>/^[A-Za-z0-9_-]{5,32}$/.test(s);
@@ -32,13 +32,21 @@ const decision=(code,group)=>{
 };
 const note=(code,group)=>legacyGroup(group)?(state.notes[code]||''):(state.groupNotes[group]?.[code]||'');
 const categoryChoice=code=>state.suggestedCategories[code]||'';
+const MOVE_TO=[['','Not moving yet'],['Birthdays','Birthdays'],['Cupcakes','Cupcakes'],['Weddings & engagements','Weddings & engagements'],['Baby celebrations','Baby celebrations'],['Love & anniversaries','Love & anniversaries'],['Other/unspecified','Other (unclassified)']];
+const moveTo=(code,group)=>state.moveDestinations?.[group]?.[code]||'';
+const isHandled=r=>!!moveTo(r.code,r.group)||(r.group==='other'&&!!categoryChoice(r.code));
+function setMoveTo(code,group,destination){
+ if(!MOVE_TO.some(([v])=>v===destination))return;
+ (state.moveDestinations[group]??={})[code]=destination;
+ save();
+}
 function readStorage(){
  try {
   const s=localStorage.getItem(STORAGE);
   if(!s)return;
   const saved=JSON.parse(s);
   if(saved&&typeof saved==='object'){
-   for(const k of ['decisions','notes','groupDecisions','groupNotes','suggestedCategories'])if(saved[k]&&typeof saved[k]==='object')state[k]=saved[k];
+   for(const k of ['decisions','notes','groupDecisions','groupNotes','suggestedCategories','moveDestinations'])if(saved[k]&&typeof saved[k]==='object')state[k]=saved[k];
    if(typeof saved.overall==='string')state.overall=saved.overall;
   }
  }catch(e){$('feedback').textContent='Browser storage is disabled. Download CSV often to preserve your decisions.';}
@@ -90,7 +98,7 @@ function makeRecords(){
  });
 }
 function cardHtml(r){
- const d=decision(r.code,r.group),n=note(r.code,r.group),chosenCategory=categoryChoice(r.code);
+ const d=decision(r.code,r.group),n=note(r.code,r.group),chosenCategory=categoryChoice(r.code),destination=moveTo(r.code,r.group);
  const categoryField=r.group==='other'?'<label class="note-label" for="category-'+clean(r.code)+'">Could this belong to a new category?</label>'+
  '<select class="category-choice" id="category-'+clean(r.code)+'">'+CATEGORY_OPTIONS.map(([v,t])=>'<option value="'+clean(v)+'"'+(chosenCategory===v?' selected':'')+'>'+clean(t)+'</option>').join('')+'</select>':'';
  return '<article class="review-card" data-code="'+clean(r.code)+'" data-decision="'+d+'">'+
@@ -104,13 +112,17 @@ function cardHtml(r){
   '<a class="post-link" href="'+r.source+'" target="_blank" rel="noopener noreferrer">View original Instagram post ↗</a></div>'+
   '<footer><div class="decision-buttons" role="group" aria-label="Choose '+clean(r.title)+'">'+
   decisionsAllowed.map(x=>'<button type="button" data-decision="'+x+'" aria-pressed="'+(d===x)+'">'+({keep:'✓ Keep',remove:'× Remove',undecided:'? Later'}[x])+'</button>').join('')+'</div>'+
+  '<label class="note-label" for="move-'+clean(r.code)+'-'+r.group+'">Move this design to</label>'+
+  '<select class="move-choice" id="move-'+clean(r.code)+'-'+r.group+'" aria-label="Move '+clean(r.title)+' to a different category">'+
+  MOVE_TO.map(([v,t])=>'<option value="'+clean(v)+'"'+(destination===v?' selected':'')+'>'+clean(t)+'</option>').join('')+'</select>'+
+  (destination?'<p class="move-state">Marked for '+clean(destination)+'. Export your CSV to update the site.</p>':'')+
   categoryField+
   '<label class="note-label" for="note-'+clean(r.code)+'-'+r.group+'">Notes (optional)</label>'+
   '<textarea class="card-note" id="note-'+clean(r.code)+'-'+r.group+'" maxlength="1500" placeholder="e.g. suitable for floral cakes, photo 2…">'+clean(n)+'</textarea></footer></article>';
 }
 function shown(){
- const search=$('search').value.trim().toLowerCase(),filter=$('status').value,sort=$('sort').value;
- const arr=records.filter(x=>x.group===currentGroup&&(filter==='all'||decision(x.code,x.group)===filter)&&
+ const search=$('search').value.trim().toLowerCase(),filter=$('status').value,sort=$('sort').value,queue=$('queue-filter').value;
+ const arr=records.filter(x=>x.group===currentGroup&&(queue==='all'||(queue==='pending'&&!isHandled(x))||(queue==='handled'&&isHandled(x)))&&(filter==='all'||decision(x.code,x.group)===filter)&&
  (!search||(x.title+' '+x.code+' '+x.caption+' '+x.evidence).toLowerCase().includes(search)));
  if(sort==='name')arr.sort((a,b)=>a.title.localeCompare(b.title));
  else if(sort==='popularity')arr.sort((a,b)=>(b.likes??-1)-(a.likes??-1)||a.sequence-b.sequence);
@@ -125,7 +137,8 @@ function render(){
  $('total').textContent=current.length;$('kept').textContent=count('keep');$('removed').textContent=count('remove');$('undecided').textContent=count('undecided');
  const list=shown();$('cards').innerHTML=list.map(cardHtml).join('');$('empty').hidden=!!list.length;
  const g=GROUPS.find(x=>x.id===currentGroup);
- $('context').textContent=g.description+' '+list.length+' posts visible. Selections save automatically on this device.';
+ const awaiting=current.filter(x=>!isHandled(x)).length;
+ $('context').textContent=g.description+' '+awaiting+' still need placement; '+list.length+' cards shown. Moves and notes save locally; download your CSV for me to update the website catalogue.';
  for(const card of $('cards').querySelectorAll('.review-card')){
   const code=card.dataset.code,r=records.find(x=>x.code===code&&x.group===currentGroup);
   const img=card.querySelector('img'),fb=card.querySelector('.image-fallback');
@@ -142,13 +155,14 @@ function render(){
    const selected=Array.from($('cards').querySelectorAll('.review-card')).find(x=>x.dataset.code===code);
    selected?.querySelector('[data-decision="'+btn.dataset.decision+'"]')?.focus({preventScroll:true});
   }));
+  card.querySelector('.move-choice').addEventListener('change',e=>{setMoveTo(code,currentGroup,e.target.value);render();});
   card.querySelector('.card-note').addEventListener('input',e=>setNote(code,currentGroup,e.target.value));
-  card.querySelector('.category-choice')?.addEventListener('change',e=>{state.suggestedCategories[code]=e.target.value;save()});
+  card.querySelector('.category-choice')?.addEventListener('change',e=>{state.suggestedCategories[code]=e.target.value;save();render()});
  }
 }
 function exportRows(){return records.map(r=>({
  group:r.group,code:r.code,title:r.title,decision:decision(r.code,r.group),
- note:note(r.code,r.group),category: r.group==='other'?categoryChoice(r.code):'',
+ note:note(r.code,r.group),category: r.group==='other'?categoryChoice(r.code):'',moveTo:moveTo(r.code,r.group),
  status:r.status,instagram:r.source,likes:r.likes,sourceEvidence:r.evidence
 }));}
 function reviewText(){
@@ -156,7 +170,7 @@ function reviewText(){
  for(const g of GROUPS){
   const items=exportRows().filter(x=>x.group===g.id);
   lines.push(g.name.toUpperCase());
-  for(const r of items)if(r.decision!=='undecided'||r.note||r.category)lines.push(r.decision.toUpperCase()+' — '+r.title+' — '+r.instagram+(r.category?' — Category: '+r.category:'')+(r.note?' — Note: '+r.note.replace(/\s+/g,' '):''));
+  for(const r of items)if(r.decision!=='undecided'||r.note||r.category)lines.push(r.decision.toUpperCase()+' — '+r.title+' — '+r.instagram+(r.category?' — Category: '+r.category:'')+(r.moveTo?' — Move to: '+r.moveTo:'')+(r.note?' — Note: '+r.note.replace(/\s+/g,' '):''));
   lines.push('Decided '+items.filter(x=>x.decision!=='undecided').length+' of '+items.length,'');
  }
  if(state.overall)lines.push('OVERALL NOTES',state.overall);
@@ -172,8 +186,8 @@ async function copy(){
  }
 }
 function csvDownload(){
- const rows=[['Section','Shortcode','Design','Decision','Notes','Suggested category','Current gallery','Instagram','Historical likes','Evidence']];
- for(const r of exportRows())rows.push([GROUP_LABEL[r.group],r.code,r.title,r.decision,r.note,r.category,r.status,r.instagram,r.likes??'',r.sourceEvidence]);
+ const rows=[['Section','Shortcode','Design','Decision','Notes','Suggested category','Move to','Current gallery','Instagram','Historical likes','Evidence']];
+ for(const r of exportRows())rows.push([GROUP_LABEL[r.group],r.code,r.title,r.decision,r.note,r.category,r.moveTo,r.status,r.instagram,r.likes??'',r.sourceEvidence]);
  rows.push([],['Overall notes',state.overall]);
  const csv=rows.map(row=>row.map(v=>'"'+String(v??'').replace(/"/g,'""')+'"').join(',')).join('\r\n');
  const blob=new Blob(['\uFEFF'+csv],{type:'text/csv;charset=utf-8'}),url=URL.createObjectURL(blob),a=document.createElement('a');
@@ -184,9 +198,10 @@ function csvDownload(){
 function bind(){
  document.querySelectorAll('[data-group]').forEach(button=>button.addEventListener('click',()=>{
   currentGroup=button.dataset.group;const url=new URL(location.href);url.searchParams.set('category',currentGroup);window.history.replaceState(null,'',url);
-  $('search').value='';$('status').value='all';$('sort').value=currentGroup==='other'?'popularity':'existing';render();
+  $('search').value='';$('status').value='all';$('sort').value=currentGroup==='other'?'popularity':'existing';
+  $('queue-filter').value=currentGroup==='other'?'pending':'all';render();
  }));
- for(const id of ['search','status','sort'])$(id).addEventListener(id==='search'?'input':'change',render);
+ for(const id of ['search','status','sort','queue-filter'])$(id).addEventListener(id==='search'?'input':'change',render);
  for(const id of ['copy','copy-bottom'])$(id).addEventListener('click',copy);
  for(const id of ['download','download-bottom'])$(id).addEventListener('click',csvDownload);
  $('close-dialog').addEventListener('click',()=>$('photo-dialog').close());
@@ -237,7 +252,7 @@ async function init(){
   for(const g of GROUPS){const b=document.querySelector('[data-group="'+g.id+'"]');if(b)b.querySelector('span').textContent=records.filter(x=>x.group===g.id).length;}
   const tab=new URLSearchParams(location.search).get('category');
   currentGroup=GROUPS.some(g=>g.id===tab)?tab:(tab==='popular'?'other':'birthdays');
-  $('sort').value=currentGroup==='other'?'popularity':'existing';bind();render();
+  $('sort').value=currentGroup==='other'?'popularity':'existing';$('queue-filter').value=currentGroup==='other'?'pending':'all';bind();render();
  }catch(e){$('context').textContent='Could not load review: '+e.message+'. Refresh after deployment.';}
 }
 document.addEventListener('DOMContentLoaded',init);
