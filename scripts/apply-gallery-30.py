@@ -120,7 +120,7 @@ for path in [ROOT/"index.html",ROOT/"cakes/index.html",ROOT/"decorate-and-sip/in
 
 tests_path=ROOT/"scripts/test-editorial-presentation.mjs"
 test=tests_path.read_text(encoding="utf-8")
-test=swap(test,"c.featured25===true","c.featured30===true","Change test featured property")
+test=swap(test,"const featured=data.cakes.filter(c=>c.featured25===true);","const featured=data.cakes.filter(c=>c.featured30===true);","Change test featured property")
 test=swap(test,"assert.equal(featured.length,25,'25 featured Instagram posts expected');","assert.equal(featured.length,30,'30 original Instagram designs expected');","Test exactly 30")
 test=swap(test,"size,25,'One selection per source post'","size,30,'One selection per source post'","Test 30 unique codes")
 test=swap(test,"for(const category of ['Birthdays','Weddings & engagements','Baby celebrations','Love & anniversaries','Other/unspecified'])assert.equal(featured.filter(c=>c.featureCategory===category).length,5,'Unbalanced selected category '+category);",
