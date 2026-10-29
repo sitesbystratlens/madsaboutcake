@@ -69,6 +69,10 @@ for(const [slug,url] of pages){
     const source=JSON.parse(fs.readFileSync('cakes.json','utf8'));
     const expected=source.cakes.filter(c=>(c.featured30===true||c.featured25===true)&&(c.primaryOccasion===label||(c.otherOccasions||[]).includes(label))).length;
     if(visible!==expected)problem.push(label+' has '+visible+' items, expected '+expected);
+    if(width===1440&&['Baby celebrations','Weddings & engagements'].includes(label)){
+     const grid=await page.locator('[data-gallery]').evaluate(el=>({shown:el.querySelectorAll('.gallery-card:not([hidden])').length,columns:getComputedStyle(el).gridTemplateColumns.split(' ').filter(Boolean).length}));
+     if(grid.shown!==6||grid.columns!==3)problem.push(label+' must display a complete 3x2 block '+JSON.stringify(grid));
+    }
     if(width===1440&&visible===4){
      const layout=await page.locator('[data-gallery]').evaluate(el=>({count:el.dataset.visibleCount,columns:getComputedStyle(el).gridTemplateColumns.split(' ').filter(Boolean).length}));
      if(layout.count!=='4'||layout.columns!==2)problem.push(label+' should render a balanced 2x2 grid '+JSON.stringify(layout));
