@@ -6,20 +6,41 @@ const data=JSON.parse(read('cakes.json')),notice=JSON.parse(read('assets/studio-
 const pages=['index.html','cakes/index.html','decorate-and-sip/index.html','about/index.html','enquire/index.html','404.html'];
 assert(data.cakes.length>=33);
 const featured=data.cakes.filter(c=>c.featured30===true);
-assert.equal(featured.length,34,'34 original Instagram designs expected');
-assert.equal(data.meta.featuredCount,34,'Published preview catalogue count must match the selected 34');
-assert(data.meta.legacyDetailRecords===data.cakes.length-34,'Legacy detail record total must remain accurate');
+assert.equal(featured.length,74,'74 owner-selected Instagram designs expected in concept preview');
+assert.equal(data.meta.featuredCount,74,'Preview catalogue count must match the 74 retained designs');
+assert(data.meta.legacyDetailRecords===data.cakes.length-featured.length,'Legacy detail record total must remain accurate');
 
-assert.equal(new Set(featured.map(c=>c.sourceShortcode)).size,34,'One selection per source post');
-for(const [category,count] of Object.entries({'Birthdays':6,'Weddings & engagements':6,'Baby celebrations':6,'Love & anniversaries':5,'Other/unspecified':11}))assert.equal(featured.filter(c=>c.featureCategory===category).length,count,'Wrong selected category count '+category);
-assert(featured.every(c=>c.coverImage.startsWith('assets/gallery-30/')),'Curated photos must be local hosted original derivatives');
-assert(featured.every(c=>typeof c.captionEvidence==='string'&&c.captionEvidence.trim().length>10),'Each featured cake needs an original-caption evidence field');
-assert(featured.every(c=>typeof c.descriptionBasis==='string'&&c.descriptionBasis.includes('Instagram post description')),'Every featured summary must cite the owner caption');
+assert.equal(new Set(featured.map(c=>c.sourceShortcode)).size,74,'One selection per source post');
+for(const [category,count] of Object.entries({'Weddings & engagements':6,'Baby celebrations':6,'Love & anniversaries':5,'Other/unspecified':11}))assert.equal(featured.filter(c=>c.featureCategory===category).length,count,'Protected category altered '+category);
+assert(featured.every(c=>/^assets\/(?:gallery-30\/|gallery-review-covers\/|creations\/|featured-25\/)/.test(c.coverImage)),'Curated photos must be local hosted original derivatives');
+assert(featured.every(c=>fs.existsSync(c.coverImage)),'Every source image must be available locally');
+assert(featured.every(c=>fs.existsSync(c.thumbnailImage||c.coverImage)),'Every gallery thumbnail must be available locally');
+assert(featured.every(c=>(typeof c.captionEvidence==='string'&&c.captionEvidence.trim().length>10)||c.reviewDecisionSource==='CSV exports 2026-10-29'),'Each preview creation needs either caption evidence or traceable user decision source');
+assert(featured.every(c=>(typeof c.descriptionBasis==='string'&&/Instagram post description|owner.s Instagram post description/.test(c.descriptionBasis))||c.reviewDecisionSource==='CSV exports 2026-10-29'),'Descriptions must be traceable to caption or clearly flagged as owner review copy');
 const valentine=featured.find(c=>c.sourceShortcode==='DGM5hj1hcJf');
 assert(valentine?.coverImage==='assets/gallery-30/DGM5hj1hcJf-M259.webp'&&valentine.sourcePhotoRank===3,'Must use complete cake photograph from same Instagram carousel');
 
 assert.equal(new Set(data.cakes.map(c=>c.sourceShortcode)).size,data.cakes.length,'Duplicate post in combined gallery and legacy catalogue');
 assert.equal(data.meta.mode,'concept-preview');
+
+const decisionSource=JSON.parse(read('data/gallery-owner-decisions-2026-10-30.json'));
+const retained=Object.entries(decisionSource.decisions).filter(([,x])=>x.review==='keep').map(([code])=>code);
+const declined=Object.entries(decisionSource.decisions).filter(([,x])=>x.review==='remove').map(([code])=>code);
+const undecided=Object.entries(decisionSource.decisions).filter(([,x])=>x.review==='undecided').map(([code])=>code);
+assert.equal(retained.length,51);assert.equal(declined.length,17);assert.equal(undecided.length,2);
+for(const code of retained)assert(featured.some(c=>c.sourceShortcode===code),'Keep selection missing '+code);
+for(const code of [...declined,...undecided])assert(!featured.some(c=>c.sourceShortcode===code),'Unapproved design included '+code);
+assert(featured.some(c=>c.sourceShortcode==='DK8nnIGBfLx'),'Owner chose to retain red-bow birthday cake');
+assert(!featured.some(c=>c.sourceShortcode==='C8iniSsyccX'),'Owner removed black heart birthday cake');
+const occasionMatches=(c,occasion)=>!c.holdOccasionFilterUntilOwnerApproval&&(c.primaryOccasion===occasion||(c.otherOccasions||[]).includes(occasion));
+const productMatches=(c,product)=>c.productType===product||(c.otherProductTypes||[]).includes(product);
+assert.equal(featured.filter(c=>occasionMatches(c,'Weddings & engagements')).length,6,'Weddings must remain at six');
+assert.equal(featured.filter(c=>occasionMatches(c,'Baby celebrations')).length,6,'Baby celebrations must remain at six');
+assert.equal(featured.filter(c=>occasionMatches(c,'Love & anniversaries')).length,5,'Love & anniversaries must remain unchanged');
+assert.equal(featured.filter(c=>productMatches(c,'Cupcakes')).length,28,'All 28 owner-kept cupcake posts should appear in Cupcakes filter');
+assert.equal(featured.filter(c=>occasionMatches(c,'Birthdays')).length,29,'Birthday list plus two cupcake birthday notes should yield 29 designs');
+assert(featured.some(c=>c.sourceShortcode==='Db2wuYpEoIe'&&c.primaryOccasion==='Love & anniversaries'&&productMatches(c,'Cupcakes')),'Coconut set must remain anniversary and appear in Cupcakes');
+
 assert(data.cakes.every(c=>c.showOnWebsite==='No'),'Owner photos should remain unapproved');
 assert(featured.some(c=>c.sourceShortcode==='DQ0WjCPEgqr'&&c.licensedCharacterReview===true&&c.ownerReviewRequired===true&&c.showOnWebsite==='No'),'Pooh design should be owner-preview only with launch approval safeguard');
 assert(data.cakes.every(c=>!(/independent website concept/i.test(c.shortDescription+' '+c.alt))),'Internal catalogue text');
