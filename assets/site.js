@@ -81,6 +81,7 @@ function initGallery(records,concept){
    const visible=!!c&&(product==='all'||slug(c.productType)===product)&&(!occasion||occasion.value==='all'||matchesOccasion(c,occasion.value));
    card.hidden=!visible;if(visible)count++;
   }
+  root.dataset.visibleCount=String(count);
   buttons.forEach(b=>b.setAttribute('aria-pressed',String(b.dataset.product===product)));
   const counter=document.getElementById('gallery-count');if(counter)counter.textContent=count+' '+(count===1?'design':'designs')+' shown';
   const empty=document.getElementById('gallery-empty');if(empty)empty.hidden=count>0;
