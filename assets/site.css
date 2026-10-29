@@ -167,3 +167,25 @@
 /* Gallery 30: 4:5 pre-optimised originals, no flat side bars. */
 #browse-gallery .gallery-card .gallery-photo img{width:100%;height:100%;aspect-ratio:4/5;object-fit:cover;background:transparent}
 #browse-gallery .gallery-photo{aspect-ratio:4/5;overflow:hidden}
+
+
+/* 2026-10-30: four-photo occasion filters should form a balanced 2x2 selection,
+   not a sparse three-column L. The 30-design catalogue remains curated. */
+@media(min-width:761px){
+ #browse-gallery .gallery-grid[data-visible-count="4"]{
+  grid-template-columns:repeat(2,minmax(0,1fr));
+  width:min(100%,920px);margin-inline:auto;
+ }
+}
+/* Decorate & Sip: distinctive pink wordmark accent, with readable colour on blush. */
+.workshop-hero .workshop-hero__copy h1 .workshop-hero__accent{color:#ac2866}
+/* Stronger but restrained experience numbering, matching the studio palette. */
+.workshop-inclusions .workshop-detail__num{
+ display:inline-flex;width:54px;height:54px;align-items:center;justify-content:center;
+ margin:0 0 18px;border-radius:50%;background:#fbd7e5;color:#553047;
+ border:1px solid #e9acc5;font:600 24px/1 var(--serif);letter-spacing:-.04em;
+}
+.workshop-inclusions .workshop-detail h3{margin-top:0}
+@media(max-width:760px){
+ .workshop-inclusions .workshop-detail__num{width:46px;height:46px;font-size:21px;margin-bottom:12px}
+}
