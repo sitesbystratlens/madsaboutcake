@@ -21,7 +21,9 @@ from PIL import Image, ImageOps, UnidentifiedImageError
 ROOT = Path(__file__).resolve().parents[1]
 DATA = json.loads((ROOT / 'data/gallery-review-candidates.json').read_text())
 CATALOGUE = json.loads((ROOT / 'cakes.json').read_text())
-SOURCE_MEDIA = json.loads((ROOT / 'data/gallery-review-photo-urls.json').read_text())['urls']
+# Signed CDN source links are a one-time import input; do not leave them on the published static site.
+SOURCE_URL_FILE = ROOT / 'data/gallery-review-photo-urls.json'
+SOURCE_MEDIA = json.loads(SOURCE_URL_FILE.read_text()).get('urls', {}) if SOURCE_URL_FILE.is_file() else {}
 DEST = ROOT / 'assets/gallery-review-covers'
 DEST.mkdir(parents=True, exist_ok=True)
 SHORT = re.compile(r'^[A-Za-z0-9_-]{5,32}$')
