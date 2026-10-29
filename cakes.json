@@ -1,16 +1,16 @@
 {
   "meta": {
-    "version": 6,
+    "version": 7,
     "mode": "concept-preview",
     "source": "Public Mads Instagram posts, Apify extract 2026-10-27, downloaded original source media",
-    "notice": "Private non-indexed website concept. Featured gallery contains 25 original Instagram photo derivatives; each caption-grounded description and category requires owner approval before commercial launch. Legacy gallery records remain available for existing links.",
+    "notice": "Non-indexed studio concept preview with 34 original Instagram-derived designs; original photographer photos and licensed-character cake remain subject to owner approval before public launch.",
     "apifyDatasetDate": "2026-10-27",
-    "selection": "Claude red-team: 30 designs, independent occasion evidence, 11 signature, 6 birthday, 4 wedding, 4 baby, 5 love. All owner-approval gates retained.",
+    "selection": "Owner-selected extensions to Claude's 30-design curation: 34 preview designs, including 6 weddings/engagements and 6 baby celebrations, 11 signature, 6 birthday and 5 love.",
     "imageAssetDirectory": "assets/gallery-30/",
     "ownerApprovalRequired": true,
     "notForPublicLaunch": true,
-    "featuredCount": 30,
-    "legacyDetailRecords": 29
+    "featuredCount": 34,
+    "legacyDetailRecords": 27
   },
   "cakes": [
     {
@@ -257,7 +257,7 @@
       "postEngagement": {
         "likes": 40,
         "comments": 5,
-        "responseIndex": 61.0,
+        "responseIndex": 61,
         "extractDate": "2026-10-27"
       },
       "licensedCharacterReview": false,
@@ -469,7 +469,7 @@
       "postEngagement": {
         "likes": 40,
         "comments": 4,
-        "responseIndex": 62.0,
+        "responseIndex": 62,
         "extractDate": "2026-10-27"
       },
       "captionEvidence": "Baked this cake with a secret centre and so much love for my friends and their little one on the way 🍼",
@@ -984,7 +984,7 @@
       "postEngagement": {
         "likes": 51,
         "comments": 6,
-        "responseIndex": 81.0,
+        "responseIndex": 81,
         "extractDate": "2026-10-27"
       },
       "licensedCharacterReview": false,
@@ -1397,7 +1397,7 @@
       "postEngagement": {
         "likes": 66,
         "comments": 4,
-        "responseIndex": 91.0,
+        "responseIndex": 91,
         "extractDate": "2026-10-27"
       },
       "licensedCharacterReview": false,
@@ -1573,7 +1573,7 @@
     },
     {
       "id": "ig-445130576a435045677172",
-      "title": "Two-tier baby-shower cake",
+      "title": "Winnie-the-Pooh baby-shower cake",
       "productType": "Cake",
       "primaryOccasion": "Baby celebrations",
       "otherOccasions": [],
@@ -1581,17 +1581,17 @@
         "Whimsical"
       ],
       "shapeFormat": "Tiered",
-      "shortDescription": "Baby-shower cake with six- and four-inch vanilla tiers, white-chocolate and raspberry filling, vanilla buttercream, fondant details and an edible image.",
-      "alt": "Two-tier baby-shower cake with vanilla buttercream, fondant details and an edible character image.",
-      "priority": 3,
+      "shortDescription": "Two-tier baby-shower cake with vanilla buttercream, bees, honey details and a Winnie-the-Pooh edible image.",
+      "alt": "Two-tier baby-shower cake with honey-drip accents, little bees and a Winnie-the-Pooh edible illustration.",
+      "priority": 31,
       "featuredHome": false,
       "homepageOrder": null,
       "instagramUrl": "https://www.instagram.com/p/DQ0WjCPEgqr/",
-      "coverImage": "assets/featured-25/DQ0WjCPEgqr-M508.webp",
+      "coverImage": "assets/gallery-30/DQ0WjCPEgqr-M508.webp",
       "previewImage": "https://images.pexels.com/photos/29192489/pexels-photo-29192489.jpeg?auto=compress&cs=tinysrgb&w=960",
       "approvalStatus": "Draft",
       "showOnWebsite": "No",
-      "demoVisible": false,
+      "demoVisible": true,
       "sourceShortcode": "DQ0WjCPEgqr",
       "sourcePhotoRank": 1,
       "ownerReviewRequired": true,
@@ -1617,9 +1617,14 @@
       },
       "licensedCharacterReview": true,
       "captionEvidence": "Baby shower ready 🍯🧸",
-      "descriptionBasis": "Summarised from owner's Instagram post description (27 October 2026 extract)",
-      "featured30": false,
-      "previewExcludeReason": "Licensed character; removed from gallery and homepage"
+      "descriptionBasis": "Summarised from original Instagram post description (27 October 2026 extract)",
+      "featured30": true,
+      "previewExcludeReason": "Licensed character; removed from gallery and homepage",
+      "thumbnailImage": "assets/gallery-30/thumbs/DQ0WjCPEgqr-M508-card.webp",
+      "sourceMediaId": "M508",
+      "reviewHoldReasons": [
+        "Recognisable licensed character: approved for owner-only review; owner decides permissions and public-launch suitability."
+      ]
     },
     {
       "id": "ig-f25-dfcd-vgbnmd",
@@ -1829,12 +1834,12 @@
       "showOnWebsite": "No",
       "demoVisible": true,
       "title": "Floral baby-shower cake",
-      "shortDescription": "Eight-inch red-velvet baby-shower cake with cream-cheese filling, vanilla buttercream and lots of flowers.",
-      "alt": "Red velvet baby-shower cake with cream-coloured buttercream and red floral details.",
+      "shortDescription": "Eight-inch red-velvet baby-shower cake with cream-cheese filling, buttercream and pink-and-red hand-piped floral accents.",
+      "alt": "Ivory single-tier baby-shower cake with vivid crimson piping and delicate pink flower decorations.",
       "productType": "Cake",
       "primaryOccasion": "Baby celebrations",
-      "priority": 18,
-      "coverImage": "assets/featured-25/DJQ6B-tBQyw-M337.webp",
+      "priority": 32,
+      "coverImage": "assets/gallery-30/DJQ6B-tBQyw-M337.webp",
       "instagramUrl": "https://www.instagram.com/p/DJQ6B-tBQyw/",
       "sourceShortcode": "DJQ6B-tBQyw",
       "sourcePhotoRank": 1,
@@ -1851,8 +1856,13 @@
       },
       "licensedCharacterReview": false,
       "captionEvidence": "Baby shower cake with lots of flowers 🌸🌷",
-      "descriptionBasis": "Summarised from owner's Instagram post description (27 October 2026 extract)",
-      "featured30": false
+      "descriptionBasis": "Summarised from original Instagram post description (27 October 2026 extract)",
+      "featured30": true,
+      "thumbnailImage": "assets/gallery-30/thumbs/DJQ6B-tBQyw-M337-card.webp",
+      "sourceMediaId": "M337",
+      "reviewHoldReasons": [
+        "Owner approval of original photo, inscriptions and showcase use required."
+      ]
     },
     {
       "id": "ig-f25-duef7fjejoe",
@@ -2791,6 +2801,88 @@
       "badgeApproved": false,
       "featured25": false,
       "featured30": false
+    },
+    {
+      "id": "ig-f34-dinfv1ohprn",
+      "title": "Floral bridal-celebration cake",
+      "productType": "Cake",
+      "primaryOccasion": "Weddings & engagements",
+      "otherOccasions": [],
+      "featureCategory": "Weddings & engagements",
+      "priority": 33,
+      "coverImage": "assets/gallery-30/DINfV1OhprN-M316.webp",
+      "thumbnailImage": "assets/gallery-30/thumbs/DINfV1OhprN-M316-card.webp",
+      "instagramUrl": "https://www.instagram.com/p/DINfV1OhprN/",
+      "sourceShortcode": "DINfV1OhprN",
+      "sourcePhotoRank": 1,
+      "sourceMediaId": "M316",
+      "featured30": true,
+      "featured25": false,
+      "demoVisible": true,
+      "showOnWebsite": "No",
+      "ownerReviewRequired": true,
+      "approvalStatus": "Draft",
+      "availableFlavourIds": [],
+      "galleryImageUrls": [],
+      "designCustomisable": true,
+      "availabilityStatus": "Enquire",
+      "shortDescription": "Elegant floral cake presented at a bride-to-be’s celebration, photographed at Antara Melbourne.",
+      "alt": "Minimalist white sculptural celebration cake with pink and green flowers, displayed for a bride-to-be.",
+      "captionEvidence": "Honored to have been a part of this lovely bride-to-be’s special day. 🌷🌹",
+      "descriptionBasis": "Summarised from original Instagram post description (27 October 2026 extract)",
+      "postEngagement": {
+        "likes": 41,
+        "comments": 3,
+        "responseIndex": null,
+        "extractDate": "2026-10-27"
+      },
+      "reviewHoldReasons": [
+        "Professional photo credited to @riversidecreative; confirm publication rights and owner approval."
+      ],
+      "licensedCharacterReview": false,
+      "photoCredit": "Photography: @riversidecreative",
+      "photoRightsReviewRequired": true
+    },
+    {
+      "id": "ig-f34-dqtmoqid53h",
+      "title": "Red-ribbon surprise-engagement cake",
+      "productType": "Cake",
+      "primaryOccasion": "Weddings & engagements",
+      "otherOccasions": [],
+      "featureCategory": "Weddings & engagements",
+      "priority": 34,
+      "coverImage": "assets/gallery-30/DQTMOqiD53h-M-vanrap-10.webp",
+      "thumbnailImage": "assets/gallery-30/thumbs/DQTMOqiD53h-M-vanrap-10-card.webp",
+      "instagramUrl": "https://www.instagram.com/p/DQTMOqiD53h/",
+      "sourceShortcode": "DQTMOqiD53h",
+      "sourcePhotoRank": 10,
+      "sourceMediaId": "M-vanrap-10",
+      "featured30": true,
+      "featured25": false,
+      "demoVisible": true,
+      "showOnWebsite": "No",
+      "ownerReviewRequired": true,
+      "approvalStatus": "Draft",
+      "availableFlavourIds": [],
+      "galleryImageUrls": [],
+      "designCustomisable": true,
+      "availabilityStatus": "Enquire",
+      "shortDescription": "Ivory surprise-engagement cake topped with a dramatic deep-red ribbon, featured at Ashwati and Jonathan’s dinner.",
+      "alt": "Tall ivory engagement cake with an oversized deep-red satin-style bow, displayed at an intimate celebration.",
+      "captionEvidence": "Ashwati & Jonathan — Surprise Engagement Dinner. Photography: @vanrap.weddings; Cake: @madsaboutcake",
+      "descriptionBasis": "Summarised from original Instagram post description (27 October 2026 extract)",
+      "postEngagement": {
+        "likes": 83,
+        "comments": 5,
+        "responseIndex": null,
+        "extractDate": "2026-10-27"
+      },
+      "reviewHoldReasons": [
+        "Original photograph 10/12 from @vanrap.weddings; owner should confirm permission to use professional photography and names."
+      ],
+      "licensedCharacterReview": false,
+      "photoCredit": "Photography: @vanrap.weddings",
+      "photoRightsReviewRequired": true
     }
   ]
 }
