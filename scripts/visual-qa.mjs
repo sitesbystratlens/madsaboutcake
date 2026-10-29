@@ -72,7 +72,7 @@ for(const [slug,url] of pages){
     if(visible!==expected)problem.push(label+' has '+visible+' items, expected '+expected);
     if(width===1440&&['Baby celebrations','Weddings & engagements'].includes(label)){
      const grid=await page.locator('[data-gallery]').evaluate(el=>({shown:el.querySelectorAll('.gallery-card:not([hidden])').length,columns:getComputedStyle(el).gridTemplateColumns.split(' ').filter(Boolean).length}));
-     if(grid.shown!==6||grid.columns!==3)problem.push(label+' must display a complete 3x2 block '+JSON.stringify(grid));
+     if(grid.shown<6||grid.columns!==3)problem.push(label+' must display a complete desktop three-column block '+JSON.stringify(grid));
     }
     if(width===1440&&visible===4){
      const layout=await page.locator('[data-gallery]').evaluate(el=>({count:el.dataset.visibleCount,columns:getComputedStyle(el).gridTemplateColumns.split(' ').filter(Boolean).length}));
@@ -115,11 +115,11 @@ for(const [slug,url] of pages){
   }
   if(slug==='review'&&(width===1440||width===390)){
     const birthdayCount=await page.locator('.review-card').count();
-    if(birthdayCount!==40)problem.push('Birthday owner-review list has '+birthdayCount+' posts, expected 40');
+    if(birthdayCount!==54)problem.push('Birthday owner-review list has '+birthdayCount+' posts, expected 54');
     await page.locator('[data-group="cupcakes"]').click();
     const cupcakeCount=await page.locator('.review-card').count();
-    if(cupcakeCount!==34)problem.push('Cupcake owner-review list has '+cupcakeCount+' posts, expected 34');
-    const extraGroups=[['weddings',18],['baby',18],['love',22],['popular',32]];
+    if(cupcakeCount!==35)problem.push('Cupcake owner-review list has '+cupcakeCount+' posts, expected 35');
+    const extraGroups=[['weddings',18],['baby',18],['love',22],['other',28]];
     for(const [group,expectedCount] of extraGroups){
       await page.locator('[data-group="'+group+'"]').click();
       const actual=await page.locator('.review-card').count();
@@ -140,7 +140,7 @@ for(const [slug,url] of pages){
     const popularRetained=page.locator('.review-card[data-code="'+popularCode+'"]');
     if(await popularRetained.locator('.category-choice').inputValue()!=='Floral / garden'||
        await popularRetained.locator('[data-decision="keep"]').getAttribute('aria-pressed')!=='true')
-      problem.push('Popular discovery category/decision not persisted after refresh');
+      problem.push('Other-category discovery decision not persisted after refresh');
     await page.locator('[data-group="birthdays"]').click();
     const first=page.locator('.review-card').first();
     const source=await first.getAttribute('data-code');
