@@ -10,6 +10,7 @@ on:
       - 'cakes/index.html'
       - 'decorate-and-sip/index.html'
       - 'assets/site.css'
+      - 'assets/site.js'
       - 'cakes.json'
       - 'assets/gallery-30/**'
   workflow_dispatch:
@@ -32,6 +33,8 @@ jobs:
         run: |
           python3 -m http.server 4173 --bind 127.0.0.1 >/tmp/mads-preview.log 2>&1 &
           sleep 3
+      - name: Validate runtime JavaScript syntax
+        run: node --check assets/site.js
       - name: Capture desktop, tablet and mobile pages
         run: node scripts/visual-qa.mjs
       - name: Save screenshots and checks
