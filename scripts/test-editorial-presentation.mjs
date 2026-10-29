@@ -48,12 +48,20 @@ for(const p of pages){
  assert(!nav.includes('>Enquire</a>'),'Formal contact label should not appear in header '+p);
  assert(html.includes('href="/about/"'),'About footer link must remain available: '+p);
 
- assert(html.includes('home-v3.css?v=20261028-v45')&&html.includes('site.js?v=20261030-gallery30'),'Cache version stale '+p);
+ assert(html.includes('home-v3.css?v=20261030-refine1')&&html.includes('site.js?v=20261030-refine1'),'Cache version stale '+p);
  assert(html.includes('href="https://www.stratlens.com/websites/"'),'Footer credit link wrong '+p);
  assert(!html.includes('made for meaningful moments'),'Generic footer '+p);
 }
+const homeCss=read('assets/home-v3.css');
 const home=read('index.html'),gallery=read('cakes/index.html'),workshop=read('decorate-and-sip/index.html'),enquire=read('enquire/index.html');
-assert(home.includes('Say it with cake.')&&home.includes('What are we<br><i>celebrating?</i>'),'Homepage headings changed');
+assert(home.includes('Say it with cake.')&&home.includes('What are we <i>celebrating?</i>'),'Homepage headings changed');
+assert(css.includes('.workshop-hero .workshop-hero__copy h1 .workshop-hero__accent'),'Workshop pink accent missing');
+assert(workshop.includes('class="workshop-hero__accent"'),'Workshop headline must have accented & Sip');
+assert(css.includes('.workshop-inclusions .workshop-detail__num'),'Workshop numbered steps not emphasised');
+assert(site.includes('root.dataset.visibleCount=String(count);'),'Gallery count must drive balanced 2×2 grid');
+assert(css.includes('.gallery-grid[data-visible-count="4"]'),'Four-card filtered gallery layout missing');
+assert(homeCss.includes('.occasion .section-head h2{font-size:clamp(49px,4.1vw,66px);white-space:nowrap}'),'Desktop occasion heading should be single line');
+
 assert(!home.includes('CUSTOM CAKES &amp; CUPCAKES · MELBOURNE'),'Homepage repeated the navigation category in an eyebrow');
 const opening=home.match(/<section class="opening">([\s\S]*?)<div class="cake-showcase">/)?.[1]||'';
 assert((opening.match(/class="action-solid"/g)||[]).length===1,'Hero should have one primary action');
@@ -137,14 +145,14 @@ const detailMarkup=site.slice(site.indexOf('function showDesign(c,concept){'),si
 assert(detailMarkup.includes('design-instagram-link')&&detailMarkup.includes('originalPost')&&detailMarkup.includes('noopener noreferrer'),'Original Instagram link missing from design drill through');
 assert(detailMarkup.includes('Ask about this design →'),'Enquiry must stay inside the detail page');
 assert(base.includes('.gallery-photo__arrow')&&base.includes('.design-instagram-link'),'Gallery link styling missing');
-assert(pages.every(p=>read(p).includes('site.css?v=20261030-gallery30')&&read(p).includes('site.js?v=20261030-gallery30')),'Shared gallery-30 assets not cache-busted');
+assert(pages.every(p=>read(p).includes('site.css?v=20261030-refine1')&&read(p).includes('site.js?v=20261030-refine1')),'Shared gallery-30 assets not cache-busted');
 const faqMarkup=workshop.match(/<div class="faq-list">([\s\S]*?)<\/div>/)?.[1]||'';
 assert.equal((faqMarkup.match(/<details>/g)||[]).length,4,'Four clear workshop FAQs expected');
 assert(!/\bMads\b/.test(faqMarkup),'FAQs should speak as We rather than Mads');
 assert(faqMarkup.includes('we’ve hosted private')&&faqMarkup.includes('We’re based in Glen Iris')&&faqMarkup.includes('We’ll confirm exactly')&&faqMarkup.includes('we’ve run a cupcake edition'),'Workshop FAQs should answer plainly in studio voice');
 
 assert(!gallery.includes('class="feature-strip"')&&!gallery.includes('GOT A DESIGN IN MIND?'),'Redundant enquiry section still displayed on gallery/drill-through');
-assert(gallery.includes('site.css?v=20261030-gallery30')&&workshop.includes('site.css?v=20261030-gallery30'),'Gallery-30 stylesheet cache version stale');
+assert(gallery.includes('site.css?v=20261030-refine1')&&workshop.includes('site.css?v=20261030-refine1'),'Gallery-30 stylesheet cache version stale');
 assert(workshop.includes('This is lovely! Thank you for hosting us Madara'),'Real guest comment absent from Decorate and Sip');
 assert(workshop.includes('https://www.instagram.com/p/DR9AAqlEovY/'),'Guest comment not attributed to original Instagram post');
 
