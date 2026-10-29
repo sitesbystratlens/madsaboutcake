@@ -19,7 +19,7 @@ const CATEGORY_OPTIONS=[
  ['Religious / cultural','Religious / cultural'],['Graduation','Graduation'],['Seasonal','Seasonal'],
  ['Corporate / career','Corporate / career'],['Milestone celebrations','Milestone celebrations'],['Other','Other — add note']
 ];
-let base=null,additional=null,catalogue=null,history=null,records=[],currentGroup='birthdays';
+let base=null,additional=null,catalogue=null,priorReview=null,records=[],currentGroup='birthdays';
 let state={decisions:{},notes:{},overall:'',groupDecisions:{},groupNotes:{},suggestedCategories:{}};
 const clean=s=>String(s??'').replace(/[&<>"']/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;','\'':'&#39;'}[c]));
 const postUrl=s=>'https://www.instagram.com/p/'+encodeURIComponent(s)+'/';
@@ -181,7 +181,7 @@ function csvDownload(){
 }
 function bind(){
  document.querySelectorAll('[data-group]').forEach(button=>button.addEventListener('click',()=>{
-  currentGroup=button.dataset.group;const url=new URL(location.href);url.searchParams.set('category',currentGroup);history.replaceState(null,'',url);
+  currentGroup=button.dataset.group;const url=new URL(location.href);url.searchParams.set('category',currentGroup);window.history.replaceState(null,'',url);
   $('search').value='';$('status').value='all';$('sort').value=currentGroup==='popular'?'popularity':'existing';render();
  }));
  for(const id of ['search','status','sort'])$(id).addEventListener(id==='search'?'input':'change',render);
@@ -193,7 +193,7 @@ function bind(){
  $('overall-notes').addEventListener('input',e=>{state.overall=e.target.value.slice(0,15000);save()});
 }
 function seedHistory(){
- const ds=history?.decisions||{};
+ const ds=priorReview?.decisions||{};
  for(const [code,value] of Object.entries(ds)){
   if(!Object.hasOwn(state.decisions,code) && decisionsAllowed.includes(value.review))state.decisions[code]=value.review;
   if(!Object.hasOwn(state.notes,code)&&value.note)state.notes[code]=value.note;
@@ -206,7 +206,7 @@ async function init(){
   const paths=['/data/gallery-review-candidates.json','/data/gallery-review-additional.json','/cakes.json','/data/gallery-owner-decisions-2026-10-30.json'];
   const rs=await Promise.all(paths.map(path=>fetch(path,{cache:'no-cache'})));
   if(rs.some(r=>!r.ok))throw Error('Review source file unavailable');
-  [base,additional,catalogue,history]=await Promise.all(rs.map(r=>r.json()));
+  [base,additional,catalogue,priorReview]=await Promise.all(rs.map(r=>r.json()));
   if(base.birthdayConfirmed?.length!==33||base.birthdayThemed?.length!==7||base.cupcakes?.length!==34||
    additional.weddingsConfirmed?.length!==12||additional.weddingsPossible?.length!==6||
    additional.babyConfirmed?.length!==9||additional.babyPossible?.length!==9||
