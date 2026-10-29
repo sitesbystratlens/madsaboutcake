@@ -1,0 +1,56 @@
+<!doctype html>
+<html lang="en-AU">
+<head>
+<meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
+<meta name="robots" content="noindex,nofollow,noarchive">
+<meta name="theme-color" content="#fedcde">
+<title>Owner gallery review — Mads About Cake</title>
+<meta name="description" content="Private concept design review for birthday cakes and cupcakes.">
+<link rel="icon" type="image/png" href="/favicon.png">
+<link rel="stylesheet" href="/assets/gallery-review.css?v=20261030-2">
+<script src="/assets/gallery-review.js?v=20261030-2" defer></script>
+</head>
+<body>
+<div class="preview-strip">Mads About Cake <span aria-hidden="true">·</span> Concept review only <span aria-hidden="true">·</span> Not the public gallery</div>
+<header class="review-header">
+  <a class="brand" href="/"><img src="/assets/mads-logo.webp" alt="" width="54" height="54"> <span>Mads About Cake</span></a>
+  <a class="back" href="/cakes/">← Back to curated gallery</a>
+</header>
+<main class="wrap" id="main">
+  <section class="intro">
+    <div><p class="eyebrow">OWNER REVIEW  /  30 OCTOBER 2026</p>
+      <h1>Choose the designs <em>you love.</em></h1>
+      <p>All identified birthday and cupcake posts in one visual catalogue. Mark <strong>Keep</strong> or <strong>Remove</strong>, add notes, and send us your decisions when you're ready.</p></div>
+    <div class="guide"><strong>Work-in-progress review</strong><p>Your selections and notes save automatically in <em>this browser</em>. They are not sent anywhere. Use Copy review or Download CSV to keep a backup before switching devices or clearing browser data.</p></div>
+  </section>
+  <div class="review-controls" aria-label="Review settings">
+    <div class="tabs" role="tablist" aria-label="Review category">
+      <button type="button" role="tab" data-group="birthdays" aria-selected="true">Birthdays <span data-birthday-count>40</span></button>
+      <button type="button" role="tab" data-group="cupcakes" aria-selected="false">Cupcakes <span data-cupcake-count>34</span></button>
+    </div>
+    <div class="actions">
+      <button id="copy" type="button" class="action-primary">Copy my review</button>
+      <button id="download" type="button" class="action-secondary">Download CSV</button>
+    </div>
+  </div>
+  <div class="toolbar">
+    <div class="stats"><span><b id="total">—</b> designs</span><span><b id="kept">0</b> keep</span><span><b id="removed">0</b> remove</span><span><b id="undecided">—</b> undecided</span></div>
+    <div class="filters">
+      <label class="sr-only" for="search">Search design</label><input id="search" type="search" placeholder="Find a design…">
+      <label class="sr-only" for="status">Review status</label><select id="status"><option value="all">All decisions</option><option value="undecided">Undecided</option><option value="keep">Keep</option><option value="remove">Remove</option></select>
+      <label class="sr-only" for="sort">Sort</label><select id="sort"><option value="existing">On site first</option><option value="name">Name A–Z</option><option value="source">Source list order</option></select>
+    </div>
+  </div>
+  <p class="context" id="context">Loading original Instagram post catalogue…</p>
+  <div class="review-grid" id="cards" aria-live="polite"></div>
+  <div id="empty" class="empty" hidden>No designs match your search and status filters.</div>
+  <section class="bottom">
+    <h2>Notes for the whole gallery</h2>
+    <label for="overall-notes">Anything else you want changed, removed or considered?</label>
+    <textarea id="overall-notes" rows="3" placeholder="Add notes here — these save automatically in this browser…"></textarea>
+    <div class="bottom-actions"><button type="button" class="action-primary" id="copy-bottom">Copy my review</button><button type="button" class="action-secondary" id="download-bottom">Download CSV</button><span id="feedback" aria-live="polite"></span></div>
+    <p class="footnote">This review is for visual selection only. Posts marked Keep are not published automatically. The existing curated gallery, baby, wedding, love and signature categories are unchanged. The review URL is not password-protected: please don't share broadly.</p>
+  </section>
+</main>
+<dialog id="photo-dialog" class="image-dialog" aria-label="Design image preview"><button type="button" class="dialog-close" id="close-dialog" aria-label="Close image">×</button><img id="dialog-image" alt=""><p id="dialog-caption"></p></dialog>
+</body></html>
