@@ -10,6 +10,8 @@ on:
       - 'cakes/index.html'
       - 'decorate-and-sip/index.html'
       - 'assets/site.css'
+      - 'cakes.json'
+      - 'assets/gallery-30/**'
   workflow_dispatch:
 permissions:
   contents: read
