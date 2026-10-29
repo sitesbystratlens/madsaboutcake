@@ -6,12 +6,12 @@ const data=JSON.parse(read('cakes.json')),notice=JSON.parse(read('assets/studio-
 const pages=['index.html','cakes/index.html','decorate-and-sip/index.html','about/index.html','enquire/index.html','404.html'];
 assert(data.cakes.length>=33);
 const featured=data.cakes.filter(c=>c.featured30===true);
-assert.equal(featured.length,113,'74 owner-selected Instagram designs expected in concept preview');
-assert.equal(data.meta.featuredCount,113,'Preview catalogue count must match the 74 retained designs');
+assert.equal(featured.length,120,'120 owner-selected designs expected in final concept preview');
+assert.equal(data.meta.featuredCount,120,'Preview catalogue count must match the final 120');
 assert(data.meta.legacyDetailRecords===data.cakes.length-featured.length,'Legacy detail record total must remain accurate');
 
-assert.equal(new Set(featured.map(c=>c.sourceShortcode)).size,113,'One selection per source post');
-for(const [category,count] of Object.entries({'Weddings & engagements':10,'Baby celebrations':9,'Love & anniversaries':6,'Other/unspecified':28,'Birthdays':43,'Cupcakes':17}))assert.equal(featured.filter(c=>c.featureCategory===category).length,count,'Protected category altered '+category);
+assert.equal(new Set(featured.map(c=>c.sourceShortcode)).size,120,'One selection per source post');
+for(const [category,count] of Object.entries({'Weddings & engagements':9,'Baby celebrations':9,'Love & anniversaries':6,'Other/unspecified':30,'Birthdays':50,'Cupcakes':16}))assert.equal(featured.filter(c=>c.featureCategory===category).length,count,'Protected category altered '+category);
 assert(featured.every(c=>/^assets\/(?:gallery-30\/|gallery-review-covers\/|creations\/|featured-25\/)/.test(c.coverImage)),'Curated photos must be local hosted original derivatives');
 assert(featured.every(c=>fs.existsSync(c.coverImage)),'Every source image must be available locally');
 assert(featured.every(c=>fs.existsSync(c.thumbnailImage||c.coverImage)),'Every gallery thumbnail must be available locally');
@@ -23,39 +23,41 @@ assert(valentine?.coverImage==='assets/gallery-30/DGM5hj1hcJf-M259.webp'&&valent
 assert.equal(new Set(data.cakes.map(c=>c.sourceShortcode)).size,data.cakes.length,'Duplicate post in combined gallery and legacy catalogue');
 assert.equal(data.meta.mode,'concept-preview');
 
-const decisionSource=JSON.parse(read('data/gallery-owner-decisions-2026-10-30.json'));
-const retained=Object.entries(decisionSource.decisions).filter(([,x])=>x.review==='keep').map(([code])=>code);
-const declined=Object.entries(decisionSource.decisions).filter(([,x])=>x.review==='remove').map(([code])=>code);
-const undecided=Object.entries(decisionSource.decisions).filter(([,x])=>x.review==='undecided').map(([code])=>code);
-assert.equal(retained.length,51);assert.equal(declined.length,17);assert.equal(undecided.length,2);
-for(const code of retained)assert(featured.some(c=>c.sourceShortcode===code),'Keep selection missing '+code);
-for(const code of [...declined,...undecided])assert(!featured.some(c=>c.sourceShortcode===code),'Unapproved design included '+code);
-assert(featured.some(c=>c.sourceShortcode==='DK8nnIGBfLx'),'Owner chose to retain red-bow birthday cake');
-assert(!featured.some(c=>c.sourceShortcode==='C8iniSsyccX'),'Owner removed black heart birthday cake');
+const final=JSON.parse(read('data/gallery-owner-decisions-final-2026-10-30.json'));
+assert.equal(final.sha256,'47610785cb507490cd703313ee953df15527fc01754383c059bacb048c46741e');
+assert.equal(final.counts.rows,175);
+assert.equal(final.counts.uniquePosts,140);
+assert.equal(final.counts.keepEntries,126);
+const groupKeep=group=>new Set(final.groups[group].filter(x=>x.decision==='keep').map(x=>x.code));
+const movedOther=new Set(final.fallbackMovesFromNotes.toOther);
+const movedBirthday=new Set(final.fallbackMovesFromNotes.toBirthday);
+const retained=new Set([...Object.keys(final.groups).flatMap(k=>[...groupKeep(k)]),...movedOther,...movedBirthday]);
+assert.equal(retained.size,120,'Final selected designs must include all explicit move-note exceptions');
+const actualCodes=new Set(featured.map(c=>c.sourceShortcode));
+for(const code of retained)assert(actualCodes.has(code),'Final Keep/move missing '+code);
+for(const c of featured)assert(retained.has(c.sourceShortcode),'Featured design rejected by final CSV '+c.sourceShortcode);
+assert(featured.some(c=>c.sourceShortcode==='DK8nnIGBfLx'),'Red-bow birthday retained');
+assert(!featured.some(c=>c.sourceShortcode==='C8iniSsyccX'),'Black-heart birthday excluded');
+assert(!featured.some(c=>c.sourceShortcode==='C88mW3FyNh8'),'Work-anniversary design removed');
+assert(!featured.some(c=>c.sourceShortcode==='C7tWF2Kh1l5'),'Duplicate blue cupcakes removed');
+assert(!featured.some(c=>c.sourceShortcode==='DHNjWAJhbpK'),'Latest wedding Remove must override earlier Keep');
 const occasionMatches=(c,occasion)=>!c.holdOccasionFilterUntilOwnerApproval&&(c.primaryOccasion===occasion||(c.otherOccasions||[]).includes(occasion));
 const productMatches=(c,product)=>c.productType===product||(c.otherProductTypes||[]).includes(product);
-assert.equal(featured.filter(c=>occasionMatches(c,'Weddings & engagements')).length,10,'Weddings must remain at six');
-assert.equal(featured.filter(c=>occasionMatches(c,'Baby celebrations')).length,9,'Baby celebrations must remain at six');
-assert.equal(featured.filter(c=>occasionMatches(c,'Love & anniversaries')).length,6,'Love & anniversaries must remain unchanged');
-assert.equal(featured.filter(c=>productMatches(c,'Cupcakes')).length,29,'All 28 owner-kept cupcake posts should appear in Cupcakes filter');
-assert.equal(featured.filter(c=>occasionMatches(c,'Birthdays')).length,43,'Birthday list plus two cupcake birthday notes should yield 29 designs');
-assert(featured.some(c=>c.sourceShortcode==='Db2wuYpEoIe'&&c.primaryOccasion==='Love & anniversaries'&&productMatches(c,'Cupcakes')),'Coconut set must remain anniversary and appear in Cupcakes');
-
-const round2=JSON.parse(read('data/gallery-owner-decisions-round2-2026-10-30.json'));
-const moves=JSON.parse(read('data/gallery-round2-category-moves.json'));
-for(const [g,n] of Object.entries({weddings:10,baby:9,love:6,popular:22})){
- const x=Object.values(round2.groupDecisions[g]);assert.equal(x.filter(v=>v.review==='keep').length,n,'Mismatch round-2 group '+g);
-}
-for(const code of moves.birthdayMoves)assert(featured.some(c=>c.sourceShortcode===code&&c.primaryOccasion==='Birthdays'),'Birthday move missing '+code);
-for(const code of moves.otherMoves)assert(featured.some(c=>c.sourceShortcode===code&&c.featureCategory==='Other/unspecified'),'Other move missing '+code);
-assert(featured.some(c=>c.sourceShortcode==='DR8_-HBkjFa'&&c.primaryOccasion==='Weddings & engagements'),'Pressed floral should be wedding');
-assert(featured.some(c=>c.sourceShortcode==='C7tO9F4B8lX'&&c.primaryOccasion==='Baby celebrations'),'Oh Baby cupcakes should be baby occasion');
-assert(featured.some(c=>c.sourceShortcode==='DMuhu5dhJbb'&&c.primaryOccasion==='Love & anniversaries'),'Raspberry satin bows should be Love');
-assert(featured.some(c=>c.sourceShortcode==='DDV60R-hcFA'&&c.featureCategory==='Cupcakes'&&!c.primaryOccasion),'Mayoun remains cupcakes only');
-assert(featured.some(c=>c.sourceShortcode==='C7tQnOMhkKK'&&c.productClassificationReview),'Provisional undersea cupcake crossover requires verification');
+for(const [occasion,expected] of [['Birthdays',50],['Weddings & engagements',9],['Baby celebrations',9],['Love & anniversaries',6]])
+  assert.equal(featured.filter(c=>occasionMatches(c,occasion)).length,expected,occasion+' filter drift');
+assert.equal(featured.filter(c=>productMatches(c,'Cupcakes')).length,27,'Cupcake product matches drift');
+for(const code of final.fallbackMovesFromNotes.toOther)assert(featured.some(c=>c.sourceShortcode===code&&c.featureCategory==='Other/unspecified'),'All-only moved design missing '+code);
+assert(featured.some(c=>c.sourceShortcode==='DGITCLkhk24'&&c.primaryOccasion==='Birthdays'&&!productMatches(c,'Cupcakes')),'Mixed order moved from cupcake filter to Birthday as requested');
+assert(featured.some(c=>c.sourceShortcode==='DQEUavaEhle'&&c.primaryOccasion==='Birthdays'&&productMatches(c,'Cupcakes')),'Football birthday cupcake must appear in both filters');
+assert(featured.some(c=>c.sourceShortcode==='Db2wuYpEoIe'&&c.primaryOccasion==='Love & anniversaries'&&productMatches(c,'Cupcakes')),'Coconut set must remain anniversary and cupcake');
+assert(featured.some(c=>c.sourceShortcode==='DDV60R-hcFA'&&!c.primaryOccasion&&productMatches(c,'Cupcakes')),'Mayoun is cupcake only');
+assert(featured.some(c=>c.sourceShortcode==='C7tQnOMhkKK'&&c.productClassificationReview),'Provisional undersea cupcake flag retained');
 for(const code of ['DNZj3aAh2jC','DPgSOTKkgjS','DK8lOEfhYJA','DHCy_bTBLKc','DHQDoHHB26G'])
- assert(featured.some(c=>c.sourceShortcode===code&&c.primaryOccasion==='Birthdays'&&c.featureCategory==='Birthdays'),'First-birthday should not be baby shower: '+code);
-const allGalleryCodes=featured.map(c=>c.sourceShortcode);assert.equal(new Set(allGalleryCodes).size,113);
+  assert(featured.some(c=>c.sourceShortcode===code&&c.primaryOccasion==='Birthdays'),'First-birthday should not be newborn/baby celebration: '+code);
+const galleryPage=read('cakes/index.html');
+assert(!/data-product="other"/.test(galleryPage),'No customer-facing Other product option');
+assert(!/<option value="Other\/unspecified"/.test(galleryPage),'No customer-facing Other occasion');
+assert(!site.includes("'Other/unspecified'") || site.includes("PUBLIC_OCCASIONS=['Birthdays','Weddings & engagements','Baby celebrations','Love & anniversaries']"),'Internal Other cannot be a public occasion');
 assert(data.cakes.every(c=>c.showOnWebsite==='No'),'Owner photos should remain unapproved');
 assert(featured.some(c=>c.sourceShortcode==='DQ0WjCPEgqr'&&c.licensedCharacterReview===true&&c.ownerReviewRequired===true&&c.showOnWebsite==='No'),'Pooh design should be owner-preview only with launch approval safeguard');
 assert(data.cakes.every(c=>!(/independent website concept/i.test(c.shortDescription+' '+c.alt))),'Internal catalogue text');
