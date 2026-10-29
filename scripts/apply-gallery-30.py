@@ -94,7 +94,7 @@ def swap(text,old,new,label):
     if count!=1:
         raise SystemExit(label+": expected 1 source match, found "+str(count))
     return text.replace(old,new)
-js=swap(js,"(?:cake-covers|creations|featured-25)","(?:cake-covers|creations|featured-25|gallery-30(?:/thumbs)?)","Allow original gallery-30 images")
+js=swap(js,"(?:cake-covers|creations|featured-25)","(?:cake-covers|creations|featured-25|gallery-30(?:\\/thumbs)?)","Allow original gallery-30 images")
 js=swap(js,"title:c.title.slice(0,140),image:imageOf(c),alt:","title:c.title.slice(0,140),image:imageOf(c),thumbnail:safeCover(c.thumbnailImage)?'/'+c.thumbnailImage:imageOf(c),alt:","Add small thumbnail source")
 card_start=js.index("function cardHtml(c){")
 card_end=js.index("function showDesign(c,concept){",card_start)
