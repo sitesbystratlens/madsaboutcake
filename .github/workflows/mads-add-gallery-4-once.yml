@@ -1,0 +1,59 @@
+name: Import four selected gallery photos and face-safe session still (once)
+on:
+  push:
+    branches: [main]
+    paths: ['.github/workflows/mads-add-gallery-4-once.yml']
+  workflow_dispatch:
+permissions:
+  contents: write
+jobs:
+  import:
+    runs-on: ubuntu-latest
+    timeout-minutes: 15
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.11'
+      - run: python -m pip install Pillow
+      - name: Download exact original post photos and generate derivatives
+        run: |
+          python - <<'PY'
+          import urllib.request,time,subprocess,json
+          from pathlib import Path
+          from io import BytesIO
+          from PIL import Image,ImageOps,ImageFilter,ImageEnhance
+          U=json.loads("{\"DQ0WjCPEgqr\":\"https://instagram.faus1-1.fna.fbcdn.net/v/t51.82787-15/574383814_17913780057230103_7272355304636902396_n.jpg?stp=dst-jpg_e35_tt6&_nc_cat=111&_nc_map=urlgen_bucketless&ig_cache_key=Mzc2MTczMDc0MTY4OTU0NDQ4OA%3D%3D.3-ccb7-5&ccb=7-5&_nc_sid=58cdad&efg=eyJ2ZW5jb2RlX3RhZyI6IkNBUk9VU0VMX0lURU0ueHBpZHMuMTQ0MC5zZHIucmVndWxhcl9waG90by5DMyJ9&_nc_ohc=Ey49fAekcIAQ7kNvwHmu7Xa&_nc_oc=Adq1gUmGJQofi2UYDBlXHZIyXXjF5lvS-L0pYyQ8wnsfvSY8SVY5hyoL7U85zgHMdE4&_nc_ad=z-m&_nc_cid=0&_nc_zt=23&_nc_ht=instagram.faus1-1.fna&_nc_gid=n4uz3kiM0Bn1g2ewPFpSZA&_nc_ss=7a20f&oh=00_AQOvVF-AAIW-vi8zJooU0McSVkYaNacpTQrnDWngTHCrjw&oe=6AE65F6A\",\"DJQ6B-tBQyw\":\"https://scontent-atl3-1.cdninstagram.com/v/t51.75761-15/495841189_17892204498230103_1204462986969365222_n.jpg?stp=dst-jpg_e35_tt6&_nc_cat=106&ig_cache_key=MzYyNTY1MjkxNDE1NDIzODU0Ng%3D%3D.3-ccb7-5&ccb=7-5&_nc_sid=58cdad&efg=eyJ2ZW5jb2RlX3RhZyI6IkNBUk9VU0VMX0lURU0ueHBpZHMuMTQ0MC5zZHIucmVndWxhcl9waG90by5DMiJ9&_nc_ohc=AZJJcW46RYMQ7kNvwEdLcF0&_nc_oc=Adr3wzwr1FNNhQk5Ka3s8s2LyM4t0UIlp9ISs2lxAIueF2REWowWdz2bR9Ut1zHKWk8&_nc_ad=z-m&_nc_cid=0&_nc_zt=23&_nc_ht=scontent-atl3-1.cdninstagram.com&_nc_gid=9co-qEUq7BC8NnP1DXgbDw&_nc_ss=7a20f&oh=00_AQNAMrFpHrIoh3X-H9LS6erYzLwOq6L2ufdt1VIjk53lfQ&oe=6AE6587E\",\"DINfV1OhprN\":\"https://instagram.fupn3-1.fna.fbcdn.net/v/t51.75761-15/489985053_17889282123230103_5488538927285102563_n.jpg?stp=dst-jpg_e35_tt6&_nc_cat=102&_nc_map=urlgen_bucketless&ig_cache_key=MzYwNjY3NjcwNjY5OTgwNjY3NA%3D%3D.3-ccb7-5&ccb=7-5&_nc_sid=58cdad&efg=eyJ2ZW5jb2RlX3RhZyI6IkNBUk9VU0VMX0lURU0ueHBpZHMuMTQ0MC5zZHIucmVndWxhcl9waG90by5DMyJ9&_nc_ohc=iCHruj_34hQQ7kNvwHru1Fr&_nc_oc=AdrdMwrjgwu7xgfjklH8BRhKXz7AJ7jRN9OfXkn_q7UUPDGubPRs1BJSi0Ff-QJyP0I&_nc_ad=z-m&_nc_cid=0&_nc_zt=23&_nc_ht=instagram.fupn3-1.fna&_nc_gid=AuDlxPM2P8JKC1D55MqD8A&_nc_ss=7a20f&oh=00_AQNfooz-fGPj-9TFMT18J5X3w5QjM9P-xHDA9akL4cUYog&oe=6AE63BC4\",\"DQTMOqiD53h\":\"https://scontent-dfw5-2.cdninstagram.com/v/t51.82787-15/569217903_17997281198833937_3835816714273062818_n.jpg?stp=dst-jpg_e35_tt6&_nc_cat=104&ig_cache_key=Mzc1MjM5NjY4MDc1MTcxNTE0OA%3D%3D.3-ccb7-5&ccb=7-5&_nc_sid=58cdad&efg=eyJ2ZW5jb2RlX3RhZyI6IkNBUk9VU0VMX0lURU0ueHBpZHMuMTQ0MC5zZHIucmVndWxhcl9waG90by5DMyJ9&_nc_ohc=-9eZo2OSce4Q7kNvwGQssRb&_nc_oc=AdqhrbrLtiXEiWB420YtHW0K2P69MkA14lbsvmL1QmXT5fTzXMffHJDcJxZ7w9AFFlc&_nc_ad=z-m&_nc_cid=0&_nc_zt=23&_nc_ht=scontent-dfw5-2.cdninstagram.com&_nc_gid=V0W-8gnNpf8kXxHqVubRHQ&_nc_ss=7a20f&oh=00_AQOqpymQXV5BvJgfbFHb5FT0Fkm_zhxmk0DAypLLbCVRPA&oe=6AE66054\",\"DSR06gjEgJK\":\"https://scontent-mad1-1.cdninstagram.com/o1/v/t2/f2/m367/AQPOCgYbSJ7Rfa5dqUMSsHFKI9UN_xFxrqeFx2tq0w1V65dcD8MIggrl7AupkldmhzU45IFKoewxLfXX18DD_D8nxKb8F7YAzwPfnP4.mp4?_nc_cat=106&_nc_sid=5e9851&_nc_ht=scontent-mad1-1.cdninstagram.com&_nc_ohc=qhtA-fBqfiAQ7kNvwFhI40d&efg=eyJ2ZW5jb2RlX3RhZyI6Inhwdl9wcm9ncmVzc2l2ZS5JTlNUQUdSQU0uQ0xJUFMuQzMuNzIwLmRhc2hfYmFzZWxpbmVfMV92MSIsInhwdl9hc3NldF9pZCI6MjU4MDUwOTA4MjI0MTcxODgsImFzc2V0X2FnZV9kYXlzIjozMTYsInZpX3VzZWNhc2VfaWQiOjEwMDk5LCJkdXJhdGlvbl9zIjoxMSwidXJsZ2VuX3NvdXJjZSI6Ind3dyJ9&ccb=17-1&vs=e151b74489a0ffd8&_nc_vs=HBksFQIYQGlnX2VwaGVtZXJhbC82QTRCMDI3MTY3MjA0MzM0RTREMjlFRjFDQ0RFRjM5QV92aWRlb19kYXNoaW5pdC5tcDQVAALIARIAFQIYRmlnX3hwdl9yZWVsc19wZXJtYW5lbnRfc3JfcHJvZC84NjY3OTEyNjU4MjQ1MzVfMjc0MDkwNTI0MjMzMjI4Mjc5OS5tcDQVAgLIARIAKAAYABsCiAd1c2Vfb2lsATEScHJvZ3Jlc3NpdmVfcmVjaXBlATEVAAAmyKzv_fzl1lsVAigCQzMsF0Anqn752yLRGBJkYXNoX2Jhc2VsaW5lXzFfdjERAHX-B2XmnQEA&_nc_gid=KKLf6mCybdytV9__Iw6UOQ&_nc_ss=70980&_nc_zt=28&oh=00_AQNE4HZukblbBppR9nkkdaAsBamemz4ES7FCQrDQ-yIAPA&oe=6AE659B3\"}")
+          P={'DQ0WjCPEgqr':'M508','DJQ6B-tBQyw':'M337','DINfV1OhprN':'M316','DQTMOqiD53h':'M-vanrap-10'}
+          def get(k):
+           for t in range(3):
+            try:
+             q=urllib.request.Request(U[k],headers={'User-Agent':'Mozilla/5.0','Referer':'https://www.instagram.com/'})
+             b=urllib.request.urlopen(q,timeout=35).read();print('RETRIEVED',k,len(b),flush=True);return b
+            except Exception as e:
+             print('retry',k,str(e)[:90]);time.sleep(1+t)
+           raise RuntimeError('Source unavailable: '+k)
+          def save(im,p,w,h,q):
+           im=ImageOps.exif_transpose(im).convert('RGB');im.thumbnail((w,h),Image.Resampling.LANCZOS)
+           Path(p).parent.mkdir(parents=True,exist_ok=True);im.save(p,'WEBP',quality=q,method=6)
+          for k,m in P.items():
+           im=Image.open(BytesIO(get(k))).convert('RGB')
+           save(im,f'assets/gallery-30/{k}-{m}.webp',950,1450,72)
+           bg=ImageOps.fit(im,(480,600),Image.Resampling.LANCZOS).filter(ImageFilter.GaussianBlur(18))
+           bg=ImageEnhance.Brightness(bg).enhance(.88)
+           fg=im.copy();fg.thumbnail((480,600),Image.Resampling.LANCZOS)
+           bg.paste(fg,((480-fg.width)//2,(600-fg.height)//2))
+           p=Path(f'assets/gallery-30/thumbs/{k}-{m}-card.webp');p.parent.mkdir(parents=True,exist_ok=True);bg.save(p,'WEBP',quality=69,method=6)
+          Path('/tmp/original.mads.mp4').write_bytes(get('DSR06gjEgJK'))
+          subprocess.run(['ffmpeg','-y','-loglevel','error','-ss','1.6','-i','/tmp/original.mads.mp4','-frames:v','1','/tmp/mads-still.png'],check=True)
+          save(Image.open('/tmp/mads-still.png'),'assets/workshops/DSR06gjEgJK-no-visible-faces.webp',720,1280,76)
+          print('ALL MEDIA VERIFIED',flush=True)
+          PY
+      - name: Commit media only if every original source succeeded
+        run: |
+          git config user.name "github-actions[bot]"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          git add assets/gallery-30/ assets/workshops/DSR06gjEgJK-no-visible-faces.webp
+          git commit -m "Add four owner-selected gallery images and face-safe session still"
+          git pull --rebase origin main
+          git push origin HEAD:main
