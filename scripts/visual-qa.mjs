@@ -68,7 +68,7 @@ for(const [slug,url] of pages){
     await page.locator('#occasion-filter').selectOption({label});
     const visible=await page.locator('[data-gallery] .gallery-card:not([hidden])').count();
     const source=JSON.parse(fs.readFileSync('cakes.json','utf8'));
-    const expected=source.cakes.filter(c=>(c.featured30===true||c.featured25===true)&&(c.primaryOccasion===label||(c.otherOccasions||[]).includes(label))).length;
+    const expected=source.cakes.filter(c=>c.featured30===true&&!c.holdOccasionFilterUntilOwnerApproval&&(c.primaryOccasion===label||(c.otherOccasions||[]).includes(label))).length;
     if(visible!==expected)problem.push(label+' has '+visible+' items, expected '+expected);
     if(width===1440&&['Baby celebrations','Weddings & engagements'].includes(label)){
      const grid=await page.locator('[data-gallery]').evaluate(el=>({shown:el.querySelectorAll('.gallery-card:not([hidden])').length,columns:getComputedStyle(el).gridTemplateColumns.split(' ').filter(Boolean).length}));
