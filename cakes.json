@@ -1,18 +1,18 @@
 {
   "meta": {
-    "version": 9,
+    "version": 10,
     "mode": "concept-preview",
     "source": "Public Mads Instagram posts, Apify extract 2026-10-27, downloaded original source media",
-    "notice": "Review-selected concept gallery only. Second-round section Remove means not in that category; moved posts retained under intended occasion or Other. Not approved for public launch.",
+    "notice": "Owner-reviewed private concept preview, not publicly approved. Other is not a customer-facing category; those cakes remain in All creations.",
     "apifyDatasetDate": "2026-10-27",
-    "selection": "Expanded six-section category-review CSV: retain prior 74 except category reassignments, add new Keep designs; Other/unspecified not a signature claim.",
+    "selection": "Final owner-reviewed 120 design concepts; 49 Birthdays, 9 Weddings, 9 Baby, 6 Love, 27 Cupcakes product matches, and unclassified designs visible through All creations; public Other category intentionally absent.",
     "imageAssetDirectory": "assets/gallery-30/",
     "ownerApprovalRequired": true,
     "notForPublicLaunch": true,
-    "featuredCount": 113,
-    "legacyDetailRecords": 12,
+    "featuredCount": 120,
+    "legacyDetailRecords": 14,
     "lastGalleryReview": "2026-10-30",
-    "ownerReviewSource": "data/gallery-owner-decisions-round2-2026-10-30.json"
+    "ownerReviewSource": "data/gallery-owner-decisions-final-2026-10-30.json"
   },
   "cakes": [
     {
@@ -64,9 +64,11 @@
         "Owner approval of original source photograph and gallery use required"
       ],
       "holdOccasionFilterUntilOwnerApproval": false,
-      "reviewDecisionSource": "Mads_Full_Gallery_Review_2026-10-29(1).csv",
+      "reviewDecisionSource": "Final CSV 2026-10-30",
       "round2CategoryAction": "Other/unspecified",
-      "ownerReviewDecision": "Keep"
+      "ownerReviewDecision": "Keep",
+      "otherProductTypes": [],
+      "finalReviewNote": "move to other category"
     },
     {
       "id": "ig-f30-dcv93blhb1i",
@@ -117,9 +119,10 @@
         "Owner approval of original source photograph and gallery use required"
       ],
       "holdOccasionFilterUntilOwnerApproval": false,
-      "reviewDecisionSource": "Mads_Full_Gallery_Review_2026-10-29(1).csv",
+      "reviewDecisionSource": "Final CSV 2026-10-30",
       "round2CategoryAction": "Birthdays",
-      "ownerReviewDecision": "Keep"
+      "ownerReviewDecision": "Keep",
+      "otherProductTypes": []
     },
     {
       "id": "ig-f25-dyj42nmkqlu",
@@ -174,9 +177,10 @@
         "Confirm wafer-paper work is still offered"
       ],
       "holdOccasionFilterUntilOwnerApproval": false,
-      "reviewDecisionSource": "Mads_Full_Gallery_Review_2026-10-29(1).csv",
+      "reviewDecisionSource": "Final CSV 2026-10-30",
       "round2CategoryAction": "Weddings & engagements",
-      "ownerReviewDecision": "Keep"
+      "ownerReviewDecision": "Keep",
+      "otherProductTypes": []
     },
     {
       "id": "ig-f25-da-b4huhkq4",
@@ -230,7 +234,9 @@
         "Owner approval of original source photograph and gallery use required"
       ],
       "ownerReviewDecision": "Keep",
-      "reviewDecisionSource": "CSV exports 2026-10-29"
+      "reviewDecisionSource": "Final CSV 2026-10-30",
+      "holdOccasionFilterUntilOwnerApproval": false,
+      "otherProductTypes": []
     },
     {
       "id": "ig-4451597948692d6b6e3652",
@@ -287,7 +293,7 @@
         "Owner approval of original source photograph and gallery use required"
       ],
       "ownerReviewDecision": "Keep",
-      "reviewDecisionSource": "Mads_Full_Gallery_Review_2026-10-29(1).csv",
+      "reviewDecisionSource": "Final CSV 2026-10-30",
       "holdOccasionFilterUntilOwnerApproval": false,
       "round2CategoryAction": "Baby celebrations"
     },
@@ -343,9 +349,10 @@
         "Confirm wafer-paper work is still offered"
       ],
       "holdOccasionFilterUntilOwnerApproval": false,
-      "reviewDecisionSource": "Mads_Full_Gallery_Review_2026-10-29(1).csv",
+      "reviewDecisionSource": "Final CSV 2026-10-30",
       "round2CategoryAction": "Other/unspecified",
-      "ownerReviewDecision": "Keep"
+      "ownerReviewDecision": "Keep",
+      "otherProductTypes": []
     },
     {
       "id": "ig-f25-dgm5hj1hcjf",
@@ -399,9 +406,10 @@
         "Owner approval of original source photograph and gallery use required"
       ],
       "holdOccasionFilterUntilOwnerApproval": false,
-      "reviewDecisionSource": "Mads_Full_Gallery_Review_2026-10-29(1).csv",
+      "reviewDecisionSource": "Final CSV 2026-10-30",
       "round2CategoryAction": "Love & anniversaries",
-      "ownerReviewDecision": "Keep"
+      "ownerReviewDecision": "Keep",
+      "otherProductTypes": []
     },
     {
       "id": "ig-444a5135524c7468504b70",
@@ -458,9 +466,10 @@
         "Owner approval of original source photograph and gallery use required"
       ],
       "holdOccasionFilterUntilOwnerApproval": false,
-      "reviewDecisionSource": "Mads_Full_Gallery_Review_2026-10-29(1).csv",
+      "reviewDecisionSource": "Final CSV 2026-10-30",
       "round2CategoryAction": "Other/unspecified",
-      "ownerReviewDecision": "Keep"
+      "ownerReviewDecision": "Keep",
+      "otherProductTypes": []
     },
     {
       "id": "ig-f30-dmmuv2mbvwk",
@@ -511,9 +520,10 @@
         "Confirm any visible names, inscriptions and photographic rights with the owner before launch"
       ],
       "holdOccasionFilterUntilOwnerApproval": false,
-      "reviewDecisionSource": "Mads_Full_Gallery_Review_2026-10-29(1).csv",
+      "reviewDecisionSource": "Final CSV 2026-10-30",
       "round2CategoryAction": "Baby celebrations",
-      "ownerReviewDecision": "Keep"
+      "ownerReviewDecision": "Keep",
+      "otherProductTypes": []
     },
     {
       "id": "ig-f30-dqjhwq9krsh",
@@ -564,9 +574,10 @@
         "Owner approval of original source photograph and gallery use required"
       ],
       "holdOccasionFilterUntilOwnerApproval": false,
-      "reviewDecisionSource": "Mads_Full_Gallery_Review_2026-10-29(1).csv",
+      "reviewDecisionSource": "Final CSV 2026-10-30",
       "round2CategoryAction": "Other/unspecified",
-      "ownerReviewDecision": "Keep"
+      "ownerReviewDecision": "Keep",
+      "otherProductTypes": []
     },
     {
       "id": "ig-44566e4a415a7745733050",
@@ -622,7 +633,8 @@
         "Owner approval of original source photograph and gallery use required"
       ],
       "ownerReviewDecision": "Keep",
-      "reviewDecisionSource": "CSV exports 2026-10-29"
+      "reviewDecisionSource": "Final CSV 2026-10-30",
+      "holdOccasionFilterUntilOwnerApproval": false
     },
     {
       "id": "ig-4453675f6f71706b6a794b",
@@ -679,9 +691,10 @@
         "Confirm non-edible floral handling and display note"
       ],
       "holdOccasionFilterUntilOwnerApproval": false,
-      "reviewDecisionSource": "Mads_Full_Gallery_Review_2026-10-29(1).csv",
+      "reviewDecisionSource": "Final CSV 2026-10-30",
       "round2CategoryAction": "Weddings & engagements",
-      "ownerReviewDecision": "Keep"
+      "ownerReviewDecision": "Keep",
+      "otherProductTypes": []
     },
     {
       "id": "ig-4457766e344e656b76385a",
@@ -738,9 +751,10 @@
         "Owner approval of original source photograph and gallery use required"
       ],
       "holdOccasionFilterUntilOwnerApproval": false,
-      "reviewDecisionSource": "Mads_Full_Gallery_Review_2026-10-29(1).csv",
+      "reviewDecisionSource": "Final CSV 2026-10-30",
       "round2CategoryAction": "Love & anniversaries",
-      "ownerReviewDecision": "Keep"
+      "ownerReviewDecision": "Keep",
+      "otherProductTypes": []
     },
     {
       "id": "ig-445030373952616b6f7241",
@@ -797,7 +811,9 @@
         "Owner approval of original source photograph and gallery use required"
       ],
       "ownerReviewDecision": "Keep",
-      "reviewDecisionSource": "CSV exports 2026-10-29"
+      "reviewDecisionSource": "Final CSV 2026-10-30",
+      "holdOccasionFilterUntilOwnerApproval": false,
+      "otherProductTypes": []
     },
     {
       "id": "ig-f30-dg-s-6byna",
@@ -848,9 +864,10 @@
         "Confirm non-edible floral handling and display note"
       ],
       "holdOccasionFilterUntilOwnerApproval": false,
-      "reviewDecisionSource": "Mads_Full_Gallery_Review_2026-10-29(1).csv",
+      "reviewDecisionSource": "Final CSV 2026-10-30",
       "round2CategoryAction": "Birthdays",
-      "ownerReviewDecision": "Keep"
+      "ownerReviewDecision": "Keep",
+      "otherProductTypes": []
     },
     {
       "id": "ig-f30-dr8-hbkjfa",
@@ -901,9 +918,10 @@
         "Occasion uncertain: retained as Signature until customer wedding context confirmed"
       ],
       "holdOccasionFilterUntilOwnerApproval": false,
-      "reviewDecisionSource": "Mads_Full_Gallery_Review_2026-10-29(1).csv",
+      "reviewDecisionSource": "Final CSV 2026-10-30",
       "round2CategoryAction": "Weddings & engagements",
-      "ownerReviewDecision": "Keep"
+      "ownerReviewDecision": "Keep",
+      "otherProductTypes": []
     },
     {
       "id": "ig-f30-c8inissyccx",
@@ -1008,9 +1026,10 @@
         "Owner approval of original source photograph and gallery use required"
       ],
       "holdOccasionFilterUntilOwnerApproval": false,
-      "reviewDecisionSource": "Mads_Full_Gallery_Review_2026-10-29(1).csv",
+      "reviewDecisionSource": "Final CSV 2026-10-30",
       "round2CategoryAction": "Baby celebrations",
-      "ownerReviewDecision": "Keep"
+      "ownerReviewDecision": "Keep",
+      "otherProductTypes": []
     },
     {
       "id": "ig-f25-dmcwjrobfjy",
@@ -1064,9 +1083,10 @@
         "Owner approval of original source photograph and gallery use required"
       ],
       "holdOccasionFilterUntilOwnerApproval": false,
-      "reviewDecisionSource": "Mads_Full_Gallery_Review_2026-10-29(1).csv",
+      "reviewDecisionSource": "Final CSV 2026-10-30",
       "round2CategoryAction": "Other/unspecified",
-      "ownerReviewDecision": "Keep"
+      "ownerReviewDecision": "Keep",
+      "otherProductTypes": []
     },
     {
       "id": "ig-444b4477724e7a42413635",
@@ -1122,7 +1142,8 @@
         "Owner approval of original source photograph and gallery use required"
       ],
       "ownerReviewDecision": "Keep",
-      "reviewDecisionSource": "CSV exports 2026-10-29"
+      "reviewDecisionSource": "Final CSV 2026-10-30",
+      "holdOccasionFilterUntilOwnerApproval": false
     },
     {
       "id": "ig-f30-dtmtusdkm4y",
@@ -1173,9 +1194,10 @@
         "Confirm any visible names, inscriptions and photographic rights with the owner before launch"
       ],
       "holdOccasionFilterUntilOwnerApproval": false,
-      "reviewDecisionSource": "Mads_Full_Gallery_Review_2026-10-29(1).csv",
+      "reviewDecisionSource": "Final CSV 2026-10-30",
       "round2CategoryAction": "Weddings & engagements",
-      "ownerReviewDecision": "Keep"
+      "ownerReviewDecision": "Keep",
+      "otherProductTypes": []
     },
     {
       "id": "ig-f30-ddnehoekoku",
@@ -1227,9 +1249,10 @@
         "Source file M629 was matched to Instagram post by its inscription; verify owner provenance"
       ],
       "holdOccasionFilterUntilOwnerApproval": false,
-      "reviewDecisionSource": "Mads_Full_Gallery_Review_2026-10-29(1).csv",
+      "reviewDecisionSource": "Final CSV 2026-10-30",
       "round2CategoryAction": "Other/unspecified",
-      "ownerReviewDecision": "Keep"
+      "ownerReviewDecision": "Keep",
+      "otherProductTypes": []
     },
     {
       "id": "ig-f30-dbf6bqkhzk1",
@@ -1280,7 +1303,9 @@
         "Confirm any visible names, inscriptions and photographic rights with the owner before launch"
       ],
       "ownerReviewDecision": "Keep",
-      "reviewDecisionSource": "CSV exports 2026-10-29"
+      "reviewDecisionSource": "Final CSV 2026-10-30",
+      "holdOccasionFilterUntilOwnerApproval": false,
+      "otherProductTypes": []
     },
     {
       "id": "ig-4443546c745a7868344271",
@@ -1338,10 +1363,11 @@
         "Do not infer dietary/service availability beyond the original completed cake"
       ],
       "ownerReviewDecision": "Keep",
-      "reviewDecisionSource": "Mads_Full_Gallery_Review_2026-10-29(1).csv",
+      "reviewDecisionSource": "Final CSV 2026-10-30",
       "reviewNotes": "anniversary",
       "holdOccasionFilterUntilOwnerApproval": false,
-      "round2CategoryAction": "Love & anniversaries"
+      "round2CategoryAction": "Love & anniversaries",
+      "finalReviewNote": "anniversary"
     },
     {
       "id": "ig-444a6a494a4e7842316170",
@@ -1396,9 +1422,10 @@
         "Confirm representative wedding/fondant services and any third-party photography rights"
       ],
       "holdOccasionFilterUntilOwnerApproval": false,
-      "reviewDecisionSource": "Mads_Full_Gallery_Review_2026-10-29(1).csv",
+      "reviewDecisionSource": "Final CSV 2026-10-30",
       "round2CategoryAction": "Weddings & engagements",
-      "ownerReviewDecision": "Keep"
+      "ownerReviewDecision": "Keep",
+      "otherProductTypes": []
     },
     {
       "id": "ig-f30-db2wuypeoie",
@@ -1450,7 +1477,7 @@
         "Do not infer dietary/service availability beyond the original completed cake"
       ],
       "ownerReviewDecision": "Keep",
-      "reviewDecisionSource": "Mads_Full_Gallery_Review_2026-10-29(1).csv",
+      "reviewDecisionSource": "Final CSV 2026-10-30",
       "otherProductTypes": [
         "Cupcakes"
       ],
@@ -1510,7 +1537,9 @@
         "Confirm representative wedding/fondant services and any third-party photography rights"
       ],
       "ownerReviewDecision": "Keep",
-      "reviewDecisionSource": "CSV exports 2026-10-29"
+      "reviewDecisionSource": "Final CSV 2026-10-30",
+      "holdOccasionFilterUntilOwnerApproval": false,
+      "otherProductTypes": []
     },
     {
       "id": "ig-f30-drhm4kxeqla",
@@ -1561,9 +1590,11 @@
         "Confirm any visible names, inscriptions and photographic rights with the owner before launch"
       ],
       "holdOccasionFilterUntilOwnerApproval": false,
-      "reviewDecisionSource": "Mads_Full_Gallery_Review_2026-10-29(1).csv",
+      "reviewDecisionSource": "Final CSV 2026-10-30",
       "round2CategoryAction": "Other/unspecified",
-      "ownerReviewDecision": "Keep"
+      "ownerReviewDecision": "Keep",
+      "otherProductTypes": [],
+      "finalReviewNote": "beautiful cake but perhaps in other category this is specifically love anniversary related."
     },
     {
       "id": "ig-4337744f6d6354686b5441",
@@ -1621,10 +1652,11 @@
         "Owner approval of original source photograph and gallery use required"
       ],
       "ownerReviewDecision": "Keep",
-      "reviewDecisionSource": "Mads_Full_Gallery_Review_2026-10-29(1).csv",
+      "reviewDecisionSource": "Final CSV 2026-10-30",
       "reviewNotes": "baby celebration",
       "holdOccasionFilterUntilOwnerApproval": false,
-      "round2CategoryAction": "Baby celebrations"
+      "round2CategoryAction": "Baby celebrations",
+      "finalReviewNote": "baby celebration"
     },
     {
       "id": "ig-44494e6652525f427a596d",
@@ -1681,9 +1713,10 @@
         "Confirm any visible names, inscriptions and photographic rights with the owner before launch"
       ],
       "holdOccasionFilterUntilOwnerApproval": false,
-      "reviewDecisionSource": "Mads_Full_Gallery_Review_2026-10-29(1).csv",
+      "reviewDecisionSource": "Final CSV 2026-10-30",
       "round2CategoryAction": "Love & anniversaries",
-      "ownerReviewDecision": "Keep"
+      "ownerReviewDecision": "Keep",
+      "otherProductTypes": []
     },
     {
       "id": "ig-445130576a435045677172",
@@ -1740,9 +1773,10 @@
         "Recognisable licensed character: approved for owner-only review; owner decides permissions and public-launch suitability."
       ],
       "holdOccasionFilterUntilOwnerApproval": false,
-      "reviewDecisionSource": "Mads_Full_Gallery_Review_2026-10-29(1).csv",
+      "reviewDecisionSource": "Final CSV 2026-10-30",
       "round2CategoryAction": "Baby celebrations",
-      "ownerReviewDecision": "Keep"
+      "ownerReviewDecision": "Keep",
+      "otherProductTypes": []
     },
     {
       "id": "ig-f25-dfcd-vgbnmd",
@@ -1882,11 +1916,13 @@
       "descriptionBasis": "Summarised from owner's Instagram post description (27 October 2026 extract)",
       "featured30": true,
       "ownerReviewDecision": "Keep",
-      "reviewDecisionSource": "CSV exports 2026-10-29",
+      "reviewDecisionSource": "Final CSV 2026-10-30",
       "thumbnailImage": "assets/featured-25/DCgADluhglk-M159.webp",
       "publicationHoldReasons": [
         "Owner approval of photo and service claim required for public launch."
-      ]
+      ],
+      "holdOccasionFilterUntilOwnerApproval": false,
+      "otherProductTypes": []
     },
     {
       "id": "ig-4444563630522d68634641",
@@ -1937,14 +1973,15 @@
       "descriptionBasis": "Summarised from owner's Instagram post description (27 October 2026 extract)",
       "featured30": true,
       "ownerReviewDecision": "Keep",
-      "reviewDecisionSource": "CSV exports 2026-10-29",
+      "reviewDecisionSource": "Final CSV 2026-10-30",
       "holdOccasionFilterUntilOwnerApproval": false,
       "reviewNotes": "mayoun is a pre wedding celebration",
       "thumbnailImage": "assets/featured-25/DDV60R-hcFA-M192.webp",
       "publicationHoldReasons": [
         "Owner approval of photo and service claim required for public launch."
       ],
-      "round2CategoryAction": "Cupcakes only — remove from weddings view"
+      "round2CategoryAction": "Cupcakes only — remove from weddings view",
+      "finalReviewNote": "not sure if people will connect that this  is wedding related immediately. "
     },
     {
       "id": "ig-f25-djq6b-tbqyw",
@@ -1997,9 +2034,10 @@
         "Owner approval of original photo, inscriptions and showcase use required."
       ],
       "holdOccasionFilterUntilOwnerApproval": false,
-      "reviewDecisionSource": "Mads_Full_Gallery_Review_2026-10-29(1).csv",
+      "reviewDecisionSource": "Final CSV 2026-10-30",
       "round2CategoryAction": "Baby celebrations",
-      "ownerReviewDecision": "Keep"
+      "ownerReviewDecision": "Keep",
+      "otherProductTypes": []
     },
     {
       "id": "ig-f25-duef7fjejoe",
@@ -2047,10 +2085,12 @@
       "descriptionBasis": "Summarised from owner's Instagram post description (27 October 2026 extract)",
       "featured30": true,
       "holdOccasionFilterUntilOwnerApproval": false,
-      "reviewDecisionSource": "Mads_Full_Gallery_Review_2026-10-29(1).csv",
+      "reviewDecisionSource": "Final CSV 2026-10-30",
       "round2CategoryAction": "Other/unspecified",
       "ownerReviewDecision": "Keep",
-      "thumbnailImage": "assets/featured-25/DUef7FjEjoE-M564.webp"
+      "thumbnailImage": "assets/featured-25/DUef7FjEjoE-M564.webp",
+      "otherProductTypes": [],
+      "finalReviewNote": "beautiful cake but perhaps in other category this is specifically love anniversary related."
     },
     {
       "id": "ig-444c343948584968546559",
@@ -2101,10 +2141,12 @@
       "descriptionBasis": "Summarised from owner's Instagram post description (27 October 2026 extract)",
       "featured30": true,
       "holdOccasionFilterUntilOwnerApproval": false,
-      "reviewDecisionSource": "Mads_Full_Gallery_Review_2026-10-29(1).csv",
+      "reviewDecisionSource": "Final CSV 2026-10-30",
       "round2CategoryAction": "Other/unspecified",
       "ownerReviewDecision": "Keep",
-      "thumbnailImage": "assets/featured-25/DL49HXIhTeY-M380.webp"
+      "thumbnailImage": "assets/featured-25/DL49HXIhTeY-M380.webp",
+      "otherProductTypes": [],
+      "finalReviewNote": "move to other category"
     },
     {
       "id": "ig-f25-dkj13vrhr-v",
@@ -2150,7 +2192,12 @@
       "licensedCharacterReview": false,
       "captionEvidence": "My customer wanted to taste test a birthday cake for her dad’s 80th birthday",
       "descriptionBasis": "Summarised from owner's Instagram post description (27 October 2026 extract)",
-      "featured30": false
+      "featured30": true,
+      "holdOccasionFilterUntilOwnerApproval": false,
+      "otherProductTypes": [],
+      "thumbnailImage": "assets/featured-25/DKJ13vrhR-V-M367.webp",
+      "reviewDecisionSource": "Final CSV 2026-10-30",
+      "ownerReviewDecision": "Keep"
     },
     {
       "id": "ig-f25-dxlcjobeljq",
@@ -2198,10 +2245,11 @@
       "descriptionBasis": "Summarised from owner's Instagram post description (27 October 2026 extract)",
       "featured30": true,
       "holdOccasionFilterUntilOwnerApproval": false,
-      "reviewDecisionSource": "Mads_Full_Gallery_Review_2026-10-29(1).csv",
+      "reviewDecisionSource": "Final CSV 2026-10-30",
       "round2CategoryAction": "Other/unspecified",
       "ownerReviewDecision": "Keep",
-      "thumbnailImage": "assets/featured-25/DXlCJoBEljq-M605.webp"
+      "thumbnailImage": "assets/featured-25/DXlCJoBEljq-M605.webp",
+      "otherProductTypes": []
     },
     {
       "id": "ig-444b4c734c505468516378",
@@ -2244,10 +2292,11 @@
       "featured30": true,
       "featureCategory": "Other/unspecified",
       "holdOccasionFilterUntilOwnerApproval": false,
-      "reviewDecisionSource": "Mads_Full_Gallery_Review_2026-10-29(1).csv",
+      "reviewDecisionSource": "Final CSV 2026-10-30",
       "round2CategoryAction": "Other/unspecified",
       "ownerReviewDecision": "Keep",
-      "thumbnailImage": "assets/creations/01_garden-bloom-statement-cake_DKLsLPThQcx.webp"
+      "thumbnailImage": "assets/creations/01_garden-bloom-statement-cake_DKLsLPThQcx.webp",
+      "otherProductTypes": []
     },
     {
       "id": "ig-4449685f6f486a4268784e",
@@ -2369,10 +2418,12 @@
       "featured30": true,
       "featureCategory": "Other/unspecified",
       "holdOccasionFilterUntilOwnerApproval": false,
-      "reviewDecisionSource": "Mads_Full_Gallery_Review_2026-10-29(1).csv",
+      "reviewDecisionSource": "Final CSV 2026-10-30",
       "round2CategoryAction": "Other/unspecified",
       "ownerReviewDecision": "Keep",
-      "thumbnailImage": "assets/creations/06_pastel-garden-tiered-cake_DWv0b5kkrWE.webp"
+      "thumbnailImage": "assets/creations/06_pastel-garden-tiered-cake_DWv0b5kkrWE.webp",
+      "otherProductTypes": [],
+      "finalReviewNote": "move to other category"
     },
     {
       "id": "ig-444e4b6c37793942636755",
@@ -2413,12 +2464,14 @@
       "featured25": false,
       "featured30": true,
       "ownerReviewDecision": "Keep",
-      "reviewDecisionSource": "CSV exports 2026-10-29",
+      "reviewDecisionSource": "Final CSV 2026-10-30",
       "thumbnailImage": "assets/creations/07_daisy-first-birthday-cake_DNKl7y9BcgU.webp",
       "publicationHoldReasons": [
         "Owner approval of photo and service claim required for public launch."
       ],
-      "featureCategory": "Birthdays"
+      "featureCategory": "Birthdays",
+      "holdOccasionFilterUntilOwnerApproval": false,
+      "otherProductTypes": []
     },
     {
       "id": "ig-44484e6a57414a6862704b",
@@ -2459,12 +2512,12 @@
       "badgeApproved": false,
       "photoCredit": "Florals: @anthicastudio",
       "featured25": false,
-      "featured30": true,
+      "featured30": false,
       "featureCategory": "Weddings & engagements",
       "holdOccasionFilterUntilOwnerApproval": false,
-      "reviewDecisionSource": "Mads_Full_Gallery_Review_2026-10-29(1).csv",
+      "reviewDecisionSource": "Final CSV 2026-10-30",
       "round2CategoryAction": "Weddings & engagements",
-      "ownerReviewDecision": "Keep",
+      "ownerReviewDecision": "Remove",
       "thumbnailImage": "assets/creations/12_calla-lily-tiered-cake_DHNjWAJhbpK.webp"
     },
     {
@@ -2546,12 +2599,15 @@
       "featured25": false,
       "featured30": true,
       "ownerReviewDecision": "Keep",
-      "reviewDecisionSource": "CSV exports 2026-10-29",
+      "reviewDecisionSource": "Final CSV 2026-10-30",
       "thumbnailImage": "assets/creations/15_styled-pink-bow-cake_DNZj3aAh2jC.webp",
       "publicationHoldReasons": [
         "Owner approval of photo and service claim required for public launch."
       ],
-      "featureCategory": "Birthdays"
+      "featureCategory": "Birthdays",
+      "holdOccasionFilterUntilOwnerApproval": false,
+      "otherProductTypes": [],
+      "finalReviewNote": "move to birthdays category"
     },
     {
       "id": "ig-44504c68544e356b674445",
@@ -2592,12 +2648,14 @@
       "featured25": false,
       "featured30": true,
       "ownerReviewDecision": "Keep",
-      "reviewDecisionSource": "CSV exports 2026-10-29",
+      "reviewDecisionSource": "Final CSV 2026-10-30",
       "thumbnailImage": "assets/creations/16_pastel-ninth-birthday-cake_DPLhTN5kgDE.webp",
       "publicationHoldReasons": [
         "Owner approval of photo and service claim required for public launch."
       ],
-      "featureCategory": "Birthdays"
+      "featureCategory": "Birthdays",
+      "holdOccasionFilterUntilOwnerApproval": false,
+      "otherProductTypes": []
     },
     {
       "id": "ig-4450616f42435a6b6c5f57",
@@ -2636,7 +2694,13 @@
       "displayBadge": "",
       "badgeApproved": false,
       "featured25": false,
-      "featured30": false
+      "featured30": true,
+      "holdOccasionFilterUntilOwnerApproval": false,
+      "featureCategory": "Birthdays",
+      "otherProductTypes": [],
+      "thumbnailImage": "assets/creations/17_basketball-birthday-cake_DPaoBCZkl_W.webp",
+      "reviewDecisionSource": "Final CSV 2026-10-30",
+      "ownerReviewDecision": "Keep"
     },
     {
       "id": "ig-444c4a72537430426d4e63",
@@ -2759,10 +2823,12 @@
       "featured30": true,
       "featureCategory": "Other/unspecified",
       "holdOccasionFilterUntilOwnerApproval": false,
-      "reviewDecisionSource": "Mads_Full_Gallery_Review_2026-10-29(1).csv",
+      "reviewDecisionSource": "Final CSV 2026-10-30",
       "round2CategoryAction": "Other/unspecified",
       "ownerReviewDecision": "Keep",
-      "thumbnailImage": "assets/creations/23_pearl-and-rose-cake_DEtTLWXBBce.webp"
+      "thumbnailImage": "assets/creations/23_pearl-and-rose-cake_DEtTLWXBBce.webp",
+      "otherProductTypes": [],
+      "finalReviewNote": "perhaps other category. beautiful design we should capture somewhere but isnt a wedding cake."
     },
     {
       "id": "ig-44504c7371497a6b70486e",
@@ -2803,12 +2869,14 @@
       "featured25": false,
       "featured30": true,
       "ownerReviewDecision": "Keep",
-      "reviewDecisionSource": "CSV exports 2026-10-29",
+      "reviewDecisionSource": "Final CSV 2026-10-30",
       "thumbnailImage": "assets/creations/24_red-vintage-piping-cake_DPLsqIzkpHn.webp",
       "publicationHoldReasons": [
         "Owner approval of photo and service claim required for public launch."
       ],
-      "featureCategory": "Birthdays"
+      "featureCategory": "Birthdays",
+      "holdOccasionFilterUntilOwnerApproval": false,
+      "otherProductTypes": []
     },
     {
       "id": "ig-444e5a6a4a6c5342686669",
@@ -2890,10 +2958,11 @@
       "featured30": true,
       "featureCategory": "Baby celebrations",
       "holdOccasionFilterUntilOwnerApproval": false,
-      "reviewDecisionSource": "Mads_Full_Gallery_Review_2026-10-29(1).csv",
+      "reviewDecisionSource": "Final CSV 2026-10-30",
       "round2CategoryAction": "Baby celebrations",
       "ownerReviewDecision": "Keep",
-      "thumbnailImage": "assets/creations/28_christening-style-floral-cake_DKDtfwHhPlE.webp"
+      "thumbnailImage": "assets/creations/28_christening-style-floral-cake_DKDtfwHhPlE.webp",
+      "otherProductTypes": []
     },
     {
       "id": "ig-4337744f39463442386c58",
@@ -2934,7 +3003,7 @@
       "featured25": false,
       "featured30": true,
       "ownerReviewDecision": "Keep",
-      "reviewDecisionSource": "Mads_Full_Gallery_Review_2026-10-29(1).csv",
+      "reviewDecisionSource": "Final CSV 2026-10-30",
       "holdOccasionFilterUntilOwnerApproval": false,
       "featureCategory": "Baby celebrations",
       "reviewNotes": "baby celebration",
@@ -2942,7 +3011,8 @@
       "publicationHoldReasons": [
         "Owner approval of photo and service claim required for public launch."
       ],
-      "round2CategoryAction": "Baby celebrations"
+      "round2CategoryAction": "Baby celebrations",
+      "finalReviewNote": "baby celebration"
     },
     {
       "id": "ig-43384a46305f4979594774",
@@ -2983,12 +3053,13 @@
       "featured25": false,
       "featured30": true,
       "ownerReviewDecision": "Keep",
-      "reviewDecisionSource": "CSV exports 2026-10-29",
+      "reviewDecisionSource": "Final CSV 2026-10-30",
       "thumbnailImage": "assets/creations/31_pastel-blossom-cupcakes_C8JF0_IyYGt.webp",
       "publicationHoldReasons": [
         "Owner approval of photo and service claim required for public launch."
       ],
-      "featureCategory": "Cupcakes"
+      "featureCategory": "Cupcakes",
+      "holdOccasionFilterUntilOwnerApproval": false
     },
     {
       "id": "ig-44526a4d4648696b686d2d",
@@ -3070,9 +3141,10 @@
       "photoCredit": "Photography: @riversidecreative",
       "photoRightsReviewRequired": true,
       "holdOccasionFilterUntilOwnerApproval": false,
-      "reviewDecisionSource": "Mads_Full_Gallery_Review_2026-10-29(1).csv",
+      "reviewDecisionSource": "Final CSV 2026-10-30",
       "round2CategoryAction": "Weddings & engagements",
-      "ownerReviewDecision": "Keep"
+      "ownerReviewDecision": "Keep",
+      "otherProductTypes": []
     },
     {
       "id": "ig-f34-dqtmoqid53h",
@@ -3115,9 +3187,10 @@
       "photoCredit": "Photography: @vanrap.weddings",
       "photoRightsReviewRequired": true,
       "holdOccasionFilterUntilOwnerApproval": false,
-      "reviewDecisionSource": "Mads_Full_Gallery_Review_2026-10-29(1).csv",
+      "reviewDecisionSource": "Final CSV 2026-10-30",
       "round2CategoryAction": "Weddings & engagements",
-      "ownerReviewDecision": "Keep"
+      "ownerReviewDecision": "Keep",
+      "otherProductTypes": []
     },
     {
       "id": "ig-review-dld0m9phw0r",
@@ -3157,11 +3230,13 @@
       "featureCategory": "Birthdays",
       "ownerReviewRequired": true,
       "reviewSource": "Owner gallery review 2026-10-29 CSV; source post from Instagram extract 2026-10-27",
-      "reviewDecisionSource": "CSV exports 2026-10-29",
+      "reviewDecisionSource": "Final CSV 2026-10-30",
       "ownerReviewDecision": "Keep",
       "publicationHoldReasons": [
         "Photo usage and service scope need Mads' approval before public launch."
-      ]
+      ],
+      "holdOccasionFilterUntilOwnerApproval": false,
+      "otherProductTypes": []
     },
     {
       "id": "ig-review-dlhgp2fhilz",
@@ -3201,11 +3276,13 @@
       "featureCategory": "Birthdays",
       "ownerReviewRequired": true,
       "reviewSource": "Owner gallery review 2026-10-29 CSV; source post from Instagram extract 2026-10-27",
-      "reviewDecisionSource": "CSV exports 2026-10-29",
+      "reviewDecisionSource": "Final CSV 2026-10-30",
       "ownerReviewDecision": "Keep",
       "publicationHoldReasons": [
         "Photo usage and service scope need Mads' approval before public launch."
-      ]
+      ],
+      "holdOccasionFilterUntilOwnerApproval": false,
+      "otherProductTypes": []
     },
     {
       "id": "ig-review-dpgsotkkgjs",
@@ -3245,11 +3322,14 @@
       "featureCategory": "Birthdays",
       "ownerReviewRequired": true,
       "reviewSource": "Owner gallery review 2026-10-29 CSV; source post from Instagram extract 2026-10-27",
-      "reviewDecisionSource": "CSV exports 2026-10-29",
+      "reviewDecisionSource": "Final CSV 2026-10-30",
       "ownerReviewDecision": "Keep",
       "publicationHoldReasons": [
         "Photo usage and service scope need Mads' approval before public launch."
-      ]
+      ],
+      "holdOccasionFilterUntilOwnerApproval": false,
+      "otherProductTypes": [],
+      "finalReviewNote": "move to birthdays category"
     },
     {
       "id": "ig-review-dfcqb6mherc",
@@ -3289,12 +3369,14 @@
       "featureCategory": "Birthdays",
       "ownerReviewRequired": true,
       "reviewSource": "Owner gallery review 2026-10-29 CSV; source post from Instagram extract 2026-10-27",
-      "reviewDecisionSource": "CSV exports 2026-10-29",
+      "reviewDecisionSource": "Final CSV 2026-10-30",
       "ownerReviewDecision": "Keep",
       "publicationHoldReasons": [
         "Photo usage and service scope need Mads' approval before public launch."
       ],
-      "reviewNotes": "birthday"
+      "reviewNotes": "birthday",
+      "holdOccasionFilterUntilOwnerApproval": false,
+      "finalReviewNote": "birthday"
     },
     {
       "id": "ig-review-dgrtchwbjfb",
@@ -3334,11 +3416,13 @@
       "featureCategory": "Birthdays",
       "ownerReviewRequired": true,
       "reviewSource": "Owner gallery review 2026-10-29 CSV; source post from Instagram extract 2026-10-27",
-      "reviewDecisionSource": "CSV exports 2026-10-29",
+      "reviewDecisionSource": "Final CSV 2026-10-30",
       "ownerReviewDecision": "Keep",
       "publicationHoldReasons": [
         "Photo usage and service scope need Mads' approval before public launch."
-      ]
+      ],
+      "holdOccasionFilterUntilOwnerApproval": false,
+      "otherProductTypes": []
     },
     {
       "id": "ig-review-df2h8fbh3nv",
@@ -3378,11 +3462,13 @@
       "featureCategory": "Birthdays",
       "ownerReviewRequired": true,
       "reviewSource": "Owner gallery review 2026-10-29 CSV; source post from Instagram extract 2026-10-27",
-      "reviewDecisionSource": "CSV exports 2026-10-29",
+      "reviewDecisionSource": "Final CSV 2026-10-30",
       "ownerReviewDecision": "Keep",
       "publicationHoldReasons": [
         "Photo usage and service scope need Mads' approval before public launch."
-      ]
+      ],
+      "holdOccasionFilterUntilOwnerApproval": false,
+      "otherProductTypes": []
     },
     {
       "id": "ig-review-dbzxsvthtxe",
@@ -3422,12 +3508,14 @@
       "featureCategory": "Birthdays",
       "ownerReviewRequired": true,
       "reviewSource": "Owner gallery review 2026-10-29 CSV; source post from Instagram extract 2026-10-27",
-      "reviewDecisionSource": "CSV exports 2026-10-29",
+      "reviewDecisionSource": "Final CSV 2026-10-30",
       "ownerReviewDecision": "Keep",
       "publicationHoldReasons": [
         "Photo usage and service scope need Mads' approval before public launch."
       ],
-      "reviewNotes": "birthday"
+      "reviewNotes": "birthday",
+      "holdOccasionFilterUntilOwnerApproval": false,
+      "finalReviewNote": "birthday"
     },
     {
       "id": "ig-review-dbqmqdshb59",
@@ -3467,11 +3555,13 @@
       "featureCategory": "Birthdays",
       "ownerReviewRequired": true,
       "reviewSource": "Owner gallery review 2026-10-29 CSV; source post from Instagram extract 2026-10-27",
-      "reviewDecisionSource": "CSV exports 2026-10-29",
+      "reviewDecisionSource": "Final CSV 2026-10-30",
       "ownerReviewDecision": "Keep",
       "publicationHoldReasons": [
         "Photo usage and service scope need Mads' approval before public launch."
-      ]
+      ],
+      "holdOccasionFilterUntilOwnerApproval": false,
+      "otherProductTypes": []
     },
     {
       "id": "ig-review-danxd3cpugy",
@@ -3511,11 +3601,13 @@
       "featureCategory": "Birthdays",
       "ownerReviewRequired": true,
       "reviewSource": "Owner gallery review 2026-10-29 CSV; source post from Instagram extract 2026-10-27",
-      "reviewDecisionSource": "CSV exports 2026-10-29",
+      "reviewDecisionSource": "Final CSV 2026-10-30",
       "ownerReviewDecision": "Keep",
       "publicationHoldReasons": [
         "Photo usage and service scope need Mads' approval before public launch."
-      ]
+      ],
+      "holdOccasionFilterUntilOwnerApproval": false,
+      "otherProductTypes": []
     },
     {
       "id": "ig-review-c-wmtmttzqp",
@@ -3555,11 +3647,15 @@
       "featureCategory": "Birthdays",
       "ownerReviewRequired": true,
       "reviewSource": "Owner gallery review 2026-10-29 CSV; source post from Instagram extract 2026-10-27",
-      "reviewDecisionSource": "CSV exports 2026-10-29",
+      "reviewDecisionSource": "Final CSV 2026-10-30",
       "ownerReviewDecision": "Keep",
       "publicationHoldReasons": [
-        "Photo usage and service scope need Mads' approval before public launch."
-      ]
+        "Photo usage and service scope need Mads' approval before public launch.",
+        "Licensed character / IP clearance required before publication."
+      ],
+      "holdOccasionFilterUntilOwnerApproval": false,
+      "otherProductTypes": [],
+      "licensedCharacterReview": true
     },
     {
       "id": "ig-review-dljsj8shd5d",
@@ -3599,11 +3695,13 @@
       "featureCategory": "Birthdays",
       "ownerReviewRequired": true,
       "reviewSource": "Owner gallery review 2026-10-29 CSV; source post from Instagram extract 2026-10-27",
-      "reviewDecisionSource": "CSV exports 2026-10-29",
+      "reviewDecisionSource": "Final CSV 2026-10-30",
       "ownerReviewDecision": "Keep",
       "publicationHoldReasons": [
         "Photo usage and service scope need Mads' approval before public launch."
-      ]
+      ],
+      "holdOccasionFilterUntilOwnerApproval": false,
+      "otherProductTypes": []
     },
     {
       "id": "ig-review-dk8loefhyja",
@@ -3643,7 +3741,7 @@
       "featureCategory": "Birthdays",
       "ownerReviewRequired": true,
       "reviewSource": "Owner gallery review 2026-10-29 CSV; source post from Instagram extract 2026-10-27",
-      "reviewDecisionSource": "CSV exports 2026-10-29",
+      "reviewDecisionSource": "Final CSV 2026-10-30",
       "ownerReviewDecision": "Keep",
       "publicationHoldReasons": [
         "Photo usage and service scope need Mads' approval before public launch."
@@ -3651,7 +3749,9 @@
       "otherProductTypes": [
         "Cupcakes"
       ],
-      "reviewNotes": "birthday"
+      "reviewNotes": "birthday",
+      "holdOccasionFilterUntilOwnerApproval": false,
+      "finalReviewNote": "keep in birthday and cupcakes"
     },
     {
       "id": "ig-review-c-yn5shtoth",
@@ -3691,11 +3791,13 @@
       "featureCategory": "Birthdays",
       "ownerReviewRequired": true,
       "reviewSource": "Owner gallery review 2026-10-29 CSV; source post from Instagram extract 2026-10-27",
-      "reviewDecisionSource": "CSV exports 2026-10-29",
+      "reviewDecisionSource": "Final CSV 2026-10-30",
       "ownerReviewDecision": "Keep",
       "publicationHoldReasons": [
         "Photo usage and service scope need Mads' approval before public launch."
-      ]
+      ],
+      "holdOccasionFilterUntilOwnerApproval": false,
+      "otherProductTypes": []
     },
     {
       "id": "ig-review-c83ol1uymkf",
@@ -3735,11 +3837,13 @@
       "featureCategory": "Birthdays",
       "ownerReviewRequired": true,
       "reviewSource": "Owner gallery review 2026-10-29 CSV; source post from Instagram extract 2026-10-27",
-      "reviewDecisionSource": "CSV exports 2026-10-29",
+      "reviewDecisionSource": "Final CSV 2026-10-30",
       "ownerReviewDecision": "Keep",
       "publicationHoldReasons": [
         "Photo usage and service scope need Mads' approval before public launch."
-      ]
+      ],
+      "holdOccasionFilterUntilOwnerApproval": false,
+      "otherProductTypes": []
     },
     {
       "id": "ig-review-dnfv8ihb9q9",
@@ -3779,11 +3883,13 @@
       "featureCategory": "Birthdays",
       "ownerReviewRequired": true,
       "reviewSource": "Owner gallery review 2026-10-29 CSV; source post from Instagram extract 2026-10-27",
-      "reviewDecisionSource": "CSV exports 2026-10-29",
+      "reviewDecisionSource": "Final CSV 2026-10-30",
       "ownerReviewDecision": "Keep",
       "publicationHoldReasons": [
         "Photo usage and service scope need Mads' approval before public launch."
-      ]
+      ],
+      "holdOccasionFilterUntilOwnerApproval": false,
+      "otherProductTypes": []
     },
     {
       "id": "ig-review-dboenm-bfox",
@@ -3823,11 +3929,15 @@
       "featureCategory": "Birthdays",
       "ownerReviewRequired": true,
       "reviewSource": "Owner gallery review 2026-10-29 CSV; source post from Instagram extract 2026-10-27",
-      "reviewDecisionSource": "CSV exports 2026-10-29",
+      "reviewDecisionSource": "Final CSV 2026-10-30",
       "ownerReviewDecision": "Keep",
       "publicationHoldReasons": [
-        "Photo usage and service scope need Mads' approval before public launch."
-      ]
+        "Photo usage and service scope need Mads' approval before public launch.",
+        "Licensed character / IP clearance required before publication."
+      ],
+      "holdOccasionFilterUntilOwnerApproval": false,
+      "otherProductTypes": [],
+      "licensedCharacterReview": true
     },
     {
       "id": "ig-review-c-hkkwsslwl",
@@ -3867,17 +3977,21 @@
       "featureCategory": "Birthdays",
       "ownerReviewRequired": true,
       "reviewSource": "Owner gallery review 2026-10-29 CSV; source post from Instagram extract 2026-10-27",
-      "reviewDecisionSource": "CSV exports 2026-10-29",
+      "reviewDecisionSource": "Final CSV 2026-10-30",
       "ownerReviewDecision": "Keep",
       "publicationHoldReasons": [
-        "Photo usage and service scope need Mads' approval before public launch."
-      ]
+        "Photo usage and service scope need Mads' approval before public launch.",
+        "Licensed character / IP clearance required before publication."
+      ],
+      "holdOccasionFilterUntilOwnerApproval": false,
+      "otherProductTypes": [],
+      "licensedCharacterReview": true
     },
     {
       "id": "ig-review-dqeuavaehle",
       "title": "Football-themed cupcakes and mini cake",
       "productType": "Cupcakes",
-      "primaryOccasion": "Birthdays",
+      "primaryOccasion": "",
       "otherOccasions": [],
       "styleTags": [],
       "shapeFormat": "Custom",
@@ -3908,15 +4022,17 @@
       "thumbnailImage": "assets/gallery-review-covers/DQEUavaEhle.webp",
       "featured25": false,
       "featured30": true,
-      "featureCategory": "Birthdays",
+      "featureCategory": "Cupcakes",
       "ownerReviewRequired": true,
       "reviewSource": "Owner gallery review 2026-10-29 CSV; source post from Instagram extract 2026-10-27",
-      "reviewDecisionSource": "CSV exports 2026-10-29",
+      "reviewDecisionSource": "Final CSV 2026-10-30",
       "ownerReviewDecision": "Keep",
       "publicationHoldReasons": [
         "Photo usage and service scope need Mads' approval before public launch."
       ],
-      "reviewNotes": "birthday"
+      "reviewNotes": "birthday",
+      "holdOccasionFilterUntilOwnerApproval": false,
+      "finalReviewNote": "birthday"
     },
     {
       "id": "ig-review-dnkmisahnj0",
@@ -3956,11 +4072,12 @@
       "featureCategory": "Cupcakes",
       "ownerReviewRequired": true,
       "reviewSource": "Owner gallery review 2026-10-29 CSV; source post from Instagram extract 2026-10-27",
-      "reviewDecisionSource": "CSV exports 2026-10-29",
+      "reviewDecisionSource": "Final CSV 2026-10-30",
       "ownerReviewDecision": "Keep",
       "publicationHoldReasons": [
         "Photo usage and service scope need Mads' approval before public launch."
-      ]
+      ],
+      "holdOccasionFilterUntilOwnerApproval": false
     },
     {
       "id": "ig-review-dgitclkhk24",
@@ -4000,15 +4117,15 @@
       "featureCategory": "Birthdays",
       "ownerReviewRequired": true,
       "reviewSource": "Owner gallery review 2026-10-29 CSV; source post from Instagram extract 2026-10-27",
-      "reviewDecisionSource": "CSV exports 2026-10-29",
+      "reviewDecisionSource": "Final CSV 2026-10-30",
       "ownerReviewDecision": "Keep",
       "publicationHoldReasons": [
         "Photo usage and service scope need Mads' approval before public launch."
       ],
-      "otherProductTypes": [
-        "Cupcakes"
-      ],
-      "reviewNotes": "birthday"
+      "otherProductTypes": [],
+      "reviewNotes": "birthday",
+      "holdOccasionFilterUntilOwnerApproval": false,
+      "finalReviewNote": "this should be under birthdays"
     },
     {
       "id": "ig-review-ddqrotyhvcl",
@@ -4048,11 +4165,12 @@
       "featureCategory": "Cupcakes",
       "ownerReviewRequired": true,
       "reviewSource": "Owner gallery review 2026-10-29 CSV; source post from Instagram extract 2026-10-27",
-      "reviewDecisionSource": "CSV exports 2026-10-29",
+      "reviewDecisionSource": "Final CSV 2026-10-30",
       "ownerReviewDecision": "Keep",
       "publicationHoldReasons": [
         "Photo usage and service scope need Mads' approval before public launch."
-      ]
+      ],
+      "holdOccasionFilterUntilOwnerApproval": false
     },
     {
       "id": "ig-review-ddqr8n-bnxq",
@@ -4092,11 +4210,12 @@
       "featureCategory": "Cupcakes",
       "ownerReviewRequired": true,
       "reviewSource": "Owner gallery review 2026-10-29 CSV; source post from Instagram extract 2026-10-27",
-      "reviewDecisionSource": "CSV exports 2026-10-29",
+      "reviewDecisionSource": "Final CSV 2026-10-30",
       "ownerReviewDecision": "Keep",
       "publicationHoldReasons": [
         "Photo usage and service scope need Mads' approval before public launch."
-      ]
+      ],
+      "holdOccasionFilterUntilOwnerApproval": false
     },
     {
       "id": "ig-review-daol05qug0y",
@@ -4136,11 +4255,12 @@
       "featureCategory": "Cupcakes",
       "ownerReviewRequired": true,
       "reviewSource": "Owner gallery review 2026-10-29 CSV; source post from Instagram extract 2026-10-27",
-      "reviewDecisionSource": "CSV exports 2026-10-29",
+      "reviewDecisionSource": "Final CSV 2026-10-30",
       "ownerReviewDecision": "Keep",
       "publicationHoldReasons": [
         "Photo usage and service scope need Mads' approval before public launch."
-      ]
+      ],
+      "holdOccasionFilterUntilOwnerApproval": false
     },
     {
       "id": "ig-review-c-7l-lny-ae",
@@ -4180,11 +4300,12 @@
       "featureCategory": "Cupcakes",
       "ownerReviewRequired": true,
       "reviewSource": "Owner gallery review 2026-10-29 CSV; source post from Instagram extract 2026-10-27",
-      "reviewDecisionSource": "CSV exports 2026-10-29",
+      "reviewDecisionSource": "Final CSV 2026-10-30",
       "ownerReviewDecision": "Keep",
       "publicationHoldReasons": [
         "Photo usage and service scope need Mads' approval before public launch."
-      ]
+      ],
+      "holdOccasionFilterUntilOwnerApproval": false
     },
     {
       "id": "ig-review-c-powscydhy",
@@ -4224,11 +4345,14 @@
       "featureCategory": "Cupcakes",
       "ownerReviewRequired": true,
       "reviewSource": "Owner gallery review 2026-10-29 CSV; source post from Instagram extract 2026-10-27",
-      "reviewDecisionSource": "CSV exports 2026-10-29",
+      "reviewDecisionSource": "Final CSV 2026-10-30",
       "ownerReviewDecision": "Keep",
       "publicationHoldReasons": [
-        "Photo usage and service scope need Mads' approval before public launch."
-      ]
+        "Photo usage and service scope need Mads' approval before public launch.",
+        "Licensed character / IP clearance required before publication."
+      ],
+      "holdOccasionFilterUntilOwnerApproval": false,
+      "licensedCharacterReview": true
     },
     {
       "id": "ig-review-c-7nlvqs7dv",
@@ -4268,11 +4392,12 @@
       "featureCategory": "Cupcakes",
       "ownerReviewRequired": true,
       "reviewSource": "Owner gallery review 2026-10-29 CSV; source post from Instagram extract 2026-10-27",
-      "reviewDecisionSource": "CSV exports 2026-10-29",
+      "reviewDecisionSource": "Final CSV 2026-10-30",
       "ownerReviewDecision": "Keep",
       "publicationHoldReasons": [
         "Photo usage and service scope need Mads' approval before public launch."
-      ]
+      ],
+      "holdOccasionFilterUntilOwnerApproval": false
     },
     {
       "id": "ig-review-c8ll68qs0n2",
@@ -4312,11 +4437,12 @@
       "featureCategory": "Cupcakes",
       "ownerReviewRequired": true,
       "reviewSource": "Owner gallery review 2026-10-29 CSV; source post from Instagram extract 2026-10-27",
-      "reviewDecisionSource": "CSV exports 2026-10-29",
+      "reviewDecisionSource": "Final CSV 2026-10-30",
       "ownerReviewDecision": "Keep",
       "publicationHoldReasons": [
         "Photo usage and service scope need Mads' approval before public launch."
-      ]
+      ],
+      "holdOccasionFilterUntilOwnerApproval": false
     },
     {
       "id": "ig-review-c8y7kujsawg",
@@ -4356,11 +4482,12 @@
       "featureCategory": "Cupcakes",
       "ownerReviewRequired": true,
       "reviewSource": "Owner gallery review 2026-10-29 CSV; source post from Instagram extract 2026-10-27",
-      "reviewDecisionSource": "CSV exports 2026-10-29",
+      "reviewDecisionSource": "Final CSV 2026-10-30",
       "ownerReviewDecision": "Keep",
       "publicationHoldReasons": [
         "Photo usage and service scope need Mads' approval before public launch."
-      ]
+      ],
+      "holdOccasionFilterUntilOwnerApproval": false
     },
     {
       "id": "ig-review-c8iozspspb8",
@@ -4400,11 +4527,12 @@
       "featureCategory": "Cupcakes",
       "ownerReviewRequired": true,
       "reviewSource": "Owner gallery review 2026-10-29 CSV; source post from Instagram extract 2026-10-27",
-      "reviewDecisionSource": "CSV exports 2026-10-29",
+      "reviewDecisionSource": "Final CSV 2026-10-30",
       "ownerReviewDecision": "Keep",
       "publicationHoldReasons": [
         "Photo usage and service scope need Mads' approval before public launch."
-      ]
+      ],
+      "holdOccasionFilterUntilOwnerApproval": false
     },
     {
       "id": "ig-review-c9wllw8sf1i",
@@ -4444,11 +4572,12 @@
       "featureCategory": "Cupcakes",
       "ownerReviewRequired": true,
       "reviewSource": "Owner gallery review 2026-10-29 CSV; source post from Instagram extract 2026-10-27",
-      "reviewDecisionSource": "CSV exports 2026-10-29",
+      "reviewDecisionSource": "Final CSV 2026-10-30",
       "ownerReviewDecision": "Keep",
       "publicationHoldReasons": [
         "Photo usage and service scope need Mads' approval before public launch."
-      ]
+      ],
+      "holdOccasionFilterUntilOwnerApproval": false
     },
     {
       "id": "ig-review-c86wdrtynb0",
@@ -4488,11 +4617,12 @@
       "featureCategory": "Cupcakes",
       "ownerReviewRequired": true,
       "reviewSource": "Owner gallery review 2026-10-29 CSV; source post from Instagram extract 2026-10-27",
-      "reviewDecisionSource": "CSV exports 2026-10-29",
+      "reviewDecisionSource": "Final CSV 2026-10-30",
       "ownerReviewDecision": "Keep",
       "publicationHoldReasons": [
         "Photo usage and service scope need Mads' approval before public launch."
-      ]
+      ],
+      "holdOccasionFilterUntilOwnerApproval": false
     },
     {
       "id": "ig-review-c7tpf3rbuzy",
@@ -4532,11 +4662,12 @@
       "featureCategory": "Cupcakes",
       "ownerReviewRequired": true,
       "reviewSource": "Owner gallery review 2026-10-29 CSV; source post from Instagram extract 2026-10-27",
-      "reviewDecisionSource": "CSV exports 2026-10-29",
+      "reviewDecisionSource": "Final CSV 2026-10-30",
       "ownerReviewDecision": "Keep",
       "publicationHoldReasons": [
         "Photo usage and service scope need Mads' approval before public launch."
-      ]
+      ],
+      "holdOccasionFilterUntilOwnerApproval": false
     },
     {
       "id": "ig-review-c7twf2kh1l5",
@@ -4572,12 +4703,12 @@
       "coverImage": "assets/gallery-review-covers/C7tWF2Kh1l5.webp",
       "thumbnailImage": "assets/gallery-review-covers/C7tWF2Kh1l5.webp",
       "featured25": false,
-      "featured30": true,
+      "featured30": false,
       "featureCategory": "Cupcakes",
       "ownerReviewRequired": true,
       "reviewSource": "Owner gallery review 2026-10-29 CSV; source post from Instagram extract 2026-10-27",
-      "reviewDecisionSource": "CSV exports 2026-10-29",
-      "ownerReviewDecision": "Keep",
+      "reviewDecisionSource": "Final CSV 2026-10-30",
+      "ownerReviewDecision": "Remove",
       "publicationHoldReasons": [
         "Photo usage and service scope need Mads' approval before public launch."
       ]
@@ -4621,13 +4752,14 @@
       "publicationHoldReasons": [
         "Owner commercial photo approval required; category and offering are provisional."
       ],
-      "reviewDecisionSource": "Mads_Full_Gallery_Review_2026-10-29(1).csv",
+      "reviewDecisionSource": "Final CSV 2026-10-30",
       "descriptionBasis": "Concept-review placeholder; no unverified product promise.",
       "captionEvidence": "Domed two tier for a bridal shower 🩵",
       "featureCategory": "Weddings & engagements",
       "holdOccasionFilterUntilOwnerApproval": false,
       "round2CategoryAction": "Weddings & engagements",
-      "ownerReviewDecision": "Keep"
+      "ownerReviewDecision": "Keep",
+      "otherProductTypes": []
     },
     {
       "id": "ig-round2-djq50bvb5qk",
@@ -4668,13 +4800,14 @@
       "publicationHoldReasons": [
         "Owner commercial photo approval required; category and offering are provisional."
       ],
-      "reviewDecisionSource": "Mads_Full_Gallery_Review_2026-10-29(1).csv",
+      "reviewDecisionSource": "Final CSV 2026-10-30",
       "descriptionBasis": "Concept-review placeholder; no unverified product promise.",
       "captionEvidence": "These customer pics were too cute not to post! Citrus vibes for a bridal shower 🍊🍋",
       "featureCategory": "Weddings & engagements",
       "holdOccasionFilterUntilOwnerApproval": false,
       "round2CategoryAction": "Weddings & engagements",
-      "ownerReviewDecision": "Keep"
+      "ownerReviewDecision": "Keep",
+      "otherProductTypes": []
     },
     {
       "id": "ig-round2-dcc-omjbsyf",
@@ -4715,13 +4848,14 @@
       "publicationHoldReasons": [
         "Owner commercial photo approval required; category and offering are provisional."
       ],
-      "reviewDecisionSource": "Mads_Full_Gallery_Review_2026-10-29(1).csv",
+      "reviewDecisionSource": "Final CSV 2026-10-30",
       "descriptionBasis": "Concept-review placeholder; no unverified product promise.",
       "captionEvidence": "Ready for a gender reveal 🤍",
       "featureCategory": "Baby celebrations",
       "holdOccasionFilterUntilOwnerApproval": false,
       "round2CategoryAction": "Baby celebrations",
-      "ownerReviewDecision": "Keep"
+      "ownerReviewDecision": "Keep",
+      "otherProductTypes": []
     },
     {
       "id": "ig-round2-dmuhu5dhjbb",
@@ -4762,13 +4896,14 @@
       "publicationHoldReasons": [
         "Owner commercial photo approval required; category and offering are provisional."
       ],
-      "reviewDecisionSource": "Mads_Full_Gallery_Review_2026-10-29(1).csv",
+      "reviewDecisionSource": "Final CSV 2026-10-30",
       "descriptionBasis": "Concept-review placeholder; no unverified product promise.",
       "captionEvidence": "Raspberries and and satin bows 🤝🏼",
       "featureCategory": "Love & anniversaries",
       "holdOccasionFilterUntilOwnerApproval": false,
       "round2CategoryAction": "Love & anniversaries",
-      "ownerReviewDecision": "Keep"
+      "ownerReviewDecision": "Keep",
+      "otherProductTypes": []
     },
     {
       "id": "ig-round2-dpanb6uerva",
@@ -4809,13 +4944,15 @@
       "publicationHoldReasons": [
         "Owner commercial photo approval required; category and offering are provisional."
       ],
-      "reviewDecisionSource": "Mads_Full_Gallery_Review_2026-10-29(1).csv",
+      "reviewDecisionSource": "Final CSV 2026-10-30",
       "descriptionBasis": "Concept-review placeholder; no unverified product promise.",
       "captionEvidence": "White and gold tones for this dreamy cake ✨",
       "featureCategory": "Birthdays",
       "holdOccasionFilterUntilOwnerApproval": false,
       "round2CategoryAction": "Birthdays",
-      "ownerReviewDecision": "Keep"
+      "ownerReviewDecision": "Keep",
+      "otherProductTypes": [],
+      "finalReviewNote": "birthday cake"
     },
     {
       "id": "ig-round2-dbnwk-wbied",
@@ -4856,13 +4993,15 @@
       "publicationHoldReasons": [
         "Owner commercial photo approval required; category and offering are provisional."
       ],
-      "reviewDecisionSource": "Mads_Full_Gallery_Review_2026-10-29(1).csv",
+      "reviewDecisionSource": "Final CSV 2026-10-30",
       "descriptionBasis": "Concept-review placeholder; no unverified product promise.",
       "captionEvidence": "Floral overload for one of my faves 🤩",
       "featureCategory": "Birthdays",
       "holdOccasionFilterUntilOwnerApproval": false,
       "round2CategoryAction": "Birthdays",
-      "ownerReviewDecision": "Keep"
+      "ownerReviewDecision": "Keep",
+      "otherProductTypes": [],
+      "finalReviewNote": "birthday cake"
     },
     {
       "id": "ig-round2-dhcy-btblkc",
@@ -4903,13 +5042,15 @@
       "publicationHoldReasons": [
         "Owner commercial photo approval required; category and offering are provisional."
       ],
-      "reviewDecisionSource": "Mads_Full_Gallery_Review_2026-10-29(1).csv",
+      "reviewDecisionSource": "Final CSV 2026-10-30",
       "descriptionBasis": "Concept-review placeholder; no unverified product promise.",
       "captionEvidence": "🦋🦋🦋 6 inch vanilla cake with vanilla buttercream, printed image and edible butterflies",
       "featureCategory": "Birthdays",
       "holdOccasionFilterUntilOwnerApproval": false,
       "round2CategoryAction": "Birthdays",
-      "ownerReviewDecision": "Keep"
+      "ownerReviewDecision": "Keep",
+      "otherProductTypes": [],
+      "finalReviewNote": "move to birthdays category"
     },
     {
       "id": "ig-round2-dhqdohhb26g",
@@ -4950,13 +5091,15 @@
       "publicationHoldReasons": [
         "Owner commercial photo approval required; category and offering are provisional."
       ],
-      "reviewDecisionSource": "Mads_Full_Gallery_Review_2026-10-29(1).csv",
+      "reviewDecisionSource": "Final CSV 2026-10-30",
       "descriptionBasis": "Concept-review placeholder; no unverified product promise.",
       "captionEvidence": "The cutiest of all cuties 🎀",
       "featureCategory": "Birthdays",
       "holdOccasionFilterUntilOwnerApproval": false,
       "round2CategoryAction": "Birthdays",
-      "ownerReviewDecision": "Keep"
+      "ownerReviewDecision": "Keep",
+      "otherProductTypes": [],
+      "finalReviewNote": "move to birthdays category"
     },
     {
       "id": "ig-round2-c-hr7nts0ei",
@@ -4997,13 +5140,15 @@
       "publicationHoldReasons": [
         "Owner commercial photo approval required; category and offering are provisional."
       ],
-      "reviewDecisionSource": "Mads_Full_Gallery_Review_2026-10-29(1).csv",
+      "reviewDecisionSource": "Final CSV 2026-10-30",
       "descriptionBasis": "Concept-review placeholder; no unverified product promise.",
       "captionEvidence": "Customer: “I like purple and gold, surprise me!” 💜",
       "featureCategory": "Birthdays",
       "holdOccasionFilterUntilOwnerApproval": false,
       "round2CategoryAction": "Birthdays",
-      "ownerReviewDecision": "Keep"
+      "ownerReviewDecision": "Keep",
+      "otherProductTypes": [],
+      "finalReviewNote": "move to birthdays category"
     },
     {
       "id": "ig-round2-c9cjqsry1gy",
@@ -5039,18 +5184,18 @@
       "coverImage": "assets/gallery-review-covers/C9cJQsry1gY.webp",
       "thumbnailImage": "assets/gallery-review-covers/C9cJQsry1gY.webp",
       "featured25": false,
-      "featured30": true,
+      "featured30": false,
       "ownerReviewRequired": true,
       "publicationHoldReasons": [
         "Owner commercial photo approval required; category and offering are provisional."
       ],
-      "reviewDecisionSource": "Mads_Full_Gallery_Review_2026-10-29(1).csv",
+      "reviewDecisionSource": "Final CSV 2026-10-30",
       "descriptionBasis": "Concept-review placeholder; no unverified product promise.",
       "captionEvidence": "Obsessed with this shade of blue 🤩",
       "featureCategory": "Birthdays",
       "holdOccasionFilterUntilOwnerApproval": false,
       "round2CategoryAction": "Birthdays",
-      "ownerReviewDecision": "Keep"
+      "ownerReviewDecision": "Remove"
     },
     {
       "id": "ig-round2-c9zzh4eyqcm",
@@ -5091,13 +5236,15 @@
       "publicationHoldReasons": [
         "Owner commercial photo approval required; category and offering are provisional."
       ],
-      "reviewDecisionSource": "Mads_Full_Gallery_Review_2026-10-29(1).csv",
+      "reviewDecisionSource": "Final CSV 2026-10-30",
       "descriptionBasis": "Concept-review placeholder; no unverified product promise.",
       "captionEvidence": "Monochrome moments from this weekend 🎂",
       "featureCategory": "Birthdays",
       "holdOccasionFilterUntilOwnerApproval": false,
       "round2CategoryAction": "Birthdays",
-      "ownerReviewDecision": "Keep"
+      "ownerReviewDecision": "Keep",
+      "otherProductTypes": [],
+      "finalReviewNote": "move to birthdays category"
     },
     {
       "id": "ig-round2-dcqrbblifnh",
@@ -5138,13 +5285,15 @@
       "publicationHoldReasons": [
         "Owner commercial photo approval required; category and offering are provisional."
       ],
-      "reviewDecisionSource": "Mads_Full_Gallery_Review_2026-10-29(1).csv",
+      "reviewDecisionSource": "Final CSV 2026-10-30",
       "descriptionBasis": "Concept-review placeholder; no unverified product promise.",
       "captionEvidence": "Something about a tiramisu cake ☕️",
       "featureCategory": "Birthdays",
       "holdOccasionFilterUntilOwnerApproval": false,
       "round2CategoryAction": "Birthdays",
-      "ownerReviewDecision": "Keep"
+      "ownerReviewDecision": "Keep",
+      "otherProductTypes": [],
+      "finalReviewNote": "photo 3 has a better angle"
     },
     {
       "id": "ig-round2-dcx9apcvqu6",
@@ -5185,13 +5334,14 @@
       "publicationHoldReasons": [
         "Owner commercial photo approval required; category and offering are provisional."
       ],
-      "reviewDecisionSource": "Mads_Full_Gallery_Review_2026-10-29(1).csv",
+      "reviewDecisionSource": "Final CSV 2026-10-30",
       "descriptionBasis": "Concept-review placeholder; no unverified product promise.",
       "captionEvidence": "In loveeee ❤️",
       "featureCategory": "Birthdays",
       "holdOccasionFilterUntilOwnerApproval": false,
       "round2CategoryAction": "Birthdays",
-      "ownerReviewDecision": "Keep"
+      "ownerReviewDecision": "Keep",
+      "otherProductTypes": []
     },
     {
       "id": "ig-round2-df1l80hbrhi",
@@ -5232,13 +5382,14 @@
       "publicationHoldReasons": [
         "Owner commercial photo approval required; category and offering are provisional."
       ],
-      "reviewDecisionSource": "Mads_Full_Gallery_Review_2026-10-29(1).csv",
+      "reviewDecisionSource": "Final CSV 2026-10-30",
       "descriptionBasis": "Concept-review placeholder; no unverified product promise.",
       "captionEvidence": "Cutie cake 🌹🌸🌺🌷🌼",
       "featureCategory": "Birthdays",
       "holdOccasionFilterUntilOwnerApproval": false,
       "round2CategoryAction": "Birthdays",
-      "ownerReviewDecision": "Keep"
+      "ownerReviewDecision": "Keep",
+      "otherProductTypes": []
     },
     {
       "id": "ig-round2-do2qv4bkkfv",
@@ -5279,13 +5430,14 @@
       "publicationHoldReasons": [
         "Owner commercial photo approval required; category and offering are provisional."
       ],
-      "reviewDecisionSource": "Mads_Full_Gallery_Review_2026-10-29(1).csv",
+      "reviewDecisionSource": "Final CSV 2026-10-30",
       "descriptionBasis": "Concept-review placeholder; no unverified product promise.",
       "captionEvidence": "Almost too pretty to slice 🍰",
       "featureCategory": "Birthdays",
       "holdOccasionFilterUntilOwnerApproval": false,
       "round2CategoryAction": "Birthdays",
-      "ownerReviewDecision": "Keep"
+      "ownerReviewDecision": "Keep",
+      "otherProductTypes": []
     },
     {
       "id": "ig-round2-deotaxvon5f",
@@ -5326,13 +5478,14 @@
       "publicationHoldReasons": [
         "Owner commercial photo approval required; category and offering are provisional."
       ],
-      "reviewDecisionSource": "Mads_Full_Gallery_Review_2026-10-29(1).csv",
+      "reviewDecisionSource": "Final CSV 2026-10-30",
       "descriptionBasis": "Concept-review placeholder; no unverified product promise.",
       "captionEvidence": "This was a fun one to make 🤩",
       "featureCategory": "Birthdays",
       "holdOccasionFilterUntilOwnerApproval": false,
       "round2CategoryAction": "Birthdays",
-      "ownerReviewDecision": "Keep"
+      "ownerReviewDecision": "Keep",
+      "otherProductTypes": []
     },
     {
       "id": "ig-round2-du40f0ikkwm",
@@ -5373,13 +5526,15 @@
       "publicationHoldReasons": [
         "Owner commercial photo approval required; category and offering are provisional."
       ],
-      "reviewDecisionSource": "Mads_Full_Gallery_Review_2026-10-29(1).csv",
+      "reviewDecisionSource": "Final CSV 2026-10-30",
       "descriptionBasis": "Concept-review placeholder; no unverified product promise.",
       "captionEvidence": "White pearls and baby’s breath is a match made in heaven ✨",
       "featureCategory": "Other/unspecified",
       "holdOccasionFilterUntilOwnerApproval": false,
       "round2CategoryAction": "Other/unspecified",
-      "ownerReviewDecision": "Keep"
+      "ownerReviewDecision": "Keep",
+      "otherProductTypes": [],
+      "finalReviewNote": "is not wedding related. perhaps other category. beautiful desing though should be captured somewher. "
     },
     {
       "id": "ig-round2-dqevlrrkh42",
@@ -5420,13 +5575,15 @@
       "publicationHoldReasons": [
         "Owner commercial photo approval required; category and offering are provisional."
       ],
-      "reviewDecisionSource": "Mads_Full_Gallery_Review_2026-10-29(1).csv",
+      "reviewDecisionSource": "Final CSV 2026-10-30",
       "descriptionBasis": "Concept-review placeholder; no unverified product promise.",
       "captionEvidence": "Minis so cute I just wanna squish ‘em 💗 4 inch cakes with vanilla buttercream and fondant details",
       "featureCategory": "Other/unspecified",
       "holdOccasionFilterUntilOwnerApproval": false,
       "round2CategoryAction": "Other/unspecified",
-      "ownerReviewDecision": "Keep"
+      "ownerReviewDecision": "Keep",
+      "otherProductTypes": [],
+      "finalReviewNote": "move to other category"
     },
     {
       "id": "ig-round2-c88mw3fynh8",
@@ -5462,18 +5619,18 @@
       "coverImage": "assets/gallery-review-covers/C88mW3FyNh8.webp",
       "thumbnailImage": "assets/gallery-review-covers/C88mW3FyNh8.webp",
       "featured25": false,
-      "featured30": true,
+      "featured30": false,
       "ownerReviewRequired": true,
       "publicationHoldReasons": [
         "Owner commercial photo approval required; category and offering are provisional."
       ],
-      "reviewDecisionSource": "Mads_Full_Gallery_Review_2026-10-29(1).csv",
+      "reviewDecisionSource": "Final CSV 2026-10-30",
       "descriptionBasis": "Concept-review placeholder; no unverified product promise.",
       "captionEvidence": "A very special work anniversary 🌟",
       "featureCategory": "Other/unspecified",
       "holdOccasionFilterUntilOwnerApproval": false,
       "round2CategoryAction": "Other/unspecified",
-      "ownerReviewDecision": "Keep"
+      "ownerReviewDecision": "Remove"
     },
     {
       "id": "ig-round2-dk8oglibplj",
@@ -5514,13 +5671,15 @@
       "publicationHoldReasons": [
         "Owner commercial photo approval required; category and offering are provisional."
       ],
-      "reviewDecisionSource": "Mads_Full_Gallery_Review_2026-10-29(1).csv",
+      "reviewDecisionSource": "Final CSV 2026-10-30",
       "descriptionBasis": "Concept-review placeholder; no unverified product promise.",
       "captionEvidence": "When the orders sync up 😌",
       "featureCategory": "Other/unspecified",
       "holdOccasionFilterUntilOwnerApproval": false,
       "round2CategoryAction": "Other/unspecified",
-      "ownerReviewDecision": "Keep"
+      "ownerReviewDecision": "Keep",
+      "otherProductTypes": [],
+      "finalReviewNote": "move to birthdays category"
     },
     {
       "id": "ig-round2-c7tqnomhkkk",
@@ -5561,7 +5720,7 @@
       "publicationHoldReasons": [
         "Owner commercial photo approval required; category and offering are provisional."
       ],
-      "reviewDecisionSource": "Mads_Full_Gallery_Review_2026-10-29(1).csv",
+      "reviewDecisionSource": "Final CSV 2026-10-30",
       "descriptionBasis": "Concept-review placeholder; no unverified product promise.",
       "captionEvidence": "A little under the sea moment 🐚🐳🌊",
       "featureCategory": "Cupcakes",
@@ -5571,7 +5730,8 @@
       ],
       "productClassificationReview": "Reviewer requested Cupcakes; historical Instagram caption describes a butter cake. Provisional cross-filter pending original photo inspection.",
       "round2CategoryAction": "Cupcakes",
-      "ownerReviewDecision": "Keep"
+      "ownerReviewDecision": "Keep",
+      "finalReviewNote": "keep in cupcakes, move to other category"
     },
     {
       "id": "ig-round2-dxll97rep2m",
@@ -5612,13 +5772,14 @@
       "publicationHoldReasons": [
         "Owner commercial photo approval required; category and offering are provisional."
       ],
-      "reviewDecisionSource": "Mads_Full_Gallery_Review_2026-10-29(1).csv",
+      "reviewDecisionSource": "Final CSV 2026-10-30",
       "descriptionBasis": "Concept-review placeholder; no unverified product promise.",
       "captionEvidence": "Every now and then I say yes to a fondant cake… and every time I question that decision mid-way 😅 But somehow we make it work in the end ✨",
       "featureCategory": "Other/unspecified",
       "holdOccasionFilterUntilOwnerApproval": false,
       "round2CategoryAction": "Other/unspecified",
-      "ownerReviewDecision": "Keep"
+      "ownerReviewDecision": "Keep",
+      "otherProductTypes": []
     },
     {
       "id": "ig-round2-db71karesvz",
@@ -5659,13 +5820,14 @@
       "publicationHoldReasons": [
         "Owner commercial photo approval required; category and offering are provisional."
       ],
-      "reviewDecisionSource": "Mads_Full_Gallery_Review_2026-10-29(1).csv",
+      "reviewDecisionSource": "Final CSV 2026-10-30",
       "descriptionBasis": "Concept-review placeholder; no unverified product promise.",
       "captionEvidence": "This cake got me feeling so much nostalgia 😭",
       "featureCategory": "Other/unspecified",
       "holdOccasionFilterUntilOwnerApproval": false,
       "round2CategoryAction": "Other/unspecified",
-      "ownerReviewDecision": "Keep"
+      "ownerReviewDecision": "Keep",
+      "otherProductTypes": []
     },
     {
       "id": "ig-round2-dcx8-bkoo2d",
@@ -5706,13 +5868,14 @@
       "publicationHoldReasons": [
         "Owner commercial photo approval required; category and offering are provisional."
       ],
-      "reviewDecisionSource": "Mads_Full_Gallery_Review_2026-10-29(1).csv",
+      "reviewDecisionSource": "Final CSV 2026-10-30",
       "descriptionBasis": "Concept-review placeholder; no unverified product promise.",
       "captionEvidence": "Why solve your problems when you can eat them instead 🫡",
       "featureCategory": "Other/unspecified",
       "holdOccasionFilterUntilOwnerApproval": false,
       "round2CategoryAction": "Other/unspecified",
-      "ownerReviewDecision": "Keep"
+      "ownerReviewDecision": "Keep",
+      "otherProductTypes": []
     },
     {
       "id": "ig-round2-dhfpppfhanb",
@@ -5752,16 +5915,18 @@
       "ownerReviewRequired": true,
       "publicationHoldReasons": [
         "Owner commercial photo approval required; category and offering are provisional.",
-        "Licensed character depiction needs owner's public-marketing decision."
+        "Licensed character depiction needs owner's public-marketing decision.",
+        "Licensed character / IP clearance required before publication."
       ],
-      "reviewDecisionSource": "Mads_Full_Gallery_Review_2026-10-29(1).csv",
+      "reviewDecisionSource": "Final CSV 2026-10-30",
       "descriptionBasis": "Concept-review placeholder; no unverified product promise.",
       "captionEvidence": "This one’s for the Arcane fans ✨",
       "featureCategory": "Other/unspecified",
       "holdOccasionFilterUntilOwnerApproval": false,
       "licensedCharacterReview": true,
       "round2CategoryAction": "Other/unspecified",
-      "ownerReviewDecision": "Keep"
+      "ownerReviewDecision": "Keep",
+      "otherProductTypes": []
     },
     {
       "id": "ig-round2-dljtvcybsky",
@@ -5802,13 +5967,14 @@
       "publicationHoldReasons": [
         "Owner commercial photo approval required; category and offering are provisional."
       ],
-      "reviewDecisionSource": "Mads_Full_Gallery_Review_2026-10-29(1).csv",
+      "reviewDecisionSource": "Final CSV 2026-10-30",
       "descriptionBasis": "Concept-review placeholder; no unverified product promise.",
       "captionEvidence": "Gemini season has been in full swing these past few weeks, bringing in some of the most gorgeous cake orders ♊️✨",
       "featureCategory": "Other/unspecified",
       "holdOccasionFilterUntilOwnerApproval": false,
       "round2CategoryAction": "Other/unspecified",
-      "ownerReviewDecision": "Keep"
+      "ownerReviewDecision": "Keep",
+      "otherProductTypes": []
     },
     {
       "id": "ig-round2-du4wzg-kjhx",
@@ -5849,13 +6015,14 @@
       "publicationHoldReasons": [
         "Owner commercial photo approval required; category and offering are provisional."
       ],
-      "reviewDecisionSource": "Mads_Full_Gallery_Review_2026-10-29(1).csv",
+      "reviewDecisionSource": "Final CSV 2026-10-30",
       "descriptionBasis": "Concept-review placeholder; no unverified product promise.",
       "captionEvidence": "Can you guess the occasion? 😝",
       "featureCategory": "Other/unspecified",
       "holdOccasionFilterUntilOwnerApproval": false,
       "round2CategoryAction": "Other/unspecified",
-      "ownerReviewDecision": "Keep"
+      "ownerReviewDecision": "Keep",
+      "otherProductTypes": []
     },
     {
       "id": "ig-round2-dd7v3m5ehki",
@@ -5896,13 +6063,14 @@
       "publicationHoldReasons": [
         "Owner commercial photo approval required; category and offering are provisional."
       ],
-      "reviewDecisionSource": "Mads_Full_Gallery_Review_2026-10-29(1).csv",
+      "reviewDecisionSource": "Final CSV 2026-10-30",
       "descriptionBasis": "Concept-review placeholder; no unverified product promise.",
       "captionEvidence": "GEM CAKE 💎✨",
       "featureCategory": "Other/unspecified",
       "holdOccasionFilterUntilOwnerApproval": false,
       "round2CategoryAction": "Other/unspecified",
-      "ownerReviewDecision": "Keep"
+      "ownerReviewDecision": "Keep",
+      "otherProductTypes": []
     },
     {
       "id": "ig-round2-dnknqrpb4bv",
@@ -5943,13 +6111,14 @@
       "publicationHoldReasons": [
         "Owner commercial photo approval required; category and offering are provisional."
       ],
-      "reviewDecisionSource": "Mads_Full_Gallery_Review_2026-10-29(1).csv",
+      "reviewDecisionSource": "Final CSV 2026-10-30",
       "descriptionBasis": "Concept-review placeholder; no unverified product promise.",
       "captionEvidence": "Serving serious red carpet energy 🎬🎞️",
       "featureCategory": "Other/unspecified",
       "holdOccasionFilterUntilOwnerApproval": false,
       "round2CategoryAction": "Other/unspecified",
-      "ownerReviewDecision": "Keep"
+      "ownerReviewDecision": "Keep",
+      "otherProductTypes": []
     },
     {
       "id": "ig-round2-drquihqkpm4",
@@ -5990,13 +6159,14 @@
       "publicationHoldReasons": [
         "Owner commercial photo approval required; category and offering are provisional."
       ],
-      "reviewDecisionSource": "Mads_Full_Gallery_Review_2026-10-29(1).csv",
+      "reviewDecisionSource": "Final CSV 2026-10-30",
       "descriptionBasis": "Concept-review placeholder; no unverified product promise.",
       "captionEvidence": "fresh florals 🤝🏼 cake",
       "featureCategory": "Other/unspecified",
       "holdOccasionFilterUntilOwnerApproval": false,
       "round2CategoryAction": "Other/unspecified",
-      "ownerReviewDecision": "Keep"
+      "ownerReviewDecision": "Keep",
+      "otherProductTypes": []
     },
     {
       "id": "ig-round2-dkdr6usbv-b",
@@ -6037,13 +6207,435 @@
       "publicationHoldReasons": [
         "Owner commercial photo approval required; category and offering are provisional."
       ],
-      "reviewDecisionSource": "Mads_Full_Gallery_Review_2026-10-29(1).csv",
+      "reviewDecisionSource": "Final CSV 2026-10-30",
       "descriptionBasis": "Concept-review placeholder; no unverified product promise.",
       "captionEvidence": "Finally got the chance to create a cake inspired by the amazing @studiosweetly and I am obsessed!",
       "featureCategory": "Other/unspecified",
       "holdOccasionFilterUntilOwnerApproval": false,
       "round2CategoryAction": "Other/unspecified",
+      "ownerReviewDecision": "Keep",
+      "otherProductTypes": []
+    },
+    {
+      "id": "ig-final-dvnlqrxkovv",
+      "title": "Joint birthday chocolate cake",
+      "shortDescription": "A previous Mads About Cake design shared for inspiration; enquire about a similar creation and its availability.",
+      "alt": "Joint birthday chocolate cake",
+      "productType": "Cake",
+      "primaryOccasion": "Birthdays",
+      "otherOccasions": [],
+      "styleTags": [],
+      "shapeFormat": "Custom",
+      "designCustomisable": true,
+      "priceFrom": null,
+      "servingsMin": null,
+      "servingsMax": null,
+      "leadTimeDays": null,
+      "availableFlavourIds": [],
+      "personalisationOptions": [],
+      "galleryImageUrls": [],
+      "availabilityStatus": "Enquire",
+      "availabilityEndDate": "",
+      "displayBadge": "",
+      "badgeApproved": false,
+      "approvalStatus": "Draft",
+      "showOnWebsite": "No",
+      "demoVisible": true,
+      "priority": 2500,
+      "featuredHome": false,
+      "homepageOrder": null,
+      "instagramUrl": "https://www.instagram.com/p/DVnLqRxkovV/",
+      "sourceShortcode": "DVnLqRxkovV",
+      "sourcePhotoRank": 1,
+      "coverImage": "assets/gallery-review-covers/DVnLqRxkovV.webp",
+      "thumbnailImage": "assets/gallery-review-covers/DVnLqRxkovV.webp",
+      "featured25": false,
+      "featured30": true,
+      "ownerReviewRequired": true,
+      "publicationHoldReasons": [
+        "Private concept preview only. Product/photograph rights and service details require owner approval."
+      ],
+      "reviewDecisionSource": "Final CSV 2026-10-30",
+      "captionEvidence": "See original Instagram post linked for source evidence",
+      "holdOccasionFilterUntilOwnerApproval": false,
+      "featureCategory": "Birthdays",
+      "otherProductTypes": [],
       "ownerReviewDecision": "Keep"
+    },
+    {
+      "id": "ig-final-dvfvq-ukulg",
+      "title": "Disco-inspired 17th birthday cake",
+      "shortDescription": "A previous Mads About Cake design shared for inspiration; enquire about a similar creation and its availability.",
+      "alt": "Disco-inspired 17th birthday cake",
+      "productType": "Cake",
+      "primaryOccasion": "Birthdays",
+      "otherOccasions": [],
+      "styleTags": [],
+      "shapeFormat": "Custom",
+      "designCustomisable": true,
+      "priceFrom": null,
+      "servingsMin": null,
+      "servingsMax": null,
+      "leadTimeDays": null,
+      "availableFlavourIds": [],
+      "personalisationOptions": [],
+      "galleryImageUrls": [],
+      "availabilityStatus": "Enquire",
+      "availabilityEndDate": "",
+      "displayBadge": "",
+      "badgeApproved": false,
+      "approvalStatus": "Draft",
+      "showOnWebsite": "No",
+      "demoVisible": true,
+      "priority": 2501,
+      "featuredHome": false,
+      "homepageOrder": null,
+      "instagramUrl": "https://www.instagram.com/p/DVFVq_Ukulg/",
+      "sourceShortcode": "DVFVq_Ukulg",
+      "sourcePhotoRank": 1,
+      "coverImage": "assets/gallery-review-covers/DVFVq_Ukulg.webp",
+      "thumbnailImage": "assets/gallery-review-covers/DVFVq_Ukulg.webp",
+      "featured25": false,
+      "featured30": true,
+      "ownerReviewRequired": true,
+      "publicationHoldReasons": [
+        "Private concept preview only. Product/photograph rights and service details require owner approval."
+      ],
+      "reviewDecisionSource": "Final CSV 2026-10-30",
+      "captionEvidence": "See original Instagram post linked for source evidence",
+      "holdOccasionFilterUntilOwnerApproval": false,
+      "featureCategory": "Birthdays",
+      "otherProductTypes": [],
+      "ownerReviewDecision": "Keep"
+    },
+    {
+      "id": "ig-final-dry4dfnkjif",
+      "title": "Addams Family 30th cake",
+      "shortDescription": "A previous Mads About Cake design shared for inspiration; enquire about a similar creation and its availability.",
+      "alt": "Addams Family 30th cake",
+      "productType": "Cake",
+      "primaryOccasion": "Birthdays",
+      "otherOccasions": [],
+      "styleTags": [],
+      "shapeFormat": "Custom",
+      "designCustomisable": true,
+      "priceFrom": null,
+      "servingsMin": null,
+      "servingsMax": null,
+      "leadTimeDays": null,
+      "availableFlavourIds": [],
+      "personalisationOptions": [],
+      "galleryImageUrls": [],
+      "availabilityStatus": "Enquire",
+      "availabilityEndDate": "",
+      "displayBadge": "",
+      "badgeApproved": false,
+      "approvalStatus": "Draft",
+      "showOnWebsite": "No",
+      "demoVisible": true,
+      "priority": 2502,
+      "featuredHome": false,
+      "homepageOrder": null,
+      "instagramUrl": "https://www.instagram.com/p/DRY4dfnkjIF/",
+      "sourceShortcode": "DRY4dfnkjIF",
+      "sourcePhotoRank": 1,
+      "coverImage": "assets/gallery-review-covers/DRY4dfnkjIF.webp",
+      "thumbnailImage": "assets/gallery-review-covers/DRY4dfnkjIF.webp",
+      "featured25": false,
+      "featured30": true,
+      "ownerReviewRequired": true,
+      "publicationHoldReasons": [
+        "Private concept preview only. Product/photograph rights and service details require owner approval.",
+        "Licensed character / IP clearance required before publication."
+      ],
+      "reviewDecisionSource": "Final CSV 2026-10-30",
+      "captionEvidence": "See original Instagram post linked for source evidence",
+      "holdOccasionFilterUntilOwnerApproval": false,
+      "featureCategory": "Birthdays",
+      "otherProductTypes": [],
+      "ownerReviewDecision": "Keep",
+      "licensedCharacterReview": true
+    },
+    {
+      "id": "ig-final-do2pqvaemc1",
+      "title": "Black-and-red 30th birthday cake",
+      "shortDescription": "A previous Mads About Cake design shared for inspiration; enquire about a similar creation and its availability.",
+      "alt": "Black-and-red 30th birthday cake",
+      "productType": "Cake",
+      "primaryOccasion": "Birthdays",
+      "otherOccasions": [],
+      "styleTags": [],
+      "shapeFormat": "Custom",
+      "designCustomisable": true,
+      "priceFrom": null,
+      "servingsMin": null,
+      "servingsMax": null,
+      "leadTimeDays": null,
+      "availableFlavourIds": [],
+      "personalisationOptions": [],
+      "galleryImageUrls": [],
+      "availabilityStatus": "Enquire",
+      "availabilityEndDate": "",
+      "displayBadge": "",
+      "badgeApproved": false,
+      "approvalStatus": "Draft",
+      "showOnWebsite": "No",
+      "demoVisible": true,
+      "priority": 2503,
+      "featuredHome": false,
+      "homepageOrder": null,
+      "instagramUrl": "https://www.instagram.com/p/DO2PQVaEmC1/",
+      "sourceShortcode": "DO2PQVaEmC1",
+      "sourcePhotoRank": 1,
+      "coverImage": "assets/gallery-review-covers/DO2PQVaEmC1.webp",
+      "thumbnailImage": "assets/gallery-review-covers/DO2PQVaEmC1.webp",
+      "featured25": false,
+      "featured30": true,
+      "ownerReviewRequired": true,
+      "publicationHoldReasons": [
+        "Private concept preview only. Product/photograph rights and service details require owner approval."
+      ],
+      "reviewDecisionSource": "Final CSV 2026-10-30",
+      "captionEvidence": "See original Instagram post linked for source evidence",
+      "holdOccasionFilterUntilOwnerApproval": false,
+      "featureCategory": "Birthdays",
+      "otherProductTypes": [],
+      "ownerReviewDecision": "Keep"
+    },
+    {
+      "id": "ig-final-digj6oibq4u",
+      "title": "Strawberry 30th birthday cake",
+      "shortDescription": "A previous Mads About Cake design shared for inspiration; enquire about a similar creation and its availability.",
+      "alt": "Strawberry 30th birthday cake",
+      "productType": "Cake",
+      "primaryOccasion": "Birthdays",
+      "otherOccasions": [],
+      "styleTags": [],
+      "shapeFormat": "Custom",
+      "designCustomisable": true,
+      "priceFrom": null,
+      "servingsMin": null,
+      "servingsMax": null,
+      "leadTimeDays": null,
+      "availableFlavourIds": [],
+      "personalisationOptions": [],
+      "galleryImageUrls": [],
+      "availabilityStatus": "Enquire",
+      "availabilityEndDate": "",
+      "displayBadge": "",
+      "badgeApproved": false,
+      "approvalStatus": "Draft",
+      "showOnWebsite": "No",
+      "demoVisible": true,
+      "priority": 2504,
+      "featuredHome": false,
+      "homepageOrder": null,
+      "instagramUrl": "https://www.instagram.com/p/DIGJ6oiBq4u/",
+      "sourceShortcode": "DIGJ6oiBq4u",
+      "sourcePhotoRank": 1,
+      "coverImage": "assets/gallery-review-covers/DIGJ6oiBq4u.webp",
+      "thumbnailImage": "assets/gallery-review-covers/DIGJ6oiBq4u.webp",
+      "featured25": false,
+      "featured30": true,
+      "ownerReviewRequired": true,
+      "publicationHoldReasons": [
+        "Private concept preview only. Product/photograph rights and service details require owner approval."
+      ],
+      "reviewDecisionSource": "Final CSV 2026-10-30",
+      "captionEvidence": "See original Instagram post linked for source evidence",
+      "holdOccasionFilterUntilOwnerApproval": false,
+      "featureCategory": "Birthdays",
+      "otherProductTypes": [],
+      "ownerReviewDecision": "Keep"
+    },
+    {
+      "id": "ig-final-c9ecftcs6n8",
+      "title": "Twenty-sixth birthday cake",
+      "shortDescription": "A previous Mads About Cake design shared for inspiration; enquire about a similar creation and its availability.",
+      "alt": "Twenty-sixth birthday cake",
+      "productType": "Cake",
+      "primaryOccasion": "Birthdays",
+      "otherOccasions": [],
+      "styleTags": [],
+      "shapeFormat": "Custom",
+      "designCustomisable": true,
+      "priceFrom": null,
+      "servingsMin": null,
+      "servingsMax": null,
+      "leadTimeDays": null,
+      "availableFlavourIds": [],
+      "personalisationOptions": [],
+      "galleryImageUrls": [],
+      "availabilityStatus": "Enquire",
+      "availabilityEndDate": "",
+      "displayBadge": "",
+      "badgeApproved": false,
+      "approvalStatus": "Draft",
+      "showOnWebsite": "No",
+      "demoVisible": true,
+      "priority": 2505,
+      "featuredHome": false,
+      "homepageOrder": null,
+      "instagramUrl": "https://www.instagram.com/p/C9ECFTcS6n8/",
+      "sourceShortcode": "C9ECFTcS6n8",
+      "sourcePhotoRank": 1,
+      "coverImage": "assets/gallery-review-covers/C9ECFTcS6n8.webp",
+      "thumbnailImage": "assets/gallery-review-covers/C9ECFTcS6n8.webp",
+      "featured25": false,
+      "featured30": true,
+      "ownerReviewRequired": true,
+      "publicationHoldReasons": [
+        "Private concept preview only. Product/photograph rights and service details require owner approval."
+      ],
+      "reviewDecisionSource": "Final CSV 2026-10-30",
+      "captionEvidence": "See original Instagram post linked for source evidence",
+      "holdOccasionFilterUntilOwnerApproval": false,
+      "featureCategory": "Birthdays",
+      "otherProductTypes": [],
+      "ownerReviewDecision": "Keep"
+    },
+    {
+      "id": "ig-final-dbc0-i4hblc",
+      "title": "Go Blues birthday cake",
+      "shortDescription": "A previous Mads About Cake design shared for inspiration; enquire about a similar creation and its availability.",
+      "alt": "Go Blues birthday cake",
+      "productType": "Cake",
+      "primaryOccasion": "",
+      "otherOccasions": [],
+      "styleTags": [],
+      "shapeFormat": "Custom",
+      "designCustomisable": true,
+      "priceFrom": null,
+      "servingsMin": null,
+      "servingsMax": null,
+      "leadTimeDays": null,
+      "availableFlavourIds": [],
+      "personalisationOptions": [],
+      "galleryImageUrls": [],
+      "availabilityStatus": "Enquire",
+      "availabilityEndDate": "",
+      "displayBadge": "",
+      "badgeApproved": false,
+      "approvalStatus": "Draft",
+      "showOnWebsite": "No",
+      "demoVisible": true,
+      "priority": 2506,
+      "featuredHome": false,
+      "homepageOrder": null,
+      "instagramUrl": "https://www.instagram.com/p/DBC0_I4hblC/",
+      "sourceShortcode": "DBC0_I4hblC",
+      "sourcePhotoRank": 1,
+      "coverImage": "assets/gallery-review-covers/DBC0_I4hblC.webp",
+      "thumbnailImage": "assets/gallery-review-covers/DBC0_I4hblC.webp",
+      "featured25": false,
+      "featured30": true,
+      "ownerReviewRequired": true,
+      "publicationHoldReasons": [
+        "Private concept preview only. Product/photograph rights and service details require owner approval."
+      ],
+      "reviewDecisionSource": "Final CSV 2026-10-30",
+      "captionEvidence": "See original Instagram post linked for source evidence",
+      "holdOccasionFilterUntilOwnerApproval": false,
+      "featureCategory": "Other/unspecified",
+      "otherProductTypes": [],
+      "ownerReviewDecision": "Keep",
+      "finalReviewNote": "move to other category"
+    },
+    {
+      "id": "ig-final-dbakk7dbinc",
+      "title": "Pokémon-themed cake",
+      "shortDescription": "A previous Mads About Cake design shared for inspiration; enquire about a similar creation and its availability.",
+      "alt": "Pokémon-themed cake",
+      "productType": "Cake",
+      "primaryOccasion": "",
+      "otherOccasions": [],
+      "styleTags": [],
+      "shapeFormat": "Custom",
+      "designCustomisable": true,
+      "priceFrom": null,
+      "servingsMin": null,
+      "servingsMax": null,
+      "leadTimeDays": null,
+      "availableFlavourIds": [],
+      "personalisationOptions": [],
+      "galleryImageUrls": [],
+      "availabilityStatus": "Enquire",
+      "availabilityEndDate": "",
+      "displayBadge": "",
+      "badgeApproved": false,
+      "approvalStatus": "Draft",
+      "showOnWebsite": "No",
+      "demoVisible": true,
+      "priority": 2507,
+      "featuredHome": false,
+      "homepageOrder": null,
+      "instagramUrl": "https://www.instagram.com/p/DBAkK7DBINC/",
+      "sourceShortcode": "DBAkK7DBINC",
+      "sourcePhotoRank": 1,
+      "coverImage": "assets/gallery-review-covers/DBAkK7DBINC.webp",
+      "thumbnailImage": "assets/gallery-review-covers/DBAkK7DBINC.webp",
+      "featured25": false,
+      "featured30": true,
+      "ownerReviewRequired": true,
+      "publicationHoldReasons": [
+        "Private concept preview only. Product/photograph rights and service details require owner approval.",
+        "Licensed character / IP clearance required before publication."
+      ],
+      "reviewDecisionSource": "Final CSV 2026-10-30",
+      "captionEvidence": "See original Instagram post linked for source evidence",
+      "holdOccasionFilterUntilOwnerApproval": false,
+      "featureCategory": "Other/unspecified",
+      "otherProductTypes": [],
+      "ownerReviewDecision": "Keep",
+      "finalReviewNote": "move to other category",
+      "licensedCharacterReview": true
+    },
+    {
+      "id": "ig-final-daxbgxktqp",
+      "title": "Chocolate cake and cupcakes",
+      "shortDescription": "A previous Mads About Cake design shared for inspiration; enquire about a similar creation and its availability.",
+      "alt": "Chocolate cake and cupcakes",
+      "productType": "Cake",
+      "primaryOccasion": "",
+      "otherOccasions": [],
+      "styleTags": [],
+      "shapeFormat": "Custom",
+      "designCustomisable": true,
+      "priceFrom": null,
+      "servingsMin": null,
+      "servingsMax": null,
+      "leadTimeDays": null,
+      "availableFlavourIds": [],
+      "personalisationOptions": [],
+      "galleryImageUrls": [],
+      "availabilityStatus": "Enquire",
+      "availabilityEndDate": "",
+      "displayBadge": "",
+      "badgeApproved": false,
+      "approvalStatus": "Draft",
+      "showOnWebsite": "No",
+      "demoVisible": true,
+      "priority": 2508,
+      "featuredHome": false,
+      "homepageOrder": null,
+      "instagramUrl": "https://www.instagram.com/p/DAxbgXkTqp-/",
+      "sourceShortcode": "DAxbgXkTqp-",
+      "sourcePhotoRank": 1,
+      "coverImage": "assets/gallery-review-covers/DAxbgXkTqp-.webp",
+      "thumbnailImage": "assets/gallery-review-covers/DAxbgXkTqp-.webp",
+      "featured25": false,
+      "featured30": true,
+      "ownerReviewRequired": true,
+      "publicationHoldReasons": [
+        "Private concept preview only. Product/photograph rights and service details require owner approval."
+      ],
+      "reviewDecisionSource": "Final CSV 2026-10-30",
+      "captionEvidence": "See original Instagram post linked for source evidence",
+      "holdOccasionFilterUntilOwnerApproval": false,
+      "featureCategory": "Other/unspecified",
+      "otherProductTypes": [],
+      "ownerReviewDecision": "Keep",
+      "finalReviewNote": "should be under other perhaps"
     }
   ]
 }
