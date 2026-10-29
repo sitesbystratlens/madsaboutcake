@@ -131,16 +131,24 @@ for(const [slug,url] of pages){
       });
       if(misses.length)problem.push(group+' has '+misses.length+' missing original preview photographs: '+misses.slice(0,3).join(','));
     }
-    const popularFirst=page.locator('.review-card').first();
-    const popularCode=await popularFirst.getAttribute('data-code');
-    await popularFirst.locator('.category-choice').selectOption('Floral / garden');
-    await popularFirst.locator('[data-decision="keep"]').click();
+    const otherFirst=page.locator('.review-card').first();
+    const otherCode=await otherFirst.getAttribute('data-code');
+    await otherFirst.locator('[data-decision="keep"]').click();
+    await page.locator('.review-card[data-code="'+otherCode+'"] .category-choice').selectOption('Floral / garden');
+    if(await page.locator('.review-card[data-code="'+otherCode+'"]').count())problem.push('Grouped design was not removed from pending Other queue');
+    const secondOther=page.locator('.review-card').first();
+    const movedCode=await secondOther.getAttribute('data-code');
+    await secondOther.locator('.move-choice').selectOption('Birthdays');
+    if(await page.locator('.review-card[data-code="'+movedCode+'"]').count())problem.push('Moved design remained in pending Other queue');
     await page.reload({waitUntil:'domcontentloaded'});
     await page.locator('.review-card').first().waitFor();
-    const popularRetained=page.locator('.review-card[data-code="'+popularCode+'"]');
-    if(await popularRetained.locator('.category-choice').inputValue()!=='Floral / garden'||
-       await popularRetained.locator('[data-decision="keep"]').getAttribute('aria-pressed')!=='true')
-      problem.push('Other-category discovery decision not persisted after refresh');
+    await page.locator('#queue-filter').selectOption('all');
+    const grouped=page.locator('.review-card[data-code="'+otherCode+'"]');
+    const moved=page.locator('.review-card[data-code="'+movedCode+'"]');
+    if(await grouped.locator('.category-choice').inputValue()!=='Floral / garden'||
+       await grouped.locator('[data-decision="keep"]').getAttribute('aria-pressed')!=='true'||
+       await moved.locator('.move-choice').inputValue()!=='Birthdays')
+      problem.push('Other grouping or category move failed to persist after refresh');
     await page.locator('[data-group="birthdays"]').click();
     const first=page.locator('.review-card').first();
     const source=await first.getAttribute('data-code');
