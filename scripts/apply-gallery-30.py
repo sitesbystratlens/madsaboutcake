@@ -96,7 +96,11 @@ def swap(text,old,new,label):
     return text.replace(old,new)
 js=swap(js,"(?:cake-covers|creations|featured-25)","(?:cake-covers|creations|featured-25|gallery-30(?:/thumbs)?)","Allow original gallery-30 images")
 js=swap(js,"title:c.title.slice(0,140),image:imageOf(c),alt:","title:c.title.slice(0,140),image:imageOf(c),thumbnail:safeCover(c.thumbnailImage)?'/'+c.thumbnailImage:imageOf(c),alt:","Add small thumbnail source")
-js=swap(js,"src=\"'+esc(c.image)+'\" alt=\"'+esc(c.alt)+'\"","src=\"'+esc(c.thumbnail)+'\" alt=\"'+esc(c.alt)+'\" width=\"480\" height=\"600\"","Use thumbnail on cards")
+card_start=js.index("function cardHtml(c){")
+card_end=js.index("function showDesign(c,concept){",card_start)
+card=js[card_start:card_end]
+card=swap(card,"src=\"'+esc(c.image)+'\" alt=\"'+esc(c.alt)+'\"","src=\"'+esc(c.thumbnail)+'\" alt=\"'+esc(c.alt)+'\" width=\"480\" height=\"600\"","Use thumbnail on gallery cards only")
+js=js[:card_start]+card+js[card_end:]
 js=swap(js,"records.filter(c=>c.featured25===true)","records.filter(c=>c.featured30===true)","Use 30 featured designs")
 js=swap(js,"if(id){const c=records.find(x=>x.id===id);if(c&&showDesign(c,concept))return;}","if(id){const c=records.find(x=>x.id===id);if(c&&(!concept||c.demoVisible!==false)&&showDesign(c,concept))return;}","Prevent hidden legacy character deep links")
 js_path.write_text(js,encoding="utf-8")
