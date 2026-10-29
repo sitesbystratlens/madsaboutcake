@@ -69,8 +69,24 @@ for(const [slug,url] of pages){
     const source=JSON.parse(fs.readFileSync('cakes.json','utf8'));
     const expected=source.cakes.filter(c=>(c.featured30===true||c.featured25===true)&&(c.primaryOccasion===label||(c.otherOccasions||[]).includes(label))).length;
     if(visible!==expected)problem.push(label+' has '+visible+' items, expected '+expected);
+    if(width===1440&&visible===4){
+     const layout=await page.locator('[data-gallery]').evaluate(el=>({count:el.dataset.visibleCount,columns:getComputedStyle(el).gridTemplateColumns.split(' ').filter(Boolean).length}));
+     if(layout.count!=='4'||layout.columns!==2)problem.push(label+' should render a balanced 2x2 grid '+JSON.stringify(layout));
+    }
    }
    await page.locator('#occasion-filter').selectOption('all');
+  }
+  if(slug==='decorate-and-sip'){
+   const presentation=await page.evaluate(()=>{
+    const accent=document.querySelector('.workshop-hero__accent');
+    const badges=[...document.querySelectorAll('.workshop-detail__num')];
+    return {accentColour:accent?getComputedStyle(accent).color:null,badgeWidths:badges.map(b=>b.getBoundingClientRect().width)};
+   });
+   if(!presentation.accentColour||presentation.badgeWidths.length!==3||presentation.badgeWidths.some(w=>w<40))problem.push('Workshop accent or numbered badges not displayed '+JSON.stringify(presentation));
+  }
+  if(slug==='home'&&width===1440){
+   const heading=await page.locator('.occasion .section-head h2').evaluate(el=>({text:el.innerText,whiteSpace:getComputedStyle(el).whiteSpace}));
+   if(!heading.text.includes('What are we celebrating?')||heading.whiteSpace!=='nowrap')problem.push('Desktop occasion heading does not resolve to one line '+JSON.stringify(heading));
   }
   if(slug==='cakes'){
    const counts=await page.evaluate(()=>({cardActions:document.querySelectorAll('[data-gallery] .gallery-card-actions').length,photoLinks:document.querySelectorAll('[data-gallery] .gallery-photo[href*="design="]').length,titleLinks:document.querySelectorAll('[data-gallery] .gallery-title-link[href*="design="]').length,arrows:document.querySelectorAll('[data-gallery] .gallery-photo__arrow').length}));
