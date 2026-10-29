@@ -16,6 +16,7 @@ jobs:
         with:
           python-version: '3.11'
       - run: python -m pip install Pillow
+      - run: sudo apt-get update -qq && sudo apt-get install -y ffmpeg
       - name: Download exact original post photos and generate derivatives
         run: |
           python - <<'PY'
