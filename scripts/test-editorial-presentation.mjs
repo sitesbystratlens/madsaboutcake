@@ -85,7 +85,7 @@ const codes=['DGM5hj1hcJf','DJQ5RLthPKp','DP-QFm2EhMp'];
 const winners=[
  ['Birthdays','DA-B4huhKQ4'],
  ['Weddings & engagements','DJjIJNxB1ap'],
- ['Baby celebrations','DQ0WjCPEgqr'],
+ ['Baby celebrations','DQYyHi-kn6R'],
  ['Love & anniversaries','DWvn4Nekv8Z']
 ];
 const byCode=new Map(featured.map(c=>[c.sourceShortcode,c]));
@@ -107,6 +107,7 @@ assert(home.includes('Valentine’s minis with strawberries.')&&home.includes('G
 assert(home.includes('Matched to the birthday dress'),"Birthday occasion copy must be grounded in the owner's words");
 
 assert(!home.includes('DauWQoCkuB1'),'Explicit cake must not return to homepage');
+assert(!home.includes('DQ0WjCPEgqr'),'Licensed character photo must not appear on the homepage');
 assert(css.includes('.mads-v3 .look-left .look-img img,')&&css.includes('object-fit:contain;object-position:center;background:transparent'),'Hero image framing must be full-cake / no zoom');
 assert(home.includes('edit-photo-frame--gold')&&home.includes('edit-photo-frame--butterfly')&&home.includes('edit-photo-frame--garden'),'Detail photographs must be deliberately cropped');
 assert(!read('about/index.html').includes('<div class="about-photo"><img src="/assets/creations/02_pink-ribbon'),'About repeats homepage hero');
