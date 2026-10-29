@@ -62,21 +62,18 @@ jobs:
         shell: bash
         run: |
           python3 - <<'PY'
-          import concurrent.futures, json, urllib.request
-          from urllib.error import URLError, HTTPError
+          import concurrent.futures, json, subprocess
           d=json.load(open('/tmp/live-gallery.json'))
           unique=sorted({p for c in d['cakes'] if c.get('featured30') for p in (c['coverImage'], c.get('thumbnailImage') or c['coverImage'])})
           def check(path):
               url='https://madsaboutcake.sitesbystratlens.workers.dev/'+path
-              request=urllib.request.Request(url,method='HEAD',headers={'Cache-Control':'no-cache'})
-              try:
-                  with urllib.request.urlopen(request,timeout=25) as response:
-                      return (path,response.status,response.headers.get('Content-Type',''))
-              except Exception as e:
-                  return (path,0,str(e))
-          with concurrent.futures.ThreadPoolExecutor(max_workers=12) as pool:
+              result=subprocess.run(['curl','-fsSI','--max-time','25','-H','Cache-Control: no-cache',url],capture_output=True,text=True)
+              headers=result.stdout.lower()
+              valid=result.returncode==0 and 'content-type: image/webp' in headers
+              return (path,valid,result.returncode,headers[-150:] if valid else (result.stderr[-180:] or headers[-180:]))
+          with concurrent.futures.ThreadPoolExecutor(max_workers=10) as pool:
               result=list(pool.map(check,unique))
-          bad=[x for x in result if x[1]!=200 or 'image/webp' not in x[2].lower()]
+          bad=[x for x in result if not x[1]]
           print('Checked',len(result),'unique selected photo/thumbnail URLs; invalid:',len(bad))
           if bad:
               print('Failures:',bad[:15])
