@@ -1,0 +1,402 @@
+{
+  "version": 2,
+  "sourceCSV": "Mads_Full_Gallery_Review_2026-10-29(1).csv",
+  "recordedDate": "2026-10-30",
+  "meaning": "Decisions on the four new tabs are per-section. Remove does not delete a post from another category. Explicit move notes supersede removal from candidate section. Older 70 Birthday/Cupcake selections unchanged.",
+  "counts": {
+    "weddings": {
+      "keep": 10,
+      "remove": 8,
+      "undecided": 0,
+      "total": 18
+    },
+    "baby": {
+      "keep": 9,
+      "remove": 8,
+      "undecided": 1,
+      "total": 18
+    },
+    "love": {
+      "keep": 6,
+      "remove": 16,
+      "undecided": 0,
+      "total": 22
+    },
+    "popular": {
+      "keep": 22,
+      "remove": 10,
+      "undecided": 0,
+      "total": 32
+    }
+  },
+  "groupDecisions": {
+    "weddings": {
+      "DYJ42NMkqlU": {
+        "review": "keep",
+        "note": ""
+      },
+      "DWz1K4TErEv": {
+        "review": "keep",
+        "note": ""
+      },
+      "DSg_oqpkjyK": {
+        "review": "keep",
+        "note": ""
+      },
+      "DQTMOqiD53h": {
+        "review": "keep",
+        "note": ""
+      },
+      "DTMTuSdkm4Y": {
+        "review": "keep",
+        "note": ""
+      },
+      "DJQ50BvB5qK": {
+        "review": "keep",
+        "note": ""
+      },
+      "DHNjWAJhbpK": {
+        "review": "keep",
+        "note": ""
+      },
+      "DINfV1OhprN": {
+        "review": "keep",
+        "note": ""
+      },
+      "DJjIJNxB1ap": {
+        "review": "keep",
+        "note": ""
+      },
+      "DR8_-HBkjFa": {
+        "review": "keep",
+        "note": ""
+      },
+      "DYcB0ByEmzo": {
+        "review": "remove",
+        "note": "too personalized with the names listed."
+      },
+      "DFCd_VGBnmD": {
+        "review": "remove",
+        "note": ""
+      },
+      "DDV60R-hcFA": {
+        "review": "remove",
+        "note": "not sure if people will connect that this is wedding related immediately."
+      },
+      "DQ1CEggEliL": {
+        "review": "remove",
+        "note": "not wedding related"
+      },
+      "DU40F0ikkwm": {
+        "review": "remove",
+        "note": "is not wedding related. perhaps other category. beautiful design though should be captured somewhere."
+      },
+      "DPanB6UErVa": {
+        "review": "remove",
+        "note": "birthday cake"
+      },
+      "DBnwK_WBIeD": {
+        "review": "remove",
+        "note": "birthday cake"
+      },
+      "DEtTLWXBBce": {
+        "review": "remove",
+        "note": "perhaps other category. beautiful design we should capture somewhere but isn't a wedding cake."
+      }
+    },
+    "baby": {
+      "DQ0WjCPEgqr": {
+        "review": "keep",
+        "note": ""
+      },
+      "DQYyHi-kn6R": {
+        "review": "keep",
+        "note": ""
+      },
+      "DMmuv2mBvWk": {
+        "review": "keep",
+        "note": ""
+      },
+      "DJQ6B-tBQyw": {
+        "review": "keep",
+        "note": ""
+      },
+      "DI75TIVBBgx": {
+        "review": "keep",
+        "note": ""
+      },
+      "C7tOmcThkTA": {
+        "review": "keep",
+        "note": ""
+      },
+      "DCc_OmjBsyf": {
+        "review": "keep",
+        "note": ""
+      },
+      "DKDtfwHhPlE": {
+        "review": "keep",
+        "note": ""
+      },
+      "C7tO9F4B8lX": {
+        "review": "keep",
+        "note": ""
+      },
+      "DNZj3aAh2jC": {
+        "review": "remove",
+        "note": "keep in birthdays but not baby celebration. baby celebration should be newborn."
+      },
+      "DPgSOTKkgjS": {
+        "review": "remove",
+        "note": "keep in birthdays but not baby celebration. baby celebration should be newborn."
+      },
+      "DK8lOEfhYJA": {
+        "review": "remove",
+        "note": "keep in birthdays but not baby celebration. baby celebration should be newborn."
+      },
+      "DWv0b5kkrWE": {
+        "review": "remove",
+        "note": "beautiful cake but perhaps in other category; this is not baby related."
+      },
+      "C7tQnOMhkKK": {
+        "review": "remove",
+        "note": "keep in cupcakes but not baby celebration. baby celebration should be newborn."
+      },
+      "DHCy_bTBLKc": {
+        "review": "remove",
+        "note": "keep in birthdays but not baby celebration. baby celebration should be newborn."
+      },
+      "DHQDoHHB26G": {
+        "review": "remove",
+        "note": "keep in birthdays but not baby celebration. baby celebration should be newborn."
+      },
+      "DQEVlRrkh42": {
+        "review": "remove",
+        "note": "beautiful cake but perhaps in other category; this is not baby related."
+      },
+      "C8JF0_IyYGt": {
+        "review": "undecided",
+        "note": ""
+      }
+    },
+    "love": {
+      "DGM5hj1hcJf": {
+        "review": "keep",
+        "note": ""
+      },
+      "DWvn4Nekv8Z": {
+        "review": "keep",
+        "note": ""
+      },
+      "DINfRR_BzYm": {
+        "review": "keep",
+        "note": ""
+      },
+      "DCTltZxh4Bq": {
+        "review": "keep",
+        "note": ""
+      },
+      "Db2wuYpEoIe": {
+        "review": "keep",
+        "note": ""
+      },
+      "DMuhu5dhJbb": {
+        "review": "keep",
+        "note": ""
+      },
+      "DDA_T8GhtQC": {
+        "review": "remove",
+        "note": ""
+      },
+      "DUef7FjEjoE": {
+        "review": "remove",
+        "note": "beautiful cake but perhaps in other category; reviewer says remove from love."
+      },
+      "DGrtxe_BJDR": {
+        "review": "remove",
+        "note": ""
+      },
+      "DHkpIm5B08V": {
+        "review": "remove",
+        "note": ""
+      },
+      "C8_6qUPSrOq": {
+        "review": "remove",
+        "note": ""
+      },
+      "C-hr7ntS0Ei": {
+        "review": "remove",
+        "note": "should be birthday cake"
+      },
+      "C9cJQsry1gY": {
+        "review": "remove",
+        "note": "birthday cake"
+      },
+      "C9ZZH4eyqcm": {
+        "review": "remove",
+        "note": "birthday cake"
+      },
+      "DLdz3jRh9NV": {
+        "review": "remove",
+        "note": ""
+      },
+      "DLdzEx3Btmr": {
+        "review": "remove",
+        "note": "beautiful cake but perhaps in other category, not love"
+      },
+      "DIYSdKZhbxK": {
+        "review": "remove",
+        "note": ""
+      },
+      "C88mW3FyNh8": {
+        "review": "remove",
+        "note": "other category; this is a work anniversary"
+      },
+      "DK8oglIBpLj": {
+        "review": "remove",
+        "note": "other category"
+      },
+      "DL49HXIhTeY": {
+        "review": "remove",
+        "note": "other category"
+      },
+      "DRHM4kxEqlA": {
+        "review": "remove",
+        "note": "beautiful cake but perhaps in other category, not love"
+      },
+      "DQEVlRrkh42": {
+        "review": "remove",
+        "note": "other category"
+      }
+    },
+    "popular": {
+      "DP-QFm2EhMp": {
+        "review": "keep",
+        "note": ""
+      },
+      "DdneHOekoku": {
+        "review": "keep",
+        "note": ""
+      },
+      "DLdzEx3Btmr": {
+        "review": "keep",
+        "note": ""
+      },
+      "DXlL97REp2M": {
+        "review": "keep",
+        "note": ""
+      },
+      "Db71kAREsvz": {
+        "review": "keep",
+        "note": ""
+      },
+      "DcX8-bKoO2D": {
+        "review": "keep",
+        "note": ""
+      },
+      "DHfpPpfhaNb": {
+        "review": "keep",
+        "note": ""
+      },
+      "DJQ5RLthPKp": {
+        "review": "keep",
+        "note": ""
+      },
+      "DR8_-HBkjFa": {
+        "review": "keep",
+        "note": ""
+      },
+      "DRHM4kxEqlA": {
+        "review": "keep",
+        "note": ""
+      },
+      "DQEVlRrkh42": {
+        "review": "keep",
+        "note": ""
+      },
+      "DQjHWq9krsH": {
+        "review": "keep",
+        "note": ""
+      },
+      "DLJtVcYBsky": {
+        "review": "keep",
+        "note": ""
+      },
+      "DMCwjRoBfjy": {
+        "review": "keep",
+        "note": ""
+      },
+      "DU4wZg-kjHx": {
+        "review": "keep",
+        "note": ""
+      },
+      "Dd7v3M5EhKI": {
+        "review": "keep",
+        "note": ""
+      },
+      "DNKnQrpB4Bv": {
+        "review": "keep",
+        "note": ""
+      },
+      "DRqUIHQkpM4": {
+        "review": "keep",
+        "note": ""
+      },
+      "DKLsLPThQcx": {
+        "review": "keep",
+        "note": ""
+      },
+      "DKDr6usBv-B": {
+        "review": "keep",
+        "note": ""
+      },
+      "DXlCJoBEljq": {
+        "review": "keep",
+        "note": ""
+      },
+      "DHQDoHHB26G": {
+        "review": "keep",
+        "note": ""
+      },
+      "DcqRbBLIFnH": {
+        "review": "remove",
+        "note": "this should be under birthday"
+      },
+      "DMuhu5dhJbb": {
+        "review": "remove",
+        "note": "in love category"
+      },
+      "DG-S_-6BYNA": {
+        "review": "remove",
+        "note": "this should be under birthday"
+      },
+      "DauWQoCkuB1": {
+        "review": "remove",
+        "note": "misspelled word"
+      },
+      "DcX9APCvQU6": {
+        "review": "remove",
+        "note": "this should be under birthday"
+      },
+      "DF1l80hBrhI": {
+        "review": "remove",
+        "note": "this should be under birthday"
+      },
+      "DCv93Blhb1I": {
+        "review": "remove",
+        "note": "this should be under birthday"
+      },
+      "DO2QV4bkkFV": {
+        "review": "remove",
+        "note": "this should be under birthday"
+      },
+      "DeoTAxVoN5f": {
+        "review": "remove",
+        "note": "this should be under birthday"
+      },
+      "DL49HXIhTeY": {
+        "review": "remove",
+        "note": "already in another category"
+      }
+    }
+  }
+}
