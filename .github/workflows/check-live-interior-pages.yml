@@ -27,8 +27,8 @@ jobs:
             curl --silent --show-error --fail --location --max-time 25 -H 'Cache-Control: no-cache' "$SITE/decorate-and-sip/?rev=$GITHUB_SHA-$n" > /tmp/sip-live.html || true
             curl --silent --show-error --fail --location --max-time 25 -H 'Cache-Control: no-cache' "$SITE/assets/site.js?rev=$GITHUB_SHA-$n" > /tmp/gallery-live.js || true
             if grep -Fq 'gallery-compact__toolbar' /tmp/cakes-live.html &&
-               grep -Fq 'site.js?v=20261028-v48' /tmp/cakes-live.html &&
-               grep -Fq 'site.js?v=20261028-v48' /tmp/sip-live.html &&
+               grep -Eq 'site.js\?v=(20261028-v48|20261030-gallery30)' /tmp/cakes-live.html &&
+               grep -Eq 'site.js\?v=(20261028-v48|20261030-gallery30)' /tmp/sip-live.html &&
                grep -Fq 'gallery-photo__arrow' /tmp/gallery-live.js &&
                grep -Fq 'design-instagram-link' /tmp/gallery-live.js &&
                grep -Fq 'We’re based in Glen Iris' /tmp/sip-live.html &&
