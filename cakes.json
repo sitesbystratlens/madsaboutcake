@@ -5,7 +5,7 @@
     "source": "Public Mads Instagram posts, Apify extract 2026-10-27, downloaded original source media",
     "notice": "Owner-reviewed private concept preview, not publicly approved. Other is not a customer-facing category; those cakes remain in All creations.",
     "apifyDatasetDate": "2026-10-27",
-    "selection": "Final owner-reviewed 120 design concepts; 49 Birthdays, 9 Weddings, 9 Baby, 6 Love, 27 Cupcakes product matches, and unclassified designs visible through All creations; public Other category intentionally absent.",
+    "selection": "Final owner-reviewed 120 design concepts; 50 Birthdays, 9 Weddings, 9 Baby, 6 Love, 27 Cupcakes product matches, and unclassified designs visible through All creations; public Other category intentionally absent.",
     "imageAssetDirectory": "assets/gallery-30/",
     "ownerApprovalRequired": true,
     "notForPublicLaunch": true,
@@ -3991,7 +3991,7 @@
       "id": "ig-review-dqeuavaehle",
       "title": "Football-themed cupcakes and mini cake",
       "productType": "Cupcakes",
-      "primaryOccasion": "",
+      "primaryOccasion": "Birthdays",
       "otherOccasions": [],
       "styleTags": [],
       "shapeFormat": "Custom",
@@ -4022,7 +4022,7 @@
       "thumbnailImage": "assets/gallery-review-covers/DQEUavaEhle.webp",
       "featured25": false,
       "featured30": true,
-      "featureCategory": "Cupcakes",
+      "featureCategory": "Birthdays",
       "ownerReviewRequired": true,
       "reviewSource": "Owner gallery review 2026-10-29 CSV; source post from Instagram extract 2026-10-27",
       "reviewDecisionSource": "Final CSV 2026-10-30",
@@ -4032,7 +4032,8 @@
       ],
       "reviewNotes": "birthday",
       "holdOccasionFilterUntilOwnerApproval": false,
-      "finalReviewNote": "birthday"
+      "finalReviewNote": "birthday",
+      "round3CategoryAction": "User notes: birthday cupcakes; retain in both birthday occasion and cupcake product filters"
     },
     {
       "id": "ig-review-dnkmisahnj0",
