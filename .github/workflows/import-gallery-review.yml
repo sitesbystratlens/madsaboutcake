@@ -1,0 +1,45 @@
+name: Import owner gallery review photos
+on:
+  push:
+    branches: [main]
+    paths:
+      - '.github/workflows/import-gallery-review.yml'
+      - 'scripts/import-review-covers.py'
+      - 'data/gallery-review-candidates.json'
+  workflow_dispatch:
+permissions:
+  contents: write
+concurrency:
+  group: mads-owner-gallery-review-media
+  cancel-in-progress: false
+jobs:
+  import:
+    runs-on: ubuntu-latest
+    timeout-minutes: 18
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.12'
+      - name: Set up image converter
+        run: python -m pip install --disable-pip-version-check requests==2.32.3 Pillow==11.1.0
+      - name: Confirm review candidate inventory
+        run: |
+          python scripts/import-review-covers.py --check
+          node --check assets/gallery-review.js
+      - name: Cache explicitly selected original public Instagram post cover photos
+        run: python scripts/import-review-covers.py
+      - name: Commit imported WebP photos and availability report
+        run: |
+          git add -A -- assets/gallery-review-covers/ data/review-import-report.json
+          if git diff --cached --quiet; then
+            echo 'No additional covers to commit'
+            exit 0
+          fi
+          git config user.name 'github-actions[bot]'
+          git config user.email '41898282+github-actions[bot]@users.noreply.github.com'
+          git commit -m 'Cache available birthday and cupcake review photos'
+          git pull --rebase origin main
+          git push origin HEAD:main
