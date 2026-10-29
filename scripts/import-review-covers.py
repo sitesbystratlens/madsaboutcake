@@ -20,6 +20,7 @@ from PIL import Image, ImageOps, UnidentifiedImageError
 
 ROOT = Path(__file__).resolve().parents[1]
 DATA = json.loads((ROOT / 'data/gallery-review-candidates.json').read_text())
+ADDITIONAL = json.loads((ROOT / 'data/gallery-review-additional.json').read_text())
 CATALOGUE = json.loads((ROOT / 'cakes.json').read_text())
 # Signed CDN source links are a one-time import input; do not leave them on the published static site.
 SOURCE_URL_FILE = ROOT / 'data/gallery-review-photo-urls.json'
@@ -90,8 +91,8 @@ def import_one(code):
         return f'FAILED {code}: ' + ' | '.join(messages)
 
 def main():
-    codes=list(dict.fromkeys(DATA['birthdayConfirmed']+DATA['birthdayThemed']+DATA['cupcakes']))
-    if len(codes)!=70 or not all(SHORT.fullmatch(c) for c in codes):
+    codes=list(dict.fromkeys(DATA['birthdayConfirmed']+DATA['birthdayThemed']+DATA['cupcakes'] + ADDITIONAL['weddingsConfirmed'] + ADDITIONAL['weddingsPossible'] + ADDITIONAL['babyConfirmed'] + ADDITIONAL['babyPossible'] + ADDITIONAL['loveConfirmed'] + ADDITIONAL['lovePossible'] + ADDITIONAL['popularUncategorised']))
+    if len(codes)<100 or len(codes)>200 or not all(SHORT.fullmatch(c) for c in codes):
         raise SystemExit('Unexpected candidate inventory; refusing to import')
     existing={c.get('sourceShortcode') for c in CATALOGUE['cakes'] if (ROOT / str(c.get('coverImage',''))).is_file()}
     missing=[c for c in codes if c not in existing and not (DEST/(c+'.webp')).is_file()]
