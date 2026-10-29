@@ -1,4 +1,4 @@
-name: Verify live owner gallery review
+name: Verify live owner gallery after second-round category moves
 on:
   push:
     branches: [main]
@@ -9,6 +9,8 @@ on:
       - 'assets/gallery-review-covers/**'
       - 'data/gallery-review-candidates.json'
       - 'data/gallery-review-additional.json'
+      - 'data/gallery-owner-decisions-round2-2026-10-30.json'
+      - 'data/gallery-round2-category-moves.json'
       - '.github/workflows/check-live-gallery-review.yml'
   workflow_dispatch:
 permissions:
@@ -19,7 +21,7 @@ jobs:
     timeout-minutes: 9
     steps:
       - uses: actions/checkout@v4
-      - name: Confirm six review tabs and 82 new category references on Cloudflare
+      - name: Confirm updated six review tabs and Other category discovery on Cloudflare on Cloudflare
         shell: bash
         run: |
           set -euo pipefail
@@ -29,7 +31,7 @@ jobs:
             curl -fsSL --max-time 25 -H 'Cache-Control: no-cache' "$SITE/assets/gallery-review.js?v=$GITHUB_SHA-$n" >/tmp/review.js || true
             curl -fsSL --max-time 25 -H 'Cache-Control: no-cache' "$SITE/data/gallery-review-candidates.json?v=$GITHUB_SHA-$n" >/tmp/review-old.json || true
             curl -fsSL --max-time 25 -H 'Cache-Control: no-cache' "$SITE/data/gallery-review-additional.json?v=$GITHUB_SHA-$n" >/tmp/review-additional.json || true
-            if grep -Fq 'data-group="popular"' /tmp/review.html &&
+            if grep -Fq 'data-group="other"' /tmp/review.html &&
                grep -Fq 'data-group="weddings"' /tmp/review.html &&
                grep -Fq 'data-group="baby"' /tmp/review.html &&
                grep -Fq 'data-group="love"' /tmp/review.html &&
@@ -42,10 +44,13 @@ jobs:
           counts={'weddingsConfirmed':12,'weddingsPossible':6,'babyConfirmed':9,'babyPossible':9,'loveConfirmed':10,'lovePossible':12,'popularUncategorised':32}
           assert (len(old['birthdayConfirmed']),len(old['birthdayThemed']),len(old['cupcakes']))==(33,7,34)
           for key,n in counts.items():assert len(new[key])==n,(key,len(new[key]))
+          assert len(new['otherUncategorised'])==28
+          assert len(new['birthdayReviewerAssigned'])==14
+          assert len(new['cupcakeReviewerAssigned'])==1
           all_new=set(sum((new[k] for k in counts),[]))
           assert len(all_new)==82,len(all_new)
           assert all_new==set(new['metadata']), 'metadata missing for candidates'
-          print('Live discovery: 40 birthdays, 34 cupcakes, 18 wedding, 18 baby, 22 love, 32 popular; 82 additional unique posts.')
+          print('Live review: 54 birthdays, 35 cupcakes, 18 weddings, 18 baby, 22 love, 28 remaining Other; 82 original supplementary post records.')
           PY
             then
               echo 'Six-section review and candidate evidence are deployed.'
