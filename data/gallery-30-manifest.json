@@ -1,6 +1,6 @@
 {
-  "version": 1,
-  "source": "Claude FINAL_CURATION_30.csv 2026-10-29; original owner Instagram extract 2026-10-27",
+  "version": 2,
+  "source": "Claude 30-design final curation plus four owner-selected category additions, Instagram source extract 2026-10-27",
   "reviewOnly": true,
   "records": [
     {
@@ -148,7 +148,7 @@
       "postEngagement": {
         "likes": 40,
         "comments": 5,
-        "responseIndex": 61.0,
+        "responseIndex": 61,
         "extractDate": "2026-10-27"
       },
       "sha256Detail": "a6ca0f0d37c270ecef3e06ccd5e4a4161ddc275597fda41fe27548889d7ef1de",
@@ -268,7 +268,7 @@
       "postEngagement": {
         "likes": 40,
         "comments": 4,
-        "responseIndex": 62.0,
+        "responseIndex": 62,
         "extractDate": "2026-10-27"
       },
       "sha256Detail": "6f41406bbbd00bdf4e5d5d9a1815a12bce398198eb65d7daf45244b2a7faec40",
@@ -568,7 +568,7 @@
       "postEngagement": {
         "likes": 51,
         "comments": 6,
-        "responseIndex": 81.0,
+        "responseIndex": 81,
         "extractDate": "2026-10-27"
       },
       "sha256Detail": "0445bd1e5b87d6aafab86d54cce0705f25c619282fc6184dc8f47b01766b3ec8",
@@ -811,7 +811,7 @@
       "postEngagement": {
         "likes": 66,
         "comments": 4,
-        "responseIndex": 91.0,
+        "responseIndex": 91,
         "extractDate": "2026-10-27"
       },
       "sha256Detail": "4a7a5c8295b7b686bc11cf0c5c1a215a7a1f72b9fb2b43704c2c5134e93243c4",
@@ -906,6 +906,123 @@
       },
       "sha256Detail": "cdf6b568030ec8d0a4789721a757e94d878e520de273f82df3ba2dacd4e4d38d",
       "sha256Thumb": "020691ad95cc75514c2f3b92dc9744b9306ccf9bcabd09d9acc965386863b05b"
+    },
+    {
+      "displayOrder": 31,
+      "sourceShortcode": "DQ0WjCPEgqr",
+      "sourcePhotoRank": 1,
+      "sourceMediaId": "M508",
+      "sourceOriginalFilename": "igexport-DQ0WjCPEgqr.jpg",
+      "instagramUrl": "https://www.instagram.com/p/DQ0WjCPEgqr/",
+      "coverImage": "assets/gallery-30/DQ0WjCPEgqr-M508.webp",
+      "thumbnailImage": "assets/gallery-30/thumbs/DQ0WjCPEgqr-M508-card.webp",
+      "title": "Winnie-the-Pooh baby-shower cake",
+      "shortDescription": "Two-tier baby-shower cake with vanilla buttercream, bees, honey details and a Winnie-the-Pooh edible image.",
+      "alt": "Two-tier baby-shower cake with honey-drip accents, little bees and a Winnie-the-Pooh edible illustration.",
+      "productType": "Cake",
+      "primaryOccasion": "Baby celebrations",
+      "featureCategory": "Baby celebrations",
+      "captionEvidence": "Baby shower ready 🍯🧸",
+      "occasionEvidence": "Original Instagram caption and photo (verified for the chosen occasion).",
+      "postEngagement": {
+        "likes": 51,
+        "comments": 2,
+        "responseIndex": 68.8,
+        "extractDate": "2026-10-27"
+      },
+      "reviewHoldReasons": [
+        "Private concept review only; character artwork owner IP approval required before public use."
+      ],
+      "photoCredit": null,
+      "sourceVerified": true
+    },
+    {
+      "displayOrder": 32,
+      "sourceShortcode": "DJQ6B-tBQyw",
+      "sourcePhotoRank": 1,
+      "sourceMediaId": "M337",
+      "sourceOriginalFilename": "igexport-DJQ6B-tBQyw.jpg",
+      "instagramUrl": "https://www.instagram.com/p/DJQ6B-tBQyw/",
+      "coverImage": "assets/gallery-30/DJQ6B-tBQyw-M337.webp",
+      "thumbnailImage": "assets/gallery-30/thumbs/DJQ6B-tBQyw-M337-card.webp",
+      "title": "Floral baby-shower cake",
+      "shortDescription": "Eight-inch red-velvet baby-shower cake with cream-cheese filling, buttercream and pink-and-red hand-piped floral accents.",
+      "alt": "Ivory single-tier baby-shower cake with vivid crimson piping and delicate pink flower decorations.",
+      "productType": "Cake",
+      "primaryOccasion": "Baby celebrations",
+      "featureCategory": "Baby celebrations",
+      "captionEvidence": "Baby shower cake with lots of flowers 🌸🌷",
+      "occasionEvidence": "Original Instagram caption and photo (verified for the chosen occasion).",
+      "postEngagement": {
+        "likes": 33,
+        "comments": 5,
+        "responseIndex": 47,
+        "extractDate": "2026-10-27"
+      },
+      "reviewHoldReasons": [
+        "Owner approval of cake photo and any visible inscription required."
+      ],
+      "photoCredit": null,
+      "sourceVerified": true
+    },
+    {
+      "displayOrder": 33,
+      "sourceShortcode": "DINfV1OhprN",
+      "sourcePhotoRank": 1,
+      "sourceMediaId": "M316",
+      "sourceOriginalFilename": "igexport-DINfV1OhprN.jpg",
+      "instagramUrl": "https://www.instagram.com/p/DINfV1OhprN/",
+      "coverImage": "assets/gallery-30/DINfV1OhprN-M316.webp",
+      "thumbnailImage": "assets/gallery-30/thumbs/DINfV1OhprN-M316-card.webp",
+      "title": "Floral bridal-celebration cake",
+      "shortDescription": "Elegant floral cake presented at a bride-to-be’s celebration, photographed at Antara Melbourne.",
+      "alt": "Minimalist white sculptural celebration cake with pink and green flowers, displayed for a bride-to-be.",
+      "productType": "Cake",
+      "primaryOccasion": "Weddings & engagements",
+      "featureCategory": "Weddings & engagements",
+      "captionEvidence": "Honored to have been a part of this lovely bride-to-be’s special day. 🌷🌹",
+      "occasionEvidence": "Original Instagram caption and photo (verified for the chosen occasion).",
+      "postEngagement": {
+        "likes": 41,
+        "comments": 3,
+        "responseIndex": null,
+        "extractDate": "2026-10-27"
+      },
+      "reviewHoldReasons": [
+        "External photographer @riversidecreative: obtain publication approval."
+      ],
+      "photoCredit": "Photography: @riversidecreative",
+      "sourceVerified": true
+    },
+    {
+      "displayOrder": 34,
+      "sourceShortcode": "DQTMOqiD53h",
+      "sourcePhotoRank": 10,
+      "sourceMediaId": "M-vanrap-10",
+      "sourceOriginalFilename": "@vanrap.weddings original Instagram sidecar image 10/12 (externally sourced)",
+      "instagramUrl": "https://www.instagram.com/p/DQTMOqiD53h/",
+      "coverImage": "assets/gallery-30/DQTMOqiD53h-M-vanrap-10.webp",
+      "thumbnailImage": "assets/gallery-30/thumbs/DQTMOqiD53h-M-vanrap-10-card.webp",
+      "title": "Red-ribbon surprise-engagement cake",
+      "shortDescription": "Ivory surprise-engagement cake topped with a dramatic deep-red ribbon, featured at Ashwati and Jonathan’s dinner.",
+      "alt": "Tall ivory engagement cake with an oversized deep-red satin-style bow, displayed at an intimate celebration.",
+      "productType": "Cake",
+      "primaryOccasion": "Weddings & engagements",
+      "featureCategory": "Weddings & engagements",
+      "captionEvidence": "Ashwati & Jonathan — Surprise Engagement Dinner. Photography: @vanrap.weddings; Cake: @madsaboutcake",
+      "occasionEvidence": "Original Instagram caption and photo (verified for the chosen occasion).",
+      "postEngagement": {
+        "likes": 83,
+        "comments": 5,
+        "responseIndex": null,
+        "extractDate": "2026-10-27"
+      },
+      "reviewHoldReasons": [
+        "External photographer @vanrap.weddings: obtain publication approval; original image 10 of 12."
+      ],
+      "photoCredit": "Photography: @vanrap.weddings",
+      "sourceVerified": true
     }
-  ]
+  ],
+  "featuredCount": 34
 }
