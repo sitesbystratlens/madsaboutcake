@@ -21,6 +21,7 @@ from PIL import Image, ImageOps, UnidentifiedImageError
 ROOT = Path(__file__).resolve().parents[1]
 DATA = json.loads((ROOT / 'data/gallery-review-candidates.json').read_text())
 CATALOGUE = json.loads((ROOT / 'cakes.json').read_text())
+SOURCE_MEDIA = json.loads((ROOT / 'data/gallery-review-photo-urls.json').read_text())['urls']
 DEST = ROOT / 'assets/gallery-review-covers'
 DEST.mkdir(parents=True, exist_ok=True)
 SHORT = re.compile(r'^[A-Za-z0-9_-]{5,32}$')
@@ -64,17 +65,27 @@ def read_image(s, code):
     return f'SAVED {code}: {out.stat().st_size} bytes'
 
 def import_one(code):
+    messages = []
+    # Prefer the already-collected, per-post source photo. Instagram page HTML
+    # no longer exposes OG images consistently to unauthenticated requests.
+    direct = SOURCE_MEDIA.get(code, '')
+    if direct:
+        try:
+            return read_image(direct, code)
+        except Exception as e:
+            messages.append(f'direct image {type(e).__name__}: {str(e)[:95]}')
     try:
         u = 'https://www.instagram.com/p/' + code + '/'
         r = requests.get(u, timeout=17, headers=HEADERS)
         r.raise_for_status()
-        if not (urlparse(r.url).hostname in ('www.instagram.com','instagram.com','m.instagram.com')):
+        if urlparse(r.url).hostname not in ('www.instagram.com','instagram.com','m.instagram.com'):
             raise ValueError('Unexpected post redirect')
         reader = MetaReader(); reader.feed(r.text[:1_500_000])
         if not reader.image: raise ValueError('Instagram OG image not available')
         return read_image(reader.image, code)
     except Exception as e:
-        return f'FAILED {code}: {type(e).__name__}: {str(e)[:130]}'
+        messages.append(f'OG fallback {type(e).__name__}: {str(e)[:95]}')
+        return f'FAILED {code}: ' + ' | '.join(messages)
 
 def main():
     codes=list(dict.fromkeys(DATA['birthdayConfirmed']+DATA['birthdayThemed']+DATA['cupcakes']))
