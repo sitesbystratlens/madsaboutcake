@@ -78,11 +78,15 @@ for(const [slug,url] of pages){
   }
   if(slug==='decorate-and-sip'){
    const presentation=await page.evaluate(()=>{
-    const accent=document.querySelector('.workshop-hero__accent');
-    const badges=[...document.querySelectorAll('.workshop-detail__num')];
-    return {accentColour:accent?getComputedStyle(accent).color:null,badgeWidths:badges.map(b=>b.getBoundingClientRect().width)};
+    const title=document.querySelector('.workshop-hero__copy h1');
+    const numbers=[...document.querySelectorAll('.workshop-detail__num')];
+    return {heading:title?.textContent?.trim(),accentCount:document.querySelectorAll('.workshop-hero__accent').length,
+      numbers:numbers.map(el=>({text:el.textContent.trim(),fontSize:parseFloat(getComputedStyle(el).fontSize),
+        borderRadius:getComputedStyle(el).borderRadius,background:getComputedStyle(el).backgroundColor}))};
    });
-   if(!presentation.accentColour||presentation.badgeWidths.length!==3||presentation.badgeWidths.some(w=>w<40))problem.push('Workshop accent or numbered badges not displayed '+JSON.stringify(presentation));
+   if(presentation.accentCount!==0||presentation.numbers.length!==3||presentation.numbers.some(n=>n.fontSize<40||n.borderRadius!=='0px'))problem.push('Workshop should have one-colour title and refined typographic steps '+JSON.stringify(presentation));
+   const heroSrc=await page.locator('.workshop-hero__media img').getAttribute('src');
+   if(!heroSrc?.endsWith('DSR06gjEgJK-no-visible-faces.webp'))problem.push('Face-safe studio photograph not selected');
   }
   if(slug==='home'&&width===1440){
    const heading=await page.locator('.occasion .section-head h2').evaluate(el=>({text:el.innerText,whiteSpace:getComputedStyle(el).whiteSpace}));
