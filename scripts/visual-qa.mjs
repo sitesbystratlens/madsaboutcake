@@ -119,6 +119,28 @@ for(const [slug,url] of pages){
     await page.locator('[data-group="cupcakes"]').click();
     const cupcakeCount=await page.locator('.review-card').count();
     if(cupcakeCount!==34)problem.push('Cupcake owner-review list has '+cupcakeCount+' posts, expected 34');
+    const extraGroups=[['weddings',18],['baby',18],['love',22],['popular',32]];
+    for(const [group,expectedCount] of extraGroups){
+      await page.locator('[data-group="'+group+'"]').click();
+      const actual=await page.locator('.review-card').count();
+      if(actual!==expectedCount)problem.push('Owner '+group+' review has '+actual+' items; expected '+expectedCount);
+      const misses=await page.locator('.review-card').evaluateAll(async cards=>{
+        const imgs=cards.map(x=>x.querySelector('img'));
+        await Promise.all(imgs.map(img=>{img.loading='eager';return img.decode().catch(()=>null)}));
+        return imgs.filter(img=>img.naturalWidth===0).map(img=>img.src);
+      });
+      if(misses.length)problem.push(group+' has '+misses.length+' missing original preview photographs: '+misses.slice(0,3).join(','));
+    }
+    const popularFirst=page.locator('.review-card').first();
+    const popularCode=await popularFirst.getAttribute('data-code');
+    await popularFirst.locator('.category-choice').selectOption('Floral / garden');
+    await popularFirst.locator('[data-decision="keep"]').click();
+    await page.reload({waitUntil:'domcontentloaded'});
+    await page.locator('.review-card').first().waitFor();
+    const popularRetained=page.locator('.review-card[data-code="'+popularCode+'"]');
+    if(await popularRetained.locator('.category-choice').inputValue()!=='Floral / garden'||
+       await popularRetained.locator('[data-decision="keep"]').getAttribute('aria-pressed')!=='true')
+      problem.push('Popular discovery category/decision not persisted after refresh');
     await page.locator('[data-group="birthdays"]').click();
     const first=page.locator('.review-card').first();
     const source=await first.getAttribute('data-code');
