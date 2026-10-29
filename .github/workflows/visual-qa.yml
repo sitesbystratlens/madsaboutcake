@@ -18,6 +18,7 @@ on:
       - 'assets/gallery-review.js'
       - 'assets/gallery-review-covers/**'
       - 'data/gallery-review-candidates.json'
+      - 'data/gallery-review-additional.json'
   workflow_dispatch:
 permissions:
   contents: read
