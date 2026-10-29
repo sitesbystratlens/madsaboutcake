@@ -27,8 +27,8 @@ jobs:
             curl --silent --show-error --fail --location --max-time 25 -H 'Cache-Control: no-cache' "$SITE/decorate-and-sip/?rev=$GITHUB_SHA-$n" > /tmp/sip-live.html || true
             curl --silent --show-error --fail --location --max-time 25 -H 'Cache-Control: no-cache' "$SITE/assets/site.js?rev=$GITHUB_SHA-$n" > /tmp/gallery-live.js || true
             if grep -Fq 'gallery-compact__toolbar' /tmp/cakes-live.html &&
-               grep -Eq 'site.js\?v=(20261028-v48|20261030-gallery30)' /tmp/cakes-live.html &&
-               grep -Eq 'site.js\?v=(20261028-v48|20261030-gallery30)' /tmp/sip-live.html &&
+               grep -Eq 'site.js\?v=(20261030-refine1|20261030-gallery30)' /tmp/cakes-live.html &&
+               grep -Eq 'site.js\?v=(20261030-refine1|20261030-gallery30)' /tmp/sip-live.html &&
                grep -Fq 'gallery-photo__arrow' /tmp/gallery-live.js &&
                grep -Fq 'design-instagram-link' /tmp/gallery-live.js &&
                grep -Fq 'We’re based in Glen Iris' /tmp/sip-live.html &&
@@ -36,11 +36,11 @@ jobs:
                grep -Fq 'See a session clip' /tmp/sip-live.html &&
                ! grep -Fq 'FROM A REAL SESSION' /tmp/sip-live.html &&
                ! grep -Fq 'class="feature-strip"' /tmp/cakes-live.html &&
-               grep -Fq 'DSR06gjEgJK-hens-setup.webp' /tmp/sip-live.html &&
+               grep -Fq 'DSR06gjEgJK-no-visible-faces.webp' /tmp/sip-live.html &&
                grep -Fq 'DHDXe4EB9Le-cupcake-edition.webp' /tmp/sip-live.html &&
                grep -Fq 'Thank you for hosting us Madara' /tmp/sip-live.html; then
               echo "Live Cakes and Decorate Sip pages are current."
-              for img in DSR06gjEgJK-hens-setup.webp DHDXe4EB9Le-cupcake-edition.webp; do
+              for img in DSR06gjEgJK-no-visible-faces.webp DHDXe4EB9Le-cupcake-edition.webp; do
                 curl --silent --show-error --fail --head --location --max-time 45 "$SITE/assets/workshops/$img" > /tmp/workshop-photo-headers.txt
                 grep -qi '^content-type: image/webp' /tmp/workshop-photo-headers.txt
                 echo "$img responds with image/webp"
@@ -60,7 +60,7 @@ jobs:
             "We’re based in Glen Iris:/tmp/sip-live.html" \
             "we’ve hosted private:/tmp/sip-live.html" \
             "See a session clip:/tmp/sip-live.html" \
-            "DSR06gjEgJK-hens-setup.webp:/tmp/sip-live.html" \
+            "DSR06gjEgJK-no-visible-faces.webp:/tmp/sip-live.html" \
             "DHDXe4EB9Le-cupcake-edition.webp:/tmp/sip-live.html" \
             "Thank you for hosting us Madara:/tmp/sip-live.html"; do
             expected="${test%%:*}"; file="${test#*:}"
