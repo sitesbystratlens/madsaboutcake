@@ -13,6 +13,11 @@ on:
       - 'assets/site.js'
       - 'cakes.json'
       - 'assets/gallery-30/**'
+      - 'review/index.html'
+      - 'assets/gallery-review.css'
+      - 'assets/gallery-review.js'
+      - 'assets/gallery-review-covers/**'
+      - 'data/gallery-review-candidates.json'
   workflow_dispatch:
 permissions:
   contents: read
