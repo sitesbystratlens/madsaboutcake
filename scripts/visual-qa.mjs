@@ -70,7 +70,8 @@ for(const [slug,url] of pages){
   if(slug==='cakes'){
    const counts=await page.evaluate(()=>({cardActions:document.querySelectorAll('[data-gallery] .gallery-card-actions').length,photoLinks:document.querySelectorAll('[data-gallery] .gallery-photo[href*="design="]').length,titleLinks:document.querySelectorAll('[data-gallery] .gallery-title-link[href*="design="]').length,arrows:document.querySelectorAll('[data-gallery] .gallery-photo__arrow').length}));
    if(counts.cardActions!==0)problem.push('repeated gallery CTAs '+counts.cardActions);
-   if(counts.photoLinks!==25||counts.titleLinks!==25||counts.arrows!==25)problem.push('gallery click targets missing '+JSON.stringify(counts));
+   const expectedGalleryCount=await page.evaluate(async()=>{const r=await fetch('/cakes.json');const d=await r.json();return d.meta.featuredCount;});
+   if(counts.photoLinks!==expectedGalleryCount||counts.titleLinks!==expectedGalleryCount||counts.arrows!==expectedGalleryCount)problem.push('gallery click targets missing; expected '+expectedGalleryCount+' '+JSON.stringify(counts));
   }
   if(slug==='cake-detail'){
    const post=await page.locator('#design-detail .design-instagram-link').evaluate(el=>({href:el.href,rel:el.rel,target:el.target,visible:el.getBoundingClientRect().width>0}));
