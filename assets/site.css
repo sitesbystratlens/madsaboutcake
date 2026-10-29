@@ -177,15 +177,25 @@
   width:min(100%,920px);margin-inline:auto;
  }
 }
-/* Decorate & Sip: distinctive pink wordmark accent, with readable colour on blush. */
-.workshop-hero .workshop-hero__copy h1 .workshop-hero__accent{color:#ac2866}
-/* Stronger but restrained experience numbering, matching the studio palette. */
-.workshop-inclusions .workshop-detail__num{
- display:inline-flex;width:54px;height:54px;align-items:center;justify-content:center;
- margin:0 0 18px;border-radius:50%;background:#fbd7e5;color:#553047;
- border:1px solid #e9acc5;font:600 24px/1 var(--serif);letter-spacing:-.04em;
+/* Decorate & Sip: editorial step numbers rather than decorative button circles.
+   Quiet top rules and large Fraunces numerals complement the existing typography. */
+.workshop-inclusions .workshop-detail{
+ padding-top:18px;
+ border-top:1px solid #ddc0c9;
 }
-.workshop-inclusions .workshop-detail h3{margin-top:0}
+.workshop-inclusions .workshop-detail__num{
+ display:flex;align-items:center;gap:17px;
+ width:auto;height:auto;margin:0 0 17px;padding:0;
+ border:0;border-radius:0;background:transparent;
+ color:#b82c71;font:500 clamp(44px,4.4vw,63px)/1 var(--serif);
+ letter-spacing:-.065em;
+}
+.workshop-inclusions .workshop-detail__num::after{
+ content:"";display:block;flex:1;max-width:88px;height:1px;background:#d3a0b1;
+}
+.workshop-inclusions .workshop-detail h3{margin:0 0 10px}
+.workshop-inclusions .workshop-detail p{margin-top:0}
 @media(max-width:760px){
- .workshop-inclusions .workshop-detail__num{width:46px;height:46px;font-size:21px;margin-bottom:12px}
+ .workshop-inclusions .workshop-detail{padding-top:14px}
+ .workshop-inclusions .workshop-detail__num{font-size:47px;margin-bottom:14px}
 }
