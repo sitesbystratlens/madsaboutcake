@@ -54,6 +54,8 @@ assert(featured.some(c=>c.sourceShortcode==='DDV60R-hcFA'&&!c.primaryOccasion&&p
 assert(featured.some(c=>c.sourceShortcode==='C7tQnOMhkKK'&&c.productClassificationReview),'Provisional undersea cupcake flag retained');
 for(const code of ['DNZj3aAh2jC','DPgSOTKkgjS','DK8lOEfhYJA','DHCy_bTBLKc','DHQDoHHB26G'])
   assert(featured.some(c=>c.sourceShortcode===code&&c.primaryOccasion==='Birthdays'),'First-birthday should not be newborn/baby celebration: '+code);
+assert(featured.some(c=>c.sourceShortcode==='DK8lOEfhYJA'&&c.sourcePhotoRank===2&&c.coverImage==='assets/gallery-final-covers/DK8lOEfhYJA-photo-2.webp'),'First birthday cake/cupcake must use owner-chosen photo 2');
+assert(featured.some(c=>c.sourceShortcode==='DcqRbBLIFnH'&&c.sourcePhotoRank===3&&c.coverImage==='assets/gallery-final-covers/DcqRbBLIFnH-photo-3.webp'),'Tiramisu must use owner-chosen photo 3');
 const galleryPage=read('cakes/index.html');
 assert(!/data-product="other"/.test(galleryPage),'No customer-facing Other product option');
 assert(!/<option value="Other\/unspecified"/.test(galleryPage),'No customer-facing Other occasion');
@@ -89,7 +91,7 @@ for(const p of pages){
  assert(!nav.includes('>Enquire</a>'),'Formal contact label should not appear in header '+p);
  assert(html.includes('href="/about/"'),'About footer link must remain available: '+p);
 
- assert(html.includes('home-v3.css?v=20261030-refine1')&&html.includes('site.js?v=20261030-refine1'),'Cache version stale '+p);
+ assert(html.includes('home-v3.css?v=20261030-refine1')&&html.includes('site.js?v=20261030-finalgallery1'),'Cache version stale '+p);
  assert(html.includes('href="https://www.stratlens.com/websites/"'),'Footer credit link wrong '+p);
  assert(!html.includes('made for meaningful moments'),'Generic footer '+p);
 }
@@ -185,7 +187,7 @@ const detailMarkup=site.slice(site.indexOf('function showDesign(c,concept){'),si
 assert(detailMarkup.includes('design-instagram-link')&&detailMarkup.includes('originalPost')&&detailMarkup.includes('noopener noreferrer'),'Original Instagram link missing from design drill through');
 assert(detailMarkup.includes('Ask about this design →'),'Enquiry must stay inside the detail page');
 assert(base.includes('.gallery-photo__arrow')&&base.includes('.design-instagram-link'),'Gallery link styling missing');
-assert(pages.every(p=>read(p).includes('site.css?v=20261030-occasion34')&&read(p).includes('site.js?v=20261030-refine1')),'Shared gallery-30 assets not cache-busted');
+assert(pages.every(p=>read(p).includes('site.css?v=20261030-occasion34')&&read(p).includes('site.js?v=20261030-finalgallery1')),'Shared gallery-30 assets not cache-busted');
 const faqMarkup=workshop.match(/<div class="faq-list">([\s\S]*?)<\/div>/)?.[1]||'';
 assert.equal((faqMarkup.match(/<details>/g)||[]).length,4,'Four clear workshop FAQs expected');
 assert(!/\bMads\b/.test(faqMarkup),'FAQs should speak as We rather than Mads');
