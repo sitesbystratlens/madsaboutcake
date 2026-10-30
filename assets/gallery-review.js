@@ -24,7 +24,7 @@ let state={decisions:{},notes:{},overall:'',groupDecisions:{},groupNotes:{},sugg
 const clean=s=>String(s??'').replace(/[&<>"']/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;','\'':'&#39;'}[c]));
 const postUrl=s=>'https://www.instagram.com/p/'+encodeURIComponent(s)+'/';
 const validCode=s=>/^[A-Za-z0-9_-]{5,32}$/.test(s);
-const validPhoto=s=>typeof s==='string'&&/^assets\/(?:gallery-30(?:\/thumbs)?|featured-25|creations|cake-covers|gallery-review-covers)\/[\w.-]+\.(?:webp|png|jpe?g|avif)$/.test(s);
+const validPhoto=s=>typeof s==='string'&&/^assets\/(?:gallery-30(?:\/thumbs)?|featured-25|creations|cake-covers|gallery-review-covers|gallery-final-covers)\/[\w.-]+\.(?:webp|png|jpe?g|avif)$/.test(s);
 const legacyGroup=g=>g==='birthdays'||g==='cupcakes';
 const decision=(code,group)=>{
  const val=legacyGroup(group)?state.decisions[code]:state.groupDecisions[group]?.[code];
