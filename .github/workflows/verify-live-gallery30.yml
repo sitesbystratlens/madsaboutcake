@@ -31,7 +31,7 @@ jobs:
             curl -fsSL --max-time 25 -H 'Cache-Control: no-cache' "$SITE/cakes.json?rev=$GITHUB_SHA-$n" > /tmp/live-gallery.json || true
             curl -fsSL --max-time 25 -H 'Cache-Control: no-cache' "$SITE/cakes/?rev=$GITHUB_SHA-$n" > /tmp/live-cakes.html || true
             curl -fsSL --max-time 25 -H 'Cache-Control: no-cache' "$SITE/assets/site.js?rev=$GITHUB_SHA-$n" > /tmp/live-gallery.js || true
-            if grep -Fq 'site.js?v=20261030-refine1' /tmp/live-cakes.html &&
+            if grep -Fq 'site.js?v=20261030-finalgallery1' /tmp/live-cakes.html &&
                grep -Fq 'gallery-review-covers' /tmp/live-gallery.js &&
                python3 - <<'PY'
           import json, sys
