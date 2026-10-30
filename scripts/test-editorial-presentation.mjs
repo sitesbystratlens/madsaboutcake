@@ -174,7 +174,7 @@ assert(!workshop.includes('DRjMFHikhm-')&&!workshop.includes('DauWQoCkuB1'),'Unr
 assert(!gallery.includes('id="style-filter"'),'Style filter still public');
 assert(gallery.includes('gallery-compact__toolbar')&&gallery.includes('gallery-compact__head'),'Gallery header not consolidated');
 assert(!gallery.includes('<p class="eyebrow">CAKES &amp; CUPCAKES</p>'),'Repeated gallery eyebrow still present');
-assert(gallery.includes('A little inspiration from past creations.'),'Gallery description should be concise and in the studio voice');
+assert(gallery.includes('Take a look at cakes and cupcakes we’ve made.'),'Gallery description should be concise and in the studio voice');
 assert(!gallery.includes('Mads’ past creations'),'Gallery intro still repeats Mads');
 const galleryNav=gallery.match(/<nav class="mads-main-nav"[^>]*>([\s\S]*?)<\/nav>/)?.[1]||'';
 assert(galleryNav.includes('class="nav-short">Cakes</span>')&&galleryNav.includes('class="nav-long">Cakes &amp; cupcakes</span>'),'Keep concise mobile nav that includes cupcakes on desktop');
@@ -200,7 +200,9 @@ assert(workshop.includes('https://www.instagram.com/p/DR9AAqlEovY/'),'Guest comm
 
 assert(base.includes('Cake gallery: compact overview')&&base.includes('Decorate & Sip: authentic session photos'),'New gallery/workshop CSS absent');
 
-assert(gallery.includes('<h1>Find a cake'),'Gallery H1 absent');
+assert(gallery.includes('<h1>Our <span class="serif-italic">creations.</span></h1>'),'Gallery H1 must say Our creations');
+assert(home.includes('href="/cakes/">Explore our creations <b>↗</b></a>'),'Homepage hero gallery CTA missing');
+assert(!home.includes('See the cakes <b>'),'Old hero CTA must be removed');
 assert(enquire.includes('<h1 id="enquiry-page-title">Got an idea?</h1>'),'Enquiry heading incorrect');
 assert(enquire.includes('<p class="eyebrow">CONTACT US</p>'),'Contact page label should be friendly');
 assert(enquire.includes('<title>Contact us | Mads About Cake, Melbourne</title>'),'Contact page title mismatch');
