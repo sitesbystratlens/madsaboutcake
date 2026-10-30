@@ -12,7 +12,7 @@ assert(data.meta.legacyDetailRecords===data.cakes.length-featured.length,'Legacy
 
 assert.equal(new Set(featured.map(c=>c.sourceShortcode)).size,120,'One selection per source post');
 for(const [category,count] of Object.entries({'Weddings & engagements':9,'Baby celebrations':9,'Love & anniversaries':6,'Other/unspecified':30,'Birthdays':50,'Cupcakes':16}))assert.equal(featured.filter(c=>c.featureCategory===category).length,count,'Protected category altered '+category);
-assert(featured.every(c=>/^assets\/(?:gallery-30\/|gallery-review-covers\/|creations\/|featured-25\/)/.test(c.coverImage)),'Curated photos must be local hosted original derivatives');
+assert(featured.every(c=>/^assets\/(?:gallery-30\/|gallery-review-covers\/|gallery-final-covers\/|creations\/|featured-25\/)/.test(c.coverImage)),'Curated photos must be local hosted original derivatives');
 assert(featured.every(c=>fs.existsSync(c.coverImage)),'Every source image must be available locally');
 assert(featured.every(c=>fs.existsSync(c.thumbnailImage||c.coverImage)),'Every gallery thumbnail must be available locally');
 assert(featured.every(c=>(typeof c.captionEvidence==='string'&&c.captionEvidence.trim().length>10)||typeof c.reviewDecisionSource==='string'),'Each preview creation needs either caption evidence or traceable user decision source');
