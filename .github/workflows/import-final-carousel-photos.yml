@@ -1,0 +1,68 @@
+name: Install final preferred carousel photos
+on:
+  push:
+    branches: [main]
+    paths:
+      - '.github/workflows/import-final-carousel-photos.yml'
+  workflow_dispatch:
+permissions:
+  contents: write
+concurrency:
+  group: mads-final-carousel-import
+  cancel-in-progress: false
+jobs:
+  import:
+    runs-on: ubuntu-latest
+    timeout-minutes: 8
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.12'
+      - run: pip install --disable-pip-version-check requests==2.32.3 Pillow==11.1.0
+      - name: Download only the two owner-requested original carousel photos
+        shell: bash
+        run: |
+          python3 - <<'PY'
+          import io,json,re
+          from pathlib import Path
+          from urllib.parse import urlparse
+          import requests
+          from PIL import Image, ImageOps
+          src=Path('data/gallery-final-photo-urls-temporary.json')
+          targets=json.loads(src.read_text())['targets']
+          assert set(targets)=={'DK8lOEfhYJA','DcqRbBLIFnH'}
+          target=Path('assets/gallery-final-covers')
+          target.mkdir(parents=True,exist_ok=True)
+          for code,item in targets.items():
+              rank=item['photoRank']
+              assert rank in (2,3) and re.fullmatch(r'[A-Za-z0-9_-]{8,20}',code)
+              u=item['url']
+              host=urlparse(u).hostname or ''
+              assert u.startswith('https://') and host.endswith('.fbcdn.net') and host.startswith('instagram.')
+              print('Fetching source photo',code,'rank',rank,flush=True)
+              response=requests.get(u,timeout=25,headers={'User-Agent':'Mozilla/5.0','Referer':'https://www.instagram.com/'})
+              response.raise_for_status()
+              assert len(response.content)<9_000_000 and response.headers.get('Content-Type','').lower().startswith('image/')
+              with Image.open(io.BytesIO(response.content)) as img:
+                  img=ImageOps.exif_transpose(img).convert('RGB')
+                  assert img.width>=450 and img.height>=450
+                  img.thumbnail((1200,1600),Image.Resampling.LANCZOS)
+                  p=target/(code+'-photo-'+str(rank)+'.webp')
+                  img.save(p,'WEBP',quality=86,method=5)
+                  print('Saved',p,'bytes',p.stat().st_size,'dimensions',img.size,flush=True)
+          PY
+      - name: Commit selected source photo derivatives
+        run: |
+          git add -A -- assets/gallery-final-covers/
+          if git diff --cached --quiet; then
+            echo 'No new photo changes to commit'
+            exit 0
+          fi
+          git config user.name 'github-actions[bot]'
+          git config user.email '41898282+github-actions[bot]@users.noreply.github.com'
+          git commit -m 'Install owner-requested second and third original photo crops'
+          git pull --rebase origin main
+          git push origin HEAD:main
