@@ -1,6 +1,6 @@
 {
   "meta": {
-    "version": 10,
+    "version": 11,
     "mode": "concept-preview",
     "source": "Public Mads Instagram posts, Apify extract 2026-10-27, downloaded original source media",
     "notice": "Owner-reviewed private concept preview, not publicly approved. Other is not a customer-facing category; those cakes remain in All creations.",
@@ -3733,9 +3733,9 @@
       "homepageOrder": null,
       "instagramUrl": "https://www.instagram.com/p/DK8lOEfhYJA/",
       "sourceShortcode": "DK8lOEfhYJA",
-      "sourcePhotoRank": 1,
-      "coverImage": "assets/gallery-review-covers/DK8lOEfhYJA.webp",
-      "thumbnailImage": "assets/gallery-review-covers/DK8lOEfhYJA.webp",
+      "sourcePhotoRank": 2,
+      "coverImage": "assets/gallery-final-covers/DK8lOEfhYJA-photo-2.webp",
+      "thumbnailImage": "assets/gallery-final-covers/DK8lOEfhYJA-photo-2.webp",
       "featured25": false,
       "featured30": true,
       "featureCategory": "Birthdays",
@@ -3751,7 +3751,8 @@
       ],
       "reviewNotes": "birthday",
       "holdOccasionFilterUntilOwnerApproval": false,
-      "finalReviewNote": "keep in birthday and cupcakes"
+      "finalReviewNote": "keep in birthday and cupcakes",
+      "finalReviewPhotoChoice": "Original Instagram carousel photo 2, requested in final owner-review note."
     },
     {
       "id": "ig-review-c-yn5shtoth",
@@ -5277,9 +5278,9 @@
       "homepageOrder": null,
       "instagramUrl": "https://www.instagram.com/p/DcqRbBLIFnH/",
       "sourceShortcode": "DcqRbBLIFnH",
-      "sourcePhotoRank": 1,
-      "coverImage": "assets/gallery-review-covers/DcqRbBLIFnH.webp",
-      "thumbnailImage": "assets/gallery-review-covers/DcqRbBLIFnH.webp",
+      "sourcePhotoRank": 3,
+      "coverImage": "assets/gallery-final-covers/DcqRbBLIFnH-photo-3.webp",
+      "thumbnailImage": "assets/gallery-final-covers/DcqRbBLIFnH-photo-3.webp",
       "featured25": false,
       "featured30": true,
       "ownerReviewRequired": true,
@@ -5294,7 +5295,8 @@
       "round2CategoryAction": "Birthdays",
       "ownerReviewDecision": "Keep",
       "otherProductTypes": [],
-      "finalReviewNote": "photo 3 has a better angle"
+      "finalReviewNote": "photo 3 has a better angle",
+      "finalReviewPhotoChoice": "Original Instagram carousel photo 3, requested in final owner-review note."
     },
     {
       "id": "ig-round2-dcx9apcvqu6",
