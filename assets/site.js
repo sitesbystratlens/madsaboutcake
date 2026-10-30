@@ -12,7 +12,7 @@ const PRODUCT_TYPES=['Cake','Cupcakes','Other Treats'];
 const PUBLIC_OCCASIONS=['Birthdays','Weddings & engagements','Baby celebrations','Love & anniversaries'];
 const OCCASIONS=[...PUBLIC_OCCASIONS,'Religious & Cultural','Graduations','Corporate & Events','Other Celebrations'];
 const esc=s=>String(s==null?'':s).replace(/[&<>"']/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));
-const safeCover=s=>typeof s==='string'&&/^assets\/(?:cake-covers|creations|featured-25|gallery-30(?:\/thumbs)?|gallery-review-covers(?:\/thumbs)?)\/[\w-]+\.(?:jpe?g|png|webp|avif)$/.test(s);
+const safeCover=s=>typeof s==='string'&&/^assets\/(?:cake-covers|creations|featured-25|gallery-30(?:\/thumbs)?|gallery-review-covers(?:\/thumbs)?|gallery-final-covers)\/[\w-]+\.(?:jpe?g|png|webp|avif)$/.test(s);
 const imageOf=c=>safeCover(c.coverImage)?'/'+c.coverImage:'/assets/mads-logo.webp';
 const slug=s=>String(s).toLowerCase().replace(/\s+/g,'-');
 const matchesOccasion=(c,o)=>!c.holdOccasionFilterUntilOwnerApproval&&(c.primaryOccasion===o||c.otherOccasions.includes(o));
