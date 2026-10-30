@@ -46,7 +46,7 @@ Cupcakes is a product filter overlapping occasion filters. Category counts canno
 - [Curated concept gallery](https://madsaboutcake.sitesbystratlens.workers.dev/cakes/)
 - [Birthdays](https://madsaboutcake.sitesbystratlens.workers.dev/cakes/?occasion=Birthdays)
 - [Cupcakes](https://madsaboutcake.sitesbystratlens.workers.dev/cakes/?product=cupcakes)
-- [GitHub editorial regression](https://github.com/sitesbystratlens/madsaboutcake/actions/workflows/verify-mads-concept-imagery.yml)
+- [GitHub editorial regression](https://github.com/sitesbystratlens/madsaboutcake/actions/workflows/check-editorial-presentation.yml)
 - [GitHub live source-photo verification](https://github.com/sitesbystratlens/madsaboutcake/actions/workflows/verify-live-gallery30.yml)
 - [Responsive browser QA](https://github.com/sitesbystratlens/madsaboutcake/actions/workflows/visual-qa.yml)
 
