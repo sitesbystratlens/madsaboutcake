@@ -1,86 +1,63 @@
-name: Verify final 120-design owner gallery and original images
+name: Verify Mads branded 120-creation galleries and imagery
 on:
   push:
     branches: [main]
     paths:
-      - '.github/workflows/verify-live-gallery30.yml'
       - 'cakes.json'
-      - 'assets/gallery-30/**'
-      - 'assets/gallery-review-covers/**'
+      - 'assets/brand-site.js'
+      - 'assets/brand-site.css'
       - 'cakes/index.html'
-      - 'assets/site.js'
-      - 'data/gallery-owner-decisions-2026-10-30.json'
-      - 'data/gallery-owner-decisions-round2-2026-10-30.json'
-      - 'data/gallery-round2-category-moves.json'
-      - 'data/gallery-owner-decisions-final-2026-10-30.json'
+      - 'weddings/**'
+      - 'celebrations/**'
+      - 'tiramisu-cakes/**'
+      - '.github/workflows/verify-live-gallery30.yml'
   workflow_dispatch:
 permissions:
   contents: read
 jobs:
   verify:
-    runs-on: ubuntu-latest
-    timeout-minutes: 10
+    runs-on: ubuntu-24.04
+    timeout-minutes: 9
     steps:
       - uses: actions/checkout@v4
-      - name: Check Cloudflare preview gallery version and selection integrity
+      - name: Check final gallery source and brand JS live
         shell: bash
         run: |
           set -euo pipefail
-          SITE="https://madsaboutcake.sitesbystratlens.workers.dev"
+          SITE=https://madsaboutcake.sitesbystratlens.workers.dev
           for n in $(seq 1 15); do
-            curl -fsSL --max-time 25 -H 'Cache-Control: no-cache' "$SITE/cakes.json?rev=$GITHUB_SHA-$n" > /tmp/live-gallery.json || true
-            curl -fsSL --max-time 25 -H 'Cache-Control: no-cache' "$SITE/cakes/?rev=$GITHUB_SHA-$n" > /tmp/live-cakes.html || true
-            curl -fsSL --max-time 25 -H 'Cache-Control: no-cache' "$SITE/assets/site.js?rev=$GITHUB_SHA-$n" > /tmp/live-gallery.js || true
-            if grep -Fq 'site.js?v=20261030-finalgallery1' /tmp/live-cakes.html &&
-               grep -Fq 'gallery-review-covers' /tmp/live-gallery.js &&
+            curl -fsSL --max-time 25 "$SITE/cakes.json?r=$GITHUB_SHA-$n" >/tmp/mbcakes.json || true
+            curl -fsSL --max-time 25 "$SITE/assets/brand-site.js?r=$GITHUB_SHA-$n" >/tmp/mbrand.js || true
+            if grep -Fq 'const isTiramisu' /tmp/mbrand.js &&
                python3 - <<'PY'
-          import json, sys
-          try:
-              d=json.load(open('/tmp/live-gallery.json'))
-              chosen=[c for c in d['cakes'] if c.get('featured30')]
-              assert len(chosen)==120 and d['meta']['featuredCount']==120
-              assert d['meta']['mode']=='concept-preview'
-              assert all(c['showOnWebsite']=='No' and c['approvalStatus']=='Draft' for c in d['cakes'])
-              assert all(c.get('ownerReviewRequired') for c in chosen)
-              assert sum(c.get('featureCategory')=='Weddings & engagements' for c in chosen)==9
-              assert sum(c.get('featureCategory')=='Baby celebrations' for c in chosen)==9
-              assert sum(c.get('featureCategory')=='Love & anniversaries' for c in chosen)==6
-              assert sum(c.get('featureCategory')=='Other/unspecified' for c in chosen)==30
-              assert sum(c['productType']=='Cupcakes' or 'Cupcakes' in c.get('otherProductTypes',[]) for c in chosen)==27
-              assert 'DK8nnIGBfLx' in {c['sourceShortcode'] for c in chosen}
-              assert 'C8iniSsyccX' not in {c['sourceShortcode'] for c in chosen}
-              assert sum(c.get('featureCategory')=='Birthdays' for c in chosen)==50
-              assert all(c.get('featureCategory')!='Other' for c in chosen)
-              print('Final 120 owner-selected designs deployed, with 50 birthdays and no public Other filter.')
-          except Exception as e:
-              print('Live gallery not updated:',e)
-              sys.exit(1)
+          import json
+          db=json.load(open('/tmp/mbcakes.json'))
+          c=[x for x in db['cakes'] if x.get('featured30')]
+          wed=[x for x in c if x.get('primaryOccasion')=='Weddings & engagements' or 'Weddings & engagements' in x.get('otherOccasions',[])]
+          tir=[x for x in c if 'tiramisu' in (str(x.get('title',''))+' '+str(x.get('shortDescription',''))+' '+str(x.get('captionEvidence',''))).lower()]
+          assert len(c)==120 and len(wed)==9 and len(tir)==1
+          assert all(x['showOnWebsite']=='No' and x['approvalStatus']=='Draft' for x in db['cakes'])
+          print('120 final creations, nine weddings, one verified tiramisu, draft-only gates')
           PY
             then
               break
             fi
-            if [[ "$n" == 15 ]]; then echo "Live gallery has not propagated"; exit 1; fi
-            echo "Awaiting owner-selected gallery publication to Cloudflare ($n/15)"
-            sleep 12
+            if [[ "$n" == 15 ]]; then echo 'Gallery not deployed'; exit 1; fi
+            sleep 10
           done
-      - name: Verify every selected original photo and thumbnail responds as WebP
+      - name: Verify every featured original cover and thumbnail is accessible
         shell: bash
         run: |
           python3 - <<'PY'
-          import concurrent.futures, json, subprocess
-          d=json.load(open('/tmp/live-gallery.json'))
-          unique=sorted({p for c in d['cakes'] if c.get('featured30') for p in (c['coverImage'], c.get('thumbnailImage') or c['coverImage'])})
-          def check(path):
-              url='https://madsaboutcake.sitesbystratlens.workers.dev/'+path
-              result=subprocess.run(['curl','-fsSI','--max-time','25','-H','Cache-Control: no-cache',url],capture_output=True,text=True)
-              headers=result.stdout.lower()
-              valid=result.returncode==0 and 'content-type: image/webp' in headers
-              return (path,valid,result.returncode,headers[-150:] if valid else (result.stderr[-180:] or headers[-180:]))
-          with concurrent.futures.ThreadPoolExecutor(max_workers=10) as pool:
-              result=list(pool.map(check,unique))
-          bad=[x for x in result if not x[1]]
-          print('Checked',len(result),'unique selected photo/thumbnail URLs; invalid:',len(bad))
-          if bad:
-              print('Failures:',bad[:15])
-              raise SystemExit(1)
+          import concurrent.futures,json,subprocess
+          db=json.load(open('/tmp/mbcakes.json'))
+          paths=sorted({p for c in db['cakes'] if c.get('featured30') for p in [c['coverImage'],c.get('thumbnailImage') or c['coverImage']]})
+          def one(path):
+             cmd=['curl','-fsSI','--max-time','20','https://madsaboutcake.sitesbystratlens.workers.dev/'+path]
+             r=subprocess.run(cmd,text=True,capture_output=True)
+             return (path,r.returncode==0 and 'content-type: image/webp' in r.stdout.lower())
+          with concurrent.futures.ThreadPoolExecutor(max_workers=10) as pool: out=list(pool.map(one,paths))
+          bad=[p for p,ok in out if not ok]
+          print('Original media:',len(paths),'broken:',len(bad))
+          if bad:print(bad[:15]);raise SystemExit(1)
           PY
