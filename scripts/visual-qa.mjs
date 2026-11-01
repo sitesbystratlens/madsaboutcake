@@ -49,22 +49,49 @@ for(const [name,url,total] of cases)for(const width of widths){
   if(info.crimson!=='rgb(154, 40, 73)')problems.push('brand palette mismatch');
   if(!info.dm)problems.push('Instagram direct message links missing');
   if(!info.phone)problems.push('confirmed text messaging number not linked');
-  if(width===390){
+  if(width<=768){
+    const toggle=page.locator('[data-mobile-nav-toggle]');
+    const mobile=page.locator('[data-mobile-nav]');
+    const desktop=page.locator('.brand-links');
+    if(!(await toggle.isVisible()))problems.push('Mobile hamburger not visible');
+    if(await desktop.isVisible())problems.push('Desktop multi-row navigation should be hidden');
+    if(await toggle.getAttribute('aria-expanded')!=='false')problems.push('Hamburger should begin collapsed');
+    if(!await page.locator('.mobile-header-contact[href="sms:+61425819951"]').isVisible())problems.push('Mobile header SMS icon shortcut absent');
+    await toggle.click();
+    if(await toggle.getAttribute('aria-expanded')!=='true'||!(await mobile.isVisible()))problems.push('Hamburger failed to reveal menu');
+    if(await mobile.locator('a').count()!==7)problems.push('Mobile menu must offer seven clear destinations');
+    if(!await mobile.locator('a[href="/cakes/"]').getByText('Explore all').count())problems.push('Mobile Explore all link absent');
+    if(!await mobile.locator('a[href="/cake-care/"]').count())problems.push('Mobile Pickup & care absent');
+    await toggle.press('Escape');
+    if(await toggle.getAttribute('aria-expanded')!=='false'||await mobile.isVisible())problems.push('Escape did not close hamburger');
+    await toggle.click();
+    await page.locator('[data-mobile-backdrop]').click({position:{x:5,y:5}});
+    if(await toggle.getAttribute('aria-expanded')!=='false')problems.push('Backdrop did not dismiss menu');
+  }
+  if(width===1440){
     const dropdown=page.locator('[data-cake-toggle]');
-    if(await dropdown.count()!==1)problems.push('Cakes dropdown toggle missing');
-    else{
-      if(await dropdown.getAttribute('aria-expanded')!=='false')problems.push('Dropdown should start closed');
+    if(await dropdown.count()!==1)problems.push('Desktop cakes dropdown toggle missing');
+    else {
       await dropdown.click();
-      if(await dropdown.getAttribute('aria-expanded')!=='true')problems.push('Dropdown did not open on tap');
-      const menu=page.locator('[data-cake-panel]');
-      if(await menu.locator('a').count()!==4)problems.push('Expected four gallery shortcuts');
-      if(await menu.locator('a[href="/cakes/?filter=cupcakes"]').count())problems.push('Cupcakes should not be separate from occasion categories');
-      if(!await menu.getByText('All creations').count())problems.push('All creations entry missing');
-      if(!await page.locator('.brand-links a[href="/cake-care/"]').getByText('Pickup & care').count())problems.push('Pickup & care navigation missing');
+      if(await dropdown.getAttribute('aria-expanded')!=='true')problems.push('Desktop category menu did not open');
+      if(!await page.locator('[data-cake-panel] a[href="/cakes/"]').getByText('Explore all').count())problems.push('Desktop Explore all entry missing');
       await dropdown.press('Escape');
-      if(await dropdown.getAttribute('aria-expanded')!=='false')problems.push('Escape did not dismiss dropdown');
-      if(!await page.locator('.nav-cakes__main[href="/cakes/"]').count())problems.push('Main cakes link is not All creations');
+      if(await dropdown.getAttribute('aria-expanded')!=='false')problems.push('Desktop Escape close failed');
     }
+  }
+  if(name==='home'&&width<=650){
+    if(await page.locator('.hero-copy .btn[data-ig-contact]').isVisible())problems.push('Duplicate mobile Instagram hero button still visible');
+    if(!await page.locator('.hero-copy .btn[href="/cakes/"]').isVisible())problems.push('Explore our creations CTA hidden');
+    if(!await page.locator('.mobile-contact-bar a').count())problems.push('Mobile sticky DM and SMS bar missing');
+  }
+  if(name==='sip'&&width<=650){
+    if(await page.locator('.decorate-page-hero .btns').isVisible())problems.push('Duplicate workshop hero contact buttons visible');
+    const heading=await page.locator('main h1').evaluate(el=>({scroll:el.scrollWidth,client:el.clientWidth,br:el.querySelector('br')!==null,nowrap:getComputedStyle(el).whiteSpace}));
+    if(heading.br||heading.nowrap!=='nowrap'||heading.scroll>heading.client+2)problems.push('Decorate & Sip heading wraps or overflows at '+width+': '+JSON.stringify(heading));
+  }
+  if(name==='care'&&width<=650){
+    const color=await page.locator('.care-panel--reminder .care-panel__icon').evaluate(el=>getComputedStyle(el).backgroundColor);
+    if(color!=='rgb(246, 244, 240)')problems.push('Heart badge is not brand cream: '+color);
   }
   if(name==='home'&&width===1440){
     const footer=page.locator('.brand-footer');
