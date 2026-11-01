@@ -41,23 +41,29 @@ assert.equal(wrangler.assets.not_found_handling,'404-page');
 for(const p of pages){
  const h=read(p);
  assert(h.includes('noindex,nofollow'),'Preview must remain non-indexed: '+p);
- assert(h.includes('brand-site.css?v=20261102-categories1')&&h.includes('brand-site.js?v=20261102-categories1'),'Refined assets missing: '+p);
+ assert(h.includes('brand-site.css?v=20261102-refine2')&&h.includes('brand-site.js?v=20261102-refine2'),'Refined assets missing: '+p);
  assert(h.includes('/assets/brand/wordmark-set-2.svg'),'Brand wordmark missing: '+p);
  assert(h.includes('class="nav-cakes__main" href="/cakes/"'),'Cake and cupcake main link must open All creations: '+p);
  assert(h.includes('data-cake-toggle')&&h.includes('aria-controls="cakes-submenu"')&&h.includes('aria-expanded="false"'),'Dedicated accessible dropdown toggle missing: '+p);
  assert(h.includes('data-cake-panel hidden'),'Cake category dropdown must start collapsed: '+p);
  assert(!h.includes('href="/cakes/?filter=cupcakes"'),'Separate Cupcakes filter must be removed from menu: '+p);
- assert(h.includes('>Custom creations</a>'),'Custom creations dropdown entry missing: '+p);
- assert(h.includes('href="/cake-care/">Care guide</a>')||h.includes('href="/cake-care/" aria-current="page">Care guide</a>'),'Care guide navigation missing: '+p);
+ assert(h.includes('>All creations</a>'),'All creations dropdown entry missing: '+p);
+ assert(h.includes('href="/cake-care/">Pickup &amp; care</a>')||h.includes('href="/cake-care/" aria-current="page">Pickup &amp; care</a>'),'Pickup & care navigation missing: '+p);
  assert(h.includes('class="footer-cols"'),'Simplified footer missing: '+p);
  assert(h.includes('Handcrafted sweets for every occasion.'),'Owner brand line missing from footer: '+p);
  const footer=h.slice(h.indexOf('<footer class="brand-footer">'));
- assert(footer.includes('Cakes &amp; cupcakes')&&footer.includes('Help &amp; contact'),'Simplified footer navigation missing: '+p);
+ assert(footer.includes('Cakes &amp; cupcakes')&&footer.includes('>Contact</p>')&&!footer.includes('Help &amp; contact'),'Simplified footer navigation missing: '+p);
+ assert(footer.includes('href="/cake-care/">Pickup &amp; care</a>'),'Pickup & care must be in Explore footer column: '+p);
+ assert(footer.includes('href="/enquire/">Get in touch</a>'),'Get in touch must be in Contact footer column: '+p);
+ assert(footer.includes('class="footer-contact-icons"'),'Footer quick-message icons missing: '+p);
+ assert(footer.includes('aria-label="DM on Instagram"')&&footer.includes('aria-label="Text 0425 819 951"'),'Accessible footer contact labels missing: '+p);
+ assert(!footer.includes('Custom cakes by enquiry only'),'Unnecessary footer disclaimer: '+p);
  assert(!footer.includes('<a href="/weddings/">Weddings</a>'),'Footer duplicates individual cake categories: '+p);
  for(const path of ['weddings','celebrations','tiramisu-cakes','decorate-and-sip','cake-care'])assert(h.includes('href="/'+path+'/"'),'Nav missing '+path+' on '+p);
  assert(h.includes('href="sms:+61425819951"'),'Text-message link missing: '+p);
  assert(!h.includes('href="tel:+61425819951"'),'Old call CTA must be removed: '+p);
- assert(h.includes('https://www.instagram.com/madsaboutcake/'),'Instagram profile fallback missing: '+p);
+ assert(h.includes('href="https://ig.me/m/madsaboutcake"'),'Instagram direct-message link missing: '+p);
+ assert(!h.includes('Message on Instagram'),'Owner prefers DM terminology: '+p);
  assert(h.includes('<main id="main">')&&h.includes('<h1'),'Semantic heading missing: '+p);
 }
 for(const p of ['weddings/index.html','celebrations/index.html','tiramisu-cakes/index.html','cakes/index.html']){
@@ -72,8 +78,11 @@ for(const p of ['celebrations/index.html','cakes/index.html'])assert(read(p).inc
 const home=read('index.html');
 assert.equal((home.match(/class="category-card"/g)||[]).length,4,'Four main owner-requested categories');
 assert(home.includes('href="/cakes/">Explore our creations ↗'),'Explore all should link to All creations');
+assert(home.includes('Your idea. Mads’ craft. A cake worth celebrating.'),'Homepage headline must name Mads');
 assert(home.includes('<p class="eyebrow">Handcrafted sweets for every occasion</p>'),'Homepage must use owner brand vocabulary');
 assert(brand.includes('.nav-cakes__submenu')&&brand.includes('instagram-outline.svg')&&brand.includes('message-outline.svg'),'Branded accessible navigation and icon styling absent');
+assert(brand.includes('.footer-contact-icons__link'),'Compact footer contact icons must be styled');
+assert(site.includes('DM on Instagram'),'Mobile and design-preview contact action should use DM language');
 assert(site.includes('function initCakeNav()')&&site.includes('panel.hidden=!value')&&site.includes("e.key==='Escape'"),'Dropdown must be keyboard/click operable');
 assert(site.includes("new URLSearchParams(location.search).get('filter')"),'Gallery filter deep linking must initialise selected offering');
 assert(site.includes("['weddings','Weddings']")&&site.includes("['celebrations','Celebrations']")&&site.includes("['tiramisu','Tiramisu']"),'Only owner-selected creation categories must appear');
