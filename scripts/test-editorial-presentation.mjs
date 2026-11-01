@@ -98,7 +98,7 @@ assert(brand.includes('.mobile-menu-backdrop{z-index:40}'),'Page backdrop must s
 assert(brand.includes('.brand-footer{margin-top:0'),'Footer gap must be removed site-wide');
 assert(brand.includes('-webkit-text-stroke:.32px currentColor'),'Brand display type must have a slightly stronger stroke');
 assert(brand.includes('.mobile-site-menu')&&brand.includes('.mobile-nav-toggle')&&brand.includes('.mobile-header-contact'),'Mobile header must be styled');
-assert(brand.includes('.hero-contact-icons{display:none}')&&home.includes('hero-contact-icons')&&workshop.includes('hero-contact-icons'),'Avoid duplicate icon contacts above sticky mobile contact bar');
+assert(brand.includes('.hero-contact-icons{display:none}')&&home.includes('hero-contact-icons')&&read('decorate-and-sip/index.html').includes('hero-contact-icons'),'Avoid duplicate icon contacts above sticky mobile contact bar');
 assert(brand.includes('.care-panel--reminder .care-panel__icon{background:var(--cream)'),'Reminder hearts should have cream backing');
 assert(!read('assets/icons/message-outline.svg').includes('M8 12h8'),'SMS icon should have no internal minus dash');
 assert(site.includes("new URLSearchParams(location.search).get('filter')"),'Gallery filter deep linking must initialise selected offering');
