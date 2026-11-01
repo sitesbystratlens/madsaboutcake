@@ -179,3 +179,13 @@ body{font-weight:400;padding-bottom:0}
 }
 
 .gallery-filters[hidden]{display:none!important}
+
+
+/* Prevent long care headings from widening a 320px viewport. */
+.care-panel__head > div{min-width:0}
+.care-panel__head .section-title{overflow-wrap:anywhere}
+@media(max-width:650px){
+ .care-panel__head{gap:10px}
+ .care-panel__head .section-title{font-size:clamp(23px,7.5vw,32px)}
+ .care-panel__head .care-panel__icon{width:42px;height:42px;font-size:22px}
+}
