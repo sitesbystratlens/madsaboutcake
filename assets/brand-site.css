@@ -247,3 +247,82 @@ body{font-weight:400;padding-bottom:0}
  .decorate-page-hero .display.decorate-heading{font-size:clamp(30px,9.5vw,44px);letter-spacing:-.045em;line-height:1.08;white-space:nowrap;max-width:100%;overflow-wrap:normal}
  .decorate-page-hero{padding-top:50px}
 }
+
+
+/* Owner mobile refinement 2 — accessible nested menu, typography, measured spacing.
+   Exact official crimson/cream retained; no alternative colours or fonts introduced. */
+.brand-link img{mix-blend-mode:multiply}
+.brand-footer{margin-top:0;padding:clamp(55px,6vw,85px) 0 33px}
+.footer-cols{gap:clamp(28px,4vw,58px);align-items:start}
+.footer-heading{font-size:clamp(43px,4.4vw,64px)}
+.footer-bottom{margin-top:clamp(32px,4vw,53px);padding-top:18px}
+.brand-footer nav a{font-size:14px;line-height:1.6}
+.contact-strip{padding:clamp(35px,4.5vw,62px) 0}
+.contact-strip .contact-signature{width:clamp(145px,13vw,190px);margin-top:9px}
+.section{padding:clamp(48px,5.7vw,85px) 0}
+.section.statement{padding:clamp(47px,5vw,72px) 0}
+.hero{padding-top:clamp(35px,4vw,62px);padding-bottom:clamp(37px,5vw,65px)}
+.page-hero{padding-top:clamp(36px,5vw,65px);padding-bottom:clamp(25px,3vw,44px)}
+.intro-row{margin-bottom:25px}
+.gallery{padding-bottom:20px}
+.gallery-more-wrap{margin-bottom:20px}
+.care-guide{padding-bottom:clamp(28px,4vw,65px)}
+/* Brand PDF fonts are not yet licensed for web. Subtle stroke reinforces the
+   thin high-contrast serif display without replacing its chosen appearance. */
+.display,.section-title,.footer-heading,.category-card__name,.gallery-card__meta h3,
+.care-tip-grid strong,.care-hero__lead{ -webkit-text-stroke:.32px currentColor }
+.eyebrow,.mobile-site-menu__heading{font-weight:600}
+.decorate-story{padding-top:clamp(32px,4.5vw,63px);padding-bottom:clamp(35px,4.5vw,67px)}
+.decorate-story__grid{display:grid;grid-template-columns:minmax(0,1fr) minmax(0,1fr);gap:clamp(30px,5vw,85px);align-items:center}
+.decorate-story__image img{display:block;width:100%;height:clamp(250px,27vw,380px);object-fit:cover}
+.decorate-story__copy .eyebrow{margin-bottom:12px}
+.decorate-story__copy .copy{margin-top:18px;max-width:540px}
+@media(max-width:850px){
+ .site-header{z-index:50;isolation:isolate}
+ .header-inner{z-index:5}
+ .mobile-site-menu{z-index:4}
+ .mobile-menu-backdrop{z-index:40}
+ .mobile-site-menu__inner{padding:9px 0 18px}
+ .mobile-site-menu__group-head{display:grid;grid-template-columns:minmax(0,1fr) 48px;align-items:center;border-bottom:1px solid var(--border)}
+ .mobile-site-menu__group-link{display:flex;justify-content:space-between;gap:12px;align-items:center;min-height:57px;padding:10px 8px 10px 4px;font:600 clamp(17px,2.5vw,20px)/1.35 var(--body);text-decoration:none}
+ .mobile-site-menu__all{font-size:16px;font-weight:400;opacity:.75}
+ .mobile-site-menu__group-toggle{display:grid;place-items:center;width:48px;height:50px;border:0;background:transparent;color:var(--crimson);cursor:pointer}
+ .mobile-site-menu__chevron{width:11px;height:11px;border-bottom:2px solid currentColor;border-right:2px solid currentColor;transform:translateY(-3px) rotate(45deg);transition:transform .2s}
+ .mobile-site-menu__group-toggle[aria-expanded=true] .mobile-site-menu__chevron{transform:translateY(3px) rotate(225deg)}
+ .mobile-site-menu__subnav[hidden]{display:none!important}
+ .mobile-site-menu__subnav{display:flex;flex-direction:column;padding:4px 0 9px 16px;background:rgba(154,40,73,.025)}
+ .mobile-site-menu__subnav a{display:flex;justify-content:space-between;align-items:center;min-height:47px;gap:12px;padding:9px 10px;border-bottom:1px solid var(--border);font:400 clamp(15px,2.3vw,18px)/1.4 var(--body);text-decoration:none}
+ .mobile-site-menu__subnav a:last-child{border-bottom:0}
+ .mobile-site-menu__primary{display:flex;flex-direction:column}
+ .mobile-site-menu__primary>a{display:flex;justify-content:space-between;align-items:center;gap:12px;padding:10px 4px;min-height:59px;border-bottom:1px solid var(--border);font:500 clamp(17px,2.5vw,20px)/1.4 var(--body);text-decoration:none}
+ .mobile-site-menu__primary>a:last-child{border-bottom:0}
+ .mobile-site-menu__primary>a span,.mobile-site-menu__subnav a span{opacity:.7}
+ .mobile-site-menu__group-link:focus-visible,.mobile-site-menu__group-toggle:focus-visible,.mobile-site-menu__subnav a:focus-visible,.mobile-site-menu__primary>a:focus-visible{outline:2px solid var(--crimson);outline-offset:-2px}
+ .mobile-site-menu__group-link[aria-current=page],.mobile-site-menu__primary>a[aria-current=page],.mobile-site-menu__subnav a[aria-current=page]{font-weight:700}
+ .decorate-story__grid{grid-template-columns:1fr 1fr;gap:25px}
+}
+@media(max-width:650px){
+ .section{padding:42px 0}
+ .section.statement{padding:42px 0}
+ .hero{padding:33px 0 41px}
+ .page-hero{padding:39px 0 31px}
+ .contact-strip{padding:32px 0 35px}
+ .brand-footer{padding:52px 0 30px}
+ .footer-cols{gap:32px 18px}
+ .footer-bottom{margin-top:38px;padding-top:17px}
+ .footer-heading{font-size:clamp(42px,11vw,56px)}
+ .footer-cols nav a{font-size:14px}
+ .contact-strip .contact-signature{width:145px}
+ .category-grid{row-gap:23px}
+ .intro-row{margin-bottom:19px}
+ .gallery{padding-bottom:14px}
+ .gallery-more-wrap{margin-bottom:13px}
+ .decorate-story{padding:30px 0 38px}
+ .decorate-story__grid{grid-template-columns:1fr;gap:18px}
+ .decorate-story__image img{height:auto;aspect-ratio:4/3;object-fit:cover}
+ .decorate-story__copy{order:-1}
+ .decorate-story__copy .copy{margin-top:13px}
+ .care-guide{padding-bottom:30px}
+ .care-hero{padding-top:42px;padding-bottom:24px}
+ .display,.section-title,.footer-heading,.category-card__name,.care-tip-grid strong,.care-hero__lead{-webkit-text-stroke:.38px currentColor}
+}
