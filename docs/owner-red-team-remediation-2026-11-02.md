@@ -56,3 +56,14 @@
 - **“xoxo Mads” deferred:** No clean original signature asset exists in the site repository; request the original design export rather than reproducing the angled business-card photograph.
 - **Menu & pricing unpublished** pending confirmation of the dated source prices.
 - No booking or checkout added.
+
+
+## Follow-up: final owner category structure and full Care guide
+
+- Owner-directed top-level creation groupings now match **Weddings**, **Celebrations** and **Tiramisu cakes**, with **Custom creations** as the all-gallery destination.
+- Cupcakes are *formats within those occasions*, no longer a standalone public creation category or submenu item.
+- The Custom creations page now displays only four filter chips (All, Weddings, Celebrations, Tiramisu). The Celebrations page retains progressive loading but not duplicate category chips.
+- The main menu's **Care guide** label replaces Cake care, with the underlying URL retained for stable links.
+- Care guide was expanded to include **all four owner-supplied sections**: the journey home, temperature matters, once you're home (fridge and 1–2 hours before serving), and her personal reminder. The visual four-panel treatment uses the owner's emoji/icon language and only the existing crimson/cream colours.
+- A **temporary, screenshot-traced SVG** of the real “xoxo Mads” handwriting is shown in enquiry sections. It is intentionally labelled preview artwork. Replace with an owner-provided original transparent/vector export before public launch; no arbitrary substitute font is used.
+- The full selection of **120 creations** and working manual Instagram/SMS enquiries remains untouched.
