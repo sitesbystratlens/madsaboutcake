@@ -1,72 +1,48 @@
-name: Verify live Cakes and Decorate Sip pages
+name: Verify live Mads category and cake care pages
 on:
   push:
     branches: [main]
     paths:
-      - cakes/index.html
-      - decorate-and-sip/index.html
-      - .github/workflows/check-live-interior-pages.yml
-      - assets/site.js
-      - assets/site.css
+      - 'weddings/**'
+      - 'celebrations/**'
+      - 'tiramisu-cakes/**'
+      - 'decorate-and-sip/**'
+      - 'cake-care/**'
+      - 'enquire/**'
+      - 'cakes/**'
+      - 'assets/brand-site.js'
+      - 'assets/brand-site.css'
+      - '.github/workflows/check-live-interior-pages.yml'
   workflow_dispatch:
 permissions:
   contents: read
 jobs:
-  verify-live:
-    runs-on: ubuntu-latest
-    timeout-minutes: 6
+  check:
+    runs-on: ubuntu-24.04
+    timeout-minutes: 7
     steps:
       - uses: actions/checkout@v4
-      - name: Confirm the worker serves the revised page structure and session images
+      - name: Confirm category, manual enquiry and care content live
         shell: bash
         run: |
           set -euo pipefail
-          SITE="https://madsaboutcake.sitesbystratlens.workers.dev"
-          for n in 1 2 3 4 5 6; do
-            curl --silent --show-error --fail --location --max-time 25 -H 'Cache-Control: no-cache' "$SITE/cakes/?rev=$GITHUB_SHA-$n" > /tmp/cakes-live.html || true
-            curl --silent --show-error --fail --location --max-time 25 -H 'Cache-Control: no-cache' "$SITE/decorate-and-sip/?rev=$GITHUB_SHA-$n" > /tmp/sip-live.html || true
-            curl --silent --show-error --fail --location --max-time 25 -H 'Cache-Control: no-cache' "$SITE/assets/site.js?rev=$GITHUB_SHA-$n" > /tmp/gallery-live.js || true
-            if grep -Fq 'gallery-compact__toolbar' /tmp/cakes-live.html &&
-               grep -Eq 'site.js\?v=(20261030-refine1|20261030-gallery30)' /tmp/cakes-live.html &&
-               grep -Eq 'site.js\?v=(20261030-refine1|20261030-gallery30)' /tmp/sip-live.html &&
-               grep -Fq 'gallery-photo__arrow' /tmp/gallery-live.js &&
-               grep -Fq 'design-instagram-link' /tmp/gallery-live.js &&
-               grep -Fq 'We’re based in Glen Iris' /tmp/sip-live.html &&
-               grep -Fq 'we’ve hosted private' /tmp/sip-live.html &&
-               grep -Fq 'See a session clip' /tmp/sip-live.html &&
-               ! grep -Fq 'FROM A REAL SESSION' /tmp/sip-live.html &&
-               ! grep -Fq 'class="feature-strip"' /tmp/cakes-live.html &&
-               grep -Fq 'DSR06gjEgJK-no-visible-faces.webp' /tmp/sip-live.html &&
-               grep -Fq 'DHDXe4EB9Le-cupcake-edition.webp' /tmp/sip-live.html &&
-               grep -Fq 'Thank you for hosting us Madara' /tmp/sip-live.html; then
-              echo "Live Cakes and Decorate Sip pages are current."
-              for img in DSR06gjEgJK-no-visible-faces.webp DHDXe4EB9Le-cupcake-edition.webp; do
-                curl --silent --show-error --fail --head --location --max-time 45 "$SITE/assets/workshops/$img" > /tmp/workshop-photo-headers.txt
-                grep -qi '^content-type: image/webp' /tmp/workshop-photo-headers.txt
-                echo "$img responds with image/webp"
-              done
-              exit 0
+          SITE=https://madsaboutcake.sitesbystratlens.workers.dev
+          for n in $(seq 1 15); do
+            bad=0
+            for page in weddings celebrations tiramisu-cakes decorate-and-sip cake-care enquire cakes; do
+              curl -fsSL --max-time 25 "$SITE/$page/?r=$GITHUB_SHA-$n" > "/tmp/mads-$page.html" || bad=1
+              grep -Fq 'brand-site.css?v=20261102-1' "/tmp/mads-$page.html" || bad=1
+              grep -Fq 'www.instagram.com/madsaboutcake/' "/tmp/mads-$page.html" || bad=1
+            done
+            if [[ "$bad" == 0 ]] &&
+               grep -Fq 'data-gallery="weddings"' /tmp/mads-weddings.html &&
+               grep -Fq 'data-gallery="celebrations"' /tmp/mads-celebrations.html &&
+               grep -Fq 'data-gallery="tiramisu"' /tmp/mads-tiramisu-cakes.html &&
+               grep -Fq 'passenger-side floor' /tmp/mads-cake-care.html &&
+               ! grep -Fq '<form' /tmp/mads-enquire.html; then
+               echo 'PASS: all new categories and care page are served, manual enquiry only'
+               exit 0
             fi
-            echo "Deployment not yet propagated ($n / 6)."
-            if [ "$n" -lt 6 ]; then sleep 12; fi
+            sleep 10
           done
-          echo "ERROR: One or more revised pages are not yet available on the live Worker."
-          for test in \
-            "gallery-compact__toolbar:/tmp/cakes-live.html" \
-            "site.js?v=20261028-v48:/tmp/cakes-live.html" \
-            "site.js?v=20261028-v48:/tmp/sip-live.html" \
-            "gallery-photo__arrow:/tmp/gallery-live.js" \
-            "design-instagram-link:/tmp/gallery-live.js" \
-            "We’re based in Glen Iris:/tmp/sip-live.html" \
-            "we’ve hosted private:/tmp/sip-live.html" \
-            "See a session clip:/tmp/sip-live.html" \
-            "DSR06gjEgJK-no-visible-faces.webp:/tmp/sip-live.html" \
-            "DHDXe4EB9Le-cupcake-edition.webp:/tmp/sip-live.html" \
-            "Thank you for hosting us Madara:/tmp/sip-live.html"; do
-            expected="${test%%:*}"; file="${test#*:}"
-            if grep -Fq "$expected" "$file"; then echo "PASS $expected"; else echo "MISSING $expected from $file"; fi
-          done
-          echo "Served CSS/JS versions:"
-          grep -oE '(site\.js|site\.css)\?v=[0-9a-z-]+' /tmp/cakes-live.html | head -5 || true
-          grep -oE '(site\.js|site\.css)\?v=[0-9a-z-]+' /tmp/sip-live.html | head -5 || true
           exit 1
