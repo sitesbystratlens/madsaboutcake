@@ -198,3 +198,52 @@ body{font-weight:400;padding-bottom:0}
 .footer-contact-icons__glyph{width:21px;height:21px;display:block;background:currentColor;-webkit-mask-repeat:no-repeat;mask-repeat:no-repeat;-webkit-mask-size:contain;mask-size:contain;-webkit-mask-position:center;mask-position:center}
 .footer-contact-icons__glyph--instagram{-webkit-mask-image:url('/assets/icons/instagram-outline.svg');mask-image:url('/assets/icons/instagram-outline.svg')}
 .footer-contact-icons__glyph--message{-webkit-mask-image:url('/assets/icons/message-outline.svg');mask-image:url('/assets/icons/message-outline.svg')}
+
+
+/* Owner-directed mobile UX, Nov 2026: preserve official logo + colours.
+   Desktop header unchanged; compact mobile header uses accessible slide-down navigation. */
+.mobile-nav-toggle,.mobile-header-contact,.mobile-site-menu,.mobile-menu-backdrop{display:none}
+.mobile-menu-backdrop[hidden],.mobile-site-menu[hidden]{display:none!important}
+.care-panel--reminder .care-panel__icon{background:var(--cream);border:1px solid var(--cream)}
+.decorate-heading{max-width:100%}
+@media(max-width:850px){
+ .site-header{position:relative;z-index:50}
+ .header-inner{display:grid;grid-template-columns:48px minmax(0,1fr) 48px;align-items:center;gap:10px;width:min(94vw,590px);min-height:92px;padding:10px 0;position:relative;z-index:3}
+ .brand-link{grid-column:2;grid-row:1;justify-self:center;width:min(260px,100%);max-width:none}
+ .brand-link img{width:100%;height:auto;max-height:75px;object-fit:contain}
+ .brand-links{display:none!important}
+ .mobile-nav-toggle{grid-column:1;grid-row:1;display:grid;place-items:center;width:48px;height:48px;border:0;background:transparent;color:var(--crimson);cursor:pointer}
+ .mobile-nav-toggle__bars,.mobile-nav-toggle__bars::before,.mobile-nav-toggle__bars::after{display:block;width:25px;height:2px;background:currentColor;border-radius:1px;position:relative;transition:transform .18s,opacity .18s}
+ .mobile-nav-toggle__bars::before,.mobile-nav-toggle__bars::after{content:'';position:absolute;left:0}
+ .mobile-nav-toggle__bars::before{transform:translateY(-8px)}
+ .mobile-nav-toggle__bars::after{transform:translateY(8px)}
+ .mobile-nav-toggle[aria-expanded=true] .mobile-nav-toggle__bars{background:transparent}
+ .mobile-nav-toggle[aria-expanded=true] .mobile-nav-toggle__bars::before{transform:rotate(45deg)}
+ .mobile-nav-toggle[aria-expanded=true] .mobile-nav-toggle__bars::after{transform:rotate(-45deg)}
+ .mobile-header-contact{grid-column:3;grid-row:1;display:flex;align-items:center;justify-content:center;width:48px;height:48px;color:var(--crimson);text-decoration:none}
+ .mobile-header-contact__glyph{display:block;width:24px;height:24px;background:currentColor;-webkit-mask:url('/assets/icons/message-outline.svg') center/contain no-repeat;mask:url('/assets/icons/message-outline.svg') center/contain no-repeat}
+ .mobile-nav-toggle:focus-visible,.mobile-header-contact:focus-visible{outline:3px solid var(--crimson);outline-offset:2px}
+ .mobile-site-menu{display:block;position:absolute;z-index:4;left:0;right:0;top:100%;max-height:min(74dvh,650px);overflow-y:auto;background:var(--cream);box-shadow:0 18px 28px rgba(91,22,49,.16);border-top:1px solid var(--border);border-bottom:1px solid var(--border)}
+ .mobile-site-menu__inner{width:min(540px,90vw);margin:0 auto;padding:18px 0 25px;display:flex;flex-direction:column}
+ .mobile-site-menu__heading{font:600 12px/1.5 var(--body);letter-spacing:.16em;text-transform:uppercase;padding:5px 0 11px}
+ .mobile-site-menu__inner>a{min-height:49px;display:flex;justify-content:space-between;align-items:center;gap:12px;padding:10px 4px;border-bottom:1px solid var(--border);color:var(--crimson);font:500 clamp(16px,2.5vw,19px)/1.4 var(--body);text-decoration:none}
+ .mobile-site-menu__inner>a span{opacity:.7;font-size:17px}
+ .mobile-site-menu__inner>a[aria-current=page]{font-weight:700}
+ .mobile-site-menu__inner>a:hover{background:rgba(154,40,73,.045)}
+ .mobile-site-menu__divider{margin-top:13px}
+ .mobile-menu-backdrop{display:block;position:fixed;inset:0;z-index:2;background:rgba(30,10,18,.33)}
+ body.mobile-nav-open{overflow:hidden}
+ body.mobile-nav-open .mobile-contact-bar{visibility:hidden}
+}
+@media(max-width:650px){
+ .brand-topline{font-size:9px;padding:6px 10px;white-space:nowrap;letter-spacing:.09em}
+ .header-inner{min-height:80px;grid-template-columns:44px minmax(0,1fr) 44px;gap:7px;width:94vw;padding:8px 0}
+ .brand-link{width:min(224px,100%)}
+ .brand-link img{max-height:62px}
+ .mobile-nav-toggle,.mobile-header-contact{width:44px;height:44px}
+ /* Sticky DM/SMS bar provides the mobile contact action; avoid redundant hero buttons. */
+ .hero-copy .btn[data-ig-contact],.decorate-page-hero .btns{display:none!important}
+ .hero-copy .btns{margin-top:0}
+ .decorate-page-hero .display.decorate-heading{font-size:clamp(30px,9.5vw,44px);letter-spacing:-.045em;line-height:1.08;white-space:nowrap;max-width:100%;overflow-wrap:normal}
+ .decorate-page-hero{padding-top:50px}
+}
