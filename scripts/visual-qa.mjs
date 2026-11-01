@@ -39,7 +39,7 @@ for(const [name,url,total] of cases)for(const width of widths){
     broken:images.filter(img=>img.complete&&img.naturalWidth===0).map(img=>img.src),
     crimson:getComputedStyle(document.querySelector('.brand-topline')).backgroundColor,
     dm:[...document.querySelectorAll('a[href="https://ig.me/m/madsaboutcake"]')].length,
-    phone:[...document.querySelectorAll('a[href="tel:+61425819951"]')].length,
+    phone:[...document.querySelectorAll('a[href="sms:+61425819951"]')].length,
     publicData:document.querySelector('[data-gallery]')?.dataset.gallery||''};
   });
   if(info.scrollWidth>width+3)problems.push('horizontal overflow '+info.scrollWidth+'/'+width);
@@ -48,7 +48,7 @@ for(const [name,url,total] of cases)for(const width of widths){
   if(info.nav<6)problems.push('six navigation entries required');
   if(info.crimson!=='rgb(154, 40, 73)')problems.push('brand palette mismatch');
   if(!info.dm)problems.push('Instagram direct message links missing');
-  if(!info.phone)problems.push('confirmed mobile not linked');
+  if(!info.phone)problems.push('confirmed text messaging number not linked');
   if(info.broken.length)problems.push('broken images: '+info.broken.slice(0,4).join(','));
   const expectedInitial=Math.min(total,12);
   if(info.cards!==expectedInitial)problems.push('expected '+expectedInitial+' initial cards, got '+info.cards);
