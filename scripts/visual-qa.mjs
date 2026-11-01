@@ -57,8 +57,10 @@ for(const [name,url,total] of cases)for(const width of widths){
       await dropdown.click();
       if(await dropdown.getAttribute('aria-expanded')!=='true')problems.push('Dropdown did not open on tap');
       const menu=page.locator('[data-cake-panel]');
-      if(await menu.locator('a').count()!==5)problems.push('Expected five gallery shortcuts');
-      if(!await menu.locator('a[href="/cakes/?filter=cupcakes"]').count())problems.push('Cupcakes shortcut missing');
+      if(await menu.locator('a').count()!==4)problems.push('Expected four gallery shortcuts');
+      if(await menu.locator('a[href="/cakes/?filter=cupcakes"]').count())problems.push('Cupcakes should not be separate from occasion categories');
+      if(!await menu.getByText('Custom creations').count())problems.push('Custom creations entry missing');
+      if(!await page.locator('.brand-links a[href="/cake-care/"]').getByText('Care guide').count())problems.push('Care guide navigation missing');
       await dropdown.press('Escape');
       if(await dropdown.getAttribute('aria-expanded')!=='false')problems.push('Escape did not dismiss dropdown');
       if(!await page.locator('.nav-cakes__main[href="/cakes/"]').count())problems.push('Main cakes link is not All creations');
@@ -87,26 +89,36 @@ for(const [name,url,total] of cases)for(const width of widths){
     await dlg.locator('.creation-dialog__close').click();
    }
   }
-  if((name==='celebrations'||name==='all')&&width===390){
+  if(name==='all'&&width===390){
    const buttons=page.locator('#gallery-filters [data-filter]');
-   if(await buttons.count()!==6)problems.push('six gallery subfilters missing');
-   await page.locator('#gallery-filters [data-filter="birthdays"]').click();
-   const expectedBirthdays=name==='celebrations'?49:50;
-   if(!await page.locator('#gallery-count').textContent().then(s=>s.includes('of '+expectedBirthdays+' ')))problems.push('Birthday subset not '+expectedBirthdays);
-   await page.locator('#gallery-filters [data-filter="cupcakes"]').click();
-   if(!await page.locator('#gallery-count').textContent().then(s=>s.includes('of 27 ')))problems.push('Cupcake subset not 27');
+   if(await buttons.count()!==4)problems.push('four owner category filters required');
+   await page.locator('#gallery-filters [data-filter="weddings"]').click();
+   if(!await page.locator('#gallery-count').textContent().then(s=>s.includes('of 9 ')))problems.push('Weddings subset not 9');
+   await page.locator('#gallery-filters [data-filter="celebrations"]').click();
+   if(!await page.locator('#gallery-count').textContent().then(s=>s.includes('of 110 ')))problems.push('Celebrations subset not 110');
+   await page.locator('#gallery-filters [data-filter="tiramisu"]').click();
+   if(!await page.locator('#gallery-count').textContent().then(s=>s.includes('of 1 ')))problems.push('Tiramisu subset not 1');
    await page.locator('#gallery-filters [data-filter="all"]').click();
    await page.locator('#gallery-show-more').click();
    if(await page.locator('.gallery-card').count()!==24)problems.push('Show more not revealing additional 12');
   }
   if(name==='all'&&width===390){
-    await page.goto(BASE+'/cakes/?filter=cupcakes',{waitUntil:'domcontentloaded',timeout:25000});
+    await page.goto(BASE+'/cakes/?filter=weddings',{waitUntil:'domcontentloaded',timeout:25000});
     await page.locator('.gallery-card').first().waitFor({timeout:18000});
-    const state=await page.locator('#gallery-filters [data-filter="cupcakes"]').getAttribute('aria-pressed');
+    const state=await page.locator('#gallery-filters [data-filter="weddings"]').getAttribute('aria-pressed');
     const text=await page.locator('#gallery-count').textContent();
-    if(state!=='true'||!text.includes('of 27 '))problems.push('Cupcakes shortcut must deep-link to 27 filtered designs');
+    if(state!=='true'||!text.includes('of 9 '))problems.push('Weddings gallery shortcut must deep-link to 9 filtered designs');
   }
-  if(name==='care'&&!(await page.locator('main').textContent()).includes('passenger-side floor'))problems.push('owner care text missing');
+  if(name==='care'){
+    const guide=await page.locator('main').textContent();
+    for(const phrase of ['passenger-side floor','Temperature matters','Once you’re home','approximately 1–2 hours','A final little reminder'])if(!guide.includes(phrase))problems.push('Owner care text missing: '+phrase);
+    if(await page.locator('.care-panel').count()!==4)problems.push('Care guide must have four content panels');
+    if(await page.locator('.care-panel__icon').count()!==4)problems.push('Care guide must include four visual icons');
+  }
+  if(name==='celebrations'&&width===390&&await page.locator('#gallery-filters:visible').count())problems.push('Celebration page should not expose duplicate subcategories');
+  if(['home','all','care','weddings','celebrations','tiramisu'].includes(name)&&width===390){
+    if(!await page.locator('img.contact-signature').count())problems.push('Preview xoxo signature missing');
+  }
   if(name==='sip'&&await page.locator('main img[src*="DSR06gjEgJK"]').count()!==1)problems.push('workshop image duplicated');
   if(name==='contact'){
    const text=await page.locator('main').textContent();
