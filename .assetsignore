@@ -1,5 +1,5 @@
-# Only deploy visitor-facing static website content.
-# Wrangler is configured with assets.directory='./'; exclude internal sources.
+# Deploy only visitor-facing website assets; internal owner review is private.
+# Wrangler assets.directory is repository root. This is gitignore-style syntax.
 .git/
 **/.git/
 .github/
@@ -7,6 +7,8 @@ docs/
 integrations/
 scripts/
 imports/
+data/
+review/
 node_modules/
 .wrangler/
 *.zip
@@ -16,3 +18,10 @@ package.json
 package-lock.json
 pnpm-lock.yaml
 yarn.lock
+# Internal, historical or owner-review data MUST NOT be deployed.
+cakes.json
+assets/gallery-review.js
+assets/gallery-review.css
+assets/site.js
+assets/site.css
+assets/studio-notices.json
