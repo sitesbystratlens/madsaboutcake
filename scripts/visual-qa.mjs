@@ -59,8 +59,8 @@ for(const [name,url,total] of cases)for(const width of widths){
       const menu=page.locator('[data-cake-panel]');
       if(await menu.locator('a').count()!==4)problems.push('Expected four gallery shortcuts');
       if(await menu.locator('a[href="/cakes/?filter=cupcakes"]').count())problems.push('Cupcakes should not be separate from occasion categories');
-      if(!await menu.getByText('Custom creations').count())problems.push('Custom creations entry missing');
-      if(!await page.locator('.brand-links a[href="/cake-care/"]').getByText('Care guide').count())problems.push('Care guide navigation missing');
+      if(!await menu.getByText('All creations').count())problems.push('All creations entry missing');
+      if(!await page.locator('.brand-links a[href="/cake-care/"]').getByText('Pickup & care').count())problems.push('Pickup & care navigation missing');
       await dropdown.press('Escape');
       if(await dropdown.getAttribute('aria-expanded')!=='false')problems.push('Escape did not dismiss dropdown');
       if(!await page.locator('.nav-cakes__main[href="/cakes/"]').count())problems.push('Main cakes link is not All creations');
@@ -70,6 +70,14 @@ for(const [name,url,total] of cases)for(const width of widths){
     const footer=page.locator('.brand-footer');
     if(await footer.locator('a[href="/weddings/"]').count())problems.push('Footer repeats wedding category');
     if(!await footer.getByText('Handcrafted sweets for every occasion.').count())problems.push('Owner brand copy missing');
+    if(await footer.getByText('Help & contact').count())problems.push('Footer should only say Contact');
+    if(await footer.locator('.footer-contact-icons a').count()!==2)problems.push('Footer quick message actions missing');
+    if(await footer.locator('nav[aria-label="Footer explore"] a').count()!==3)problems.push('Footer Explore needs exactly three links');
+    if(await footer.locator('nav[aria-label="Footer contact"] a').count()!==1)problems.push('Footer Contact needs one text link and two icons');
+    if(!await footer.locator('a[aria-label="DM on Instagram"]').count())problems.push('DM icon label missing');
+    if(!await footer.locator('a[aria-label="Text 0425 819 951"]').count())problems.push('SMS icon label missing');
+    if((await footer.textContent()).includes('Custom cakes by enquiry only'))problems.push('Old footer disclaimer remains');
+    if(!(await page.locator('main').textContent()).includes('Your idea. Mads’ craft.'))problems.push('Mads personal homepage copy missing');
     if(!await page.locator('.contact-strip .btn[data-ig-contact]').count())problems.push('Instagram action missing');
     if(!await page.locator('.contact-strip .btn[data-mobile-link]').count())problems.push('SMS action missing');
   }
