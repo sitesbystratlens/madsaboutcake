@@ -16,7 +16,8 @@ assert.equal(celebrations.length,110,'Celebrations include all other creations, 
 assert(brand.includes('#9A2849')&&brand.includes('#F6F4F0'),'Use exact brand hexes from PDF');
 for(const font of ['Perandory Condensed','Amorea','Amsterdam Four','Helvetica Now Display'])assert(brand.includes(font),'Named brand font missing: '+font);
 assert(!brand.includes('#fedcde')&&!brand.includes('#f15ea0'),'Legacy blush/pink must not return to public layout');
-assert(read('assets/brand/wordmark-set-2.svg').includes('data:image/webp;base64,'),'Use actual artwork exported from brand guideline PDF');
+assert(read('assets/brand/wordmark-set-2.svg').includes('data:image/webp;base64,'),'Use actual wordmark artwork extracted from brand guide');
+assert(read('assets/brand/monogram-set-2.svg').includes('data:image/webp;base64,'),'Use actual monogram artwork extracted from brand guide');
 assert(site.includes("const PHONE=''"),'Phone must not be guessed');
 assert(site.includes('data-mobile-pending')||site.includes('[data-mobile-pending]'),'Owner missing phone must be disclosed, not fake linked');
 assert(!/add to cart|checkout|select a date|book now/i.test(site),'No automated orders or bookings');
@@ -25,7 +26,7 @@ assert(site.includes(":'celebrations'"),'Celebration fallback missing');
 for(const p of pages){
  const h=read(p);
  assert(h.includes('noindex,nofollow'),'Preview must stay no-indexed: '+p);
- assert(h.includes('brand-site.css?v=20261102-1'),'Branded style not enabled: '+p);
+ assert(h.includes('brand-site.css?v=20261102-2'),'Branded style not enabled: '+p);
  assert(h.includes('brand-site.js?v=20261102-1'),'Branded browser logic not enabled: '+p);
  assert(h.includes('/assets/brand/wordmark-set-2.svg'),'Official logo missing on: '+p);
  assert(h.includes('href="/cake-care/"')&&h.includes('href="/weddings/"')&&h.includes('href="/celebrations/"')&&h.includes('href="/tiramisu-cakes/"')&&h.includes('href="/decorate-and-sip/"'),'Category or care navigation missing: '+p);
