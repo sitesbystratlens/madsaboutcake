@@ -37,10 +37,11 @@ for(const [name,url,wanted] of cases)for(const width of widths){
     crimson:getComputedStyle(document.querySelector('.brand-topline')).backgroundColor,
     igLinks:document.querySelectorAll('a[href="https://www.instagram.com/madsaboutcake/"]').length,
     phoneLinks:[...document.querySelectorAll('[data-mobile-link]')].filter(x=>!x.hidden).length,
-    phonePending:[...document.querySelectorAll('[data-mobile-pending]')].filter(x=>getComputedStyle(x).display!=='none').length};
+    phonePending:[...document.querySelectorAll('[data-mobile-pending]')].filter(x=>getComputedStyle(x).display!=='none').length,
+    overflowItems:[...document.querySelectorAll('body *')].filter(x=>{const r=x.getBoundingClientRect();return r.right>innerWidth+4&&r.width>0}).slice(0,12).map(x=>({tag:x.tagName,cls:String(x.className).slice(0,60),right:Math.round(x.getBoundingClientRect().right),width:Math.round(x.getBoundingClientRect().width),text:(x.textContent||'').trim().slice(0,50)}))};
   });
   const problems=[];
-  if(info.scrollWidth>width+3)problems.push('horizontal overflow '+info.scrollWidth);
+  if(info.scrollWidth>width+3)problems.push('horizontal overflow '+info.scrollWidth+' caused by '+JSON.stringify(info.overflowItems));
   if(!info.heading)problems.push('H1 missing');
   if(!info.logo)problems.push('brand logo did not render');
   if(info.nav<6)problems.push('category nav incomplete');
