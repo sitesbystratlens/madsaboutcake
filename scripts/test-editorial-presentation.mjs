@@ -96,7 +96,7 @@ assert(workshop.includes('DHDXe4EB9Le-cupcake-edition.webp'),'Original workshop 
 const care=read('cake-care/index.html');
 for(const x of ['passenger-side floor','lap','support it from underneath','squeezing the sides'])assert(care.includes(x),'Owner-supplied care tips missing: '+x);
 for(const x of ['Temperature matters','Once you’re home','A final little reminder','car air-conditioned','parked car','straight into the fridge','approximately 1–2 hours before serving','Thank you for trusting me with your special occasion'])assert(care.includes(x),'Owner-supplied additional care copy missing: '+x);
-assert.equal((care.match(/class="care-panel/g)||[]).length,4,'Care guide must contain four visual panels');
+assert.equal((care.match(/class="care-panel(?:\s|")/g)||[]).length,4,'Care guide must contain four visual panels');
 assert(care.includes('class="care-panel__icon"'),'Care guide icons missing');
 const contact=read('enquire/index.html');
 assert(contact.includes('Helpful details for your message'),'Enquiry guidance missing');
