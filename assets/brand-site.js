@@ -132,6 +132,27 @@ function initCakeNav(){
   if(open()&&!menu.contains(e.relatedTarget))setOpen(false);
  });
 }
+function initMobileNav(){
+ const toggle=document.querySelector('[data-mobile-nav-toggle]');
+ const panel=document.querySelector('[data-mobile-nav]');
+ const backdrop=document.querySelector('[data-mobile-backdrop]');
+ if(!toggle||!panel||!backdrop)return;
+ const open=()=>!panel.hidden;
+ const setOpen=value=>{
+  panel.hidden=!value;
+  backdrop.hidden=!value;
+  toggle.setAttribute('aria-expanded',String(value));
+  toggle.setAttribute('aria-label',value?'Close navigation menu':'Open navigation menu');
+  document.body.classList.toggle('mobile-nav-open',value);
+ };
+ toggle.addEventListener('click',()=>setOpen(!open()));
+ backdrop.addEventListener('click',()=>setOpen(false));
+ panel.querySelectorAll('a').forEach(link=>link.addEventListener('click',()=>setOpen(false)));
+ document.addEventListener('keydown',e=>{
+  if(e.key==='Escape'&&open()){setOpen(false);toggle.focus();}
+ });
+ window.addEventListener('resize',()=>{if(window.innerWidth>850&&open())setOpen(false);});
+}
 function initContact(){
  document.querySelectorAll('[data-ig-contact]').forEach(a=>{a.href=IG_DM;a.target='_blank';a.rel='noopener noreferrer'});
  document.querySelectorAll('[data-mobile-link]').forEach(a=>{a.href=SMS;a.textContent='Text '+PHONE;a.hidden=false});
@@ -141,5 +162,5 @@ function initContact(){
  sticky.innerHTML='<a href="'+IG_DM+'" target="_blank" rel="noopener noreferrer">DM on Instagram</a><a href="'+SMS+'">Text '+PHONE+'</a>';
  document.body.appendChild(sticky);
 }
-document.addEventListener('DOMContentLoaded',()=>{initCakeNav();initContact();setupGallery()});
+document.addEventListener('DOMContentLoaded',()=>{initCakeNav();initMobileNav();initContact();setupGallery()});
 })();
