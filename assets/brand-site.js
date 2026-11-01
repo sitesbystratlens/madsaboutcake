@@ -15,21 +15,14 @@ const safePhoto=p=>typeof p==='string'&&/^assets\/(?:gallery-30|gallery-review-c
 const safeIg=url=>typeof url==='string'&&/^https:\/\/www\.instagram\.com\/p\/[A-Za-z0-9_-]{5,32}\/$/.test(url)?url:IG_PROFILE;
 const FILTERS=[
  ['all','All'],
- ['birthdays','Birthdays'],
- ['baby','Baby celebrations'],
- ['love','Love & anniversaries'],
- ['cupcakes','Cupcakes'],
- ['other','More occasions']
+ ['weddings','Weddings'],
+ ['celebrations','Celebrations'],
+ ['tiramisu','Tiramisu']
 ];
 const currentSection=list=>list.filter(c=>c&&typeof c==='object');
 function matchFilter(c,f){
- if(f==='all')return true;
- if(f==='birthdays')return c.occasion==='Birthdays';
- if(f==='baby')return c.occasion==='Baby celebrations';
- if(f==='love')return c.occasion==='Love & anniversaries';
- if(f==='cupcakes')return (c.productTypes||[]).includes('Cupcakes');
- if(f==='other')return !['Birthdays','Baby celebrations','Love & anniversaries'].includes(c.occasion);
- return true;
+ // Offerings, not formats: cakes and cupcakes remain within their occasion.
+ return f==='all'||c.section===f;
 }
 function dialog(){
  let d=byId('creation-dialog');
@@ -81,7 +74,7 @@ function setupGallery(){
   const requested=new URLSearchParams(location.search).get('filter');
   let filter=FILTERS.some(([value])=>value===requested)?requested:'all',shown=STEP;
   const count=byId('gallery-count'),filterHost=byId('gallery-filters'),more=byId('gallery-show-more');
-  if(filterHost && (key==='celebrations'||key==='all')){
+  if(filterHost && key==='all'){
    filterHost.hidden=false;
    function filters(){
     filterHost.innerHTML=FILTERS.map(([value,label])=>{
