@@ -6,7 +6,7 @@
 const IG_PROFILE='https://www.instagram.com/madsaboutcake/';
 const IG_DM='https://ig.me/m/madsaboutcake';
 const PHONE='0425 819 951';
-const TEL='tel:+61425819951';
+const SMS='sms:+61425819951';
 const DATA='/assets/public-creations.json';
 const STEP=12;
 const byId=id=>document.getElementById(id);
@@ -116,11 +116,11 @@ function setupGallery(){
 }
 function initContact(){
  document.querySelectorAll('[data-ig-contact]').forEach(a=>{a.href=IG_DM;a.target='_blank';a.rel='noopener noreferrer'});
- document.querySelectorAll('[data-mobile-link]').forEach(a=>{a.href=TEL;a.textContent='Call '+PHONE;a.hidden=false});
+ document.querySelectorAll('[data-mobile-link]').forEach(a=>{a.href=SMS;a.textContent='Text '+PHONE;a.hidden=false});
  document.querySelectorAll('[data-mobile-pending]').forEach(e=>e.remove());
  const sticky=document.createElement('nav');
  sticky.className='mobile-contact-bar';sticky.setAttribute('aria-label','Quick contact');
- sticky.innerHTML='<a href="'+IG_DM+'" target="_blank" rel="noopener noreferrer">Instagram message ↗</a><a href="'+TEL+'">Call '+PHONE+'</a>';
+ sticky.innerHTML='<a href="'+IG_DM+'" target="_blank" rel="noopener noreferrer">Instagram message ↗</a><a href="'+SMS+'">Text '+PHONE+'</a>';
  document.body.appendChild(sticky);
 }
 document.addEventListener('DOMContentLoaded',()=>{initContact();setupGallery()});
