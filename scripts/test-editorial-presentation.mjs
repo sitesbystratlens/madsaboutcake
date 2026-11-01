@@ -28,6 +28,7 @@ for(const font of ['Perandory Condensed','Amorea','Amsterdam Four','Helvetica No
 assert(!brand.includes('#fedcde')&&!brand.includes('#f15ea0'),'Legacy colours cannot return');
 assert(read('assets/brand/wordmark-set-2.svg').includes('data:image/webp;base64,'),'Do not claim a raster logo has become true vector');
 assert(site.includes("const PHONE='0425 819 951'"),'Confirmed owner phone missing');
+assert(site.includes("const SMS='sms:+61425819951'"),'Text-message URI missing');
 assert(site.includes('const IG_DM='),'Direct Instagram messaging missing');
 assert(site.includes("const DATA='/assets/public-creations.json'"),'Public minimal gallery source missing');
 assert(!site.includes("fetch('/cakes.json'"),'Internal raw catalogue must never be fetched by visitors');
@@ -40,10 +41,11 @@ assert.equal(wrangler.assets.not_found_handling,'404-page');
 for(const p of pages){
  const h=read(p);
  assert(h.includes('noindex,nofollow'),'Preview must remain non-indexed: '+p);
- assert(h.includes('brand-site.css?v=20261102-r1')&&h.includes('brand-site.js?v=20261102-r1'),'New assets missing: '+p);
+ assert(h.includes('brand-site.css?v=20261102-r1')&&h.includes('brand-site.js?v=20261102-r2'),'New assets missing: '+p);
  assert(h.includes('/assets/brand/wordmark-set-2.svg'),'Brand wordmark missing: '+p);
  for(const path of ['weddings','celebrations','tiramisu-cakes','decorate-and-sip','cake-care'])assert(h.includes('href="/'+path+'/"'),'Nav missing '+path+' on '+p);
- assert(h.includes('href="tel:+61425819951"'),'Phone link missing: '+p);
+ assert(h.includes('href="sms:+61425819951"'),'Text-message link missing: '+p);
+ assert(!h.includes('href="tel:+61425819951"'),'Old call CTA must be removed: '+p);
  assert(h.includes('https://www.instagram.com/madsaboutcake/'),'Instagram profile fallback missing: '+p);
  assert(h.includes('<main id="main">')&&h.includes('<h1'),'Semantic heading missing: '+p);
 }
