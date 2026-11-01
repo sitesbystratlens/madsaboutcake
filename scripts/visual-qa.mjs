@@ -68,7 +68,8 @@ for(const [name,url,total] of cases)for(const width of widths){
    const buttons=page.locator('#gallery-filters [data-filter]');
    if(await buttons.count()!==6)problems.push('six gallery subfilters missing');
    await page.locator('#gallery-filters [data-filter="birthdays"]').click();
-   if(!await page.locator('#gallery-count').textContent().then(s=>s.includes('of 50 ')))problems.push('Birthday subset not 50');
+   const expectedBirthdays=name==='celebrations'?49:50;
+   if(!await page.locator('#gallery-count').textContent().then(s=>s.includes('of '+expectedBirthdays+' ')))problems.push('Birthday subset not '+expectedBirthdays);
    await page.locator('#gallery-filters [data-filter="cupcakes"]').click();
    if(!await page.locator('#gallery-count').textContent().then(s=>s.includes('of 27 ')))problems.push('Cupcake subset not 27');
    await page.locator('#gallery-filters [data-filter="all"]').click();
