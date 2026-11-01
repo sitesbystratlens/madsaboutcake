@@ -137,6 +137,14 @@ function initMobileNav(){
  const panel=document.querySelector('[data-mobile-nav]');
  const backdrop=document.querySelector('[data-mobile-backdrop]');
  if(!toggle||!panel||!backdrop)return;
+ const groupToggle=panel.querySelector('[data-mobile-cakes-toggle]');
+ const groupPanel=panel.querySelector('[data-mobile-cakes-panel]');
+ const setGroupOpen=value=>{
+  if(!groupToggle||!groupPanel)return;
+  groupPanel.hidden=!value;
+  groupToggle.setAttribute('aria-expanded',String(value));
+  groupToggle.setAttribute('aria-label',value?'Hide cake categories':'Show cake categories');
+ };
  const open=()=>!panel.hidden;
  const setOpen=value=>{
   panel.hidden=!value;
@@ -144,8 +152,10 @@ function initMobileNav(){
   toggle.setAttribute('aria-expanded',String(value));
   toggle.setAttribute('aria-label',value?'Close navigation menu':'Open navigation menu');
   document.body.classList.toggle('mobile-nav-open',value);
+  if(!value)setGroupOpen(false);
  };
  toggle.addEventListener('click',()=>setOpen(!open()));
+ groupToggle?.addEventListener('click',()=>setGroupOpen(groupPanel.hidden));
  backdrop.addEventListener('click',()=>setOpen(false));
  panel.querySelectorAll('a').forEach(link=>link.addEventListener('click',()=>setOpen(false)));
  document.addEventListener('keydown',e=>{
