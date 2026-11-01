@@ -78,7 +78,8 @@ function setupGallery(){
   if(key==='tiramisu'){items=items.slice().sort((a,b)=>a.title.localeCompare(b.title))}
   const selected=new URLSearchParams(location.search).get('design');
   if(selected){const n=items.findIndex(c=>c.id===selected||c.code===selected);if(n>0)items.unshift(...items.splice(n,1))}
-  let filter='all',shown=STEP;
+  const requested=new URLSearchParams(location.search).get('filter');
+  let filter=FILTERS.some(([value])=>value===requested)?requested:'all',shown=STEP;
   const count=byId('gallery-count'),filterHost=byId('gallery-filters'),more=byId('gallery-show-more');
   if(filterHost && (key==='celebrations'||key==='all')){
    filterHost.hidden=false;
@@ -114,6 +115,30 @@ function setupGallery(){
   const count=byId('gallery-count');if(count)count.textContent='Gallery unavailable';
  });
 }
+function initCakeNav(){
+ const menu=document.querySelector('[data-cake-menu]');
+ if(!menu)return;
+ const toggle=menu.querySelector('[data-cake-toggle]');
+ const panel=menu.querySelector('[data-cake-panel]');
+ if(!toggle||!panel)return;
+ const open=()=>!panel.hidden;
+ const setOpen=value=>{
+  panel.hidden=!value;
+  toggle.setAttribute('aria-expanded',String(value));
+ };
+ toggle.addEventListener('click',()=>setOpen(!open()));
+ document.addEventListener('pointerdown',e=>{
+  if(open()&&!menu.contains(e.target))setOpen(false);
+ });
+ document.addEventListener('keydown',e=>{
+  if(e.key==='Escape'&&open()){
+   setOpen(false);toggle.focus();
+  }
+ });
+ menu.addEventListener('focusout',e=>{
+  if(open()&&!menu.contains(e.relatedTarget))setOpen(false);
+ });
+}
 function initContact(){
  document.querySelectorAll('[data-ig-contact]').forEach(a=>{a.href=IG_DM;a.target='_blank';a.rel='noopener noreferrer'});
  document.querySelectorAll('[data-mobile-link]').forEach(a=>{a.href=SMS;a.textContent='Text '+PHONE;a.hidden=false});
@@ -123,5 +148,5 @@ function initContact(){
  sticky.innerHTML='<a href="'+IG_DM+'" target="_blank" rel="noopener noreferrer">Instagram message ↗</a><a href="'+SMS+'">Text '+PHONE+'</a>';
  document.body.appendChild(sticky);
 }
-document.addEventListener('DOMContentLoaded',()=>{initContact();setupGallery()});
+document.addEventListener('DOMContentLoaded',()=>{initCakeNav();initContact();setupGallery()});
 })();
