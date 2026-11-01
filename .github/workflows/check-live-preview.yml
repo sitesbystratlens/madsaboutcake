@@ -27,6 +27,11 @@ jobs:
             curl -fsSL --max-time 25 "$SITE/assets/brand-site.css?r=$GITHUB_SHA-$n" >/tmp/mads-brand.css || true
             if grep -Fq 'A little cake, a lot of love.' /tmp/mads-home.html &&
                grep -Fq 'wordmark-set-2.svg' /tmp/mads-home.html &&
+               grep -Fq 'data-cake-toggle' /tmp/mads-home.html &&
+               grep -Fq 'href="/cakes/?filter=cupcakes"' /tmp/mads-home.html &&
+               grep -Fq 'Handcrafted sweets for every occasion.' /tmp/mads-home.html &&
+               grep -Fq 'href="sms:+61425819951"' /tmp/mads-home.html &&
+               grep -Fq 'brand-site.css?v=20261102-nav1' /tmp/mads-home.html &&
                grep -Fq 'href="/weddings/"' /tmp/mads-home.html &&
                grep -Fq 'href="/celebrations/"' /tmp/mads-home.html &&
                grep -Fq 'href="/tiramisu-cakes/"' /tmp/mads-home.html &&
