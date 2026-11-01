@@ -82,7 +82,7 @@ for(const [name,url,total] of cases)for(const width of widths){
     await toggle.press('Escape');
     if(await toggle.getAttribute('aria-expanded')!=='false'||await mobile.isVisible())problems.push('Escape did not close hamburger');
     await toggle.click();
-    await page.locator('[data-mobile-backdrop]').click({position:{x:5,y:5}});
+    await page.locator('[data-mobile-backdrop]').click({position:{x:6,y:700}});
     if(await toggle.getAttribute('aria-expanded')!=='false')problems.push('Backdrop did not dismiss menu');
   }
   if(width===1440){
