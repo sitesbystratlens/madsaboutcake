@@ -29,7 +29,7 @@ function dialog(){
  if(d)return d;
  d=document.createElement('dialog');
  d.id='creation-dialog';d.className='creation-dialog';
- d.innerHTML='<div class="creation-dialog__inner"><button type="button" class="creation-dialog__close" aria-label="Close photograph">×</button><img alt=""><h2 class="creation-dialog__title"></h2><p>Like this creation? Mention its reference when you get in touch.</p><p class="creation-dialog__ref"></p><div class="btns"><button class="btn btn-outline" type="button" data-dialog-copy>Copy reference</button><a class="btn" href="'+IG_DM+'" target="_blank" rel="noopener noreferrer">Message Mads ↗</a><a class="dialog-post" href="'+IG_PROFILE+'" target="_blank" rel="noopener noreferrer">Original post ↗</a></div></div>';
+ d.innerHTML='<div class="creation-dialog__inner"><button type="button" class="creation-dialog__close" aria-label="Close photograph">×</button><img alt=""><h2 class="creation-dialog__title"></h2><p>Like this creation? Mention its reference when you get in touch.</p><p class="creation-dialog__ref"></p><div class="btns"><button class="btn btn-outline" type="button" data-dialog-copy>Copy reference</button><a class="btn" href="'+IG_DM+'" target="_blank" rel="noopener noreferrer">DM on Instagram ↗</a><a class="dialog-post" href="'+IG_PROFILE+'" target="_blank" rel="noopener noreferrer">Original post ↗</a></div></div>';
  document.body.appendChild(d);
  d.querySelector('.creation-dialog__close').addEventListener('click',()=>d.close());
  d.addEventListener('click',e=>{if(e.target===d)d.close()});
@@ -138,7 +138,7 @@ function initContact(){
  document.querySelectorAll('[data-mobile-pending]').forEach(e=>e.remove());
  const sticky=document.createElement('nav');
  sticky.className='mobile-contact-bar';sticky.setAttribute('aria-label','Quick contact');
- sticky.innerHTML='<a href="'+IG_DM+'" target="_blank" rel="noopener noreferrer">Instagram message ↗</a><a href="'+SMS+'">Text '+PHONE+'</a>';
+ sticky.innerHTML='<a href="'+IG_DM+'" target="_blank" rel="noopener noreferrer">DM on Instagram</a><a href="'+SMS+'">Text '+PHONE+'</a>';
  document.body.appendChild(sticky);
 }
 document.addEventListener('DOMContentLoaded',()=>{initCakeNav();initContact();setupGallery()});
