@@ -28,13 +28,17 @@ jobs:
             if grep -Fq 'A little cake, a lot of love.' /tmp/mads-home.html &&
                grep -Fq 'wordmark-set-2.svg' /tmp/mads-home.html &&
                grep -Fq 'data-cake-toggle' /tmp/mads-home.html &&
-               grep -Fq '>Custom creations</a>' /tmp/mads-home.html &&
+               grep -Fq '>All creations</a>' /tmp/mads-home.html &&
                ! grep -Fq 'href="/cakes/?filter=cupcakes"' /tmp/mads-home.html &&
-               grep -Fq 'href="/cake-care/">Care guide</a>' /tmp/mads-home.html &&
+               grep -Fq 'href="/cake-care/">Pickup &amp; care</a>' /tmp/mads-home.html &&
                grep -Fq 'xoxo-mads-preview.svg' /tmp/mads-home.html &&
                grep -Fq 'Handcrafted sweets for every occasion.' /tmp/mads-home.html &&
+               grep -Fq 'Your idea. Mads’ craft. A cake worth celebrating.' /tmp/mads-home.html &&
+               grep -Fq 'aria-label="DM on Instagram"' /tmp/mads-home.html &&
+               grep -Fq 'aria-label="Text 0425 819 951"' /tmp/mads-home.html &&
+               grep -Fq 'href="/enquire/">Get in touch</a>' /tmp/mads-home.html &&
                grep -Fq 'href="sms:+61425819951"' /tmp/mads-home.html &&
-               grep -Fq 'brand-site.css?v=20261102-categories1' /tmp/mads-home.html &&
+               grep -Fq 'brand-site.css?v=20261102-refine2' /tmp/mads-home.html &&
                grep -Fq 'href="/weddings/"' /tmp/mads-home.html &&
                grep -Fq 'href="/celebrations/"' /tmp/mads-home.html &&
                grep -Fq 'href="/tiramisu-cakes/"' /tmp/mads-home.html &&
