@@ -31,9 +31,10 @@ jobs:
             bad=0
             for page in weddings celebrations tiramisu-cakes decorate-and-sip cake-care enquire cakes; do
               curl -fsSL --max-time 25 "$SITE/$page/?r=$GITHUB_SHA-$n" > "/tmp/mads-$page.html" || bad=1
-              grep -Fq 'brand-site.css?v=20261102-nav1' "/tmp/mads-$page.html" || bad=1
+              grep -Fq 'brand-site.css?v=20261102-categories1' "/tmp/mads-$page.html" || bad=1
               grep -Fq 'www.instagram.com/madsaboutcake/' "/tmp/mads-$page.html" || bad=1
               grep -Fq 'data-cake-toggle' "/tmp/mads-$page.html" || bad=1
+              grep -Fq '>Custom creations</a>' "/tmp/mads-$page.html" || bad=1
               grep -Fq 'href="sms:+61425819951"' "/tmp/mads-$page.html" || bad=1
             done
             if [[ "$bad" == 0 ]] &&
@@ -41,6 +42,9 @@ jobs:
                grep -Fq 'data-gallery="celebrations"' /tmp/mads-celebrations.html &&
                grep -Fq 'data-gallery="tiramisu"' /tmp/mads-tiramisu-cakes.html &&
                grep -Fq 'passenger-side floor' /tmp/mads-cake-care.html &&
+               grep -Fq 'Temperature matters' /tmp/mads-cake-care.html &&
+               grep -Fq 'Once you’re home' /tmp/mads-cake-care.html &&
+               grep -Fq 'A final little reminder' /tmp/mads-cake-care.html &&
                ! grep -Fq '<form' /tmp/mads-enquire.html; then
                echo 'PASS: all new categories and care page are served, manual enquiry only'
                exit 0
