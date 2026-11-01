@@ -1,3 +1,5 @@
+> **Current implementation notice (2 November 2026):** This file is historical. The rebranded concept preview now uses crimson/cream, four owner-requested categories, 120 original-source creations and confirmed mobile 0425 819 951. The original owner review page and internal decision JSON are intentionally excluded from the public Cloudflare deployment. For current status, risks, working links and owner approvals see [Owner red-team remediation](docs/owner-red-team-remediation-2026-11-02.md).
+
 # Mads About Cake — independent concept pitch (October 2026)
 
 
