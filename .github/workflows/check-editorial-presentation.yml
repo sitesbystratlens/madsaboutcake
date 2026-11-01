@@ -1,22 +1,23 @@
-name: Verify Mads concept imagery
+name: Verify Mads brand-guide website
 on:
   push:
     branches: [main]
     paths:
       - 'index.html'
-      - 'assets/site.css'
-      - 'assets/site.js'
-      - 'assets/studio-notices.json'
-      - 'assets/enquiry-settings.json'
-      - 'assets/home-v3.css'
-      - 'about/index.html'
-      - 'cakes/index.html'
-      - 'decorate-and-sip/index.html'
-      - 'enquire/index.html'
-      - 'assets/creations/**'
+      - 'weddings/**'
+      - 'celebrations/**'
+      - 'tiramisu-cakes/**'
+      - 'decorate-and-sip/**'
+      - 'cake-care/**'
+      - 'enquire/**'
+      - 'about/**'
+      - 'cakes/**'
+      - '404.html'
+      - 'assets/brand-site.css'
+      - 'assets/brand-site.js'
+      - 'assets/brand/**'
       - 'cakes.json'
       - 'scripts/test-editorial-presentation.mjs'
-      - 'scripts/sync-portfolio.mjs'
       - '.github/workflows/check-editorial-presentation.yml'
   pull_request:
     branches: [main]
@@ -32,7 +33,7 @@ jobs:
       - uses: actions/setup-node@v4
         with:
           node-version: '22'
-      - name: Check selected original photography and navigation
+      - name: Verify brand guideline, category galleries, care text and contact guardrails
         run: |
+          node --check assets/brand-site.js
           node scripts/test-editorial-presentation.mjs
-          node scripts/sync-portfolio.mjs --test
