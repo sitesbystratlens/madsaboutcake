@@ -416,3 +416,28 @@ body{font-weight:400;padding-bottom:0}
  .statement-grid>div{margin-top:25px}
  .decorate-page-hero .copy{font-size:18px;line-height:1.7;margin-top:20px}
 }
+
+/* Final owner round-one editorial balance: equal-weight story/contact bands. */
+@media(min-width:981px){
+ .section.statement{
+   min-height:425px;display:flex;align-items:center;
+   padding:clamp(65px,5.5vw,88px) 0;
+ }
+ .section.statement>.container{flex:0 0 auto}
+}
+.statement .statement-title{line-height:1.035}
+.statement-grid>div>p{
+ font-size:clamp(19px,1.45vw,21px);
+ line-height:1.65;
+ max-width:450px;
+ font-weight:400;
+}
+@media(min-width:651px) and (max-width:980px){
+ .section.statement{min-height:auto;padding:clamp(55px,7vw,78px) 0}
+ .statement-grid>div>p{font-size:19px;max-width:560px}
+}
+@media(max-width:650px){
+ .section.statement{min-height:auto;padding:47px 0 52px;display:block}
+ .statement .statement-title{font-size:clamp(32px,8vw,47px);line-height:1.065}
+ .statement-grid>div>p{font-size:17px;line-height:1.7;max-width:100%}
+}

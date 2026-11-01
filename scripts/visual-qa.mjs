@@ -103,7 +103,17 @@ for(const [name,url,total] of cases)for(const width of widths){
   if(name==='home'){
     if(!await page.locator('.hero-actions>a.btn[href="/cakes/"]').isVisible())problems.push('Explore our creations primary CTA must be visible at every viewport');
     if(await page.locator('.statement .btn[data-ig-contact]').count())problems.push('Burgundy statement duplicates enquiry CTA');
-    if(await page.locator('.statement-line').count()!==3)problems.push('Burgundy statement must have three editorial lines');
+    if(await page.locator('.statement-line').count()!==4)problems.push('Burgundy statement must have four editorial lines');
+    if((await page.locator('.statement-line').last().textContent()).trim()!=='celebrating.')problems.push('Celebrating must be on its own line');
+    if(width>=981){
+      const metrics=await page.evaluate(()=>{
+        const statement=document.querySelector('.section.statement'),contact=document.querySelector('.contact-strip');
+        const copy=statement.querySelector('.statement-grid>div>p');
+        return {top:statement.getBoundingClientRect().height,contact:contact.getBoundingClientRect().height,font:parseFloat(getComputedStyle(copy).fontSize)};
+      });
+      if(metrics.font<19)problems.push('Statement supporting copy too small: '+metrics.font+'px');
+      if(metrics.top<390||Math.abs(metrics.top-metrics.contact)>110)problems.push('Statement and cream contact bands unbalanced: '+JSON.stringify(metrics));
+    }
   }
   if(name==='home'&&width<=650){
     if(await page.locator('.hero-copy .btn[data-ig-contact]').isVisible())problems.push('Duplicate mobile Instagram hero button still visible');

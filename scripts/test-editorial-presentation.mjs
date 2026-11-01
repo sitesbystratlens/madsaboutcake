@@ -41,7 +41,7 @@ assert.equal(wrangler.assets.not_found_handling,'404-page');
 for(const p of pages){
  const h=read(p);
  assert(h.includes('noindex,nofollow'),'Preview must remain non-indexed: '+p);
- assert(h.includes('brand-site.css?v=20261102-polish7')&&h.includes('brand-site.js?v=20261102-mobile4'),'Mobile-refined assets missing: '+p);
+ assert(h.includes('brand-site.css?v=20261102-polish8')&&h.includes('brand-site.js?v=20261102-mobile4'),'Mobile-refined assets missing: '+p);
  assert(h.includes('/assets/brand/wordmark-set-2.svg'),'Brand wordmark missing: '+p);
  assert(h.includes('class="nav-cakes__main" href="/cakes/"'),'Cake and cupcake main link must open All creations: '+p);
  assert(h.includes('data-cake-toggle')&&h.includes('aria-controls="cakes-submenu"')&&h.includes('aria-expanded="false"'),'Dedicated accessible dropdown toggle missing: '+p);
@@ -85,7 +85,7 @@ for(const p of ['celebrations/index.html','cakes/index.html'])assert(read(p).inc
 const home=read('index.html');
 assert.equal((home.match(/class="category-card"/g)||[]).length,4,'Four main owner-requested categories');
 assert(home.includes('<a class="btn" href="/cakes/">Explore our creations ↗</a>')&&home.includes('class="hero-actions"')&&home.includes('class="hero-contact-icons"'),'Homepage must retain Explore creations CTA alongside two compact contact icons');
-assert((home.match(/class="statement-line"/g)||[]).length===3,'Burgundy editorial headline needs three deliberate lines');
+assert((home.match(/class="statement-line"/g)||[]).length===4&&home.includes('class="statement-line">celebrating.</span>'),'Burgundy editorial headline needs four deliberate lines ending in celebrating.');
 assert(!home.includes('class="btn btn-cream" data-ig-contact'),'Remove duplicate Instagram CTA from burgundy editorial section');
 assert(home.includes('Your idea.</span> <span class="statement-line">Mads’ craft.'),'Homepage headline must name Mads');
 assert(home.includes('<p class="eyebrow">Handcrafted sweets for every occasion</p>'),'Homepage must use owner brand vocabulary');

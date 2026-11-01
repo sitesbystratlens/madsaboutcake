@@ -39,12 +39,13 @@ jobs:
                grep -Fq 'Handcrafted sweets for every occasion.' /tmp/mads-home.html &&
                grep -Fq 'class="statement-line">Your idea.</span>' /tmp/mads-home.html &&
                grep -Fq 'class="statement-line">Mads’ craft.</span>' /tmp/mads-home.html &&
-               grep -Fq 'class="statement-line">A cake worth celebrating.</span>' /tmp/mads-home.html &&
+               grep -Fq 'class="statement-line">A cake worth</span>' /tmp/mads-home.html &&
+               grep -Fq 'class="statement-line">celebrating.</span>' /tmp/mads-home.html &&
                grep -Fq 'aria-label="DM on Instagram"' /tmp/mads-home.html &&
                grep -Fq 'aria-label="Text 0425 819 951"' /tmp/mads-home.html &&
                grep -Fq 'href="/enquire/">Get in touch</a>' /tmp/mads-home.html &&
                grep -Fq 'href="sms:+61425819951"' /tmp/mads-home.html &&
-               grep -Fq 'brand-site.css?v=20261102-polish7' /tmp/mads-home.html &&
+               grep -Fq 'brand-site.css?v=20261102-polish8' /tmp/mads-home.html &&
                grep -Fq 'href="/weddings/"' /tmp/mads-home.html &&
                grep -Fq 'href="/celebrations/"' /tmp/mads-home.html &&
                grep -Fq 'href="/tiramisu-cakes/"' /tmp/mads-home.html &&
