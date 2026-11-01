@@ -175,7 +175,10 @@ for(const [name,url,total] of cases)for(const width of widths){
     const guide=await page.locator('main').textContent();
     for(const phrase of ['passenger-side floor','Temperature matters','Once you’re home','approximately 1–2 hours','A final little reminder'])if(!guide.includes(phrase))problems.push('Owner care text missing: '+phrase);
     if(await page.locator('.care-panel').count()!==4)problems.push('Care guide must have four content panels');
-    if(await page.locator('.care-panel__icon svg').count()!==4)problems.push('Care guide must include four premium line icons');
+    const careIcons=await page.locator('.care-panel__icon').allTextContents();
+    if(careIcons.join('')!=='🚗🌡️❄️💕')problems.push('Care guide should use the four original expressive icons');
+    const separators=await page.locator('.care-bullets li').evaluateAll(xs=>xs.map(el=>getComputedStyle(el).borderTopWidth));
+    if(separators.some(x=>x!=='0px'))problems.push('Care bullet list should not have row dividers');
   }
   if(name==='celebrations'&&width===390&&await page.locator('#gallery-filters:visible').count())problems.push('Celebration page should not expose duplicate subcategories');
   if(['home','all','care','weddings','celebrations','tiramisu'].includes(name)&&width===390){
@@ -194,7 +197,7 @@ for(const [name,url,total] of cases)for(const width of widths){
   }
   if(width<=390){
     const headingStroke=await page.locator('main h1').evaluate(el=>getComputedStyle(el).webkitTextStrokeWidth);
-    if(!headingStroke||headingStroke==='0px')problems.push('High-contrast brand display hairlines have no legibility refinement');
+    if(!headingStroke||Number.parseFloat(headingStroke)<.65)problems.push('Brand display hairlines need stronger legibility treatment');
   }
   if(name==='sip'&&await page.locator('main img[src*="DSR06gjEgJK"]').count()!==1)problems.push('workshop image duplicated');
   if(name==='contact'){

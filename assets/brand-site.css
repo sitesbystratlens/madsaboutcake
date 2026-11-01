@@ -345,10 +345,8 @@ body{font-weight:400;padding-bottom:0}
 /* Contact band visually balances burgundy footer without fixed mobile height. */
 .contact-strip{padding:clamp(70px,6.3vw,98px) 0}
 @media(min-width:851px){.contact-strip{min-height:425px;display:flex;align-items:center}.contact-strip>.container{flex:0 0 auto}}
-/* Premium monochrome line illustration system for care guidance. */
-.care-panel__icon svg{width:30px;height:30px;display:block;fill:none;stroke:currentColor;stroke-width:1.45;stroke-linecap:round;stroke-linejoin:round}
-.care-panel--reminder .care-panel__icon{color:var(--crimson)}
-@media(max-width:850px){.contact-strip{padding:65px 0}.care-panel__icon svg{width:24px;height:24px}}
+/* Restore original expressive care illustrations; line art proved too clinical. */
+@media(max-width:850px){.contact-strip{padding:65px 0}}
 @media(max-width:650px){
  .hero-contact-icons{display:none}
  .hero{padding:33px 0 24px}
@@ -357,5 +355,26 @@ body{font-weight:400;padding-bottom:0}
  .decorate-page-hero .page-hero__image{height:380px}
  .decorate-page-hero + .decorate-story{padding-top:24px}
  .contact-strip{padding:48px 0 50px}
- .care-panel__icon svg{width:22px;height:22px}
+ 
+ /* Care icon is intentionally an emoji again. */
 }
+
+/* November 2026 typography refinement: preserve the editorial Bodoni family
+   while raising the minimum apparent thickness of its contrast hairlines.
+   Official Perandory licensed webfont remains an owner-supplied launch dependency. */
+.display,.section-title,.footer-heading,.creation-dialog__title,
+.category-card__name,.gallery-card__meta h3,.care-tip-grid strong,
+.care-hero__lead,.care-step h2{
+ font-weight:600;
+ -webkit-text-stroke:.72px currentColor;
+ paint-order:stroke fill;
+}
+@media(max-width:650px){
+ .display,.section-title,.footer-heading,.creation-dialog__title,
+ .category-card__name,.gallery-card__meta h3,.care-tip-grid strong,
+ .care-hero__lead,.care-step h2{-webkit-text-stroke:.68px currentColor}
+}
+/* Retain bullets, but remove repeated horizontal separators: whitespace
+   and dots provide enough scanning structure in the two shorter care panels. */
+.care-bullets li{border-top:0;padding:8px 0 9px 27px}
+.care-bullets li::before{top:19px}
