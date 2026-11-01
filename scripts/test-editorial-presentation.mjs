@@ -41,12 +41,14 @@ assert.equal(wrangler.assets.not_found_handling,'404-page');
 for(const p of pages){
  const h=read(p);
  assert(h.includes('noindex,nofollow'),'Preview must remain non-indexed: '+p);
- assert(h.includes('brand-site.css?v=20261102-nav1')&&h.includes('brand-site.js?v=20261102-nav1'),'Refined assets missing: '+p);
+ assert(h.includes('brand-site.css?v=20261102-categories1')&&h.includes('brand-site.js?v=20261102-categories1'),'Refined assets missing: '+p);
  assert(h.includes('/assets/brand/wordmark-set-2.svg'),'Brand wordmark missing: '+p);
  assert(h.includes('class="nav-cakes__main" href="/cakes/"'),'Cake and cupcake main link must open All creations: '+p);
  assert(h.includes('data-cake-toggle')&&h.includes('aria-controls="cakes-submenu"')&&h.includes('aria-expanded="false"'),'Dedicated accessible dropdown toggle missing: '+p);
  assert(h.includes('data-cake-panel hidden'),'Cake category dropdown must start collapsed: '+p);
- assert(h.includes('href="/cakes/?filter=cupcakes"'),'Cupcakes deep link missing: '+p);
+ assert(!h.includes('href="/cakes/?filter=cupcakes"'),'Separate Cupcakes filter must be removed from menu: '+p);
+ assert(h.includes('>Custom creations</a>'),'Custom creations dropdown entry missing: '+p);
+ assert(h.includes('href="/cake-care/">Care guide</a>')||h.includes('href="/cake-care/" aria-current="page">Care guide</a>'),'Care guide navigation missing: '+p);
  assert(h.includes('class="footer-cols"'),'Simplified footer missing: '+p);
  assert(h.includes('Handcrafted sweets for every occasion.'),'Owner brand line missing from footer: '+p);
  const footer=h.slice(h.indexOf('<footer class="brand-footer">'));
@@ -73,16 +75,29 @@ assert(home.includes('href="/cakes/">Explore our creations ↗'),'Explore all sh
 assert(home.includes('<p class="eyebrow">Handcrafted sweets for every occasion</p>'),'Homepage must use owner brand vocabulary');
 assert(brand.includes('.nav-cakes__submenu')&&brand.includes('instagram-outline.svg')&&brand.includes('message-outline.svg'),'Branded accessible navigation and icon styling absent');
 assert(site.includes('function initCakeNav()')&&site.includes('panel.hidden=!value')&&site.includes("e.key==='Escape'"),'Dropdown must be keyboard/click operable');
-assert(site.includes("new URLSearchParams(location.search).get('filter')"),'Cupcakes deep linking must initialise selected gallery filter');
+assert(site.includes("new URLSearchParams(location.search).get('filter')"),'Gallery filter deep linking must initialise selected offering');
+assert(site.includes("['weddings','Weddings']")&&site.includes("['celebrations','Celebrations']")&&site.includes("['tiramisu','Tiramisu']"),'Only owner-selected creation categories must appear');
+assert(!site.includes("['cupcakes','Cupcakes']")&&!site.includes("['birthdays','Birthdays']"),'No separate cupcake or birthday category filter');
+assert(site.includes("key==='all'"),'Top-level category filters belong to the full Custom creations gallery');
 assert(fs.existsSync('assets/icons/instagram-outline.svg')&&fs.existsSync('assets/icons/message-outline.svg'),'Contact icons missing');
 assert(!read('index.html').includes('Menu & pricing'),'Unconfirmed prices must remain unpublished');
+for(const p of pages.filter(p=>!['404.html'].includes(p))){
+ const h=read(p);
+ assert(h.includes('/assets/brand/xoxo-mads-preview.svg'),'Temporary signature missing: '+p);
+}
+assert(fs.existsSync('assets/brand/xoxo-mads-preview.svg'),'Temporary xoxo handwriting asset missing');
+assert(read('assets/brand/xoxo-mads-preview.svg').includes('temporary tracing'),'Temporary preview provenance should be documented');
+assert(read('cakes/index.html').includes('<h1 class="display display--small">Custom creations.</h1>'),'Main gallery heading incorrect');
+assert(read('cakes/index.html').includes('<title>Custom creations |'),'Main gallery title incorrect');
 const wedding=read('weddings/index.html');assert(wedding.includes('engagement celebrations'),'Wedding copy must acknowledge bridal/engagements');
 const workshop=read('decorate-and-sip/index.html');
 assert.equal((workshop.match(/DSR06gjEgJK-no-visible-faces\.webp/g)||[]).length,1,'Do not reuse workshop photo');
 assert(workshop.includes('DHDXe4EB9Le-cupcake-edition.webp'),'Original workshop photo missing');
 const care=read('cake-care/index.html');
 for(const x of ['passenger-side floor','lap','support it from underneath','squeezing the sides'])assert(care.includes(x),'Owner-supplied care tips missing: '+x);
-assert(!/fridge|refrigerat|room.temperature|store for/i.test(care),'Do not invent storage directions');
+for(const x of ['Temperature matters','Once you’re home','A final little reminder','car air-conditioned','parked car','straight into the fridge','approximately 1–2 hours before serving','Thank you for trusting me with your special occasion'])assert(care.includes(x),'Owner-supplied additional care copy missing: '+x);
+assert.equal((care.match(/class="care-panel/g)||[]).length,4,'Care guide must contain four visual panels');
+assert(care.includes('class="care-panel__icon"'),'Care guide icons missing');
 const contact=read('enquire/index.html');
 assert(contact.includes('Helpful details for your message'),'Enquiry guidance missing');
 assert(!contact.includes('<form'),'Manual enquiry only: do not add checkout or form');
