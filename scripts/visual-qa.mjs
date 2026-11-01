@@ -71,8 +71,12 @@ for(const [name,url,total] of cases)for(const width of widths){
     await cakesToggle.click();
     if(await cakesPanel.isVisible())problems.push('Cakes accordion could not collapse');
     const logo=page.locator('.brand-link img');
-    const blend=await logo.evaluate(x=>getComputedStyle(x).mixBlendMode);
-    if(blend!=='multiply')problems.push('Logo white background should blend with cream');
+    const alpha=await logo.evaluate(async img=>{
+      await img.decode();const canvas=document.createElement('canvas');canvas.width=360;canvas.height=96;
+      const ctx=canvas.getContext('2d');ctx.drawImage(img,0,0,360,96);
+      return ctx.getImageData(0,0,1,1).data[3];
+    });
+    if(alpha>16)problems.push('Wordmark background not transparent; corner alpha='+alpha);
     const layout=await page.evaluate(()=>({
       headerZ:getComputedStyle(document.querySelector('.site-header')).zIndex,
       backdropZ:getComputedStyle(document.querySelector('[data-mobile-backdrop]')).zIndex,
@@ -98,17 +102,23 @@ for(const [name,url,total] of cases)for(const width of widths){
   }
   if(name==='home'&&width<=650){
     if(await page.locator('.hero-copy .btn[data-ig-contact]').isVisible())problems.push('Duplicate mobile Instagram hero button still visible');
-    if(!await page.locator('.hero-copy .btn[href="/cakes/"]').isVisible())problems.push('Explore our creations CTA hidden');
+    if(await page.locator('.hero-copy .hero-contact-icons').isVisible())problems.push('Hero icons duplicate mobile sticky contact bar');
     if(!await page.locator('.mobile-contact-bar a').count())problems.push('Mobile sticky DM and SMS bar missing');
   }
   if(name==='sip'&&width<=650){
-    if(await page.locator('.decorate-page-hero .btns').isVisible())problems.push('Duplicate workshop hero contact buttons visible');
+    if(await page.locator('.decorate-page-hero .hero-contact-icons').isVisible())problems.push('Workshop hero icons duplicate mobile sticky contact bar');
     const heading=await page.locator('main h1').evaluate(el=>({scroll:el.scrollWidth,client:el.clientWidth,br:el.querySelector('br')!==null,nowrap:getComputedStyle(el).whiteSpace}));
     if(heading.br||heading.nowrap!=='nowrap'||heading.scroll>heading.client+2)problems.push('Decorate & Sip heading wraps or overflows at '+width+': '+JSON.stringify(heading));
   }
   if(name==='care'&&width<=650){
     const color=await page.locator('.care-panel--reminder .care-panel__icon').evaluate(el=>getComputedStyle(el).backgroundColor);
     if(color!=='rgb(246, 244, 240)')problems.push('Heart badge is not brand cream: '+color);
+  }
+  if(['home','sip'].includes(name)&&width===1440){
+    const actions=page.locator('.hero-contact-icons a');
+    if(await actions.count()!==2)problems.push('Hero needs exactly two contact icons');
+    if(await actions.first().getAttribute('aria-label')!=='Direct message Mads on Instagram')problems.push('Instagram icon accessible name missing');
+    if(!(await actions.nth(1).getAttribute('href'))?.startsWith('sms:'))problems.push('SMS icon target missing');
   }
   if(name==='home'&&width===1440){
     const footer=page.locator('.brand-footer');
@@ -165,7 +175,7 @@ for(const [name,url,total] of cases)for(const width of widths){
     const guide=await page.locator('main').textContent();
     for(const phrase of ['passenger-side floor','Temperature matters','Once you’re home','approximately 1–2 hours','A final little reminder'])if(!guide.includes(phrase))problems.push('Owner care text missing: '+phrase);
     if(await page.locator('.care-panel').count()!==4)problems.push('Care guide must have four content panels');
-    if(await page.locator('.care-panel__icon').count()!==4)problems.push('Care guide must include four visual icons');
+    if(await page.locator('.care-panel__icon svg').count()!==4)problems.push('Care guide must include four premium line icons');
   }
   if(name==='celebrations'&&width===390&&await page.locator('#gallery-filters:visible').count())problems.push('Celebration page should not expose duplicate subcategories');
   if(['home','all','care','weddings','celebrations','tiramisu'].includes(name)&&width===390){

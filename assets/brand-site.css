@@ -326,3 +326,36 @@ body{font-weight:400;padding-bottom:0}
  .care-hero{padding-top:42px;padding-bottom:24px}
  .display,.section-title,.footer-heading,.category-card__name,.care-tip-grid strong,.care-hero__lead{-webkit-text-stroke:.38px currentColor}
 }
+
+/* November 2026 finishing pass: authentic transparent logo and refined proportions. */
+.brand-link img{mix-blend-mode:normal}
+.hero-contact-icons{display:flex;align-items:center;gap:11px;margin-top:5px}
+.hero-contact-icons__link{width:51px;height:51px;display:inline-flex;align-items:center;justify-content:center;border:1px solid var(--crimson);color:var(--crimson);background:transparent;text-decoration:none;transition:background .2s ease,color .2s ease,border-color .2s ease}
+.hero-contact-icons__link:hover{background:var(--crimson);color:var(--cream)}
+.hero-contact-icons__link:focus-visible{outline:3px solid var(--crimson);outline-offset:4px}
+.hero-contact-icons__link span{display:block;width:21px;height:21px;background:currentColor;mask-size:contain;mask-position:center;mask-repeat:no-repeat;-webkit-mask-size:contain;-webkit-mask-position:center;-webkit-mask-repeat:no-repeat}
+.hero-contact-icons__link--instagram span{mask-image:url('/assets/icons/instagram-outline.svg');-webkit-mask-image:url('/assets/icons/instagram-outline.svg')}
+.hero-contact-icons__link--message span{mask-image:url('/assets/icons/message-outline.svg');-webkit-mask-image:url('/assets/icons/message-outline.svg')}
+/* Reduce cumulative padding between image-led heroes and the following section. */
+.hero{padding-bottom:clamp(22px,2.7vw,39px)}
+.hero + .section{padding-top:clamp(24px,3.1vw,47px)}
+.decorate-page-hero{padding-top:clamp(28px,3.4vw,47px);padding-bottom:clamp(23px,2.6vw,37px)}
+.decorate-page-hero .page-hero__image{height:clamp(370px,35vw,540px)}
+.decorate-page-hero + .decorate-story{padding-top:clamp(22px,3.1vw,44px)}
+/* Contact band visually balances burgundy footer without fixed mobile height. */
+.contact-strip{padding:clamp(70px,6.3vw,98px) 0}
+@media(min-width:851px){.contact-strip{min-height:425px;display:flex;align-items:center}.contact-strip>.container{flex:0 0 auto}}
+/* Premium monochrome line illustration system for care guidance. */
+.care-panel__icon svg{width:30px;height:30px;display:block;fill:none;stroke:currentColor;stroke-width:1.45;stroke-linecap:round;stroke-linejoin:round}
+.care-panel--reminder .care-panel__icon{color:var(--crimson)}
+@media(max-width:850px){.contact-strip{padding:65px 0}.care-panel__icon svg{width:24px;height:24px}}
+@media(max-width:650px){
+ .hero-contact-icons{display:none}
+ .hero{padding:33px 0 24px}
+ .hero + .section{padding-top:26px}
+ .decorate-page-hero{padding:37px 0 28px}
+ .decorate-page-hero .page-hero__image{height:380px}
+ .decorate-page-hero + .decorate-story{padding-top:24px}
+ .contact-strip{padding:48px 0 50px}
+ .care-panel__icon svg{width:22px;height:22px}
+}
