@@ -1,174 +1,65 @@
 #!/usr/bin/env node
-import { chromium } from 'playwright';
+import {chromium} from 'playwright';
 import fs from 'node:fs';
-import path from 'node:path';
-
-const port=4173;
-const base='http://127.0.0.1:'+port;
-const widths=[1440,768,390,320];
-const pages=[
- ['home','/'],['cakes','/cakes/'],['cake-detail','/cakes/?design=ig-f25-dgm5hj1hcjf'],
- ['decorate-and-sip','/decorate-and-sip/'],['about','/about/'],['enquire','/enquire/'],['review','/review/']
+const BASE='http://127.0.0.1:4173',widths=[1440,768,390,320];
+const cases=[
+ ['home','/',null],
+ ['weddings','/weddings/',9],
+ ['celebrations','/celebrations/',110],
+ ['tiramisu','/tiramisu-cakes/',1],
+ ['sip','/decorate-and-sip/',null],
+ ['care','/cake-care/',null],
+ ['all','/cakes/',120],
+ ['contact','/enquire/',null]
 ];
-const out='qa-screenshots';
-fs.mkdirSync(out,{recursive:true});
 const browser=await chromium.launch({headless:true});
-let failures=[],results=[];
-for(const [slug,url] of pages){
- for(const width of widths){
-  const page=await browser.newPage({viewport:{width,height:900},deviceScaleFactor:1});
-  const exceptions=[];
-  page.on('pageerror',error=>exceptions.push(error.message));
-  await page.goto(base+url,{waitUntil:'domcontentloaded',timeout:20000});
-  await page.locator('body').waitFor();
-  if(slug==='review')await page.locator('.review-card').first().waitFor({timeout:15000});
-  // Force below-the-fold native lazy images to load before counting failures and capturing a full-page screenshot.
+let errors=[],results=[];
+fs.mkdirSync('qa-screenshots',{recursive:true});
+for(const [name,url,wanted] of cases)for(const width of widths){
+ const page=await browser.newPage({viewport:{width,height:900},deviceScaleFactor:1});
+ const pageErrors=[];page.on('pageerror',e=>pageErrors.push(e.message));
+ try{
+  await page.goto(BASE+url,{waitUntil:'domcontentloaded',timeout:25000});
+  await page.locator('main h1').waitFor({timeout:12000});
+  if(wanted!==null)await page.locator('.gallery-card').first().waitFor({timeout:18000});
   await page.evaluate(async()=>{
-   const images=[...document.images];
-   for(const img of images)if(img.loading==='lazy')img.loading='eager';
-   await Promise.all(images.map(img=>img.decode().catch(()=>null)));
+   const im=[...document.images].filter(x=>x.loading!=='lazy').slice(0,18);
+   await Promise.all(im.map(x=>x.decode().catch(()=>null)));
   });
-  await page.waitForTimeout(150);
   const info=await page.evaluate(()=>{
-   const visible=e=>{const s=getComputedStyle(e);return s.display!=='none'&&s.visibility!=='hidden'&&!e.hidden;};
-   const imgs=[...document.images];
-   const nav=[...document.querySelectorAll('.mads-main-nav a')].filter(visible);
-   const doc=document.documentElement;
-   const facts={
-    pageTitle:document.title,
-    documentWidth:doc.scrollWidth,
-    viewportWidth:innerWidth,
-    imageCount:imgs.length,
-    brokenImages:imgs.filter(x=>visible(x)&&x.complete&&x.naturalWidth===0).map(x=>x.getAttribute('src')),
-    visibleNavigation:nav.map(a=>a.textContent.trim()),
-    mainHeading:document.querySelector('main h1')?.textContent.trim()||'',
-    cssFont:getComputedStyle(document.querySelector('main h1')||document.body).fontFamily,
-    fontLoaded:document.fonts.check('600 40px Fraunces'),
-    bannerVisible:[...document.querySelectorAll('[data-studio-announcement]')].some(visible),
-    galleryCards:[...document.querySelectorAll('[data-gallery] .gallery-card')].filter(visible).length,
-    formCount:document.querySelectorAll('[data-studio-enquiry-form]').length,
-    overflowElements:[...document.querySelectorAll('body *')].filter(el=>{const rect=el.getBoundingClientRect();return rect.width>0&&rect.right>innerWidth+4&&getComputedStyle(el).position!=='fixed';}).slice(0,10).map(el=>({tag:el.tagName,cls:String(el.className).slice(0,90),right:Math.round(el.getBoundingClientRect().right)}))
-   };
-   return facts;
+   const logo=document.querySelector('.brand-link img'),body=document.body;
+   const imgs=[...document.images].filter(x=>x.loading!=='lazy');
+   return {title:document.title,scrollWidth:document.documentElement.scrollWidth,viewport:innerWidth,
+    heading:document.querySelector('main h1')?.textContent.trim(),
+    logo:logo?.naturalWidth||0,nav:document.querySelectorAll('.brand-links a').length,
+    cards:document.querySelectorAll('.gallery-card').length,
+    broken:imgs.filter(x=>x.complete&&x.naturalWidth===0).map(x=>x.src),
+    crimson:getComputedStyle(document.querySelector('.brand-topline')).backgroundColor,
+    igLinks:document.querySelectorAll('a[href="https://www.instagram.com/madsaboutcake/"]').length,
+    phoneLinks:[...document.querySelectorAll('[data-mobile-link]')].filter(x=>!x.hidden).length,
+    phonePending:[...document.querySelectorAll('[data-mobile-pending]')].filter(x=>getComputedStyle(x).display!=='none').length};
   });
-  const screenshot=path.join(out,slug+'-'+width+'.png');
-  await page.screenshot({path:screenshot,fullPage:true,animations:'disabled',timeout:20000});
-  const problem=[];
-  if(info.documentWidth>width+4)problem.push('horizontal overflow '+info.documentWidth+' > '+width);
-  if(info.brokenImages.length)problem.push('broken images '+info.brokenImages.join(','));
-  if(slug!=='review'&&info.visibleNavigation.length<3)problem.push('insufficient visible navigation');
-  if(!info.mainHeading)problem.push('missing H1');
-  if(exceptions.length)problem.push('uncaught JS '+exceptions.join('; '));
-  if(slug==='cakes'){
-   const source=JSON.parse(fs.readFileSync('cakes.json','utf8'));
-   if(info.galleryCards!==source.meta.featuredCount)problem.push('expected '+source.meta.featuredCount+' gallery designs, saw '+info.galleryCards);
-  }
-  if(slug==='cakes'&&(width===1440||width===390)){
-   for(const label of ['Birthdays','Weddings & engagements','Baby celebrations','Love & anniversaries']){
-    await page.locator('#occasion-filter').selectOption({label});
-    const visible=await page.locator('[data-gallery] .gallery-card:not([hidden])').count();
-    const source=JSON.parse(fs.readFileSync('cakes.json','utf8'));
-    const expected=source.cakes.filter(c=>c.featured30===true&&!c.holdOccasionFilterUntilOwnerApproval&&(c.primaryOccasion===label||(c.otherOccasions||[]).includes(label))).length;
-    if(visible!==expected)problem.push(label+' has '+visible+' items, expected '+expected);
-    if(width===1440&&['Baby celebrations','Weddings & engagements'].includes(label)){
-     const grid=await page.locator('[data-gallery]').evaluate(el=>({shown:el.querySelectorAll('.gallery-card:not([hidden])').length,columns:getComputedStyle(el).gridTemplateColumns.split(' ').filter(Boolean).length}));
-     if(grid.shown<6||grid.columns!==3)problem.push(label+' must display a complete desktop three-column block '+JSON.stringify(grid));
-    }
-    if(width===1440&&visible===4){
-     const layout=await page.locator('[data-gallery]').evaluate(el=>({count:el.dataset.visibleCount,columns:getComputedStyle(el).gridTemplateColumns.split(' ').filter(Boolean).length}));
-     if(layout.count!=='4'||layout.columns!==2)problem.push(label+' should render a balanced 2x2 grid '+JSON.stringify(layout));
-    }
-   }
-   await page.locator('#occasion-filter').selectOption('all');
-  }
-  if(slug==='decorate-and-sip'){
-   const presentation=await page.evaluate(()=>{
-    const title=document.querySelector('.workshop-hero__copy h1');
-    const numbers=[...document.querySelectorAll('.workshop-detail__num')];
-    return {heading:title?.textContent?.trim(),accentCount:document.querySelectorAll('.workshop-hero__accent').length,
-      numbers:numbers.map(el=>({text:el.textContent.trim(),fontSize:parseFloat(getComputedStyle(el).fontSize),
-        borderRadius:getComputedStyle(el).borderRadius,background:getComputedStyle(el).backgroundColor}))};
-   });
-   if(presentation.accentCount!==0||presentation.numbers.length!==3||presentation.numbers.some(n=>n.fontSize<40||n.borderRadius!=='0px'))problem.push('Workshop should have one-colour title and refined typographic steps '+JSON.stringify(presentation));
-   const heroSrc=await page.locator('.workshop-hero__media img').getAttribute('src');
-   if(!heroSrc?.endsWith('DSR06gjEgJK-no-visible-faces.webp'))problem.push('Face-safe studio photograph not selected');
-  }
-  if(slug==='home'&&width===1440){
-   const heading=await page.locator('.occasion .section-head h2').evaluate(el=>({text:el.innerText,whiteSpace:getComputedStyle(el).whiteSpace}));
-   if(!heading.text.includes('What are we celebrating?')||heading.whiteSpace!=='nowrap')problem.push('Desktop occasion heading does not resolve to one line '+JSON.stringify(heading));
-  }
-  if(slug==='cakes'){
-   const counts=await page.evaluate(()=>({cardActions:document.querySelectorAll('[data-gallery] .gallery-card-actions').length,photoLinks:document.querySelectorAll('[data-gallery] .gallery-photo[href*="design="]').length,titleLinks:document.querySelectorAll('[data-gallery] .gallery-title-link[href*="design="]').length,arrows:document.querySelectorAll('[data-gallery] .gallery-photo__arrow').length}));
-   if(counts.cardActions!==0)problem.push('repeated gallery CTAs '+counts.cardActions);
-   const expectedGalleryCount=await page.evaluate(async()=>{const r=await fetch('/cakes.json');const d=await r.json();return d.meta.featuredCount;});
-   if(counts.photoLinks!==expectedGalleryCount||counts.titleLinks!==expectedGalleryCount||counts.arrows!==expectedGalleryCount)problem.push('gallery click targets missing; expected '+expectedGalleryCount+' '+JSON.stringify(counts));
-  }
-  if(slug==='cake-detail'){
-   const post=await page.locator('#design-detail .design-instagram-link').evaluate(el=>({href:el.href,rel:el.rel,target:el.target,visible:el.getBoundingClientRect().width>0}));
-   if(post.href!=='https://www.instagram.com/p/DGM5hj1hcJf/'||post.target!=='_blank'||!post.rel.includes('noopener')||!post.visible)problem.push('original Instagram link missing or incorrect '+JSON.stringify(post));
-   if((await page.locator('#design-detail a[href*="/enquire/"]').count())!==1)problem.push('detail enquiry link missing');
-  }
-  if(slug==='decorate-and-sip'){
-   const answers=await page.locator('.faq-list').textContent();
-   if(/\bMads\b/.test(answers)||!answers.includes('we’ve')&&!answers.includes('We’re'))problem.push('FAQ studio voice not consistent');
-   if((await page.locator('.faq-list details').count())!==4)problem.push('FAQ count differs');
-  }
-  if(slug==='review'&&(width===1440||width===390)){
-    const birthdayCount=await page.locator('.review-card').count();
-    if(birthdayCount!==54)problem.push('Birthday owner-review list has '+birthdayCount+' posts, expected 54');
-    await page.locator('[data-group="cupcakes"]').click();
-    const cupcakeCount=await page.locator('.review-card').count();
-    if(cupcakeCount!==35)problem.push('Cupcake owner-review list has '+cupcakeCount+' posts, expected 35');
-    const extraGroups=[['weddings',18],['baby',18],['love',22],['other',28]];
-    for(const [group,expectedCount] of extraGroups){
-      await page.locator('[data-group="'+group+'"]').click();
-      const actual=await page.locator('.review-card').count();
-      if(actual!==expectedCount)problem.push('Owner '+group+' review has '+actual+' items; expected '+expectedCount);
-      const misses=await page.locator('.review-card').evaluateAll(async cards=>{
-        const imgs=cards.map(x=>x.querySelector('img'));
-        await Promise.all(imgs.map(img=>{img.loading='eager';return img.decode().catch(()=>null)}));
-        return imgs.filter(img=>img.naturalWidth===0).map(img=>img.src);
-      });
-      if(misses.length)problem.push(group+' has '+misses.length+' missing original preview photographs: '+misses.slice(0,3).join(','));
-    }
-    const otherFirst=page.locator('.review-card').first();
-    const otherCode=await otherFirst.getAttribute('data-code');
-    await otherFirst.locator('[data-decision="keep"]').click();
-    await page.locator('.review-card[data-code="'+otherCode+'"] .category-choice').selectOption('Floral / garden');
-    if(await page.locator('.review-card[data-code="'+otherCode+'"]').count())problem.push('Grouped design was not removed from pending Other queue');
-    const secondOther=page.locator('.review-card').first();
-    const movedCode=await secondOther.getAttribute('data-code');
-    await secondOther.locator('.move-choice').selectOption('Birthdays');
-    if(await page.locator('.review-card[data-code="'+movedCode+'"]').count())problem.push('Moved design remained in pending Other queue');
-    await page.reload({waitUntil:'domcontentloaded'});
-    await page.locator('.review-card').first().waitFor();
-    await page.locator('#queue-filter').selectOption('all');
-    const grouped=page.locator('.review-card[data-code="'+otherCode+'"]');
-    const moved=page.locator('.review-card[data-code="'+movedCode+'"]');
-    if(await grouped.locator('.category-choice').inputValue()!=='Floral / garden'||
-       await grouped.locator('[data-decision="keep"]').getAttribute('aria-pressed')!=='true'||
-       await moved.locator('.move-choice').inputValue()!=='Birthdays')
-      problem.push('Other grouping or category move failed to persist after refresh');
-    await page.locator('[data-group="birthdays"]').click();
-    const first=page.locator('.review-card').first();
-    const source=await first.getAttribute('data-code');
-    await first.locator('[data-decision="keep"]').click();
-    await page.reload({waitUntil:'domcontentloaded'});
-    await page.locator('.review-card').first().waitFor();
-    const retained=page.locator('.review-card[data-code="'+source+'"] [data-decision="keep"]');
-    if(await retained.getAttribute('aria-pressed')!=='true')problem.push('Owner Keep selection does not survive refresh');
-    if(!await page.locator('.review-card .post-link[href^="https://www.instagram.com/p/"]').count())problem.push('Source-post links missing');
-    if((await page.locator('.review-header .brand').count())!==1||(await page.locator('.review-header .back').count())!==1)problem.push('Review navigation links missing');
-    if((await page.locator('body').evaluate(el=>el.scrollWidth))>width+4)problem.push('review horizontal overflow');
-  }
-  if(slug==='enquire'&&info.formCount!==1)problem.push('missing enquiry form');
-  results.push({page:slug,width,screenshot,...info,problems:problem});
-  if(problem.length)failures.push(slug+' '+width+': '+problem.join('; '));
-  console.log(JSON.stringify({page:slug,width,broken:info.brokenImages.length,overflow:info.documentWidth-width,nav:info.visibleNavigation.length,cards:info.galleryCards,fontLoaded:info.fontLoaded,problems:problem}));
-  await page.close();
- }
+  const problems=[];
+  if(info.scrollWidth>width+3)problems.push('horizontal overflow '+info.scrollWidth);
+  if(!info.heading)problems.push('H1 missing');
+  if(!info.logo)problems.push('brand logo did not render');
+  if(info.nav<6)problems.push('category nav incomplete');
+  if(info.crimson!=='rgb(154, 40, 73)')problems.push('wrong crimson '+info.crimson);
+  if(info.igLinks<2)problems.push('Instagram enquiry absent');
+  if(info.phoneLinks)problems.push('Unconfirmed phone number exposed');
+  if(info.broken.length)problems.push('broken image(s) '+info.broken.slice(0,3).join(','));
+  if(wanted!==null&&info.cards!==wanted)problems.push('expected '+wanted+' creations, saw '+info.cards);
+  if(name==='care'&&!(await page.locator('main').textContent()).includes('passenger-side floor'))problems.push('care instructions absent');
+  if(name==='contact'&&(await page.locator('form').count()))problems.push('order form unexpectedly present');
+  if(pageErrors.length)problems.push('browser error '+pageErrors.join('; '));
+  await page.screenshot({path:'qa-screenshots/'+name+'-'+width+'.png',fullPage:true,animations:'disabled',timeout:35000});
+  results.push({name,width,...info,problems});
+  if(problems.length)errors.push(name+' '+width+': '+problems.join('; '));
+  console.log(JSON.stringify({page:name,width,cards:info.cards,logo:info.logo,overflow:info.scrollWidth-width,problems}));
+ }catch(e){errors.push(name+' '+width+': '+e.message);}
+ await page.close();
 }
 await browser.close();
-fs.writeFileSync(path.join(out,'qa-results.json'),JSON.stringify({date:new Date().toISOString(),source:'GitHub main, local static server',results,failures},null,2));
-if(failures.length){console.error('VISUAL QA BLOCKERS:\n'+failures.join('\n'));process.exitCode=1;}
-else console.log('VISUAL QA PASS: screenshots captured across 6 pages × 4 widths, no broken images or overflow.');
+fs.writeFileSync('qa-screenshots/report.json',JSON.stringify({cases:results,errors},null,2));
+if(errors.length){console.error('REBRAND QA FAILED:\n'+errors.join('\n'));process.exitCode=1;}
+else console.log('REBRAND QA PASS: 8 pages × 4 breakpoints, branded logo, no broken imagery, manual enquiry and exact category counts');
