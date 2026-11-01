@@ -1,4 +1,4 @@
-name: Mads visual QA screenshots
+name: Mads brand refresh visual QA
 on:
   push:
     branches: [main]
@@ -6,6 +6,14 @@ on:
       - 'scripts/visual-qa.mjs'
       - '.github/workflows/visual-qa.yml'
       - 'assets/home-v3.css'
+      - 'assets/brand-site.css'
+      - 'assets/brand-site.js'
+      - 'assets/brand/**'
+      - 'weddings/**'
+      - 'celebrations/**'
+      - 'tiramisu-cakes/**'
+      - 'cake-care/**'
+      - 'enquire/**'
       - 'index.html'
       - 'cakes/index.html'
       - 'decorate-and-sip/index.html'
@@ -40,7 +48,7 @@ jobs:
           python3 -m http.server 4173 --bind 127.0.0.1 >/tmp/mads-preview.log 2>&1 &
           sleep 3
       - name: Validate runtime JavaScript syntax
-        run: node --check assets/site.js
+        run: node --check assets/brand-site.js
       - name: Capture desktop, tablet and mobile pages
         run: node scripts/visual-qa.mjs
       - name: Save screenshots and checks
