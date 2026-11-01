@@ -1,52 +1,127 @@
-/* Mads About Cake — owner-led 2025 brand refresh, 2026 gallery concept.
-   All examples sourced from the curated 120 Instagram posts, not inventing products.
-   No cart, booking, date selector or order form: contact is manual. */
+/* Mads About Cake — owner-approved category structure, manual enquiries only.
+   Gallery reads an intentionally minimal PUBLIC data file. Internal owner review
+   information is excluded from the Cloudflare asset deployment. */
 (() => {
 'use strict';
-const IG='https://www.instagram.com/madsaboutcake/';
-const PHONE='0425 819 951'; // Confirmed by site owner through the project contact.
+const IG_PROFILE='https://www.instagram.com/madsaboutcake/';
+const IG_DM='https://ig.me/m/madsaboutcake';
+const PHONE='0425 819 951';
+const TEL='tel:+61425819951';
+const DATA='/assets/public-creations.json';
+const STEP=12;
 const byId=id=>document.getElementById(id);
-const esc=x=>String(x??'').replace(/[&<>"']/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));
-const safeUrl=s=>typeof s==='string'&&/^assets\/(?:gallery-30|gallery-review-covers|gallery-final-covers|featured-25|creations)\/[\w./-]+\.webp$/.test(s);
-const selected=c=>c.featured30===true;
-const isTiramisu=c=>/tiramisu/i.test([c.title,c.shortDescription,c.captionEvidence].join(' '));
-const isWedding=c=>c.primaryOccasion==='Weddings & engagements'||(c.otherOccasions||[]).includes('Weddings & engagements');
-const category=c=>isTiramisu(c)?'tiramisu':isWedding(c)?'weddings':'celebrations';
-const pretty={weddings:'Wedding cakes',celebrations:'Celebration cakes',tiramisu:'Tiramisu cakes'};
-const galleryCard=(c,i)=>{
- const path=safeUrl(c.coverImage)?'/'+c.coverImage:'/assets/mads-logo.webp';
- const photo=c.instagramUrl&&/^https:\/\/www\.instagram\.com\/p\/[\w-]+\/$/.test(c.instagramUrl)?c.instagramUrl:IG;
- const name=esc(c.title);
- return '<article class="gallery-card"><a class="gallery-card__photo" href="'+esc(photo)+'" target="_blank" rel="noopener noreferrer" aria-label="View original Instagram post for '+name+'"><img src="'+esc(path)+'" alt="'+esc(c.alt||c.title)+'" loading="lazy" decoding="async"></a>'+
-  '<div class="gallery-card__meta"><p class="eyebrow">A past creation / '+String(i+1).padStart(2,'0')+'</p><h3>'+name+'</h3>'+
-  '<div class="gallery-card__links"><a href="'+esc(photo)+'" target="_blank" rel="noopener noreferrer">View on Instagram ↗</a><a href="'+IG+'" target="_blank" rel="noopener noreferrer">Enquire about similar ↗</a></div></div></article>';
-};
-async function setupGallery(){
+const esc=v=>String(v??'').replace(/[&<>"']/g,ch=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[ch]));
+const safePhoto=p=>typeof p==='string'&&/^assets\/(?:gallery-30|gallery-review-covers|gallery-final-covers|featured-25|creations)\/[\w./-]+\.webp$/.test(p);
+const safeIg=url=>typeof url==='string'&&/^https:\/\/www\.instagram\.com\/p\/[A-Za-z0-9_-]{5,32}\/$/.test(url)?url:IG_PROFILE;
+const FILTERS=[
+ ['all','All'],
+ ['birthdays','Birthdays'],
+ ['baby','Baby celebrations'],
+ ['love','Love & anniversaries'],
+ ['cupcakes','Cupcakes'],
+ ['other','More occasions']
+];
+const currentSection=list=>list.filter(c=>c&&typeof c==='object');
+function matchFilter(c,f){
+ if(f==='all')return true;
+ if(f==='birthdays')return c.occasion==='Birthdays';
+ if(f==='baby')return c.occasion==='Baby celebrations';
+ if(f==='love')return c.occasion==='Love & anniversaries';
+ if(f==='cupcakes')return (c.productTypes||[]).includes('Cupcakes');
+ if(f==='other')return !['Birthdays','Baby celebrations','Love & anniversaries'].includes(c.occasion);
+ return true;
+}
+function dialog(){
+ let d=byId('creation-dialog');
+ if(d)return d;
+ d=document.createElement('dialog');
+ d.id='creation-dialog';d.className='creation-dialog';
+ d.innerHTML='<div class="creation-dialog__inner"><button type="button" class="creation-dialog__close" aria-label="Close photograph">×</button><img alt=""><h2 class="creation-dialog__title"></h2><p>Like this creation? Mention its reference when you get in touch.</p><p class="creation-dialog__ref"></p><div class="btns"><button class="btn btn-outline" type="button" data-dialog-copy>Copy reference</button><a class="btn" href="'+IG_DM+'" target="_blank" rel="noopener noreferrer">Message Mads ↗</a><a class="dialog-post" href="'+IG_PROFILE+'" target="_blank" rel="noopener noreferrer">Original post ↗</a></div></div>';
+ document.body.appendChild(d);
+ d.querySelector('.creation-dialog__close').addEventListener('click',()=>d.close());
+ d.addEventListener('click',e=>{if(e.target===d)d.close()});
+ return d;
+}
+async function copyText(text){
+ try{await navigator.clipboard.writeText(text);return true}
+ catch(e){
+  const field=document.createElement('textarea');field.value=text;field.style.position='fixed';field.style.opacity='0';
+  document.body.appendChild(field);field.select();const ok=document.execCommand('copy');field.remove();return ok;
+ }
+}
+function openPreview(c){
+ const d=dialog();
+ d.querySelector('img').src='/'+(safePhoto(c.coverImage)?c.coverImage:c.thumbnailImage);
+ d.querySelector('img').alt=c.alt||c.title;
+ d.querySelector('.creation-dialog__title').textContent=c.title;
+ d.querySelector('.creation-dialog__ref').textContent='Design reference: '+c.code;
+ d.querySelector('.dialog-post').href=safeIg(c.instagramUrl);
+ const copy=d.querySelector('[data-dialog-copy]');copy.textContent='Copy reference';
+ copy.onclick=async()=>{copy.textContent=(await copyText('Mads About Cake — '+c.title+' (reference '+c.code+')'))?'Reference copied ✓':'Copy unavailable'};
+ d.showModal();
+}
+function galleryCard(c){
+ const img=safePhoto(c.thumbnailImage)?c.thumbnailImage:c.coverImage;
+ const title=esc(c.title),alt=esc(c.alt||c.title);
+ return '<article class="gallery-card">'+
+  '<button class="gallery-card__photo" type="button" data-preview="'+esc(c.code)+'" aria-label="View larger photo of '+title+'"><img loading="lazy" decoding="async" src="/'+esc(img)+'" alt="'+alt+'"></button>'+
+  '<div class="gallery-card__meta"><h3>'+title+'</h3>'+
+  '<div class="gallery-card__links"><a href="'+esc(safeIg(c.instagramUrl))+'" target="_blank" rel="noopener noreferrer">Original Instagram post ↗</a>'+
+  '<button type="button" data-copy="'+esc(c.code)+'">Copy reference</button></div></div></article>';
+}
+function setupGallery(){
  const root=document.querySelector('[data-gallery]');if(!root)return;
- const key=root.dataset.gallery;try{
-  const res=await fetch('/cakes.json',{cache:'no-store'});if(!res.ok)throw new Error('Unable to load creations');
-  const db=await res.json();
-  let filtered=(db.cakes||[]).filter(selected).filter(c=>key==='all'||category(c)===key);
-  if(key==='tiramisu')filtered.sort((a,b)=>Number(b.postEngagement?.likes||0)-Number(a.postEngagement?.likes||0));
-  if(key==='celebrations')filtered.sort((a,b)=>(a.priority??1000)-(b.priority??1000));
-  const detail=new URLSearchParams(location.search).get('design');
-  if(detail){const j=filtered.findIndex(c=>c.id===detail);if(j>0)filtered.unshift(...filtered.splice(j,1));}
-  root.innerHTML=filtered.map(galleryCard).join('');
-  const count=byId('gallery-count');if(count)count.textContent=filtered.length+' '+(filtered.length===1?'creation':'creations')+' to explore';
-  if(!filtered.length)root.innerHTML='<p class="empty">More creations will be added here as Madara approves her selection. You can still enquire directly on Instagram.</p>';
- }catch(e){root.innerHTML='<p class="empty">The gallery is unavailable at the moment. <a href="'+IG+'">Browse Mads on Instagram ↗</a></p>';}
+ const key=root.dataset.gallery;
+ fetch(DATA,{cache:'default'}).then(r=>{if(!r.ok)throw new Error('Gallery unavailable');return r.json()}).then(db=>{
+  const all=currentSection(db.creations||[]);
+  let items=all.filter(c=>key==='all'||c.section===key).sort((a,b)=>(a.priority??1000)-(b.priority??1000));
+  if(key==='tiramisu'){items=items.slice().sort((a,b)=>a.title.localeCompare(b.title))}
+  const selected=new URLSearchParams(location.search).get('design');
+  if(selected){const n=items.findIndex(c=>c.id===selected||c.code===selected);if(n>0)items.unshift(...items.splice(n,1))}
+  let filter='all',shown=STEP;
+  const count=byId('gallery-count'),filterHost=byId('gallery-filters'),more=byId('gallery-show-more');
+  if(filterHost && (key==='celebrations'||key==='all')){
+   filterHost.hidden=false;
+   function filters(){
+    filterHost.innerHTML=FILTERS.map(([value,label])=>{
+     const n=items.filter(c=>matchFilter(c,value)).length;
+     return '<button type="button" class="filter-chip" data-filter="'+value+'" aria-pressed="'+(filter===value)+'">'+esc(label)+' <span>'+n+'</span></button>';
+    }).join('');
+    filterHost.querySelectorAll('[data-filter]').forEach(b=>b.addEventListener('click',()=>{
+      filter=b.dataset.filter;shown=STEP;draw();filters();
+    }));
+   }
+   filters();
+  }
+  function draw(){
+   const list=items.filter(c=>matchFilter(c,filter));
+   const visible=list.slice(0,shown);
+   root.innerHTML=visible.map(galleryCard).join('');
+   if(!list.length)root.innerHTML='<p class="empty">No creations in this group yet. Explore the other categories or message Mads about a custom idea.</p>';
+   if(count)count.textContent='Showing '+visible.length+' of '+list.length+' '+(list.length===1?'creation':'creations');
+   if(more){more.hidden=visible.length===list.length;more.textContent='Show more creations';more.onclick=()=>{shown+=STEP;draw();}}
+   root.querySelectorAll('[data-preview]').forEach(button=>button.addEventListener('click',()=>{
+    const c=all.find(x=>x.code===button.dataset.preview);if(c)openPreview(c);
+   }));
+   root.querySelectorAll('[data-copy]').forEach(button=>button.addEventListener('click',async()=>{
+    const c=all.find(x=>x.code===button.dataset.copy);if(!c)return;
+    button.textContent=await copyText('Mads About Cake — '+c.title+' (reference '+c.code+')')?'Copied ✓':'Copy unavailable';
+   }));
+  }
+  draw();
+ }).catch(()=>{
+  root.innerHTML='<p class="empty">The gallery is temporarily unavailable. <a href="'+IG_PROFILE+'" target="_blank" rel="noopener noreferrer">Visit Mads on Instagram ↗</a></p>';
+  const count=byId('gallery-count');if(count)count.textContent='Gallery unavailable';
+ });
 }
 function initContact(){
- document.querySelectorAll('[data-ig-contact]').forEach(a=>{a.href=IG;a.target='_blank';a.rel='noopener noreferrer'});
- document.querySelectorAll('[data-mobile-link]').forEach(a=>{
-  const digits=PHONE.replace(/[^+\d]/g,'');
-  if(digits){a.href='tel:+61'+digits.slice(1);a.textContent='Call '+PHONE;a.hidden=false;}
-  else{a.hidden=true;}
- });
- document.querySelectorAll('[data-mobile-pending]').forEach(x=>{x.classList.toggle('visible',!PHONE);x.textContent=PHONE?'':'Mobile contact button will appear once the studio confirms its public number.'});
+ document.querySelectorAll('[data-ig-contact]').forEach(a=>{a.href=IG_DM;a.target='_blank';a.rel='noopener noreferrer'});
+ document.querySelectorAll('[data-mobile-link]').forEach(a=>{a.href=TEL;a.textContent='Call '+PHONE;a.hidden=false});
+ document.querySelectorAll('[data-mobile-pending]').forEach(e=>e.remove());
+ const sticky=document.createElement('nav');
+ sticky.className='mobile-contact-bar';sticky.setAttribute('aria-label','Quick contact');
+ sticky.innerHTML='<a href="'+IG_DM+'" target="_blank" rel="noopener noreferrer">Instagram message ↗</a><a href="'+TEL+'">Call '+PHONE+'</a>';
+ document.body.appendChild(sticky);
 }
-function init(){
- initContact();setupGallery();
-}
-document.addEventListener('DOMContentLoaded',init);
+document.addEventListener('DOMContentLoaded',()=>{initContact();setupGallery()});
 })();
