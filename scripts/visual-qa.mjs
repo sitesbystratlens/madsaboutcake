@@ -67,7 +67,7 @@ for(const [name,url,total] of cases)for(const width of widths){
     await cakesToggle.click();
     if(await cakesToggle.getAttribute('aria-expanded')!=='true'||!(await cakesPanel.isVisible()))problems.push('Cakes category accordion did not open');
     if(await cakesPanel.locator('a').count()!==3)problems.push('Cakes group should show Weddings, Celebrations and Tiramisu');
-    if(!await cakesPanel.getByText('Tiramisu',{exact:true}).count())problems.push('Subcategory label should be Tiramisu, not Tiramisu cakes');
+    if((await cakesPanel.locator('a[href="/tiramisu-cakes/"]').innerText()).replace(/↗/g,'').trim()!=='Tiramisu')problems.push('Subcategory label should be Tiramisu, not Tiramisu cakes');
     await cakesToggle.click();
     if(await cakesPanel.isVisible())problems.push('Cakes accordion could not collapse');
     const logo=page.locator('.brand-link img');
