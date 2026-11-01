@@ -31,7 +31,7 @@ jobs:
             bad=0
             for page in weddings celebrations tiramisu-cakes decorate-and-sip cake-care enquire cakes; do
               curl -fsSL --max-time 25 "$SITE/$page/?r=$GITHUB_SHA-$n" > "/tmp/mads-$page.html" || bad=1
-              grep -Fq 'brand-site.css?v=20261102-1' "/tmp/mads-$page.html" || bad=1
+              grep -Fq 'brand-site.css?v=20261102-2' "/tmp/mads-$page.html" || bad=1
               grep -Fq 'www.instagram.com/madsaboutcake/' "/tmp/mads-$page.html" || bad=1
             done
             if [[ "$bad" == 0 ]] &&
