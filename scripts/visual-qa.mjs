@@ -56,12 +56,29 @@ for(const [name,url,total] of cases)for(const width of widths){
     if(!(await toggle.isVisible()))problems.push('Mobile hamburger not visible');
     if(await desktop.isVisible())problems.push('Desktop multi-row navigation should be hidden');
     if(await toggle.getAttribute('aria-expanded')!=='false')problems.push('Hamburger should begin collapsed');
-    if(!await page.locator('.mobile-header-contact[href="sms:+61425819951"]').isVisible())problems.push('Mobile header SMS icon shortcut absent');
+    if(!await page.locator('.mobile-header-contact[href="/enquire/"]').isVisible())problems.push('Mobile header should link to Contact page');
     await toggle.click();
     if(await toggle.getAttribute('aria-expanded')!=='true'||!(await mobile.isVisible()))problems.push('Hamburger failed to reveal menu');
-    if(await mobile.locator('a').count()!==7)problems.push('Mobile menu must offer seven clear destinations');
-    if(!await mobile.locator('a[href="/cakes/"]').getByText('Explore all').count())problems.push('Mobile Explore all link absent');
-    if(!await mobile.locator('a[href="/cake-care/"]').count())problems.push('Mobile Pickup & care absent');
+    const cakesToggle=mobile.locator('[data-mobile-cakes-toggle]');
+    const cakesPanel=mobile.locator('[data-mobile-cakes-panel]');
+    if(await cakesToggle.getAttribute('aria-expanded')!=='false'||await cakesPanel.isVisible())problems.push('Cakes accordion must start collapsed');
+    if(await mobile.locator('.mobile-site-menu__group-link[href="/cakes/"]').count()!==1)problems.push('Cakes & cupcakes group must link to full gallery');
+    if(await mobile.locator('.mobile-site-menu__primary>a').count()!==3)problems.push('Need three standalone groups: Decorate & Sip, Pickup & care, Contact');
+    await cakesToggle.click();
+    if(await cakesToggle.getAttribute('aria-expanded')!=='true'||!(await cakesPanel.isVisible()))problems.push('Cakes category accordion did not open');
+    if(await cakesPanel.locator('a').count()!==3)problems.push('Cakes group should show Weddings, Celebrations and Tiramisu');
+    if(!await cakesPanel.getByText('Tiramisu',{exact:true}).count())problems.push('Subcategory label should be Tiramisu, not Tiramisu cakes');
+    await cakesToggle.click();
+    if(await cakesPanel.isVisible())problems.push('Cakes accordion could not collapse');
+    const logo=page.locator('.brand-link img');
+    const blend=await logo.evaluate(x=>getComputedStyle(x).mixBlendMode);
+    if(blend!=='multiply')problems.push('Logo white background should blend with cream');
+    const layout=await page.evaluate(()=>({
+      headerZ:getComputedStyle(document.querySelector('.site-header')).zIndex,
+      backdropZ:getComputedStyle(document.querySelector('[data-mobile-backdrop]')).zIndex,
+      backdropInHeader:document.querySelector('.site-header').contains(document.querySelector('[data-mobile-backdrop]'))
+    }));
+    if(layout.backdropInHeader||Number(layout.backdropZ)>=Number(layout.headerZ))problems.push('Backdrop is dimming header and logo: '+JSON.stringify(layout));
     await toggle.press('Escape');
     if(await toggle.getAttribute('aria-expanded')!=='false'||await mobile.isVisible())problems.push('Escape did not close hamburger');
     await toggle.click();
@@ -153,6 +170,17 @@ for(const [name,url,total] of cases)for(const width of widths){
   if(name==='celebrations'&&width===390&&await page.locator('#gallery-filters:visible').count())problems.push('Celebration page should not expose duplicate subcategories');
   if(['home','all','care','weddings','celebrations','tiramisu'].includes(name)&&width===390){
     if(!await page.locator('img.contact-signature').count())problems.push('Preview xoxo signature missing');
+  }
+  if(name==='sip'){
+    if(!await page.locator('.decorate-story__grid').count())problems.push('Workshop story image/copy grid missing');
+    if(await page.locator('.photo-composition--single').count())problems.push('Legacy sparse workshop photo layout remains');
+  }
+  if(name==='home'&&await page.locator('.contact-strip').count()===1){
+    const gap=await page.evaluate(()=>{
+      const contact=document.querySelector('.contact-strip'),foot=document.querySelector('.brand-footer');
+      return Math.round(foot.getBoundingClientRect().top-contact.getBoundingClientRect().bottom);
+    });
+    if(gap>4)problems.push('Excess whitespace between contact section and footer: '+gap+'px');
   }
   if(name==='sip'&&await page.locator('main img[src*="DSR06gjEgJK"]').count()!==1)problems.push('workshop image duplicated');
   if(name==='contact'){
