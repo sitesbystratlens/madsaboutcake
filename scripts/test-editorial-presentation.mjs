@@ -18,8 +18,8 @@ for(const font of ['Perandory Condensed','Amorea','Amsterdam Four','Helvetica No
 assert(!brand.includes('#fedcde')&&!brand.includes('#f15ea0'),'Legacy blush/pink must not return to public layout');
 assert(read('assets/brand/wordmark-set-2.svg').includes('data:image/webp;base64,'),'Use actual wordmark artwork extracted from brand guide');
 assert(read('assets/brand/monogram-set-2.svg').includes('data:image/webp;base64,'),'Use actual monogram artwork extracted from brand guide');
-assert(site.includes("const PHONE=''"),'Phone must not be guessed');
-assert(site.includes('data-mobile-pending')||site.includes('[data-mobile-pending]'),'Owner missing phone must be disclosed, not fake linked');
+assert(site.includes("const PHONE='0425 819 951'"),'Confirmed owner phone missing');
+assert(site.includes("a.href='tel:+61'"),'Call-to-mobile URI must be configured');
 assert(!/add to cart|checkout|select a date|book now/i.test(site),'No automated orders or bookings');
 assert(site.includes('category=c=>isTiramisu(c)'),'Tiramisu classification missing');
 assert(site.includes(":'celebrations'"),'Celebration fallback missing');
@@ -27,17 +27,18 @@ for(const p of pages){
  const h=read(p);
  assert(h.includes('noindex,nofollow'),'Preview must stay no-indexed: '+p);
  assert(h.includes('brand-site.css?v=20261102-2'),'Branded style not enabled: '+p);
- assert(h.includes('brand-site.js?v=20261102-1'),'Branded browser logic not enabled: '+p);
+ assert(h.includes('brand-site.js?v=20261102-2'),'Updated branded browser logic not enabled: '+p);
  assert(h.includes('/assets/brand/wordmark-set-2.svg'),'Official logo missing on: '+p);
  assert(h.includes('href="/cake-care/"')&&h.includes('href="/weddings/"')&&h.includes('href="/celebrations/"')&&h.includes('href="/tiramisu-cakes/"')&&h.includes('href="/decorate-and-sip/"'),'Category or care navigation missing: '+p);
  assert(h.includes('https://www.instagram.com/madsaboutcake/'),'Manual Instagram enquiry missing on '+p);
+ assert(h.includes('href="tel:+61425819951"'),'Confirmed business mobile missing from footer: '+p);
  assert(h.includes('<main id="main">'),'Semantic main content missing '+p);
  assert(h.includes('<h1'),'Page heading missing '+p);
 }
 for(const path of ['weddings/index.html','celebrations/index.html','tiramisu-cakes/index.html']){
  const h=read(path);
  assert(h.includes('data-gallery='),'Filtered original creation grid missing '+path);
- assert(h.includes('data-mobile-link hidden'),'Phone placeholder must never be a fabricated tel link '+path);
+ assert(h.includes('data-mobile-link href="tel:+61425819951"'),'Direct owner mobile contact missing '+path);
 }
 const home=read('index.html');
 assert((home.match(/class="category-card"/g)||[]).length===4,'Four main category tiles required');
