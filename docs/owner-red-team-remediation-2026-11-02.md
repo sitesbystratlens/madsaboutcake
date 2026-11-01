@@ -17,7 +17,7 @@
 - Logo set #2 used as a **temporary PDF-extracted raster** inside an SVG wrapper. It is not a true vector asset and is visibly softer on Retina devices; obtain official original SVG or high-resolution transparent PNG.
 - Exact brand faces (Perandory Condensed, Amorea / Amsterdam Four or Brittany, Helvetica Now Display Light) are **not installed**. Current fallbacks are temporary until licensed WOFF2 fonts and owner's choice of script face are supplied.
 - Four top-level offerings: Weddings, Celebration cakes, Tiramisu cakes, Decorate & Sip. 120 selected original-source creations preserved (nine wedding; one verified tiramisu; 110 celebration cards). No stock/photos invented to pad categories.
-- Every page offers an Instagram enquiry and confirmed mobile **0425 819 951** (tel:+61425819951), including a mobile contact bar. Manual date and availability confirmation only; no booking, checkout or order form.
+- Every page offers an Instagram enquiry and confirmed mobile **0425 819 951** (sms:+61425819951), including a mobile contact bar. Manual date and availability confirmation only; no booking, checkout or order form.
 - Cake-care page contains owner's three supplied transport instructions; refrigerating/serving/storage guidance intentionally remains pending owner confirmation.
 
 ## Changes from independent red-team audit
