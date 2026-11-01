@@ -378,3 +378,41 @@ body{font-weight:400;padding-bottom:0}
    and dots provide enough scanning structure in the two shorter care panels. */
 .care-bullets li{border-top:0;padding:8px 0 9px 27px}
 .care-bullets li::before{top:19px}
+
+/* 2026-11-02 owner feedback: preserve the main gallery CTA and use icon
+   links only for secondary contact on the homepage hero. */
+.hero-actions{display:flex;align-items:center;flex-wrap:wrap;gap:12px}
+.hero-actions>.btn{min-height:51px;white-space:normal}
+.hero-actions .hero-contact-icons{margin-top:0}
+.hero-actions .hero-contact-icons__link{width:51px;height:51px}
+
+/* Three deliberate editorial lines avoid fragmented accidental wraps.
+   The next cream contact strip carries the enquiry CTA; no duplicate here. */
+.statement-grid{align-items:center}
+.statement .statement-title{max-width:none;font-size:clamp(43px,3.7vw,62px);line-height:1.05;letter-spacing:-.036em}
+.statement-line{display:block}
+.statement-grid>div>p{margin:0;max-width:380px}
+@media(min-width:981px){
+ .statement-grid{display:grid;grid-template-columns:minmax(0,1.75fr) minmax(0,.8fr);gap:clamp(42px,5vw,88px)}
+}
+@media(min-width:651px) and (max-width:980px){
+ .statement-grid{display:block}
+ .statement-grid>div{margin-top:25px}
+ .statement .statement-title{font-size:clamp(42px,5.7vw,56px)}
+}
+
+/* Decorate & Sip has one contact destination near the footer; make the
+   introductory narrative more legible against the large workshop photograph. */
+.decorate-page-hero .copy{
+ font-size:clamp(20px,1.55vw,24px);
+ line-height:1.65;
+ font-weight:400;
+ max-width:600px;
+ margin:27px 0 0;
+}
+@media(max-width:650px){
+ .hero-actions>.btn{width:auto;min-height:49px}
+ .statement .statement-title{font-size:clamp(37px,9vw,52px);line-height:1.06}
+ .statement-grid>div{margin-top:25px}
+ .decorate-page-hero .copy{font-size:18px;line-height:1.7;margin-top:20px}
+}

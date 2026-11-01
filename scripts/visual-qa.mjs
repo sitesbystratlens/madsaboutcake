@@ -100,13 +100,18 @@ for(const [name,url,total] of cases)for(const width of widths){
       if(await dropdown.getAttribute('aria-expanded')!=='false')problems.push('Desktop Escape close failed');
     }
   }
+  if(name==='home'){
+    if(!await page.locator('.hero-actions>a.btn[href="/cakes/"]').isVisible())problems.push('Explore our creations primary CTA must be visible at every viewport');
+    if(await page.locator('.statement .btn[data-ig-contact]').count())problems.push('Burgundy statement duplicates enquiry CTA');
+    if(await page.locator('.statement-line').count()!==3)problems.push('Burgundy statement must have three editorial lines');
+  }
   if(name==='home'&&width<=650){
     if(await page.locator('.hero-copy .btn[data-ig-contact]').isVisible())problems.push('Duplicate mobile Instagram hero button still visible');
     if(await page.locator('.hero-copy .hero-contact-icons').isVisible())problems.push('Hero icons duplicate mobile sticky contact bar');
     if(!await page.locator('.mobile-contact-bar a').count())problems.push('Mobile sticky DM and SMS bar missing');
   }
   if(name==='sip'&&width<=650){
-    if(await page.locator('.decorate-page-hero .hero-contact-icons').isVisible())problems.push('Workshop hero icons duplicate mobile sticky contact bar');
+    if(await page.locator('.decorate-page-hero .hero-contact-icons').count())problems.push('Workshop hero icons should be removed');
     const heading=await page.locator('main h1').evaluate(el=>({scroll:el.scrollWidth,client:el.clientWidth,br:el.querySelector('br')!==null,nowrap:getComputedStyle(el).whiteSpace}));
     if(heading.br||heading.nowrap!=='nowrap'||heading.scroll>heading.client+2)problems.push('Decorate & Sip heading wraps or overflows at '+width+': '+JSON.stringify(heading));
   }
@@ -114,7 +119,12 @@ for(const [name,url,total] of cases)for(const width of widths){
     const color=await page.locator('.care-panel--reminder .care-panel__icon').evaluate(el=>getComputedStyle(el).backgroundColor);
     if(color!=='rgb(246, 244, 240)')problems.push('Heart badge is not brand cream: '+color);
   }
-  if(['home','sip'].includes(name)&&width===1440){
+  if(name==='sip'){
+    if(await page.locator('.decorate-page-hero .hero-contact-icons').count())problems.push('Workshop hero must not repeat contact links');
+    const size=await page.locator('.decorate-page-hero .copy').evaluate(el=>parseFloat(getComputedStyle(el).fontSize));
+    if(size<(width<=650?17.5:19.5))problems.push('Decorate & Sip hero description remains too small: '+size+'px');
+  }
+  if(name==='home'&&width===1440){
     const actions=page.locator('.hero-contact-icons a');
     if(await actions.count()!==2)problems.push('Hero needs exactly two contact icons');
     if(await actions.first().getAttribute('aria-label')!=='Direct message Mads on Instagram')problems.push('Instagram icon accessible name missing');

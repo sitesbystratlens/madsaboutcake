@@ -41,7 +41,7 @@ assert.equal(wrangler.assets.not_found_handling,'404-page');
 for(const p of pages){
  const h=read(p);
  assert(h.includes('noindex,nofollow'),'Preview must remain non-indexed: '+p);
- assert(h.includes('brand-site.css?v=20261102-polish6')&&h.includes('brand-site.js?v=20261102-mobile4'),'Mobile-refined assets missing: '+p);
+ assert(h.includes('brand-site.css?v=20261102-polish7')&&h.includes('brand-site.js?v=20261102-mobile4'),'Mobile-refined assets missing: '+p);
  assert(h.includes('/assets/brand/wordmark-set-2.svg'),'Brand wordmark missing: '+p);
  assert(h.includes('class="nav-cakes__main" href="/cakes/"'),'Cake and cupcake main link must open All creations: '+p);
  assert(h.includes('data-cake-toggle')&&h.includes('aria-controls="cakes-submenu"')&&h.includes('aria-expanded="false"'),'Dedicated accessible dropdown toggle missing: '+p);
@@ -84,8 +84,10 @@ for(const p of ['weddings/index.html','celebrations/index.html','tiramisu-cakes/
 for(const p of ['celebrations/index.html','cakes/index.html'])assert(read(p).includes('id="gallery-filters"'),'Filter chips missing: '+p);
 const home=read('index.html');
 assert.equal((home.match(/class="category-card"/g)||[]).length,4,'Four main owner-requested categories');
-assert(home.includes('class="hero-contact-icons"')&&home.includes('href="/cakes/"'),'Homepage needs icon contact plus accessible creations navigation');
-assert(home.includes('Your idea. Mads’ craft. A cake worth celebrating.'),'Homepage headline must name Mads');
+assert(home.includes('<a class="btn" href="/cakes/">Explore our creations ↗</a>')&&home.includes('class="hero-actions"')&&home.includes('class="hero-contact-icons"'),'Homepage must retain Explore creations CTA alongside two compact contact icons');
+assert((home.match(/class="statement-line"/g)||[]).length===3,'Burgundy editorial headline needs three deliberate lines');
+assert(!home.includes('class="btn btn-cream" data-ig-contact'),'Remove duplicate Instagram CTA from burgundy editorial section');
+assert(home.includes('Your idea.</span> <span class="statement-line">Mads’ craft.'),'Homepage headline must name Mads');
 assert(home.includes('<p class="eyebrow">Handcrafted sweets for every occasion</p>'),'Homepage must use owner brand vocabulary');
 assert(brand.includes('.nav-cakes__submenu')&&brand.includes('instagram-outline.svg')&&brand.includes('message-outline.svg'),'Branded accessible navigation and icon styling absent');
 assert(brand.includes('.footer-contact-icons__link'),'Compact footer contact icons must be styled');
@@ -98,7 +100,7 @@ assert(brand.includes('.mobile-menu-backdrop{z-index:40}'),'Page backdrop must s
 assert(brand.includes('.brand-footer{margin-top:0'),'Footer gap must be removed site-wide');
 assert(brand.includes('-webkit-text-stroke:.32px currentColor'),'Brand display type must have a slightly stronger stroke');
 assert(brand.includes('.mobile-site-menu')&&brand.includes('.mobile-nav-toggle')&&brand.includes('.mobile-header-contact'),'Mobile header must be styled');
-assert(brand.includes('.hero-contact-icons{display:none}')&&home.includes('hero-contact-icons')&&read('decorate-and-sip/index.html').includes('hero-contact-icons'),'Avoid duplicate icon contacts above sticky mobile contact bar');
+assert(brand.includes('.hero-contact-icons{display:none}')&&home.includes('hero-contact-icons')&&!read('decorate-and-sip/index.html').includes('hero-contact-icons'),'Home uses secondary hero icons; workshop relies on contact strip and sticky mobile bar');
 assert(brand.includes('.care-panel--reminder .care-panel__icon{background:var(--cream)'),'Reminder hearts should have cream backing');
 assert(!read('assets/icons/message-outline.svg').includes('M8 12h8'),'SMS icon should have no internal minus dash');
 assert(site.includes("new URLSearchParams(location.search).get('filter')"),'Gallery filter deep linking must initialise selected offering');
@@ -123,7 +125,10 @@ assert(workshop.includes('decorate-story__grid')&&workshop.includes('decorate-st
 assert(!workshop.includes('photo-composition--single'),'Legacy sparse workshop image row must be removed');
 assert(workshop.includes('<h1 class="display display--small decorate-heading">Decorate &amp; Sip.</h1>'),'Decorate heading must not force a line break');
 assert(!workshop.includes('Decorate<br>& Sip.'),'Forced decorate heading line break must be removed');
+assert(!workshop.includes('hero-contact-icons'),'Workshop hero should not repeat contact icons');
+assert(brand.includes('.decorate-page-hero .copy{')||brand.includes('.decorate-page-hero .copy{\n'),'Workshop hero description must be enlarged');
 const care=read('cake-care/index.html');
+assert(care.includes('<h1 class="display display--small">Cake pickup<br>&amp; care.</h1>'),'Cake care heading retains deliberate two-line hierarchy');
 for(const x of ['passenger-side floor','lap','support it from underneath','squeezing the sides'])assert(care.includes(x),'Owner-supplied care tips missing: '+x);
 for(const x of ['Temperature matters','Once you’re home','A final little reminder','car air-conditioned','parked car','straight into the fridge','approximately 1–2 hours before serving','Thank you for trusting me with your special occasion'])assert(care.includes(x),'Owner-supplied additional care copy missing: '+x);
 assert.equal((care.match(/class="care-panel(?:\s|")/g)||[]).length,4,'Care guide must contain four visual panels');
