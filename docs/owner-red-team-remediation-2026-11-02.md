@@ -44,3 +44,15 @@
 - CI: [Four-width browser QA](https://github.com/sitesbystratlens/madsaboutcake/actions/workflows/visual-qa.yml)
 
 **Public launch status: NO-GO until owner approval and remaining data/brand questions are resolved.**
+
+
+## Navigation and contact refinement (2 November 2026)
+
+- Consolidated the top navigation into **Cakes & cupcakes** (main text navigates to All creations), with a separately operable chevron menu for All creations, Weddings, Celebration cakes, Tiramisu cakes and Cupcakes. Cupcakes opens `/cakes/?filter=cupcakes`; menu interaction includes click, touch, Escape and outside-dismissal.
+- The four original homepage category cards remain, so Madara's four offerings remain immediately discoverable.
+- Simplified footer into brand, Explore and Help & contact, retaining site credits. Used **“Handcrafted sweets for every occasion”** in the introduction and footer, with selective “After something a little more custom? Let's chat!” wording for contact.
+- SMS `sms:+61425819951` and Instagram direct messaging remain the contact methods, with outline icons **alongside labels**. The SMS icon uses a speech bubble rather than a handset.
+- Brand colours and existing logo Set #2 are unchanged.
+- **“xoxo Mads” deferred:** No clean original signature asset exists in the site repository; request the original design export rather than reproducing the angled business-card photograph.
+- **Menu & pricing unpublished** pending confirmation of the dated source prices.
+- No booking or checkout added.
