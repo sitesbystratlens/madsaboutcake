@@ -3,64 +3,94 @@ import {chromium} from 'playwright';
 import fs from 'node:fs';
 const BASE='http://127.0.0.1:4173',widths=[1440,768,390,320];
 const cases=[
- ['home','/',null],
+ ['home','/',0],
  ['weddings','/weddings/',9],
  ['celebrations','/celebrations/',110],
  ['tiramisu','/tiramisu-cakes/',1],
- ['sip','/decorate-and-sip/',null],
- ['care','/cake-care/',null],
+ ['sip','/decorate-and-sip/',0],
+ ['care','/cake-care/',0],
  ['all','/cakes/',120],
- ['contact','/enquire/',null]
+ ['contact','/enquire/',0],
+ ['about','/about/',0],
+ ['notfound','/404.html',0]
 ];
-const browser=await chromium.launch({headless:true});
-let errors=[],results=[];
 fs.mkdirSync('qa-screenshots',{recursive:true});
-for(const [name,url,wanted] of cases)for(const width of widths){
+const browser=await chromium.launch({headless:true});
+const errs=[],reports=[];
+for(const [name,url,total] of cases)for(const width of widths){
  const page=await browser.newPage({viewport:{width,height:900},deviceScaleFactor:1});
  const pageErrors=[];page.on('pageerror',e=>pageErrors.push(e.message));
+ const problems=[];
  try{
   await page.goto(BASE+url,{waitUntil:'domcontentloaded',timeout:25000});
   await page.locator('main h1').waitFor({timeout:12000});
-  if(wanted!==null)await page.locator('.gallery-card').first().waitFor({timeout:18000});
+  if(total)await page.locator('.gallery-card').first().waitFor({timeout:18000});
   await page.evaluate(async()=>{
-   const im=[...document.images].filter(x=>x.loading!=='lazy').slice(0,18);
-   await Promise.all(im.map(x=>x.decode().catch(()=>null)));
+   const imgs=[...document.images].slice(0,10);
+   await Promise.all(imgs.map(img=>{img.loading='eager';return img.decode().catch(()=>null)}));
   });
   const info=await page.evaluate(()=>{
-   const logo=document.querySelector('.brand-link img'),body=document.body;
-   const imgs=[...document.images].filter(x=>x.loading!=='lazy');
+   const head=document.querySelector('.brand-link img');
+   const images=[...document.images].filter(img=>img.loading!=='lazy');
    return {title:document.title,scrollWidth:document.documentElement.scrollWidth,viewport:innerWidth,
-    heading:document.querySelector('main h1')?.textContent.trim(),
-    logo:logo?.naturalWidth||0,nav:document.querySelectorAll('.brand-links a').length,
+    heading:document.querySelector('main h1')?.textContent.trim(),logo:head?.naturalWidth||0,
+    nav:document.querySelectorAll('.brand-links a').length,
     cards:document.querySelectorAll('.gallery-card').length,
-    broken:imgs.filter(x=>x.complete&&x.naturalWidth===0).map(x=>x.src),
+    broken:images.filter(img=>img.complete&&img.naturalWidth===0).map(img=>img.src),
     crimson:getComputedStyle(document.querySelector('.brand-topline')).backgroundColor,
-    igLinks:document.querySelectorAll('a[href="https://www.instagram.com/madsaboutcake/"]').length,
-    phoneLinks:[...document.querySelectorAll('[data-mobile-link]')].filter(x=>!x.hidden).length,
-    phonePending:[...document.querySelectorAll('[data-mobile-pending]')].filter(x=>getComputedStyle(x).display!=='none').length,
-    overflowItems:[...document.querySelectorAll('body *')].filter(x=>{const r=x.getBoundingClientRect();return r.right>innerWidth+4&&r.width>0}).slice(0,12).map(x=>({tag:x.tagName,cls:String(x.className).slice(0,60),right:Math.round(x.getBoundingClientRect().right),width:Math.round(x.getBoundingClientRect().width),text:(x.textContent||'').trim().slice(0,50)}))};
+    dm:[...document.querySelectorAll('a[href="https://ig.me/m/madsaboutcake"]')].length,
+    phone:[...document.querySelectorAll('a[href="tel:+61425819951"]')].length,
+    publicData:document.querySelector('[data-gallery]')?.dataset.gallery||''};
   });
-  const problems=[];
-  if(info.scrollWidth>width+3)problems.push('horizontal overflow '+info.scrollWidth+' caused by '+JSON.stringify(info.overflowItems));
+  if(info.scrollWidth>width+3)problems.push('horizontal overflow '+info.scrollWidth+'/'+width);
   if(!info.heading)problems.push('H1 missing');
-  if(!info.logo)problems.push('brand logo did not render');
-  if(info.nav<6)problems.push('category nav incomplete');
-  if(info.crimson!=='rgb(154, 40, 73)')problems.push('wrong crimson '+info.crimson);
-  if(info.igLinks<2)problems.push('Instagram enquiry absent');
-  if(info.phoneLinks)problems.push('Unconfirmed phone number exposed');
-  if(info.broken.length)problems.push('broken image(s) '+info.broken.slice(0,3).join(','));
-  if(wanted!==null&&info.cards!==wanted)problems.push('expected '+wanted+' creations, saw '+info.cards);
-  if(name==='care'&&!(await page.locator('main').textContent()).includes('passenger-side floor'))problems.push('care instructions absent');
-  if(name==='contact'&&(await page.locator('form').count()))problems.push('order form unexpectedly present');
-  if(pageErrors.length)problems.push('browser error '+pageErrors.join('; '));
+  if(!info.logo)problems.push('brand logo missing');
+  if(info.nav<6)problems.push('six navigation entries required');
+  if(info.crimson!=='rgb(154, 40, 73)')problems.push('brand palette mismatch');
+  if(!info.dm)problems.push('Instagram direct message links missing');
+  if(!info.phone)problems.push('confirmed mobile not linked');
+  if(info.broken.length)problems.push('broken images: '+info.broken.slice(0,4).join(','));
+  const expectedInitial=Math.min(total,12);
+  if(info.cards!==expectedInitial)problems.push('expected '+expectedInitial+' initial cards, got '+info.cards);
+  if(total){
+   const announcement=await page.locator('#gallery-count').textContent();
+   if(!announcement.includes('of '+total+' '))problems.push('gallery count inaccurate: '+announcement);
+   const button=page.locator('.gallery-card [data-preview]').first();
+   if(!await button.count())problems.push('on-page photo preview missing');
+   else if(width===390){
+    await button.click();const dlg=page.locator('#creation-dialog');
+    if(!await dlg.evaluate(e=>e.open))problems.push('photo dialog did not open');
+    if(!await dlg.locator('[data-dialog-copy]').count())problems.push('copy design reference missing');
+    await dlg.locator('.creation-dialog__close').click();
+   }
+  }
+  if((name==='celebrations'||name==='all')&&width===390){
+   const buttons=page.locator('#gallery-filters [data-filter]');
+   if(await buttons.count()!==6)problems.push('six gallery subfilters missing');
+   await page.locator('#gallery-filters [data-filter="birthdays"]').click();
+   if(!await page.locator('#gallery-count').textContent().then(s=>s.includes('of 50 ')))problems.push('Birthday subset not 50');
+   await page.locator('#gallery-filters [data-filter="cupcakes"]').click();
+   if(!await page.locator('#gallery-count').textContent().then(s=>s.includes('of 27 ')))problems.push('Cupcake subset not 27');
+   await page.locator('#gallery-filters [data-filter="all"]').click();
+   await page.locator('#gallery-show-more').click();
+   if(await page.locator('.gallery-card').count()!==24)problems.push('Show more not revealing additional 12');
+  }
+  if(name==='care'&&!(await page.locator('main').textContent()).includes('passenger-side floor'))problems.push('owner care text missing');
+  if(name==='sip'&&await page.locator('main img[src*="DSR06gjEgJK"]').count()!==1)problems.push('workshop image duplicated');
+  if(name==='contact'){
+   const text=await page.locator('main').textContent();
+   if(!text.includes('Helpful details for your message'))problems.push('enquiry checklist missing');
+   if(await page.locator('form').count())problems.push('unapproved order form');
+  }
+  if(pageErrors.length)problems.push('browser errors: '+pageErrors.join('; '));
   await page.screenshot({path:'qa-screenshots/'+name+'-'+width+'.png',fullPage:true,animations:'disabled',timeout:35000});
-  results.push({name,width,...info,problems});
-  if(problems.length)errors.push(name+' '+width+': '+problems.join('; '));
-  console.log(JSON.stringify({page:name,width,cards:info.cards,logo:info.logo,overflow:info.scrollWidth-width,problems}));
- }catch(e){errors.push(name+' '+width+': '+e.message);}
+  reports.push({name,width,...info,problems});
+  if(problems.length)errs.push(name+' @ '+width+': '+problems.join('; '));
+  console.log(JSON.stringify({name,width,cards:info.cards,overflow:info.scrollWidth-width,problems}));
+ }catch(e){errs.push(name+' @ '+width+': '+e.message)}
  await page.close();
 }
 await browser.close();
-fs.writeFileSync('qa-screenshots/report.json',JSON.stringify({cases:results,errors},null,2));
-if(errors.length){console.error('REBRAND QA FAILED:\n'+errors.join('\n'));process.exitCode=1;}
-else console.log('REBRAND QA PASS: 8 pages × 4 breakpoints, branded logo, no broken imagery, manual enquiry and exact category counts');
+fs.writeFileSync('qa-screenshots/report.json',JSON.stringify({cases:reports,errors:errs},null,2));
+if(errs.length){console.error('OWNER REVIEW QA FAILED:\n'+errs.join('\n'));process.exitCode=1}
+else console.log('OWNER REVIEW QA PASS: 10 pages x 4 widths; six gallery filters; staged reveal; direct message and mobile contact; no broken imagery.');
