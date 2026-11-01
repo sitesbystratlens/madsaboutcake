@@ -17,6 +17,9 @@ on:
       - 'assets/brand-site.js'
       - 'assets/brand/**'
       - 'cakes.json'
+      - 'assets/public-creations.json'
+      - '.assetsignore'
+      - 'wrangler.jsonc'
       - 'scripts/test-editorial-presentation.mjs'
       - '.github/workflows/check-editorial-presentation.yml'
   pull_request:
