@@ -1,40 +1,44 @@
-name: Verify deployed Mads preview
+name: Verify deployed Mads branded homepage
 on:
   push:
     branches: [main]
     paths:
-      - index.html
-      - .github/workflows/check-live-preview.yml
+      - 'index.html'
+      - 'assets/brand-site.css'
+      - 'assets/brand-site.js'
+      - 'assets/brand/**'
+      - '.github/workflows/check-live-preview.yml'
   workflow_dispatch:
 permissions:
   contents: read
 jobs:
-  check-preview:
-    runs-on: ubuntu-latest
-    timeout-minutes: 5
+  check:
+    runs-on: ubuntu-24.04
+    timeout-minutes: 6
     steps:
       - uses: actions/checkout@v4
-      - name: Confirm Cloudflare worker serves latest homepage and original photo
+      - name: Validate brand header, source logo and four category cards
         shell: bash
         run: |
           set -euo pipefail
-          SITE="https://madsaboutcake.sitesbystratlens.workers.dev/"
-          MARKER=$(sed -n 's/.*<meta name="mads-layout-version" content="\([^"]*\)".*/\1/p' index.html | head -1)
-          IMAGE="/assets/featured-25/DGM5hj1hcJf-M259.webp"
-          echo "Expected homepage version: $MARKER"
-          for n in 1 2 3 4 5 6; do
-            curl --silent --show-error --fail --location --max-time 20 -H 'Cache-Control: no-cache' "$SITE?check=${GITHUB_SHA}-${n}" > /tmp/live-preview.html || true
-            if grep -Fq "$MARKER" /tmp/live-preview.html && grep -Fq "$IMAGE" /tmp/live-preview.html && grep -Fq '<nav class="mads-main-nav"' /tmp/live-preview.html && grep -Fq '<div class="opening-copy"><h1>Say it with cake.</h1>' /tmp/live-preview.html && ! grep -Fq 'class="mads-nav-about"' /tmp/live-preview.html && ! grep -Fq 'CUSTOM CAKES &amp; CUPCAKES · MELBOURNE' /tmp/live-preview.html && ! grep -Fq 'class="action-line" href="/#cake-enquiry"' /tmp/live-preview.html && grep -Fq 'What are we <i>celebrating?</i>' /tmp/live-preview.html && grep -Fq 'See a session clip' /tmp/live-preview.html && grep -Fq 'What can we help with?' /tmp/live-preview.html && grep -Fq 'Send message ↗' /tmp/live-preview.html && ! grep -Fq 'Got something<br><i>to celebrate?</i>' /tmp/live-preview.html; then
-              echo "Live Cloudflare homepage is current."
-              curl --silent --show-error --fail --location --head --max-time 45 "$SITE${IMAGE}" > /tmp/hero-headers.txt
-              grep -qi '^content-type: image/webp' /tmp/hero-headers.txt
-              echo "Live hero image responds as WebP: $(grep -i '^content-type:' /tmp/hero-headers.txt | tail -1)"
+          SITE=https://madsaboutcake.sitesbystratlens.workers.dev
+          for n in $(seq 1 15); do
+            curl -fsSL --max-time 25 "$SITE/?r=$GITHUB_SHA-$n" >/tmp/mads-home.html || true
+            curl -fsSL --max-time 25 "$SITE/assets/brand-site.css?r=$GITHUB_SHA-$n" >/tmp/mads-brand.css || true
+            if grep -Fq 'A little cake, a lot of love.' /tmp/mads-home.html &&
+               grep -Fq 'wordmark-set-2.svg' /tmp/mads-home.html &&
+               grep -Fq 'href="/weddings/"' /tmp/mads-home.html &&
+               grep -Fq 'href="/celebrations/"' /tmp/mads-home.html &&
+               grep -Fq 'href="/tiramisu-cakes/"' /tmp/mads-home.html &&
+               grep -Fq 'href="/decorate-and-sip/"' /tmp/mads-home.html &&
+               grep -Fq '#9A2849' /tmp/mads-brand.css &&
+               grep -Fq '#F6F4F0' /tmp/mads-brand.css; then
+              curl -fsSL --max-time 25 "$SITE/assets/brand/wordmark-set-2.svg" >/tmp/mads-logo.svg
+              grep -Fq 'data:image/webp;base64,' /tmp/mads-logo.svg
+              echo 'PASS: brand site homepage, genuine artwork, palette, categories'
               exit 0
             fi
-            echo "Live homepage not yet updated (attempt $n of 6)."
-            if [ "$n" -lt 6 ]; then sleep 12; fi
+            echo "Waiting for branded preview deployment ($n of 15)"
+            sleep 10
           done
-          echo "ERROR: Cloudflare does not yet serve the GitHub homepage version or full-view cake photo."
-          echo "Remote version markers:"
-          grep -oE 'mads-layout-version[^>]*' /tmp/live-preview.html || true
           exit 1
