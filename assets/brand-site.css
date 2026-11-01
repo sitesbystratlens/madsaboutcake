@@ -177,3 +177,5 @@ body{font-weight:400;padding-bottom:0}
  .care-panel__closing p{font-size:15px}
  .care-guide{gap:14px}
 }
+
+.gallery-filters[hidden]{display:none!important}
