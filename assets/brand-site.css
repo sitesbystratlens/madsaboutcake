@@ -11,3 +11,6 @@
 /* Keep unusually long personalised cake names inside narrow cards. */
 .gallery-card,.gallery-card__meta,.gallery-card__meta h3,.gallery-card__links a{min-width:0;overflow-wrap:anywhere;word-break:normal}
 .gallery-card__meta h3{hyphens:auto}
+
+/* The longest editorial category name (Celebrations) must fit on a 320px phone. */
+@media(max-width:650px){.page-hero .display--small{font-size:clamp(30px,8vw,50px);overflow-wrap:anywhere;max-width:100%}}
