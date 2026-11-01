@@ -41,7 +41,7 @@ assert.equal(wrangler.assets.not_found_handling,'404-page');
 for(const p of pages){
  const h=read(p);
  assert(h.includes('noindex,nofollow'),'Preview must remain non-indexed: '+p);
- assert(h.includes('brand-site.css?v=20261102-mobile4')&&h.includes('brand-site.js?v=20261102-mobile4'),'Mobile-refined assets missing: '+p);
+ assert(h.includes('brand-site.css?v=20261102-polish5')&&h.includes('brand-site.js?v=20261102-mobile4'),'Mobile-refined assets missing: '+p);
  assert(h.includes('/assets/brand/wordmark-set-2.svg'),'Brand wordmark missing: '+p);
  assert(h.includes('class="nav-cakes__main" href="/cakes/"'),'Cake and cupcake main link must open All creations: '+p);
  assert(h.includes('data-cake-toggle')&&h.includes('aria-controls="cakes-submenu"')&&h.includes('aria-expanded="false"'),'Dedicated accessible dropdown toggle missing: '+p);
@@ -84,7 +84,7 @@ for(const p of ['weddings/index.html','celebrations/index.html','tiramisu-cakes/
 for(const p of ['celebrations/index.html','cakes/index.html'])assert(read(p).includes('id="gallery-filters"'),'Filter chips missing: '+p);
 const home=read('index.html');
 assert.equal((home.match(/class="category-card"/g)||[]).length,4,'Four main owner-requested categories');
-assert(home.includes('href="/cakes/">Explore our creations ↗'),'Explore all should link to All creations');
+assert(home.includes('class="hero-contact-icons"')&&home.includes('href="/cakes/"'),'Homepage needs icon contact plus accessible creations navigation');
 assert(home.includes('Your idea. Mads’ craft. A cake worth celebrating.'),'Homepage headline must name Mads');
 assert(home.includes('<p class="eyebrow">Handcrafted sweets for every occasion</p>'),'Homepage must use owner brand vocabulary');
 assert(brand.includes('.nav-cakes__submenu')&&brand.includes('instagram-outline.svg')&&brand.includes('message-outline.svg'),'Branded accessible navigation and icon styling absent');
@@ -93,12 +93,12 @@ assert(site.includes('DM on Instagram'),'Mobile and design-preview contact actio
 assert(site.includes('function initCakeNav()')&&site.includes('panel.hidden=!value')&&site.includes("e.key==='Escape'"),'Dropdown must be keyboard/click operable');
 assert(site.includes('function initMobileNav()')&&site.includes("document.body.classList.toggle('mobile-nav-open',value)")&&site.includes('backdrop.addEventListener'),'Mobile navigation must open, close and restore focus');
 assert(site.includes('groupToggle?.addEventListener')&&site.includes('setGroupOpen(false)'),'Nested cake accordion must toggle and reset on menu close');
-assert(brand.includes('.brand-link img{mix-blend-mode:multiply}'),'Official wordmark white backing must blend with brand cream');
+assert(brand.includes('.brand-link img{mix-blend-mode:normal}')&&read('assets/brand/wordmark-set-2.svg').includes('brand-ink-alpha'),'Wordmark image must remove pale backdrop at source');
 assert(brand.includes('.mobile-menu-backdrop{z-index:40}'),'Page backdrop must stay below header logo');
 assert(brand.includes('.brand-footer{margin-top:0'),'Footer gap must be removed site-wide');
 assert(brand.includes('-webkit-text-stroke:.32px currentColor'),'Brand display type must have a slightly stronger stroke');
 assert(brand.includes('.mobile-site-menu')&&brand.includes('.mobile-nav-toggle')&&brand.includes('.mobile-header-contact'),'Mobile header must be styled');
-assert(brand.includes('.hero-copy .btn[data-ig-contact]')&&brand.includes('.decorate-page-hero .btns'),'Duplicate mobile hero contact CTAs must be hidden');
+assert(brand.includes('.hero-contact-icons{display:none}')&&home.includes('hero-contact-icons')&&workshop.includes('hero-contact-icons'),'Avoid duplicate icon contacts above sticky mobile contact bar');
 assert(brand.includes('.care-panel--reminder .care-panel__icon{background:var(--cream)'),'Reminder hearts should have cream backing');
 assert(!read('assets/icons/message-outline.svg').includes('M8 12h8'),'SMS icon should have no internal minus dash');
 assert(site.includes("new URLSearchParams(location.search).get('filter')"),'Gallery filter deep linking must initialise selected offering');
