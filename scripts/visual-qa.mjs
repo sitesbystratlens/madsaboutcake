@@ -49,6 +49,29 @@ for(const [name,url,total] of cases)for(const width of widths){
   if(info.crimson!=='rgb(154, 40, 73)')problems.push('brand palette mismatch');
   if(!info.dm)problems.push('Instagram direct message links missing');
   if(!info.phone)problems.push('confirmed text messaging number not linked');
+  if(width===390){
+    const dropdown=page.locator('[data-cake-toggle]');
+    if(await dropdown.count()!==1)problems.push('Cakes dropdown toggle missing');
+    else{
+      if(await dropdown.getAttribute('aria-expanded')!=='false')problems.push('Dropdown should start closed');
+      await dropdown.click();
+      if(await dropdown.getAttribute('aria-expanded')!=='true')problems.push('Dropdown did not open on tap');
+      const menu=page.locator('[data-cake-panel]');
+      if(await menu.locator('a').count()!==5)problems.push('Expected five gallery shortcuts');
+      if(!await menu.locator('a[href="/cakes/?filter=cupcakes"]').count())problems.push('Cupcakes shortcut missing');
+      await dropdown.press('Escape');
+      if(await dropdown.getAttribute('aria-expanded')!=='false')problems.push('Escape did not dismiss dropdown');
+      if(!await page.locator('.nav-cakes__main[href="/cakes/"]').count())problems.push('Main cakes link is not All creations');
+    }
+  }
+  if(name==='home'&&width===1440){
+    const footer=page.locator('.brand-footer');
+    if(await footer.locator('a[href="/weddings/"]').count())problems.push('Footer repeats wedding category');
+    if(!await footer.getByText('Handcrafted sweets for every occasion.').count())problems.push('Owner brand copy missing');
+    if(!await page.locator('.contact-strip .btn[data-ig-contact]').count())problems.push('Instagram action missing');
+    if(!await page.locator('.contact-strip .btn[data-mobile-link]').count())problems.push('SMS action missing');
+  }
+
   if(info.broken.length)problems.push('broken images: '+info.broken.slice(0,4).join(','));
   const expectedInitial=Math.min(total,12);
   if(info.cards!==expectedInitial)problems.push('expected '+expectedInitial+' initial cards, got '+info.cards);
@@ -75,6 +98,13 @@ for(const [name,url,total] of cases)for(const width of widths){
    await page.locator('#gallery-filters [data-filter="all"]').click();
    await page.locator('#gallery-show-more').click();
    if(await page.locator('.gallery-card').count()!==24)problems.push('Show more not revealing additional 12');
+  }
+  if(name==='all'&&width===390){
+    await page.goto(BASE+'/cakes/?filter=cupcakes',{waitUntil:'domcontentloaded',timeout:25000});
+    await page.locator('.gallery-card').first().waitFor({timeout:18000});
+    const state=await page.locator('#gallery-filters [data-filter="cupcakes"]').getAttribute('aria-pressed');
+    const text=await page.locator('#gallery-count').textContent();
+    if(state!=='true'||!text.includes('of 27 '))problems.push('Cupcakes shortcut must deep-link to 27 filtered designs');
   }
   if(name==='care'&&!(await page.locator('main').textContent()).includes('passenger-side floor'))problems.push('owner care text missing');
   if(name==='sip'&&await page.locator('main img[src*="DSR06gjEgJK"]').count()!==1)problems.push('workshop image duplicated');
