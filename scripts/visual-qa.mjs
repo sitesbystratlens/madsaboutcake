@@ -175,12 +175,16 @@ for(const [name,url,total] of cases)for(const width of widths){
     if(!await page.locator('.decorate-story__grid').count())problems.push('Workshop story image/copy grid missing');
     if(await page.locator('.photo-composition--single').count())problems.push('Legacy sparse workshop photo layout remains');
   }
-  if(name==='home'&&await page.locator('.contact-strip').count()===1){
+  if(await page.locator('.contact-strip').count()===1){
     const gap=await page.evaluate(()=>{
       const contact=document.querySelector('.contact-strip'),foot=document.querySelector('.brand-footer');
       return Math.round(foot.getBoundingClientRect().top-contact.getBoundingClientRect().bottom);
     });
     if(gap>4)problems.push('Excess whitespace between contact section and footer: '+gap+'px');
+  }
+  if(width<=390){
+    const headingStroke=await page.locator('main h1').evaluate(el=>getComputedStyle(el).webkitTextStrokeWidth);
+    if(!headingStroke||headingStroke==='0px')problems.push('High-contrast brand display hairlines have no legibility refinement');
   }
   if(name==='sip'&&await page.locator('main img[src*="DSR06gjEgJK"]').count()!==1)problems.push('workshop image duplicated');
   if(name==='contact'){
