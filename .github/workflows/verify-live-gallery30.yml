@@ -1,63 +1,84 @@
-name: Verify Mads branded 120-creation galleries and imagery
+name: Verify public minimal gallery and source photographs
 on:
   push:
     branches: [main]
     paths:
-      - 'cakes.json'
+      - '.github/workflows/verify-live-gallery30.yml'
+      - '.assetsignore'
+      - 'wrangler.jsonc'
+      - 'assets/public-creations.json'
       - 'assets/brand-site.js'
       - 'assets/brand-site.css'
+      - 'assets/gallery-30/**'
+      - 'assets/gallery-review-covers/**'
+      - 'assets/gallery-final-covers/**'
       - 'cakes/index.html'
-      - 'weddings/**'
-      - 'celebrations/**'
-      - 'tiramisu-cakes/**'
-      - '.github/workflows/verify-live-gallery30.yml'
+      - 'celebrations/index.html'
+      - 'weddings/index.html'
+      - 'tiramisu-cakes/index.html'
   workflow_dispatch:
 permissions:
   contents: read
 jobs:
   verify:
     runs-on: ubuntu-24.04
-    timeout-minutes: 9
+    timeout-minutes: 11
     steps:
       - uses: actions/checkout@v4
-      - name: Check final gallery source and brand JS live
+      - name: Wait for 120-item public gallery and validate no private metadata
         shell: bash
         run: |
           set -euo pipefail
-          SITE=https://madsaboutcake.sitesbystratlens.workers.dev
-          for n in $(seq 1 15); do
-            curl -fsSL --max-time 25 "$SITE/cakes.json?r=$GITHUB_SHA-$n" >/tmp/mbcakes.json || true
-            curl -fsSL --max-time 25 "$SITE/assets/brand-site.js?r=$GITHUB_SHA-$n" >/tmp/mbrand.js || true
-            if grep -Fq 'const isTiramisu' /tmp/mbrand.js &&
+          SITE='https://madsaboutcake.sitesbystratlens.workers.dev'
+          for n in $(seq 1 18); do
+            curl -fsSL --max-time 24 "$SITE/assets/public-creations.json?r=$GITHUB_SHA-$n" >/tmp/mb-public.json || true
+            curl -fsSL --max-time 24 "$SITE/assets/brand-site.js?r=$GITHUB_SHA-$n" >/tmp/mb-brand.js || true
+            if grep -Fq "const DATA='/assets/public-creations.json'" /tmp/mb-brand.js &&
                python3 - <<'PY'
           import json
-          db=json.load(open('/tmp/mbcakes.json'))
-          c=[x for x in db['cakes'] if x.get('featured30')]
-          wed=[x for x in c if x.get('primaryOccasion')=='Weddings & engagements' or 'Weddings & engagements' in x.get('otherOccasions',[])]
-          tir=[x for x in c if 'tiramisu' in (str(x.get('title',''))+' '+str(x.get('shortDescription',''))+' '+str(x.get('captionEvidence',''))).lower()]
-          assert len(c)==120 and len(wed)==9 and len(tir)==1
-          assert all(x['showOnWebsite']=='No' and x['approvalStatus']=='Draft' for x in db['cakes'])
-          print('120 final creations, nine weddings, one verified tiramisu, draft-only gates')
+          j=json.load(open('/tmp/mb-public.json'))
+          items=j['creations']
+          assert j['count']==120 and len(items)==120
+          assert len({c['code'] for c in items})==120
+          assert sum(c['section']=='weddings' for c in items)==9
+          assert sum(c['section']=='celebrations' for c in items)==110
+          assert sum(c['section']=='tiramisu' for c in items)==1
+          allowed={'id','code','title','alt','coverImage','thumbnailImage','instagramUrl','section','occasion','productTypes','priority'}
+          assert all(set(c)<=allowed for c in items)
+          print('Public gallery contains 120 minimal approved-source designs')
           PY
             then
               break
             fi
-            if [[ "$n" == 15 ]]; then echo 'Gallery not deployed'; exit 1; fi
+            if [[ "$n" == 18 ]]; then echo 'ERROR: Public gallery not deployed'; exit 1; fi
             sleep 10
           done
-      - name: Verify every featured original cover and thumbnail is accessible
+      - name: Confirm raw owner data and review UI are not public
+        shell: bash
+        run: |
+          set -euo pipefail
+          SITE='https://madsaboutcake.sitesbystratlens.workers.dev'
+          for route in /cakes.json /data/gallery-owner-decisions-final-2026-10-30.json /review/ /assets/gallery-review.js; do
+            status=$(curl -sS -o /tmp/probe -w '%{http_code}' --max-time 25 "$SITE$route")
+            echo "$route -> HTTP $status"
+            if [[ "$status" != '404' ]]; then
+              echo "ERROR: Internal asset must be excluded: $route (got $status)"
+              exit 1
+            fi
+          done
+      - name: Check every selected photo URL
         shell: bash
         run: |
           python3 - <<'PY'
-          import concurrent.futures,json,subprocess
-          db=json.load(open('/tmp/mbcakes.json'))
-          paths=sorted({p for c in db['cakes'] if c.get('featured30') for p in [c['coverImage'],c.get('thumbnailImage') or c['coverImage']]})
-          def one(path):
-             cmd=['curl','-fsSI','--max-time','20','https://madsaboutcake.sitesbystratlens.workers.dev/'+path]
-             r=subprocess.run(cmd,text=True,capture_output=True)
-             return (path,r.returncode==0 and 'content-type: image/webp' in r.stdout.lower())
-          with concurrent.futures.ThreadPoolExecutor(max_workers=10) as pool: out=list(pool.map(one,paths))
-          bad=[p for p,ok in out if not ok]
-          print('Original media:',len(paths),'broken:',len(bad))
+          import json,subprocess,concurrent.futures
+          d=json.load(open('/tmp/mb-public.json'))
+          paths=sorted({p for c in d['creations'] for p in (c['coverImage'],c['thumbnailImage'])})
+          def check(p):
+              r=subprocess.run(['curl','-fsSI','--max-time','20','https://madsaboutcake.sitesbystratlens.workers.dev/'+p],capture_output=True,text=True)
+              return p,r.returncode==0 and 'content-type: image/webp' in r.stdout.lower()
+          with concurrent.futures.ThreadPoolExecutor(max_workers=12) as pool:
+              result=list(pool.map(check,paths))
+          bad=[p for p,ok in result if not ok]
+          print('Selected original photo URLs:',len(paths),'broken:',len(bad))
           if bad:print(bad[:15]);raise SystemExit(1)
           PY
