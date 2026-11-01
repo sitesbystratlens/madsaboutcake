@@ -4,7 +4,7 @@
 (() => {
 'use strict';
 const IG='https://www.instagram.com/madsaboutcake/';
-const PHONE=''; // Await Madara's confirmed public business mobile number.
+const PHONE='0425 819 951'; // Confirmed by site owner through the project contact.
 const byId=id=>document.getElementById(id);
 const esc=x=>String(x??'').replace(/[&<>"']/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));
 const safeUrl=s=>typeof s==='string'&&/^assets\/(?:gallery-30|gallery-review-covers|gallery-final-covers|featured-25|creations)\/[\w./-]+\.webp$/.test(s);
@@ -40,7 +40,7 @@ function initContact(){
  document.querySelectorAll('[data-ig-contact]').forEach(a=>{a.href=IG;a.target='_blank';a.rel='noopener noreferrer'});
  document.querySelectorAll('[data-mobile-link]').forEach(a=>{
   const digits=PHONE.replace(/[^+\d]/g,'');
-  if(digits){a.href='tel:'+digits;a.textContent='Call '+PHONE;a.hidden=false;}
+  if(digits){a.href='tel:+61'+digits.slice(1);a.textContent='Call '+PHONE;a.hidden=false;}
   else{a.hidden=true;}
  });
  document.querySelectorAll('[data-mobile-pending]').forEach(x=>{x.classList.toggle('visible',!PHONE);x.textContent=PHONE?'':'Mobile contact button will appear once the studio confirms its public number.'});
