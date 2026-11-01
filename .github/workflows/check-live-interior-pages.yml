@@ -31,11 +31,13 @@ jobs:
             bad=0
             for page in weddings celebrations tiramisu-cakes decorate-and-sip cake-care enquire cakes; do
               curl -fsSL --max-time 25 "$SITE/$page/?r=$GITHUB_SHA-$n" > "/tmp/mads-$page.html" || bad=1
-              grep -Fq 'brand-site.css?v=20261102-categories1' "/tmp/mads-$page.html" || bad=1
+              grep -Fq 'brand-site.css?v=20261102-refine2' "/tmp/mads-$page.html" || bad=1
               grep -Fq 'www.instagram.com/madsaboutcake/' "/tmp/mads-$page.html" || bad=1
               grep -Fq 'data-cake-toggle' "/tmp/mads-$page.html" || bad=1
-              grep -Fq '>Custom creations</a>' "/tmp/mads-$page.html" || bad=1
+              grep -Fq '>All creations</a>' "/tmp/mads-$page.html" || bad=1
               grep -Fq 'href="sms:+61425819951"' "/tmp/mads-$page.html" || bad=1
+              grep -Fq 'aria-label="DM on Instagram"' "/tmp/mads-$page.html" || bad=1
+              grep -Fq 'href="/cake-care/">Pickup &amp; care</a>' "/tmp/mads-$page.html" || bad=1
             done
             if [[ "$bad" == 0 ]] &&
                grep -Fq 'data-gallery="weddings"' /tmp/mads-weddings.html &&
