@@ -176,11 +176,11 @@ for(const [name,url,total] of cases)for(const width of widths){
    const buttons=page.locator('#gallery-filters [data-filter]');
    if(await buttons.count()!==4)problems.push('four owner category filters required');
    await page.locator('#gallery-filters [data-filter="weddings"]').click();
-   if(!await page.locator('#gallery-count').textContent().then(s=>s.includes('of 6 ')))problems.push('Weddings subset not 9');
+   if(!await page.locator('#gallery-count').textContent().then(s=>s.includes('of 6 ')))problems.push('Weddings subset not 6');
    await page.locator('#gallery-filters [data-filter="celebrations"]').click();
-   if(!await page.locator('#gallery-count').textContent().then(s=>s.includes('of 24 ')))problems.push('Celebrations subset not 110');
+   if(!await page.locator('#gallery-count').textContent().then(s=>s.includes('of 24 ')))problems.push('Celebrations subset not 24');
    await page.locator('#gallery-filters [data-filter="tiramisu"]').click();
-   if(!await page.locator('#gallery-count').textContent().then(s=>s.includes('of 2 ')))problems.push('Tiramisu subset not 1');
+   if(!await page.locator('#gallery-count').textContent().then(s=>s.includes('of 2 ')))problems.push('Tiramisu subset not 2');
    await page.locator('#gallery-filters [data-filter="all"]').click();
    await page.locator('#gallery-show-more').click();
    if(await page.locator('.gallery-card').count()!==24)problems.push('Show more not revealing additional 12');
@@ -190,7 +190,7 @@ for(const [name,url,total] of cases)for(const width of widths){
     await page.locator('.gallery-card').first().waitFor({timeout:18000});
     const state=await page.locator('#gallery-filters [data-filter="weddings"]').getAttribute('aria-pressed');
     const text=await page.locator('#gallery-count').textContent();
-    if(state!=='true'||!text.includes('of 9 '))problems.push('Weddings gallery shortcut must deep-link to 9 filtered designs');
+    if(state!=='true'||!text.includes('of 6 '))problems.push('Weddings gallery shortcut must deep-link to 6 filtered designs');
   }
   if(name==='care'){
     const guide=await page.locator('main').textContent();
