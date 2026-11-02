@@ -64,7 +64,7 @@ for(const [name,url,total] of cases)for(const width of widths){
     const cakesPanel=mobile.locator('[data-mobile-cakes-panel]');
     if(await cakesToggle.getAttribute('aria-expanded')!=='false'||await cakesPanel.isVisible())problems.push('Cakes accordion must start collapsed');
     if(await mobile.locator('.mobile-site-menu__group-link[href="/cakes/"]').count()!==1)problems.push('Cakes & cupcakes group must link to full gallery');
-    if(await mobile.locator('.mobile-site-menu__primary>a').count()!==4)problems.push('Mobile navigation must include Decorate & Sip, Pickup, Prices and Contact');
+    if(await mobile.locator('.mobile-site-menu__primary>a').count()!==3)problems.push('Mobile navigation must have Decorate & Sip, Pickup and Contact, without Prices');
     await cakesToggle.click();
     if(await cakesToggle.getAttribute('aria-expanded')!=='true'||!(await cakesPanel.isVisible()))problems.push('Cakes category accordion did not open');
     if(await cakesPanel.locator('a').count()!==3)problems.push('Cakes group should show Weddings, Celebrations and Tiramisu');
@@ -147,7 +147,11 @@ for(const [name,url,total] of cases)for(const width of widths){
     if(!await footer.getByText('Handcrafted sweets for every occasion.').count())problems.push('Owner brand copy missing');
     if(await footer.getByText('Help & contact').count())problems.push('Footer should only say Contact');
     if(await footer.locator('.footer-contact-icons a').count()!==2)problems.push('Footer quick message actions missing');
-    if(await footer.locator('nav[aria-label="Footer explore"] a').count()!==4)problems.push('Footer Explore must include pricing link');
+    if(await footer.locator('nav[aria-label="Footer explore"] a').count()!==4)problems.push('Footer Explore should have four links');
+    const exploreLinks=await footer.locator('nav[aria-label="Footer explore"] a').evaluateAll(xs=>xs.map(x=>({path:new URL(x.href).pathname,label:x.textContent.trim()})));
+    if(exploreLinks.map(x=>x.path).join(',')!=='/cakes/,/decorate-and-sip/,/cake-care/,/pricing/'||exploreLinks.at(-1)?.label!=='Pricing')problems.push('Pricing must be labelled Pricing and appear below Pickup & care');
+    if(await page.locator('.brand-links a[href="/pricing/"]').count())problems.push('Pricing should not appear in top desktop navigation');
+    if(await page.locator('.mobile-site-menu__primary a[href="/pricing/"]').count())problems.push('Pricing should not appear in mobile primary navigation');
     if(await footer.locator('nav[aria-label="Footer contact"] a').count()!==1)problems.push('Footer Contact needs one text link and two icons');
     if(!await footer.locator('a[aria-label="DM on Instagram"]').count())problems.push('DM icon label missing');
     if(!await footer.locator('a[aria-label="Text 0425 819 951"]').count())problems.push('SMS icon label missing');

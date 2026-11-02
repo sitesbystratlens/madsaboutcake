@@ -61,7 +61,11 @@ for(const p of pages){
  assert(h.includes('class="footer-cols"'),'Simplified footer missing: '+p);
  assert(h.includes('Handcrafted sweets for every occasion.'),'Owner brand line missing from footer: '+p);
  const footer=h.slice(h.indexOf('<footer class="brand-footer">'));
- assert(footer.includes('href="/pricing/"')&&footer.includes('Cakes &amp; cupcakes')&&footer.includes('>Contact</p>')&&!footer.includes('Help &amp; contact'),'Simplified footer navigation missing: '+p);
+ assert(footer.includes('href="/pricing/">Pricing</a>')&&footer.includes('Cakes &amp; cupcakes')&&footer.includes('>Contact</p>')&&!footer.includes('Help &amp; contact'),'Simplified footer navigation missing: '+p);
+ const footerLinks=[...footer.matchAll(/<a href="\/(?:cakes|decorate-and-sip|cake-care|pricing)\/"[^>]*>/g)].map(m=>m[0]);
+ assert.deepEqual(footerLinks.map(x=>x.match(/href="([^"]+)"/)[1]),['/cakes/','/decorate-and-sip/','/cake-care/','/pricing/'],'Pricing must appear last under Pickup & care in the footer: '+p);
+ assert(!h.slice(h.indexOf('<nav class="brand-links"'),h.indexOf('</nav>',h.indexOf('<nav class="brand-links"'))).includes('href="/pricing/"'),'Pricing must not be in desktop header: '+p);
+ assert(!h.slice(h.indexOf('<div class="mobile-site-menu__primary">'),h.indexOf('</div>',h.indexOf('<div class="mobile-site-menu__primary">'))).includes('href="/pricing/"'),'Pricing must not be in mobile menu: '+p);
  assert(footer.includes('href="/cake-care/">Pickup &amp; care</a>'),'Pickup & care must be in Explore footer column: '+p);
  assert(footer.includes('href="/enquire/">Get in touch</a>'),'Get in touch must be in Contact footer column: '+p);
  assert(footer.includes('class="footer-contact-icons"'),'Footer quick-message icons missing: '+p);
