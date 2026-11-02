@@ -4,15 +4,16 @@ import fs from 'node:fs';
 const BASE='http://127.0.0.1:4173',widths=[1440,768,390,320];
 const cases=[
  ['home','/',0],
- ['weddings','/weddings/',9],
- ['celebrations','/celebrations/',110],
- ['tiramisu','/tiramisu-cakes/',1],
+ ['weddings','/weddings/',6],
+ ['celebrations','/celebrations/',24],
+ ['tiramisu','/tiramisu-cakes/',2],
  ['sip','/decorate-and-sip/',0],
  ['care','/cake-care/',0],
- ['all','/cakes/',120],
+ ['all','/cakes/',32],
  ['contact','/enquire/',0],
  ['about','/about/',0],
- ['notfound','/404.html',0]
+ ['notfound','/404.html',0],
+ ['pricing','/pricing/',0]
 ];
 fs.mkdirSync('qa-screenshots',{recursive:true});
 const browser=await chromium.launch({headless:true});
@@ -63,7 +64,7 @@ for(const [name,url,total] of cases)for(const width of widths){
     const cakesPanel=mobile.locator('[data-mobile-cakes-panel]');
     if(await cakesToggle.getAttribute('aria-expanded')!=='false'||await cakesPanel.isVisible())problems.push('Cakes accordion must start collapsed');
     if(await mobile.locator('.mobile-site-menu__group-link[href="/cakes/"]').count()!==1)problems.push('Cakes & cupcakes group must link to full gallery');
-    if(await mobile.locator('.mobile-site-menu__primary>a').count()!==3)problems.push('Need three standalone groups: Decorate & Sip, Pickup & care, Contact');
+    if(await mobile.locator('.mobile-site-menu__primary>a').count()!==4)problems.push('Mobile navigation must include Decorate & Sip, Pickup, Prices and Contact');
     await cakesToggle.click();
     if(await cakesToggle.getAttribute('aria-expanded')!=='true'||!(await cakesPanel.isVisible()))problems.push('Cakes category accordion did not open');
     if(await cakesPanel.locator('a').count()!==3)problems.push('Cakes group should show Weddings, Celebrations and Tiramisu');
@@ -146,7 +147,7 @@ for(const [name,url,total] of cases)for(const width of widths){
     if(!await footer.getByText('Handcrafted sweets for every occasion.').count())problems.push('Owner brand copy missing');
     if(await footer.getByText('Help & contact').count())problems.push('Footer should only say Contact');
     if(await footer.locator('.footer-contact-icons a').count()!==2)problems.push('Footer quick message actions missing');
-    if(await footer.locator('nav[aria-label="Footer explore"] a').count()!==3)problems.push('Footer Explore needs exactly three links');
+    if(await footer.locator('nav[aria-label="Footer explore"] a').count()!==4)problems.push('Footer Explore must include pricing link');
     if(await footer.locator('nav[aria-label="Footer contact"] a').count()!==1)problems.push('Footer Contact needs one text link and two icons');
     if(!await footer.locator('a[aria-label="DM on Instagram"]').count())problems.push('DM icon label missing');
     if(!await footer.locator('a[aria-label="Text 0425 819 951"]').count())problems.push('SMS icon label missing');
@@ -175,11 +176,11 @@ for(const [name,url,total] of cases)for(const width of widths){
    const buttons=page.locator('#gallery-filters [data-filter]');
    if(await buttons.count()!==4)problems.push('four owner category filters required');
    await page.locator('#gallery-filters [data-filter="weddings"]').click();
-   if(!await page.locator('#gallery-count').textContent().then(s=>s.includes('of 9 ')))problems.push('Weddings subset not 9');
+   if(!await page.locator('#gallery-count').textContent().then(s=>s.includes('of 6 ')))problems.push('Weddings subset not 9');
    await page.locator('#gallery-filters [data-filter="celebrations"]').click();
-   if(!await page.locator('#gallery-count').textContent().then(s=>s.includes('of 110 ')))problems.push('Celebrations subset not 110');
+   if(!await page.locator('#gallery-count').textContent().then(s=>s.includes('of 24 ')))problems.push('Celebrations subset not 110');
    await page.locator('#gallery-filters [data-filter="tiramisu"]').click();
-   if(!await page.locator('#gallery-count').textContent().then(s=>s.includes('of 1 ')))problems.push('Tiramisu subset not 1');
+   if(!await page.locator('#gallery-count').textContent().then(s=>s.includes('of 2 ')))problems.push('Tiramisu subset not 1');
    await page.locator('#gallery-filters [data-filter="all"]').click();
    await page.locator('#gallery-show-more').click();
    if(await page.locator('.gallery-card').count()!==24)problems.push('Show more not revealing additional 12');
@@ -199,6 +200,14 @@ for(const [name,url,total] of cases)for(const width of widths){
     if(careIcons.join('')!=='🚗🌡️❄️💕')problems.push('Care guide should use the four original expressive icons');
     const separators=await page.locator('.care-bullets li').evaluateAll(xs=>xs.map(el=>getComputedStyle(el).borderTopWidth));
     if(separators.some(x=>x!=='0px'))problems.push('Care bullet list should not have row dividers');
+  }
+  if(name==='pricing'){
+   const rows=await page.locator('.pricing-table tbody tr').count();
+   if(rows!==11)problems.push('Pricing page must show 5 cake sizes and 6 additions');
+   if(!await page.locator('.pricing-source-note').count())problems.push('Pricing source provenance missing');
+  }
+  if(name==='tiramisu'&&width===390){
+    if(await page.locator('.gallery-card').count()!==2)problems.push('Custom and original tiramisu both expected');
   }
   if(name==='celebrations'&&width===390&&await page.locator('#gallery-filters:visible').count())problems.push('Celebration page should not expose duplicate subcategories');
   if(['home','all','care','weddings','celebrations','tiramisu'].includes(name)&&width===390){
@@ -236,4 +245,4 @@ for(const [name,url,total] of cases)for(const width of widths){
 await browser.close();
 fs.writeFileSync('qa-screenshots/report.json',JSON.stringify({cases:reports,errors:errs},null,2));
 if(errs.length){console.error('OWNER REVIEW QA FAILED:\n'+errs.join('\n'));process.exitCode=1}
-else console.log('OWNER REVIEW QA PASS: 10 pages x 4 widths; six gallery filters; staged reveal; direct message and mobile contact; no broken imagery.');
+else console.log('OWNER REVIEW QA PASS: 11 pages x 4 widths; six gallery filters; staged reveal; direct message and mobile contact; no broken imagery.');

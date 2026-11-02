@@ -25,7 +25,7 @@ jobs:
     timeout-minutes: 11
     steps:
       - uses: actions/checkout@v4
-      - name: Wait for 120-item public gallery and validate no private metadata
+      - name: Wait for curated 32-item public gallery and validate no private metadata
         shell: bash
         run: |
           set -euo pipefail
@@ -38,14 +38,14 @@ jobs:
           import json
           j=json.load(open('/tmp/mb-public.json'))
           items=j['creations']
-          assert j['count']==120 and len(items)==120
-          assert len({c['code'] for c in items})==120
-          assert sum(c['section']=='weddings' for c in items)==9
-          assert sum(c['section']=='celebrations' for c in items)==110
-          assert sum(c['section']=='tiramisu' for c in items)==1
+          assert j['count']==32 and len(items)==32
+          assert len({c['code'] for c in items})==32
+          assert sum(c['section']=='weddings' for c in items)==6
+          assert sum(c['section']=='celebrations' for c in items)==24
+          assert sum(c['section']=='tiramisu' for c in items)==2
           allowed={'id','code','title','alt','coverImage','thumbnailImage','instagramUrl','section','occasion','productTypes','priority'}
           assert all(set(c)<=allowed for c in items)
-          print('Public gallery contains 120 minimal approved-source designs')
+          print('Public gallery contains 32 curated source designs')
           PY
             then
               break
