@@ -67,3 +67,12 @@
 - Care guide was expanded to include **all four owner-supplied sections**: the journey home, temperature matters, once you're home (fridge and 1–2 hours before serving), and her personal reminder. The visual four-panel treatment uses the owner's emoji/icon language and only the existing crimson/cream colours.
 - A **temporary, screenshot-traced SVG** of the real “xoxo Mads” handwriting is shown in enquiry sections. It is intentionally labelled preview artwork. Replace with an owner-provided original transparent/vector export before public launch; no arbitrary substitute font is used.
 - The full selection of **120 creations** and working manual Instagram/SMS enquiries remains untouched.
+
+
+## Owner feedback incorporated — 3 November 2026
+
+- Owner has opted to publish price lists. A responsive Menu & pricing page reproduces prices from the **October 2025** brand-guide price-list images (cake sizes, flavours, fillings, additions, cupcakes and Decorate & Sip). **Reconfirm those older prices before removing preview restrictions**. No checkout or automatic booking is introduced.
+- Owner prefers a **curated gallery**. Public selection is reduced from 120 to 32 (6 weddings, 24 celebrations, 2 tiramisu), while the original 120 remain available internally for future rotation. Google Sheets editing is a later idea, not implemented.
+- Added a second personalised graduation tiramisu example from the owner's shared original Instagram post (DeoN1h7PHzB) and photograph; do not substitute generated cake images.
+- Brand colours remain strictly crimson #9A2849 and cream #F6F4F0. Fonts (Perandory Condensed, Amorea/Amsterdam Four and Helvetica Now Display Light) remain **temporarily substituted** until the designer supplies properly licensed web font files. Canva logo exports are not font-license files.
+- Current hero still uses the existing genuine Mads cake images; generated collage ideas are paused.

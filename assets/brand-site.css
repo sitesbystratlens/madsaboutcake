@@ -441,3 +441,32 @@ body{font-weight:400;padding-bottom:0}
  .statement .statement-title{font-size:clamp(32px,8vw,47px);line-height:1.065}
  .statement-grid>div>p{font-size:17px;line-height:1.7;max-width:100%}
 }
+
+/* November owner review — pricing layout uses brand crimson and cream exclusively. */
+.pricing-intro{padding-bottom:40px}.pricing-intro .copy{max-width:780px}
+.pricing-source-note{font-size:13px;line-height:1.7;margin-top:22px;opacity:.8;max-width:760px}
+.pricing-body{padding-bottom:clamp(55px,6vw,90px)}
+.pricing-body>.section-title{font-size:clamp(38px,4.5vw,67px);line-height:1.05;margin:12px 0 26px}
+.pricing-intro-copy{font-size:16px;line-height:1.7;margin:0 0 26px;max-width:780px}
+.pricing-grid{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:18px}
+.pricing-grid--two{grid-template-columns:repeat(2,minmax(0,1fr))}
+.pricing-panel{border:1px solid var(--border);padding:clamp(23px,3vw,38px);min-width:0}
+.pricing-panel h3{font:600 clamp(26px,2.5vw,39px)/1.12 var(--display);text-transform:uppercase;letter-spacing:-.025em;margin:0 0 23px}
+.pricing-panel p,.pricing-panel li{font:400 15px/1.75 var(--body);margin:9px 0}
+.pricing-panel strong{font-weight:600}
+.pricing-panel ul{padding-left:20px}
+.pricing-price{font:600 clamp(31px,3vw,44px)/1.1 var(--display)!important;margin:6px 0 24px!important}
+.pricing-price span{font:400 15px/1.5 var(--body)}
+.pricing-table{width:100%;border-collapse:collapse}
+.pricing-table caption{position:absolute;width:1px;height:1px;overflow:hidden;clip-path:inset(50%)}
+.pricing-table th,.pricing-table td{border-bottom:1px solid var(--border);padding:12px 0;font:400 15px/1.5 var(--body)}
+.pricing-table th{text-align:left}.pricing-table td{text-align:right;font-weight:600;white-space:nowrap}
+.pricing-footnote{font-size:13px;line-height:1.7;margin-top:22px}
+.pricing-outro{border-top:1px solid var(--border);padding:49px 0 76px}
+.pricing-outro .section-title{font-size:clamp(39px,5vw,72px)}
+.pricing-outro p{margin:13px 0 26px}
+.gallery[data-gallery=tiramisu]{grid-template-columns:repeat(2,minmax(0,440px));gap:22px;justify-content:center}
+.gallery[data-gallery=tiramisu] .gallery-card__photo{height:auto;aspect-ratio:3/4}
+@media(max-width:850px){.pricing-grid{grid-template-columns:repeat(2,minmax(0,1fr))}.pricing-grid>.pricing-panel:last-child:nth-child(odd){grid-column:1/-1}}
+@media(max-width:650px){.pricing-grid,.pricing-grid--two{grid-template-columns:1fr}.pricing-grid>.pricing-panel:last-child:nth-child(odd){grid-column:auto}.pricing-body{padding-bottom:50px}.pricing-panel{padding:24px}.gallery[data-gallery=tiramisu]{grid-template-columns:repeat(2,minmax(0,1fr));gap:14px}}
+@media(max-width:360px){.gallery[data-gallery=tiramisu]{grid-template-columns:1fr}}

@@ -5,17 +5,19 @@ const read=p=>fs.readFileSync(p,'utf8');
 const raw=JSON.parse(read('cakes.json'));
 const pub=JSON.parse(read('assets/public-creations.json'));
 const brand=read('assets/brand-site.css'),site=read('assets/brand-site.js');
-const pages=['index.html','weddings/index.html','celebrations/index.html','tiramisu-cakes/index.html','decorate-and-sip/index.html','cake-care/index.html','cakes/index.html','enquire/index.html','about/index.html','404.html'];
+const pages=['pricing/index.html','index.html','weddings/index.html','celebrations/index.html','tiramisu-cakes/index.html','decorate-and-sip/index.html','cake-care/index.html','cakes/index.html','enquire/index.html','about/index.html','404.html'];
 const privateSelected=raw.cakes.filter(c=>c.featured30);
 const items=pub.creations;
-assert.equal(privateSelected.length,120);
-assert.equal(items.length,120,'Final owner selections must remain 120');
-assert.equal(pub.count,120,'Public count must match featured total');
-assert.equal(new Set(items.map(c=>c.code)).size,120,'No duplicate image source');
-assert.deepEqual(new Set(items.map(c=>c.code)),new Set(privateSelected.map(c=>c.sourceShortcode)),'All owner selections retained');
-assert.equal(items.filter(c=>c.section==='weddings').length,9);
-assert.equal(items.filter(c=>c.section==='tiramisu').length,1);
-assert.equal(items.filter(c=>c.section==='celebrations').length,110);
+assert.equal(privateSelected.length,120,'Preserve internal original image archive');
+assert(raw.cakes.some(c=>c.sourceShortcode==='DeoN1h7PHzB'),'Owner-provided tiramisu image must be archived');
+assert(items.some(c=>c.code==='DeoN1h7PHzB'&&c.section==='tiramisu'),'Custom graduation tiramisu must appear publicly');
+assert.equal(items.length,32,'Owner requested a curated public selection rather than all archive images');
+assert.equal(pub.count,32,'Public gallery count must match curated selection');
+assert.equal(new Set(items.map(c=>c.code)).size,32,'No duplicate source posts');
+assert(items.every(c=>privateSelected.some(x=>x.sourceShortcode===c.code)||c.code==='DeoN1h7PHzB'),'Selected images must originate in owner archive or owner-supplied tiramisu');
+assert.equal(items.filter(c=>c.section==='weddings').length,6);
+assert.equal(items.filter(c=>c.section==='tiramisu').length,2);
+assert.equal(items.filter(c=>c.section==='celebrations').length,24);
 assert(items.every(c=>c.title&&c.title.length<75&&!/[\u{1F300}-\u{1FAFF}]/u.test(c.title)&&!c.title.includes('@studi')),'Every public title should be editorial, not an Instagram caption');
 assert(items.every(c=>c.alt&&c.alt.length<150),'Alt text must be descriptive and bounded');
 assert(items.every(c=>/^https:\/\/www\.instagram\.com\/p\/[A-Za-z0-9_-]{5,32}\/$/.test(c.instagramUrl)));
@@ -41,7 +43,7 @@ assert.equal(wrangler.assets.not_found_handling,'404-page');
 for(const p of pages){
  const h=read(p);
  assert(h.includes('noindex,nofollow'),'Preview must remain non-indexed: '+p);
- assert(h.includes('brand-site.css?v=20261102-polish8')&&h.includes('brand-site.js?v=20261102-mobile4'),'Mobile-refined assets missing: '+p);
+ assert(h.includes('brand-site.css?v=20261103-pricing1')&&h.includes('brand-site.js?v=20261102-mobile4'),'Mobile-refined assets missing: '+p);
  assert(h.includes('/assets/brand/wordmark-set-2.svg'),'Brand wordmark missing: '+p);
  assert(h.includes('class="nav-cakes__main" href="/cakes/"'),'Cake and cupcake main link must open All creations: '+p);
  assert(h.includes('data-cake-toggle')&&h.includes('aria-controls="cakes-submenu"')&&h.includes('aria-expanded="false"'),'Dedicated accessible dropdown toggle missing: '+p);
@@ -59,19 +61,19 @@ for(const p of pages){
  assert(h.includes('class="footer-cols"'),'Simplified footer missing: '+p);
  assert(h.includes('Handcrafted sweets for every occasion.'),'Owner brand line missing from footer: '+p);
  const footer=h.slice(h.indexOf('<footer class="brand-footer">'));
- assert(footer.includes('Cakes &amp; cupcakes')&&footer.includes('>Contact</p>')&&!footer.includes('Help &amp; contact'),'Simplified footer navigation missing: '+p);
+ assert(footer.includes('href="/pricing/"')&&footer.includes('Cakes &amp; cupcakes')&&footer.includes('>Contact</p>')&&!footer.includes('Help &amp; contact'),'Simplified footer navigation missing: '+p);
  assert(footer.includes('href="/cake-care/">Pickup &amp; care</a>'),'Pickup & care must be in Explore footer column: '+p);
  assert(footer.includes('href="/enquire/">Get in touch</a>'),'Get in touch must be in Contact footer column: '+p);
  assert(footer.includes('class="footer-contact-icons"'),'Footer quick-message icons missing: '+p);
  assert(footer.includes('aria-label="DM on Instagram"')&&footer.includes('aria-label="Text 0425 819 951"'),'Accessible footer contact labels missing: '+p);
  assert(!footer.includes('Custom cakes by enquiry only'),'Unnecessary footer disclaimer: '+p);
  assert(!footer.includes('<a href="/weddings/">Weddings</a>'),'Footer duplicates individual cake categories: '+p);
- for(const path of ['weddings','celebrations','tiramisu-cakes','decorate-and-sip','cake-care'])assert(h.includes('href="/'+path+'/"'),'Nav missing '+path+' on '+p);
+ for(const path of ['weddings','celebrations','tiramisu-cakes','decorate-and-sip','cake-care','pricing'])assert(h.includes('href="/'+path+'/"'),'Nav missing '+path+' on '+p);
  assert(h.includes('href="sms:+61425819951"'),'Text-message link missing: '+p);
  assert(!h.includes('href="tel:+61425819951"'),'Old call CTA must be removed: '+p);
  assert(h.includes('href="https://ig.me/m/madsaboutcake"'),'Instagram direct-message link missing: '+p);
  assert(!h.includes('Message on Instagram'),'Owner prefers DM terminology: '+p);
- assert(h.includes('<main id="main">')&&h.includes('<h1'),'Semantic heading missing: '+p);
+ assert(h.includes('<main id="main"')&&h.includes('<h1'),'Semantic heading missing: '+p);
 }
 for(const p of ['weddings/index.html','celebrations/index.html','tiramisu-cakes/index.html','cakes/index.html']){
  const h=read(p);
@@ -108,8 +110,8 @@ assert(site.includes("['weddings','Weddings']")&&site.includes("['celebrations',
 assert(!site.includes("['cupcakes','Cupcakes']")&&!site.includes("['birthdays','Birthdays']"),'No separate cupcake or birthday category filter');
 assert(site.includes("key==='all'"),'Top-level category filters belong to the full Custom creations gallery');
 assert(fs.existsSync('assets/icons/instagram-outline.svg')&&fs.existsSync('assets/icons/message-outline.svg'),'Contact icons missing');
-assert(!read('index.html').includes('Menu & pricing'),'Unconfirmed prices must remain unpublished');
-for(const p of pages.filter(p=>!['404.html'].includes(p))){
+assert(read('pricing/index.html').includes('Menu &amp; pricing.')&&read('pricing/index.html').includes('October 2025 brand guide'),'Pricing guide must reflect original source and flag its dated values');
+for(const p of pages.filter(p=>!['404.html','pricing/index.html'].includes(p))){
  const h=read(p);
  assert(h.includes('/assets/brand/xoxo-mads-preview.svg'),'Temporary signature missing: '+p);
 }
@@ -138,4 +140,4 @@ assert(brand.includes('-webkit-text-stroke:.72px currentColor'),'High contrast d
 const contact=read('enquire/index.html');
 assert(contact.includes('Helpful details for your message'),'Enquiry guidance missing');
 assert(!contact.includes('<form'),'Manual enquiry only: do not add checkout or form');
-console.log('RED TEAM OWNER REVIEW PASS: 120 selected creations, minimal public JSON, no exposed review deployment, 4 categories, branded manual contact and cake-care text.');
+console.log('RED TEAM OWNER REVIEW PASS: 32 curated creations, minimal public JSON, no exposed review deployment, 4 categories, branded manual contact and cake-care text.');

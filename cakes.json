@@ -6639,6 +6639,24 @@
       "otherProductTypes": [],
       "ownerReviewDecision": "Keep",
       "finalReviewNote": "should be under other perhaps"
+    },
+    {
+      "id": "ig-owner-deon1h7phzb",
+      "sourceShortcode": "DeoN1h7PHzB",
+      "title": "Custom graduation tiramisu cake",
+      "alt": "Tiramisu cake by Mads in an open white box with ladyfingers, cocoa, cream ribbon, and a 'Gladys the Graduate' custom inscription.",
+      "shortDescription": "Original custom graduation tiramisu cake supplied directly by the owner in November 2026.",
+      "productType": "Cake",
+      "primaryOccasion": "Graduations",
+      "coverImage": "assets/gallery-final-covers/DeoN1h7PHzB-owner.webp",
+      "thumbnailImage": "assets/gallery-final-covers/DeoN1h7PHzB-owner.webp",
+      "instagramUrl": "https://www.instagram.com/p/DeoN1h7PHzB/",
+      "priority": 2033,
+      "featured30": false,
+      "demoVisible": true,
+      "approvalStatus": "Owner supplied",
+      "showOnWebsite": "Yes",
+      "ownerReviewRequired": false
     }
   ]
 }
