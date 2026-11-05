@@ -28,7 +28,8 @@ assert(!/captionEvidence|ownerReviewDecision|reviewNotes|publicationHoldReasons|
 assert(brand.includes('#9A2849')&&brand.includes('#F6F4F0'),'Use exact brand palette');
 for(const font of ['Perandory Condensed','Amorea','Amsterdam Four','Helvetica Now Display'])assert(brand.includes(font),'Named brand font missing: '+font);
 assert(!brand.includes('#fedcde')&&!brand.includes('#f15ea0'),'Legacy colours cannot return');
-assert(read('assets/brand/wordmark-set-2.svg').includes('data:image/webp;base64,'),'Do not claim a raster logo has become true vector');
+assert(fs.readFileSync('assets/brand/wordmark-owner-transparent.png').subarray(1,4).toString()==='PNG','Transparent Canva-derived wordmark PNG must be present');
+assert(fs.readFileSync('assets/brand/monogram-owner-transparent.png').subarray(1,4).toString()==='PNG','Transparent Canva-derived monogram PNG must be present');
 assert(site.includes("const PHONE='0425 819 951'"),'Confirmed owner phone missing');
 assert(site.includes("const SMS='sms:+61425819951'"),'Text-message URI missing');
 assert(site.includes('const IG_DM='),'Direct Instagram messaging missing');
@@ -43,8 +44,8 @@ assert.equal(wrangler.assets.not_found_handling,'404-page');
 for(const p of pages){
  const h=read(p);
  assert(h.includes('noindex,nofollow'),'Preview must remain non-indexed: '+p);
- assert(h.includes('brand-site.css?v=20261103-pricing1')&&h.includes('brand-site.js?v=20261102-mobile4'),'Mobile-refined assets missing: '+p);
- assert(h.includes('/assets/brand/wordmark-set-2.svg'),'Brand wordmark missing: '+p);
+ assert(h.includes('brand-site.css?v=20261105-brand1')&&h.includes('brand-site.js?v=20261102-mobile4'),'Mobile-refined assets missing: '+p);
+ assert(h.includes('/assets/brand/wordmark-owner-transparent.png'),'Brand wordmark missing: '+p);
  assert(h.includes('class="nav-cakes__main" href="/cakes/"'),'Cake and cupcake main link must open All creations: '+p);
  assert(h.includes('data-cake-toggle')&&h.includes('aria-controls="cakes-submenu"')&&h.includes('aria-expanded="false"'),'Dedicated accessible dropdown toggle missing: '+p);
  assert(h.includes('data-cake-panel hidden'),'Cake category dropdown must start collapsed: '+p);
@@ -91,6 +92,12 @@ for(const p of ['celebrations/index.html','cakes/index.html'])assert(read(p).inc
 const home=read('index.html');
 assert.equal((home.match(/class="category-card"/g)||[]).length,4,'Four main owner-requested categories');
 assert(home.includes('<a class="btn" href="/cakes/">Explore our creations ↗</a>')&&home.includes('class="hero-actions"')&&home.includes('class="hero-contact-icons"'),'Homepage must retain Explore creations CTA alongside two compact contact icons');
+assert(home.includes('src="/assets/gallery-30/DYJ42NMkqlU-M618.webp"')&&home.includes('src="/assets/gallery-30/DCv93Blhb1I-M182.webp"')&&home.includes('src="/assets/gallery-final-covers/DeoN1h7PHzB-owner.webp"'),'Homepage category cards should feature distinct real owner creations');
+const categoryHtml=home.slice(home.indexOf('<div class="category-grid">'),home.indexOf('</section>',home.indexOf('<div class="category-grid">')));
+const heroHtml=home.slice(home.indexOf('<div class="hero-art">'),home.indexOf('</section>',home.indexOf('<div class="hero-art">')));
+for(const cover of [...categoryHtml.matchAll(/<img src="([^"]+)"/g)].map(m=>m[1]))assert(!heroHtml.includes('src="'+cover+'"'),'Homepage category cover must not duplicate a hero image: '+cover);
+const pricingHtml=read('pricing/index.html');
+assert(pricingHtml.includes('class="contact-strip"')&&pricingHtml.includes('class="contact-signature"'),'Pricing contact section must reuse shared branded signature');
 assert((home.match(/class="statement-line"/g)||[]).length===4&&home.includes('class="statement-line">celebrating.</span>'),'Burgundy editorial headline needs four deliberate lines ending in celebrating.');
 assert(!home.includes('class="btn btn-cream" data-ig-contact'),'Remove duplicate Instagram CTA from burgundy editorial section');
 assert(home.includes('Your idea.</span> <span class="statement-line">Mads’ craft.'),'Homepage headline must name Mads');
@@ -101,7 +108,7 @@ assert(site.includes('DM on Instagram'),'Mobile and design-preview contact actio
 assert(site.includes('function initCakeNav()')&&site.includes('panel.hidden=!value')&&site.includes("e.key==='Escape'"),'Dropdown must be keyboard/click operable');
 assert(site.includes('function initMobileNav()')&&site.includes("document.body.classList.toggle('mobile-nav-open',value)")&&site.includes('backdrop.addEventListener'),'Mobile navigation must open, close and restore focus');
 assert(site.includes('groupToggle?.addEventListener')&&site.includes('setGroupOpen(false)'),'Nested cake accordion must toggle and reset on menu close');
-assert(brand.includes('.brand-link img{mix-blend-mode:normal}')&&read('assets/brand/wordmark-set-2.svg').includes('brand-ink-alpha'),'Wordmark image must remove pale backdrop at source');
+assert(brand.includes('.brand-link img{mix-blend-mode:normal;object-fit:contain;image-rendering:auto;filter:none}')&&!brand.includes('.brand-link img{mix-blend-mode:multiply}'),'Owner wordmark must use source transparency without CSS blending');
 assert(brand.includes('.mobile-menu-backdrop{z-index:40}'),'Page backdrop must stay below header logo');
 assert(brand.includes('.brand-footer{margin-top:0'),'Footer gap must be removed site-wide');
 assert(brand.includes('-webkit-text-stroke:.32px currentColor'),'Brand display type must have a slightly stronger stroke');

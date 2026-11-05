@@ -26,7 +26,7 @@ jobs:
             curl -fsSL --max-time 25 "$SITE/?r=$GITHUB_SHA-$n" >/tmp/mads-home.html || true
             curl -fsSL --max-time 25 "$SITE/assets/brand-site.css?r=$GITHUB_SHA-$n" >/tmp/mads-brand.css || true
             if grep -Fq 'A little cake, a lot of love.' /tmp/mads-home.html &&
-               grep -Fq 'wordmark-set-2.svg' /tmp/mads-home.html &&
+               grep -Fq 'wordmark-owner-transparent.png' /tmp/mads-home.html &&
                grep -Fq 'data-cake-toggle' /tmp/mads-home.html &&
                grep -Fq 'data-mobile-nav-toggle' /tmp/mads-home.html &&
                grep -Fq 'data-mobile-cakes-toggle' /tmp/mads-home.html &&
@@ -45,15 +45,16 @@ jobs:
                grep -Fq 'aria-label="Text 0425 819 951"' /tmp/mads-home.html &&
                grep -Fq 'href="/enquire/">Get in touch</a>' /tmp/mads-home.html &&
                grep -Fq 'href="sms:+61425819951"' /tmp/mads-home.html &&
-               grep -Fq 'brand-site.css?v=20261103-pricing1' /tmp/mads-home.html &&
+               grep -Fq 'brand-site.css?v=20261105-brand1' /tmp/mads-home.html &&
                grep -Fq 'href="/weddings/"' /tmp/mads-home.html &&
                grep -Fq 'href="/celebrations/"' /tmp/mads-home.html &&
                grep -Fq 'href="/tiramisu-cakes/"' /tmp/mads-home.html &&
                grep -Fq 'href="/decorate-and-sip/"' /tmp/mads-home.html &&
                grep -Fq '#9A2849' /tmp/mads-brand.css &&
                grep -Fq '#F6F4F0' /tmp/mads-brand.css; then
-              curl -fsSL --max-time 25 "$SITE/assets/brand/wordmark-set-2.svg" >/tmp/mads-logo.svg
-              grep -Fq 'data:image/webp;base64,' /tmp/mads-logo.svg
+              curl -fsSL --max-time 25 "$SITE/assets/brand/wordmark-owner-transparent.png" >/tmp/mads-logo.png
+              test "$(wc -c </tmp/mads-logo.png)" -gt 1000
+              file /tmp/mads-logo.png | grep -Fq 'PNG image data'
               echo 'PASS: brand site homepage, genuine artwork, palette, categories'
               exit 0
             fi

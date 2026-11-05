@@ -251,7 +251,7 @@ body{font-weight:400;padding-bottom:0}
 
 /* Owner mobile refinement 2 — accessible nested menu, typography, measured spacing.
    Exact official crimson/cream retained; no alternative colours or fonts introduced. */
-.brand-link img{mix-blend-mode:multiply}
+/* Brand artwork must retain its real transparency, never CSS multiply blending. */
 .brand-footer{margin-top:0;padding:clamp(55px,6vw,85px) 0 33px}
 .footer-cols{gap:clamp(28px,4vw,58px);align-items:start}
 .footer-heading{font-size:clamp(43px,4.4vw,64px)}
@@ -328,7 +328,7 @@ body{font-weight:400;padding-bottom:0}
 }
 
 /* November 2026 finishing pass: authentic transparent logo and refined proportions. */
-.brand-link img{mix-blend-mode:normal}
+.brand-link img{mix-blend-mode:normal;object-fit:contain;image-rendering:auto;filter:none}
 .hero-contact-icons{display:flex;align-items:center;gap:11px;margin-top:5px}
 .hero-contact-icons__link{width:51px;height:51px;display:inline-flex;align-items:center;justify-content:center;border:1px solid var(--crimson);color:var(--crimson);background:transparent;text-decoration:none;transition:background .2s ease,color .2s ease,border-color .2s ease}
 .hero-contact-icons__link:hover{background:var(--crimson);color:var(--cream)}
@@ -462,9 +462,7 @@ body{font-weight:400;padding-bottom:0}
 .pricing-table th,.pricing-table td{border-bottom:1px solid var(--border);padding:12px 0;font:400 15px/1.5 var(--body)}
 .pricing-table th{text-align:left}.pricing-table td{text-align:right;font-weight:600;white-space:nowrap}
 .pricing-footnote{font-size:13px;line-height:1.7;margin-top:22px}
-.pricing-outro{border-top:1px solid var(--border);padding:49px 0 76px}
-.pricing-outro .section-title{font-size:clamp(39px,5vw,72px)}
-.pricing-outro p{margin:13px 0 26px}
+/* Pricing page reuses shared contact-strip component and signature. */
 .gallery[data-gallery=tiramisu]{grid-template-columns:repeat(2,minmax(0,440px));gap:22px;justify-content:center}
 .gallery[data-gallery=tiramisu] .gallery-card__photo{height:auto;aspect-ratio:3/4}
 @media(max-width:850px){.pricing-grid{grid-template-columns:repeat(2,minmax(0,1fr))}.pricing-grid>.pricing-panel:last-child:nth-child(odd){grid-column:1/-1}}

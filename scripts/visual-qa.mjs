@@ -102,6 +102,23 @@ for(const [name,url,total] of cases)for(const width of widths){
     }
   }
   if(name==='home'){
+    const logo=await page.locator('.brand-link img').evaluate(el=>({src:el.getAttribute('src'),loaded:el.complete&&el.naturalWidth>0}));
+    if(!logo.src.includes('wordmark-owner-transparent.png')||!logo.loaded)problems.push('Canva original transparent wordmark is missing or not loaded');
+    if(!await page.locator('link[rel="icon"][href*="monogram-owner-transparent.png"]').count())problems.push('Official monogram favicon is missing');
+  }
+  if(name==='home'){
+    const imgSets=await page.evaluate(()=>{
+      const hero=[...document.querySelectorAll('.hero-art img')].map(img=>new URL(img.src).pathname);
+      const cards=[...document.querySelectorAll('.category-card__image img')].map(img=>new URL(img.src).pathname);
+      return {hero,cards};
+    });
+    if(imgSets.cards.some(path=>imgSets.hero.includes(path)))problems.push('Category covers still duplicate hero photographs');
+    if(!imgSets.cards[0]?.includes('DYJ42NMkqlU')||!imgSets.cards[1]?.includes('DCv93Blhb1I')||!imgSets.cards[2]?.includes('DeoN1h7PHzB'))problems.push('Curated category covers missing');
+  }
+  if(name==='pricing'){
+    if(!await page.locator('main .contact-strip .contact-signature').count())problems.push('Pricing closing section missing branded signature');
+  }
+  if(name==='home'){
     if(!await page.locator('.hero-actions>a.btn[href="/cakes/"]').isVisible())problems.push('Explore our creations primary CTA must be visible at every viewport');
     if(await page.locator('.statement .btn[data-ig-contact]').count())problems.push('Burgundy statement duplicates enquiry CTA');
     if(await page.locator('.statement-line').count()!==4)problems.push('Burgundy statement must have four editorial lines');
