@@ -35,7 +35,7 @@ jobs:
                grep -Fq '>Explore all</a>' /tmp/mads-home.html &&
                ! grep -Fq 'href="/cakes/?filter=cupcakes"' /tmp/mads-home.html &&
                grep -Fq 'href="/cake-care/">Pickup &amp; care</a>' /tmp/mads-home.html &&
-               grep -Fq 'xoxo-mads-preview.svg' /tmp/mads-home.html &&
+               ! grep -Fq 'xoxo-mads-preview.svg' /tmp/mads-home.html &&
                grep -Fq 'Handcrafted sweets for every occasion.' /tmp/mads-home.html &&
                grep -Fq 'class="statement-line">Your idea.</span>' /tmp/mads-home.html &&
                grep -Fq 'class="statement-line">Mads’ craft.</span>' /tmp/mads-home.html &&
