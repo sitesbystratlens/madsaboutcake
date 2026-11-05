@@ -52,11 +52,12 @@ jobs:
                grep -Fq 'href="/decorate-and-sip/"' /tmp/mads-home.html &&
                grep -Fq '#9A2849' /tmp/mads-brand.css &&
                grep -Fq '#F6F4F0' /tmp/mads-brand.css; then
-              curl -fsSL --max-time 25 "$SITE/assets/brand/wordmark-owner-transparent.png" >/tmp/mads-logo.png
-              test "$(wc -c </tmp/mads-logo.png)" -gt 1000
-              file /tmp/mads-logo.png | grep -Fq 'PNG image data'
-              echo 'PASS: brand site homepage, genuine artwork, palette, categories'
-              exit 0
+              if curl -fsSL --max-time 25 "$SITE/assets/brand/wordmark-owner-transparent.png?v=20261105-brand1&r=$GITHUB_SHA-$n" >/tmp/mads-logo.png &&
+                 test "$(wc -c </tmp/mads-logo.png)" -gt 1000 &&
+                 file /tmp/mads-logo.png | grep -Fq 'PNG image data'; then
+                echo 'PASS: brand site homepage, genuine artwork, palette, categories'
+                exit 0
+              fi
             fi
             echo "Waiting for branded preview deployment ($n of 15)"
             sleep 10
