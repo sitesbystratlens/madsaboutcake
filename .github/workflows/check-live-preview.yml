@@ -45,14 +45,14 @@ jobs:
                grep -Fq 'aria-label="Text 0425 819 951"' /tmp/mads-home.html &&
                grep -Fq 'href="/enquire/">Get in touch</a>' /tmp/mads-home.html &&
                grep -Fq 'href="sms:+61425819951"' /tmp/mads-home.html &&
-               grep -Fq 'brand-site.css?v=20261105-brand1' /tmp/mads-home.html &&
+               grep -Fq 'brand-site.css?v=20261105-brand2' /tmp/mads-home.html &&
                grep -Fq 'href="/weddings/"' /tmp/mads-home.html &&
                grep -Fq 'href="/celebrations/"' /tmp/mads-home.html &&
                grep -Fq 'href="/tiramisu-cakes/"' /tmp/mads-home.html &&
                grep -Fq 'href="/decorate-and-sip/"' /tmp/mads-home.html &&
                grep -Fq '#9A2849' /tmp/mads-brand.css &&
                grep -Fq '#F6F4F0' /tmp/mads-brand.css; then
-              if curl -fsSL --max-time 25 "$SITE/assets/brand/wordmark-owner-transparent.png?v=20261105-brand1&r=$GITHUB_SHA-$n" >/tmp/mads-logo.png &&
+              if curl -fsSL --max-time 25 "$SITE/assets/brand/wordmark-owner-transparent.png?v=20261105-brand2&r=$GITHUB_SHA-$n" >/tmp/mads-logo.png &&
                  test "$(wc -c </tmp/mads-logo.png)" -gt 1000 &&
                  file /tmp/mads-logo.png | grep -Fq 'PNG image data'; then
                 echo 'PASS: brand site homepage, genuine artwork, palette, categories'

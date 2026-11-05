@@ -44,7 +44,7 @@ assert.equal(wrangler.assets.not_found_handling,'404-page');
 for(const p of pages){
  const h=read(p);
  assert(h.includes('noindex,nofollow'),'Preview must remain non-indexed: '+p);
- assert(h.includes('brand-site.css?v=20261105-brand1')&&h.includes('brand-site.js?v=20261102-mobile4'),'Mobile-refined assets missing: '+p);
+ assert(h.includes('brand-site.css?v=20261105-brand2')&&h.includes('brand-site.js?v=20261102-mobile4'),'Mobile-refined assets missing: '+p);
  assert(h.includes('/assets/brand/wordmark-owner-transparent.png'),'Brand wordmark missing: '+p);
  assert(h.includes('class="nav-cakes__main" href="/cakes/"'),'Cake and cupcake main link must open All creations: '+p);
  assert(h.includes('data-cake-toggle')&&h.includes('aria-controls="cakes-submenu"')&&h.includes('aria-expanded="false"'),'Dedicated accessible dropdown toggle missing: '+p);
@@ -61,6 +61,7 @@ for(const p of pages){
  assert(h.includes('href="/cake-care/">Pickup &amp; care</a>')||h.includes('href="/cake-care/" aria-current="page">Pickup &amp; care</a>'),'Pickup & care navigation missing: '+p);
  assert(h.includes('class="footer-cols"'),'Simplified footer missing: '+p);
  assert(h.includes('Handcrafted sweets for every occasion.'),'Owner brand line missing from footer: '+p);
+ assert(h.includes('class="footer-brand__mark"')&&h.includes('stacked-owner-cream.svg'),'Owner stacked logo must appear in footer: '+p);
  const footer=h.slice(h.indexOf('<footer class="brand-footer">'));
  assert(footer.includes('href="/pricing/">Pricing</a>')&&footer.includes('Cakes &amp; cupcakes')&&footer.includes('>Contact</p>')&&!footer.includes('Help &amp; contact'),'Simplified footer navigation missing: '+p);
  const footerLinks=[...footer.matchAll(/<a href="\/(?:cakes|decorate-and-sip|cake-care|pricing)\/"[^>]*>/g)].map(m=>m[0]);
@@ -91,6 +92,9 @@ for(const p of ['weddings/index.html','celebrations/index.html','tiramisu-cakes/
 for(const p of ['celebrations/index.html','cakes/index.html'])assert(read(p).includes('id="gallery-filters"'),'Filter chips missing: '+p);
 const home=read('index.html');
 assert.equal((home.match(/class="category-card"/g)||[]).length,4,'Four main owner-requested categories');
+assert(brand.includes('.category-card__image{height:auto;aspect-ratio:4/5'),'Home photography requires consistent editorial framing');
+assert(brand.includes('.pricing-panel{background:transparent;border:0;border-top:1px'),'Price list must use light rules rather than full card borders');
+assert(fs.existsSync('assets/brand/stacked-owner-cream.svg'),'Official stacked footer logo missing');
 assert(home.includes('<a class="btn" href="/cakes/">Explore our creations ↗</a>')&&home.includes('class="hero-actions"')&&home.includes('class="hero-contact-icons"'),'Homepage must retain Explore creations CTA alongside two compact contact icons');
 assert(home.includes('src="/assets/gallery-30/DYJ42NMkqlU-M618.webp"')&&home.includes('src="/assets/gallery-30/DCv93Blhb1I-M182.webp"')&&home.includes('src="/assets/gallery-final-covers/DeoN1h7PHzB-owner.webp"'),'Homepage category cards should feature distinct real owner creations');
 const categoryHtml=home.slice(home.indexOf('<div class="category-grid">'),home.indexOf('</section>',home.indexOf('<div class="category-grid">')));
@@ -145,7 +149,9 @@ assert(care.includes('<h1 class="display display--small">Cake pickup<br>&amp; ca
 for(const x of ['passenger-side floor','lap','support it from underneath','squeezing the sides'])assert(care.includes(x),'Owner-supplied care tips missing: '+x);
 for(const x of ['Temperature matters','Once you’re home','A final little reminder','car air-conditioned','parked car','straight into the fridge','approximately 1–2 hours before serving','Thank you for trusting me with your special occasion'])assert(care.includes(x),'Owner-supplied additional care copy missing: '+x);
 assert.equal((care.match(/class="care-panel(?:\s|")/g)||[]).length,4,'Care guide must contain four visual panels');
-assert(['🚗','🌡️','❄️','💕'].every(icon=>care.includes(icon)),'Original expressive cake-care icons missing');
+assert(['transport','temperature','refrigeration','heart'].every(k=>care.includes('data-icon="'+k+'"')),'Brand-consistent care icon set missing');
+assert((care.match(/class="care-panel__icon"/g)||[]).length===4,'All four care icon placements must remain');
+assert(!['🚗','🌡️','❄️','💕'].some(icon=>care.includes(icon)),'Coloured emoji icons must not return');
 assert(brand.includes('.care-bullets li{border-top:0'),'Cake-care horizontal bullet separators should be removed');
 assert(brand.includes('-webkit-text-stroke:.72px currentColor'),'High contrast display hairlines must be thickened');
 const contact=read('enquire/index.html');

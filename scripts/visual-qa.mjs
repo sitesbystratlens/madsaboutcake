@@ -113,6 +113,8 @@ for(const [name,url,total] of cases)for(const width of widths){
       return {hero,cards};
     });
     if(imgSets.cards.some(path=>imgSets.hero.includes(path)))problems.push('Category covers still duplicate hero photographs');
+    const frames=await page.locator('.category-card__image').evaluateAll(xs=>xs.map(el=>({w:el.clientWidth,h:el.clientHeight})));
+    if(frames.some(f=>Math.abs(f.w/f.h-0.8)>0.08))problems.push('Category covers must retain consistent 4:5 framing');
     if(!imgSets.cards[0]?.includes('DYJ42NMkqlU')||!imgSets.cards[1]?.includes('DCv93Blhb1I')||!imgSets.cards[2]?.includes('DeoN1h7PHzB'))problems.push('Curated category covers missing');
   }
   if(name==='pricing'){
@@ -162,6 +164,8 @@ for(const [name,url,total] of cases)for(const width of widths){
     const footer=page.locator('.brand-footer');
     if(await footer.locator('a[href="/weddings/"]').count())problems.push('Footer repeats wedding category');
     if(!await footer.getByText('Handcrafted sweets for every occasion.').count())problems.push('Owner brand copy missing');
+    const brandImg=footer.locator('.footer-brand__mark img');
+    if(!await brandImg.count()||!(await brandImg.evaluate(el=>el.complete&&el.naturalWidth>0)))problems.push('Original stacked footer brand logo did not load');
     if(await footer.getByText('Help & contact').count())problems.push('Footer should only say Contact');
     if(await footer.locator('.footer-contact-icons a').count()!==2)problems.push('Footer quick message actions missing');
     if(await footer.locator('nav[aria-label="Footer explore"] a').count()!==4)problems.push('Footer Explore should have four links');
@@ -217,12 +221,15 @@ for(const [name,url,total] of cases)for(const width of widths){
     const guide=await page.locator('main').textContent();
     for(const phrase of ['passenger-side floor','Temperature matters','Once you’re home','approximately 1–2 hours','A final little reminder'])if(!guide.includes(phrase))problems.push('Owner care text missing: '+phrase);
     if(await page.locator('.care-panel').count()!==4)problems.push('Care guide must have four content panels');
-    const careIcons=await page.locator('.care-panel__icon').allTextContents();
-    if(careIcons.join('')!=='🚗🌡️❄️💕')problems.push('Care guide should use the four original expressive icons');
+    const careIcons=await page.locator('.care-panel__icon').evaluateAll(xs=>xs.map(el=>({kind:el.dataset.icon,svg:!!el.querySelector('svg')})));
+    if(careIcons.length!==4||careIcons.some(c=>!c.svg)||careIcons.map(c=>c.kind).join(',')!=='transport,temperature,refrigeration,heart')
+      problems.push('Care guide requires four consistent single-colour SVG icons');
     const separators=await page.locator('.care-bullets li').evaluateAll(xs=>xs.map(el=>getComputedStyle(el).borderTopWidth));
     if(separators.some(x=>x!=='0px'))problems.push('Care bullet list should not have row dividers');
   }
   if(name==='pricing'){
+   const pricingPanels=await page.locator('.pricing-panel').evaluateAll(xs=>xs.map(el=>({top:getComputedStyle(el).borderTopWidth,left:getComputedStyle(el).borderLeftWidth,right:getComputedStyle(el).borderRightWidth})));
+   if(pricingPanels.some(p=>p.left!=='0px'||p.right!=='0px'||p.top==='0px'))problems.push('Pricing must use paper-inspired horizontal rules instead of boxed panels');
    const rows=await page.locator('.pricing-table tbody tr').count();
    if(rows!==11)problems.push('Pricing page must show 5 cake sizes and 6 additions');
    if(!await page.locator('.pricing-source-note').count())problems.push('Pricing source provenance missing');
