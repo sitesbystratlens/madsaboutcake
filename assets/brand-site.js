@@ -167,6 +167,7 @@ function initContact(){
  document.querySelectorAll('[data-ig-contact]').forEach(a=>{a.href=IG_DM;a.target='_blank';a.rel='noopener noreferrer'});
  document.querySelectorAll('[data-mobile-link]').forEach(a=>{a.href=SMS;a.textContent='Text '+PHONE;a.hidden=false});
  document.querySelectorAll('[data-mobile-pending]').forEach(e=>e.remove());
+ if(document.querySelector('main.enquire-page')){document.body.classList.add('contact-page');return;}
  const sticky=document.createElement('nav');
  sticky.className='mobile-contact-bar';sticky.setAttribute('aria-label','Quick contact');
  sticky.innerHTML='<a href="'+IG_DM+'" target="_blank" rel="noopener noreferrer">DM on Instagram</a><a href="'+SMS+'">Text '+PHONE+'</a>';

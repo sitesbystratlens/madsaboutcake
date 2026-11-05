@@ -118,7 +118,7 @@ for(const [name,url,total] of cases)for(const width of widths){
     if(!imgSets.cards[0]?.includes('DYJ42NMkqlU')||!imgSets.cards[1]?.includes('DCv93Blhb1I')||!imgSets.cards[2]?.includes('DeoN1h7PHzB'))problems.push('Curated category covers missing');
   }
   if(name==='pricing'){
-    if(!await page.locator('main .contact-strip .contact-signature').count())problems.push('Pricing closing section missing branded signature');
+    if(await page.locator('img.contact-signature').count())problems.push('Temporary reconstructed signature must not be shown');
   }
   if(name==='home'){
     if(!await page.locator('.hero-actions>a.btn[href="/cakes/"]').isVisible())problems.push('Explore our creations primary CTA must be visible at every viewport');
@@ -220,6 +220,34 @@ for(const [name,url,total] of cases)for(const width of widths){
     }
   }
 
+
+  if(name==='home'&&!(await page.locator('main').textContent()).includes('Every cake is handcrafted for your occasion'))
+    problems.push('Homepage bespoke-service copy must be positive');
+  if(name==='pricing'){
+    const note=await page.locator('.pricing-source-note').textContent();
+    if(note.includes('October 2025')||!note.includes('Prices are a guide'))
+      problems.push('Pricing must not expose internal brand-guide dates and must clarify quote variability');
+  }
+  if(name==='contact'){
+    if((await page.locator('main').textContent()).includes("website orders and bookings aren't available"))
+      problems.push('Contact page still uses negative platform copy');
+  }
+  if(width<=650){
+    const stickyCount=await page.locator('.mobile-contact-bar').count();
+    if(name==='contact'){
+      if(stickyCount)problems.push('Contact page duplicates mobile sticky buttons');
+      if(!await page.locator('.enquire-page .page-hero .btns').isVisible())
+        problems.push('Dedicated contact page actions must remain visible on mobile');
+    }else if(!stickyCount)problems.push('Browsing pages must retain accessible sticky contact actions');
+    if(await page.locator('.contact-strip').count()){
+      if(await page.locator('.contact-strip__inner > div:last-child').isVisible())
+        problems.push('Mobile closing band duplicates sticky contact actions');
+    }
+  }else if(await page.locator('.contact-strip').count()){
+    if(!await page.locator('.contact-strip .btns').isVisible())
+      problems.push('Desktop contact band must retain direct enquiry buttons');
+  }
+
   if(info.broken.length)problems.push('broken images: '+info.broken.slice(0,4).join(','));
   const expectedInitial=Math.min(total,12);
   if(info.cards!==expectedInitial)problems.push('expected '+expectedInitial+' initial cards, got '+info.cards);
@@ -277,7 +305,7 @@ for(const [name,url,total] of cases)for(const width of widths){
   }
   if(name==='celebrations'&&width===390&&await page.locator('#gallery-filters:visible').count())problems.push('Celebration page should not expose duplicate subcategories');
   if(['home','all','care','weddings','celebrations','tiramisu'].includes(name)&&width===390){
-    if(!await page.locator('img.contact-signature').count())problems.push('Preview xoxo signature missing');
+    if(await page.locator('img.contact-signature').count())problems.push('Unapproved reconstructed signature still shown');
   }
   if(name==='sip'){
     if(!await page.locator('.decorate-story__grid').count())problems.push('Workshop story image/copy grid missing');

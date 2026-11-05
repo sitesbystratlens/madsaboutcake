@@ -45,7 +45,7 @@ assert.equal(wrangler.assets.not_found_handling,'404-page');
 for(const p of pages){
  const h=read(p);
  assert(h.includes('noindex,nofollow'),'Preview must remain non-indexed: '+p);
- assert(h.includes('brand-site.css?v=20261105-type1')&&h.includes('brand-site.js?v=20261102-mobile4'),'Mobile-refined assets missing: '+p);
+ assert(h.includes('brand-site.css?v=20261105-finalpolish1')&&h.includes('brand-site.js?v=20261105-finalpolish1'),'Mobile-refined assets missing: '+p);
  assert(h.includes('/assets/brand/wordmark-owner-transparent.png'),'Brand wordmark missing: '+p);
  assert(h.includes('class="nav-cakes__main" href="/cakes/"'),'Cake and cupcake main link must open All creations: '+p);
  assert(h.includes('data-cake-toggle')&&h.includes('aria-controls="cakes-submenu"')&&h.includes('aria-expanded="false"'),'Dedicated accessible dropdown toggle missing: '+p);
@@ -102,11 +102,12 @@ const categoryHtml=home.slice(home.indexOf('<div class="category-grid">'),home.i
 const heroHtml=home.slice(home.indexOf('<div class="hero-art">'),home.indexOf('</section>',home.indexOf('<div class="hero-art">')));
 for(const cover of [...categoryHtml.matchAll(/<img src="([^"]+)"/g)].map(m=>m[1]))assert(!heroHtml.includes('src="'+cover+'"'),'Homepage category cover must not duplicate a hero image: '+cover);
 const pricingHtml=read('pricing/index.html');
-assert(pricingHtml.includes('class="contact-strip"')&&pricingHtml.includes('class="contact-signature"'),'Pricing contact section must reuse shared branded signature');
+assert(pricingHtml.includes('class="contact-strip"')&&!pricingHtml.includes('October 2025 brand guide'),'Pricing must use the shared contact section without exposing internal document provenance');
 assert((home.match(/class="statement-line"/g)||[]).length===4&&home.includes('class="statement-line">celebrating.</span>'),'Burgundy editorial headline needs four deliberate lines ending in celebrating.');
 assert(!home.includes('class="btn btn-cream" data-ig-contact'),'Remove duplicate Instagram CTA from burgundy editorial section');
 assert(home.includes('Your idea.</span> <span class="statement-line">Mads’ craft.'),'Homepage headline must name Mads');
 assert(home.includes('<p class="eyebrow">Handcrafted sweets for every occasion</p>'),'Homepage must use owner brand vocabulary');
+assert(!home.includes('one-click checkout')&&home.includes('Every cake is handcrafted for your occasion'),'Homepage must use positive bespoke-service language');
 assert(brand.includes('.nav-cakes__submenu')&&brand.includes('instagram-outline.svg')&&brand.includes('message-outline.svg'),'Branded accessible navigation and icon styling absent');
 assert(brand.includes('.footer-contact-icons__link'),'Compact footer contact icons must be styled');
 assert(site.includes('DM on Instagram'),'Mobile and design-preview contact action should use DM language');
@@ -126,13 +127,13 @@ assert(site.includes("['weddings','Weddings']")&&site.includes("['celebrations',
 assert(!site.includes("['cupcakes','Cupcakes']")&&!site.includes("['birthdays','Birthdays']"),'No separate cupcake or birthday category filter');
 assert(site.includes("key==='all'"),'Top-level category filters belong to the full Custom creations gallery');
 assert(fs.existsSync('assets/icons/instagram-outline.svg')&&fs.existsSync('assets/icons/message-outline.svg'),'Contact icons missing');
-assert(read('pricing/index.html').includes('Menu &amp; pricing.')&&read('pricing/index.html').includes('October 2025 brand guide'),'Pricing guide must reflect original source and flag its dated values');
+assert(read('pricing/index.html').includes('Menu &amp; pricing.')&&read('pricing/index.html').includes('Prices are a guide'),'Pricing must describe indicative prices clearly');
 for(const p of pages.filter(p=>!['404.html','pricing/index.html'].includes(p))){
  const h=read(p);
- assert(h.includes('/assets/brand/xoxo-mads-preview.svg'),'Temporary signature missing: '+p);
+ assert(!h.includes('xoxo-mads-preview.svg'),'Unapproved traced signature must not be embedded: '+p);
 }
-assert(fs.existsSync('assets/brand/xoxo-mads-preview.svg'),'Temporary xoxo handwriting asset missing');
-assert(read('assets/brand/xoxo-mads-preview.svg').includes('temporary tracing'),'Temporary preview provenance should be documented');
+assert(!fs.existsSync('assets/brand/xoxo-mads-preview.svg'),'Traced preview artwork should not be distributed');
+assert(site.includes("document.querySelector('main.enquire-page')"),'Contact page must not duplicate sticky and main CTAs');
 assert(read('cakes/index.html').includes('<h1 class="display display--small">Custom creations.</h1>'),'Main gallery heading incorrect');
 assert(read('cakes/index.html').includes('<title>Custom creations |'),'Main gallery title incorrect');
 const wedding=read('weddings/index.html');assert(wedding.includes('engagement celebrations'),'Wedding copy must acknowledge bridal/engagements');

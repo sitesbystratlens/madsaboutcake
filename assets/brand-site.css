@@ -573,3 +573,15 @@ main h1.display--small{font-size:var(--type-page);line-height:1.02;letter-spacin
  .care-panel__head .section-title{font-size:27px}
  .contact-strip .section-title,.pricing-outro .section-title{font-size:32px}
 }
+
+/* Final owner polish: no new colours, fonts, logos, or brand artwork.
+   On mobile the fixed DM/SMS bar is the contact action for browsing pages.
+   On the dedicated Contact page, its visible main-page buttons serve that role. */
+@media(max-width:650px){
+ .contact-strip__inner > div:last-child{display:none}
+ .page-hero .btns{display:none}
+ .page-hero > a.btn[data-ig-contact],
+ .page-hero--split > div > a.btn[data-ig-contact]{display:none}
+ .enquire-page .page-hero .btns{display:flex}
+ body.contact-page{padding-bottom:0}
+}
