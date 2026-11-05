@@ -182,6 +182,44 @@ for(const [name,url,total] of cases)for(const width of widths){
     if(!await page.locator('.contact-strip .btn[data-mobile-link]').count())problems.push('SMS action missing');
   }
 
+
+  // Visual hierarchy regression guard; previous checks covered overflow but
+  // not inconsistent H1/H2/H3 relationships or intro/body typography.
+  const type=await page.evaluate(()=>{
+    const px=selector=>{const el=document.querySelector(selector);return el?parseFloat(getComputedStyle(el).fontSize):null};
+    return {
+      h1:px('main h1'),eyebrow:px('main .eyebrow'),copy:px('main .copy'),
+      pricingH2:px('main .pricing-body > h2.section-title'),
+      pricingH3:px('main .pricing-panel h3'),
+      pricingCopy:px('main .pricing-intro-copy'),
+      priceNote:px('main .pricing-source-note')
+    };
+  });
+  const near=(x,y)=>x!==null&&Math.abs(x-y)<1.3;
+  const mobileExpected=width===320?{page:38,hero:50,h2:30,h3:23}:{page:40,hero:54,h2:32,h3:24};
+  if(width<=390){
+    if(!near(type.eyebrow,11))problems.push('Eyebrow scale drift: '+type.eyebrow);
+    if(name==='home'){
+      if(!near(type.h1,mobileExpected.hero))problems.push('Homepage H1 scale drift: '+type.h1);
+    }else if(name==='sip'){
+      if(type.h1<28||type.h1>36)problems.push('Constrained Sip H1 scale drift: '+type.h1);
+    }else if(name!=='notfound'){
+      if(!near(type.h1,mobileExpected.page))problems.push('Interior page H1 scale drift: '+type.h1);
+    }
+    if(type.copy!==null&&name!=='sip'&&!near(type.copy,16))problems.push('Body intro scale drift: '+type.copy);
+  }
+  if(name==='pricing'){
+    const h1=type.h1,h2=type.pricingH2,h3=type.pricingH3;
+    if(h1===null||h2===null||h3===null||!(h1>h2&&h2>h3))
+      problems.push('Pricing title hierarchy wrong (must be H1 > H2 > H3): '+[h1,h2,h3].join('/'));
+    if(width<=390){
+      if(!near(h2,mobileExpected.h2)||!near(h3,mobileExpected.h3))
+        problems.push('Mobile pricing type tokens drift: '+[h2,h3].join('/'));
+      if(!near(type.pricingCopy,16)||!near(type.priceNote,14))
+        problems.push('Pricing descriptive font mismatch: '+[type.pricingCopy,type.priceNote].join('/'));
+    }
+  }
+
   if(info.broken.length)problems.push('broken images: '+info.broken.slice(0,4).join(','));
   const expectedInitial=Math.min(total,12);
   if(info.cards!==expectedInitial)problems.push('expected '+expectedInitial+' initial cards, got '+info.cards);

@@ -5,6 +5,7 @@ const read=p=>fs.readFileSync(p,'utf8');
 const raw=JSON.parse(read('cakes.json'));
 const pub=JSON.parse(read('assets/public-creations.json'));
 const brand=read('assets/brand-site.css'),site=read('assets/brand-site.js');
+for(const token of ['--type-hero:','--type-page:','--type-section:','--type-subsection:','--type-copy:'])assert(brand.includes(token),'Missing shared typography token: '+token);
 const pages=['pricing/index.html','index.html','weddings/index.html','celebrations/index.html','tiramisu-cakes/index.html','decorate-and-sip/index.html','cake-care/index.html','cakes/index.html','enquire/index.html','about/index.html','404.html'];
 const privateSelected=raw.cakes.filter(c=>c.featured30);
 const items=pub.creations;
@@ -44,7 +45,7 @@ assert.equal(wrangler.assets.not_found_handling,'404-page');
 for(const p of pages){
  const h=read(p);
  assert(h.includes('noindex,nofollow'),'Preview must remain non-indexed: '+p);
- assert(h.includes('brand-site.css?v=20261105-brand2')&&h.includes('brand-site.js?v=20261102-mobile4'),'Mobile-refined assets missing: '+p);
+ assert(h.includes('brand-site.css?v=20261105-type1')&&h.includes('brand-site.js?v=20261102-mobile4'),'Mobile-refined assets missing: '+p);
  assert(h.includes('/assets/brand/wordmark-owner-transparent.png'),'Brand wordmark missing: '+p);
  assert(h.includes('class="nav-cakes__main" href="/cakes/"'),'Cake and cupcake main link must open All creations: '+p);
  assert(h.includes('data-cake-toggle')&&h.includes('aria-controls="cakes-submenu"')&&h.includes('aria-expanded="false"'),'Dedicated accessible dropdown toggle missing: '+p);

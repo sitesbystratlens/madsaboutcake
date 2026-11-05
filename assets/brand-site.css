@@ -524,3 +524,52 @@ body{font-weight:400;padding-bottom:0}
  .contact-strip .section-title{font-size:clamp(38px,9.3vw,56px)}
 }
 @media(max-width:360px){.category-card__image{height:auto;aspect-ratio:4/5}}
+
+/* Sitewide typography system — 5 November 2026.
+   The brand's official webfonts remain pending. These variables keep scale and
+   vertical rhythm consistent while the current display/body fallbacks are used.
+   Exceptions: homepage statement, constrained care panels and one-line Sip H1. */
+:root{
+ --type-hero:clamp(62px,8vw,118px);
+ --type-page:clamp(46px,5vw,72px);
+ --type-section:clamp(38px,3.8vw,55px);
+ --type-subsection:clamp(24px,2.2vw,32px);
+ --type-copy:clamp(16px,1.18vw,18px);
+ --type-small:14px;
+ --type-eyebrow:11px;
+}
+body{font-size:var(--type-copy);line-height:1.72}
+.display{font-size:var(--type-hero);line-height:.96}
+main h1.display--small{font-size:var(--type-page);line-height:1.02;letter-spacing:-.045em}
+.section-title{font-size:var(--type-section);line-height:1.06;letter-spacing:-.035em}
+.eyebrow{font-size:var(--type-eyebrow);line-height:1.5;letter-spacing:.18em}
+.copy,.page-hero:not(.decorate-page-hero) .copy,.pricing-intro-copy{font-size:var(--type-copy);line-height:1.72}
+.pricing-panel p,.pricing-panel li,.pricing-table th,.pricing-table td,
+.care-tip-grid p,.care-bullets li{font-size:var(--type-copy);line-height:1.7}
+.pricing-panel h3{font-size:var(--type-subsection);line-height:1.13;margin:0 0 15px}
+.pricing-source-note{font-size:var(--type-small);line-height:1.65;opacity:.84}
+.pricing-intro{padding-top:clamp(42px,4vw,64px);padding-bottom:clamp(24px,3vw,40px)}
+.pricing-intro .copy{margin:18px 0 0}
+.pricing-intro .pricing-source-note{margin:16px 0 0}
+.pricing-body{padding-bottom:clamp(42px,4.4vw,68px)}
+.pricing-body .editorial-rule{margin-bottom:23px}
+.pricing-body>.section-title{font-size:var(--type-section);line-height:1.07;margin:9px 0 16px}
+.pricing-intro-copy{margin:0 0 22px}
+.pricing-panel{padding:20px 7px 14px}
+.contact-strip .section-title,.pricing-outro .section-title{font-size:var(--type-section)}
+.care-panel__head .section-title{font-size:clamp(28px,2.9vw,44px)}
+@media(max-width:650px){
+ :root{--type-hero:54px;--type-page:40px;--type-section:32px;--type-subsection:24px;--type-copy:16px}
+ .page-hero .display--small,.care-hero .display--small{font-size:var(--type-page)}
+ .decorate-page-hero .display.decorate-heading{font-size:clamp(29px,8.8vw,39px);line-height:1.08}
+ .care-panel__head .section-title{font-size:28px}
+ .contact-strip .section-title,.pricing-outro .section-title{font-size:34px}
+ .pricing-body{padding-bottom:38px}
+ .pricing-panel{padding:19px 0 13px}
+ .pricing-intro .copy{margin-top:16px}
+}
+@media(max-width:360px){
+ :root{--type-hero:50px;--type-page:38px;--type-section:30px;--type-subsection:23px}
+ .care-panel__head .section-title{font-size:27px}
+ .contact-strip .section-title,.pricing-outro .section-title{font-size:32px}
+}
