@@ -276,12 +276,15 @@ for(const [name,url,total] of cases)for(const width of widths){
     if(legibility.links<13.8||legibility.button<13.8)problems.push('Gallery links must use 14px: '+JSON.stringify(legibility));
   }
   if(name==='all'&&width===390){
+    // The preview dialog is created on first click, not at page load.
+    await page.locator('.gallery-card [data-preview]').first().click();
     const colors=await page.evaluate(()=>{
       const d=document.querySelector('#creation-dialog'),photo=d?.querySelector('img');
       return {photo:photo?getComputedStyle(photo).backgroundColor:null,overlay:d?getComputedStyle(d,'::backdrop').backgroundColor:null};
     });
     if(colors.photo!=='rgb(246, 244, 240)'||!colors.overlay?.startsWith('rgba(154, 40, 73,'))
       problems.push('Photo preview diverges from owner palette: '+JSON.stringify(colors));
+    await page.locator('#creation-dialog .creation-dialog__close').click();
   }
   if(info.broken.length)problems.push('broken images: '+info.broken.slice(0,4).join(','));
   const expectedInitial=Math.min(total,12);
