@@ -28,6 +28,7 @@ for(const item of items)assert(Object.keys(item).every(k=>keys.has(k)),'Public g
 assert(!/captionEvidence|ownerReviewDecision|reviewNotes|publicationHoldReasons|approvalStatus|postEngagement|customer|supplier/i.test(read('assets/public-creations.json')),'Raw private metadata must not be in public gallery');
 assert(brand.includes('#9A2849')&&brand.includes('#F6F4F0'),'Use exact brand palette');
 for(const font of ['Perandory Condensed','Amorea','Amsterdam Four','Helvetica Now Display'])assert(brand.includes(font),'Named brand font missing: '+font);
+for(const localFace of ["local('Perandory-Condensed')","local('HelveticaNowDisplay-Light')"])assert(brand.includes(localFace),'Approved local-only font preview missing: '+localFace);
 assert(!brand.includes('#fedcde')&&!brand.includes('#f15ea0'),'Legacy colours cannot return');
 assert(fs.readFileSync('assets/brand/wordmark-owner-transparent.png').subarray(1,4).toString()==='PNG','Transparent Canva-derived wordmark PNG must be present');
 assert(fs.readFileSync('assets/brand/monogram-owner-transparent.png').subarray(1,4).toString()==='PNG','Transparent Canva-derived monogram PNG must be present');
@@ -45,7 +46,7 @@ assert.equal(wrangler.assets.not_found_handling,'404-page');
 for(const p of pages){
  const h=read(p);
  assert(h.includes('noindex,nofollow'),'Preview must remain non-indexed: '+p);
- assert(h.includes('brand-site.css?v=20261105-finalpolish1')&&h.includes('brand-site.js?v=20261105-finalpolish1'),'Mobile-refined assets missing: '+p);
+ assert(h.includes('brand-site.css?v=20261109-localfont1')&&h.includes('brand-site.js?v=20261105-finalpolish1'),'Mobile-refined assets missing: '+p);
  assert(h.includes('/assets/brand/wordmark-owner-transparent.png'),'Brand wordmark missing: '+p);
  assert(h.includes('class="nav-cakes__main" href="/cakes/"'),'Cake and cupcake main link must open All creations: '+p);
  assert(h.includes('data-cake-toggle')&&h.includes('aria-controls="cakes-submenu"')&&h.includes('aria-expanded="false"'),'Dedicated accessible dropdown toggle missing: '+p);

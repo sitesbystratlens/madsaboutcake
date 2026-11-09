@@ -248,6 +248,16 @@ for(const [name,url,total] of cases)for(const width of widths){
       problems.push('Desktop contact band must retain direct enquiry buttons');
   }
 
+  // Font-family intent must remain aligned with the owner's two named styles.
+  // The repository intentionally does not distribute unlicensed font binaries.
+  if(width===390){
+    const families=await page.evaluate(()=>({
+      heading:getComputedStyle(document.querySelector('main h1')).fontFamily,
+      body:getComputedStyle(document.body).fontFamily
+    }));
+    if(!families.heading.includes('Mads Perandory Condensed Local'))problems.push('Owner-approved Perandory Condensed font stack missing');
+    if(!families.body.includes('Mads Helvetica Now Display Light Local'))problems.push('Owner-approved Helvetica Now Display Light font stack missing');
+  }
   if(info.broken.length)problems.push('broken images: '+info.broken.slice(0,4).join(','));
   const expectedInitial=Math.min(total,12);
   if(info.cards!==expectedInitial)problems.push('expected '+expectedInitial+' initial cards, got '+info.cards);
