@@ -151,8 +151,8 @@ for(const [name,url,total] of cases)for(const width of widths){
   }
   if(name==='sip'){
     if(await page.locator('.decorate-page-hero .hero-contact-icons').count())problems.push('Workshop hero must not repeat contact links');
-    const size=await page.locator('.decorate-page-hero .copy').evaluate(el=>parseFloat(getComputedStyle(el).fontSize));
-    if(size<(width<=650?17.5:19.5))problems.push('Decorate & Sip hero description remains too small: '+size+'px');
+    const sizes=await page.locator('.decorate-page-hero .copy').evaluate(el=>({text:parseFloat(getComputedStyle(el).fontSize),body:parseFloat(getComputedStyle(document.body).fontSize)}));
+    if(Math.abs(sizes.text-sizes.body)>1.2)problems.push('Decorate & Sip introduction is not aligned with the shared body-text scale: '+JSON.stringify(sizes));
   }
   if(name==='home'&&width===1440){
     const actions=page.locator('.hero-contact-icons a');
@@ -257,6 +257,31 @@ for(const [name,url,total] of cases)for(const width of widths){
     }));
     if(!families.heading.includes('Mads Perandory Condensed Local'))problems.push('Owner-approved Perandory Condensed font stack missing');
     if(!families.body.includes('Mads Helvetica Now Display Light Local'))problems.push('Owner-approved Helvetica Now Display Light font stack missing');
+  }
+  // Brand-guide final polish: supporting type sizes and approved photo-preview palette.
+  if(name==='care'&&width<=650){
+    const lead=await page.locator('.care-hero__lead').evaluate(el=>parseFloat(getComputedStyle(el).fontSize));
+    if(lead<21.9||lead>24.1)problems.push('Care lead typography drift: '+lead);
+  }
+  if(name==='home'){
+    const note=await page.locator('.category-card__note').first().evaluate(el=>parseFloat(getComputedStyle(el).fontSize));
+    if(note<13.8)problems.push('Category labels too small: '+note);
+  }
+  if(total){
+    const legibility=await page.locator('.gallery-card').first().evaluate(card=>{
+      const links=card.querySelector('.gallery-card__links');
+      const button=links?.querySelector('button');
+      return {links:links?parseFloat(getComputedStyle(links).fontSize):0,button:button?parseFloat(getComputedStyle(button).fontSize):0};
+    });
+    if(legibility.links<13.8||legibility.button<13.8)problems.push('Gallery links must use 14px: '+JSON.stringify(legibility));
+  }
+  if(name==='all'&&width===390){
+    const colors=await page.evaluate(()=>{
+      const d=document.querySelector('#creation-dialog'),photo=d?.querySelector('img');
+      return {photo:photo?getComputedStyle(photo).backgroundColor:null,overlay:d?getComputedStyle(d,'::backdrop').backgroundColor:null};
+    });
+    if(colors.photo!=='rgb(246, 244, 240)'||!colors.overlay?.startsWith('rgba(154, 40, 73,'))
+      problems.push('Photo preview diverges from owner palette: '+JSON.stringify(colors));
   }
   if(info.broken.length)problems.push('broken images: '+info.broken.slice(0,4).join(','));
   const expectedInitial=Math.min(total,12);
